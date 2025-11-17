@@ -2,11 +2,11 @@
   <div class="container">
     <div class="header-content">
       <div class="logo">
-        <a routerLink="/">{{ 'APP_NAME' | translate }}</a>
+        <a routerLink="/">{{ 'FIXIT' | translate }}</a>
       </div>
 
       <!-- Mobile Menu Toggle -->
-      <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [attr.aria-label]="'HEADER.MENU' | translate">
+      <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [attr.aria-label]="'MENU' | translate">
         <span class="hamburger-icon" [class.open]="mobileMenuOpen()">
           <span></span>
           <span></span>
@@ -20,19 +20,19 @@
         </button>
 
         @if (!authService.isAuthenticated()) {
-          <a routerLink="/login" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">
-            {{ 'HEADER.LOGIN' | translate }}
+          <a routerLink="/login" routerLinkActive="active" class="nav-link" (click)="closeMenus()">
+            {{ 'LOGIN' | translate }}
           </a>
-          <div class="nav-dropdown">
-            <button class="nav-link dropdown-toggle">
-              {{ 'HEADER.REGISTER' | translate }} Logout 
+          <div class="nav-dropdown" [class.open]="registerDropdownOpen()">
+            <button class="nav-link " (click)="toggleRegisterDropdown()">
+              {{ 'REGISTER '  | translate }}
             </button>
-            <div class="dropdown-menu">
-              <a routerLink="/register/client" class="dropdown-item" (click)="closeMobileMenu()">
-                {{ 'HEADER.REGISTER_AS_CLIENT' | translate }}
+            <div class="dropdown-menu" [class.open]="registerDropdownOpen()">
+              <a routerLink="/register/client" class="dropdown-item" (click)="closeMenus()">
+                {{ 'CLIENT' | translate }}
               </a>
-              <a routerLink="/register/craftsman" class="dropdown-item" (click)="closeMobileMenu()">
-                {{ 'HEADER.REGISTER_AS_CRAFTSMAN' | translate }}
+              <a routerLink="/register/craftsman" class="dropdown-item" (click)="closeMenus()">
+                {{ 'CRAFTSMAN' | translate }}
               </a>
             </div>
           </div>
@@ -40,8 +40,8 @@
           @if (authService.currentUser$ | async; as user) {
             <div class="user-menu">
               <span class="user-name">{{ user.fName }} {{ user.lName }}</span>
-              <button (click)="onLogout(); closeMobileMenu()" class="btn-logout">
-                {{ 'HEADER.LOGOUT' | translate }} 
+              <button (click)="onLogout(); closeMenus()" class="btn-logout">
+                {{ 'LOGOUT' | translate }}
               </button>
             </div>
           }

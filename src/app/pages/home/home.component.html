@@ -12,7 +12,7 @@
       } @else {
         @if (authService.currentUser$ | async; as user) {
           <div class="welcome-message">
-            <h2>Welcome back, {{ user.firstName }}!</h2>
+            <h2>Welcome back, {{ user.fName }}!</h2>
             <p>You're logged in as {{ user.role }}</p>
           </div>
         }

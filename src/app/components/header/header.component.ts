@@ -10,12 +10,16 @@ import { TranslationService } from '../../services/translation.service';
   standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  authService = inject(AuthService);
-  translationService = inject(TranslationService);
-  mobileMenuOpen = signal(false);
+  // Make services public for template access
+  public authService = inject(AuthService);
+  public translationService = inject(TranslationService);
+
+  // UI state signals
+  public mobileMenuOpen = signal(false);
+  public registerDropdownOpen = signal(false);
 
   onLogout(): void {
     this.authService.logout();
@@ -29,7 +33,12 @@ export class HeaderComponent {
     this.mobileMenuOpen.set(!this.mobileMenuOpen());
   }
 
-  closeMobileMenu(): void {
+  toggleRegisterDropdown(): void {
+    this.registerDropdownOpen.set(!this.registerDropdownOpen());
+  }
+
+  closeMenus(): void {
     this.mobileMenuOpen.set(false);
+    this.registerDropdownOpen.set(false);
   }
 }
