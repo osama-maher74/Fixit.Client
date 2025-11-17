@@ -1,0 +1,69 @@
+import { Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css'
+})
+export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  loginForm: FormGroup;
+  isLoading = signal(false);
+  errorMessage = signal<string | null>(null);
+  showPassword = signal(false);
+
+  constructor() {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
+
+  get email() {
+    return this.loginForm.get('email');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword.set(!this.showPassword());
+  }
+
+  onSubmit(): void {
+    if (this.loginForm.valid) {
+      this.isLoading.set(true);
+      this.errorMessage.set(null);
+
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (response) => {
+          this.isLoading.set(false);
+
+          // Get return URL from route parameters or default to home
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          this.router.navigate([returnUrl]);
+        },
+        error: (error) => {
+          this.isLoading.set(false);
+          this.errorMessage.set(error.message || 'Login failed. Please check your credentials.');
+        }
+      });
+    } else {
+      // Mark all fields as touched to show validation errors
+      Object.keys(this.loginForm.controls).forEach(key => {
+        this.loginForm.get(key)?.markAsTouched();
+      });
+    }
+  }
+}

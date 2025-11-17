@@ -1,0 +1,52 @@
+export enum Gender {
+  Male = 0,
+  Female = 1
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface ClientRegisterRequest {
+  fName: string;
+  lName: string;
+  email: string;
+  password: string;
+  location: string;
+  phoneNumber: string;
+  profileImage: string;
+  gender: Gender;
+  dateOfBirth: string;
+}
+
+export interface CraftsmanRegisterRequest {
+  fName: string;
+  lName: string;
+  email: string;
+  password: string;
+  location: string;
+  phoneNumber: string;
+  profileImage: string;
+  description: string;
+  hourlyRate: number;
+  experienceOfYears: number;
+  nationalId: string;
+  gender: Gender;
+  dateOfBirth: string;
+}
+
+export interface AuthResponse {
+  token?: string;
+  user?: User;
+  message?: string;
+  success?: boolean;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  fName: string;
+  lName: string;
+  role: string;
+}

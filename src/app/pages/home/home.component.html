@@ -1,0 +1,54 @@
+<div class="home-container">
+  <div class="hero-section">
+    <div class="container">
+      <h1>Welcome to FixIt</h1>
+      <p class="hero-subtitle">Connect with skilled craftsmen or offer your services</p>
+
+      @if (!authService.isAuthenticated()) {
+        <div class="cta-buttons">
+          <a routerLink="/register/client" class="btn btn-primary">Find Craftsmen</a>
+          <a routerLink="/register/craftsman" class="btn btn-secondary">Become a Craftsman</a>
+        </div>
+      } @else {
+        @if (authService.currentUser$ | async; as user) {
+          <div class="welcome-message">
+            <h2>Welcome back, {{ user.firstName }}!</h2>
+            <p>You're logged in as {{ user.role }}</p>
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="features-section">
+    <div class="container">
+      <h2 class="section-title">Why Choose FixIt?</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔧</div>
+          <h3>Skilled Professionals</h3>
+          <p>Connect with verified craftsmen with years of experience</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Quick Response</h3>
+          <p>Get fast responses and book services at your convenience</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <h3>Transparent Pricing</h3>
+          <p>Clear hourly rates with no hidden fees</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>Secure Platform</h3>
+          <p>Your data and transactions are protected</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

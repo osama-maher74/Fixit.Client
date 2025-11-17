@@ -1,0 +1,52 @@
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <div class="logo">
+        <a routerLink="/">{{ 'APP_NAME' | translate }}</a>
+      </div>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [attr.aria-label]="'HEADER.MENU' | translate">
+        <span class="hamburger-icon" [class.open]="mobileMenuOpen()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+
+      <nav class="nav" [class.mobile-open]="mobileMenuOpen()">
+        <button (click)="toggleLanguage()" class="lang-switcher">
+          {{ translationService.currentLang() === 'en' ? 'العربية' : 'English' }}
+        </button>
+
+        @if (!authService.isAuthenticated()) {
+          <a routerLink="/login" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">
+            {{ 'HEADER.LOGIN' | translate }}
+          </a>
+          <div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">
+              {{ 'HEADER.REGISTER' | translate }} Logout 
+            </button>
+            <div class="dropdown-menu">
+              <a routerLink="/register/client" class="dropdown-item" (click)="closeMobileMenu()">
+                {{ 'HEADER.REGISTER_AS_CLIENT' | translate }}
+              </a>
+              <a routerLink="/register/craftsman" class="dropdown-item" (click)="closeMobileMenu()">
+                {{ 'HEADER.REGISTER_AS_CRAFTSMAN' | translate }}
+              </a>
+            </div>
+          </div>
+        } @else {
+          @if (authService.currentUser$ | async; as user) {
+            <div class="user-menu">
+              <span class="user-name">{{ user.fName }} {{ user.lName }}</span>
+              <button (click)="onLogout(); closeMobileMenu()" class="btn-logout">
+                {{ 'HEADER.LOGOUT' | translate }} 
+              </button>
+            </div>
+          }
+        }
+      </nav>
+    </div>
+  </div>
+</header>

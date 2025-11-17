@@ -1,0 +1,346 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Register as Craftsman</h2>
+    <p class="subtitle">Create your craftsman account and start offering your services</p>
+
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (successMessage()) {
+      <div class="alert alert-success">
+        {{ successMessage() }}
+      </div>
+    }
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- Personal Information Section -->
+      <div class="section-header">Personal Information</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fName">First Name *</label>
+          <input
+            type="text"
+            id="fName"
+            formControlName="fName"
+            class="form-control"
+            [class.error]="fName?.invalid && fName?.touched"
+            placeholder="Enter first name"
+          />
+          @if (fName?.invalid && fName?.touched) {
+            <div class="error-message">
+              @if (fName?.errors?.['required']) {
+                <span>First name is required</span>
+              }
+              @if (fName?.errors?.['minlength']) {
+                <span>Minimum 2 characters required</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="lName">Last Name *</label>
+          <input
+            type="text"
+            id="lName"
+            formControlName="lName"
+            class="form-control"
+            [class.error]="lName?.invalid && lName?.touched"
+            placeholder="Enter last name"
+          />
+          @if (lName?.invalid && lName?.touched) {
+            <div class="error-message">
+              @if (lName?.errors?.['required']) {
+                <span>Last name is required</span>
+              }
+              @if (lName?.errors?.['minlength']) {
+                <span>Minimum 2 characters required</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [class.error]="email?.invalid && email?.touched"
+          placeholder="Enter your email"
+        />
+        @if (email?.invalid && email?.touched) {
+          <div class="error-message">
+            @if (email?.errors?.['required']) {
+              <span>Email is required</span>
+            }
+            @if (email?.errors?.['email']) {
+              <span>Please enter a valid email</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <div class="password-wrapper">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              id="password"
+              formControlName="password"
+              class="form-control"
+              [class.error]="password?.invalid && password?.touched"
+              placeholder="Enter password"
+            />
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="togglePasswordVisibility('password')"
+            >
+              {{ showPassword() ? '👁️' : '👁️‍🗨️' }}
+            </button>
+          </div>
+          @if (password?.invalid && password?.touched) {
+            <div class="error-message">
+              @if (password?.errors?.['required']) {
+                <span>Password is required</span>
+              }
+              @if (password?.errors?.['minlength']) {
+                <span>Minimum 8 characters required</span>
+              }
+              @if (password?.errors?.['passwordStrength']) {
+                <span>Must contain uppercase, lowercase, number, and special character</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password *</label>
+          <div class="password-wrapper">
+            <input
+              [type]="showConfirmPassword() ? 'text' : 'password'"
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              class="form-control"
+              [class.error]="confirmPassword?.invalid && confirmPassword?.touched"
+              placeholder="Confirm password"
+            />
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="togglePasswordVisibility('confirmPassword')"
+            >
+              {{ showConfirmPassword() ? '👁️' : '👁️‍🗨️' }}
+            </button>
+          </div>
+          @if (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched) {
+            <div class="error-message">
+              <span>Passwords do not match</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number *</label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            formControlName="phoneNumber"
+            class="form-control"
+            [class.error]="phoneNumber?.invalid && phoneNumber?.touched"
+            placeholder="Enter phone number (10-15 digits)"
+          />
+          @if (phoneNumber?.invalid && phoneNumber?.touched) {
+            <div class="error-message">
+              @if (phoneNumber?.errors?.['required']) {
+                <span>Phone number is required</span>
+              }
+              @if (phoneNumber?.errors?.['pattern']) {
+                <span>Enter a valid phone number (10-15 digits)</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="nationalId">National ID *</label>
+          <input
+            type="text"
+            id="nationalId"
+            formControlName="nationalId"
+            class="form-control"
+            [class.error]="nationalId?.invalid && nationalId?.touched"
+            placeholder="Enter national ID"
+          />
+          @if (nationalId?.invalid && nationalId?.touched) {
+            <div class="error-message">
+              @if (nationalId?.errors?.['required']) {
+                <span>National ID is required</span>
+              }
+              @if (nationalId?.errors?.['pattern']) {
+                <span>Enter a valid national ID (5-20 characters)</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="location">Location *</label>
+        <input
+          type="text"
+          id="location"
+          formControlName="location"
+          class="form-control"
+          [class.error]="location?.invalid && location?.touched"
+          placeholder="Enter your location"
+        />
+        @if (location?.invalid && location?.touched) {
+          <div class="error-message">
+            <span>Location is required</span>
+          </div>
+        }
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="gender">Gender *</label>
+          <select
+            id="gender"
+            formControlName="gender"
+            class="form-control"
+          >
+            @for (option of genderOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="dateOfBirth">Date of Birth *</label>
+          <input
+            type="date"
+            id="dateOfBirth"
+            formControlName="dateOfBirth"
+            class="form-control"
+            [class.error]="dateOfBirth?.invalid && dateOfBirth?.touched"
+          />
+          @if (dateOfBirth?.invalid && dateOfBirth?.touched) {
+            <div class="error-message">
+              @if (dateOfBirth?.errors?.['required']) {
+                <span>Date of birth is required</span>
+              }
+              @if (dateOfBirth?.errors?.['underAge']) {
+                <span>You must be at least 18 years old</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Professional Information Section -->
+      <div class="section-header">Professional Information</div>
+
+      <div class="form-group">
+        <label for="description">Description (Optional)</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          class="form-control"
+          rows="4"
+          placeholder="Describe your skills, experience, and services"
+        ></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="hourlyRate">Hourly Rate ($)</label>
+          <input
+            type="number"
+            id="hourlyRate"
+            formControlName="hourlyRate"
+            class="form-control"
+            [class.error]="hourlyRate?.invalid && hourlyRate?.touched"
+            placeholder="Enter hourly rate (optional)"
+            min="0"
+          />
+          @if (hourlyRate?.invalid && hourlyRate?.touched) {
+            <div class="error-message">
+              @if (hourlyRate?.errors?.['min']) {
+                <span>Hourly rate cannot be negative</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="experienceOfYears">Years of Experience</label>
+          <input
+            type="number"
+            id="experienceOfYears"
+            formControlName="experienceOfYears"
+            class="form-control"
+            [class.error]="experienceOfYears?.invalid && experienceOfYears?.touched"
+            placeholder="Enter years of experience (optional)"
+            min="0"
+            max="50"
+          />
+          @if (experienceOfYears?.invalid && experienceOfYears?.touched) {
+            <div class="error-message">
+              @if (experienceOfYears?.errors?.['min']) {
+                <span>Experience cannot be negative</span>
+              }
+              @if (experienceOfYears?.errors?.['max']) {
+                <span>Experience cannot exceed 50 years</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="profileImage">Profile Image *</label>
+        <input
+          type="file"
+          id="profileImage"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          class="form-control"
+          [class.error]="registerForm.get('profileImage')?.invalid && registerForm.get('profileImage')?.touched"
+        />
+        @if (registerForm.get('profileImage')?.invalid && registerForm.get('profileImage')?.touched) {
+          <div class="error-message">
+            <span>Profile image is required</span>
+          </div>
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="isLoading()"
+      >
+        @if (isLoading()) {
+          <span class="spinner"></span>
+          <span>Registering...</span>
+        } @else {
+          <span>Register as Craftsman</span>
+        }
+      </button>
+    </form>
+
+    <div class="login-link">
+      <p>Already have an account? <a routerLink="/login">Login here</a></p>
+    </div>
+  </div>
+</div>
