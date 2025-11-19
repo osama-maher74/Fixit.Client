@@ -2,7 +2,7 @@
   <div class="container">
     <div class="header-content">
       <div class="logo">
-        <a routerLink="/">{{ 'FIXIT' | translate }}</a>
+        <a routerLink="/">{{ 'FIXIT ' | translate }}</a>
       </div>
 
       <!-- Mobile Menu Toggle -->
@@ -37,14 +37,14 @@
             </div>
           </div>
         } @else {
-          @if (authService.currentUser$ | async; as user) {
-            <div class="user-menu">
+          <div class="user-menu">
+            @if (authService.currentUser$ | async; as user) {
               <span class="user-name">{{ user.fName }} {{ user.lName }}</span>
-              <button (click)="onLogout(); closeMenus()" class="btn-logout">
-                {{ 'LOGOUT' | translate }}
-              </button>
-            </div>
-          }
+            }
+            <button (click)="onLogout(); closeMenus()" class="btn-logout">
+              {{ 'LOGOUT' | translate }}
+            </button>
+          </div>
         }
       </nav>
     </div>
