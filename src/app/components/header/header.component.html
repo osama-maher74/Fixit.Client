@@ -2,11 +2,11 @@
   <div class="container">
     <div class="header-content">
       <div class="logo">
-        <a routerLink="/">{{ 'FIXIT ' | translate }}</a>
+        <a routerLink="/">{{ 'APP_NAME' | translate }}</a>
       </div>
 
       <!-- Mobile Menu Toggle -->
-      <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [attr.aria-label]="'MENU' | translate">
+      <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [attr.aria-label]="'HEADER.MENU' | translate">
         <span class="hamburger-icon" [class.open]="mobileMenuOpen()">
           <span></span>
           <span></span>
@@ -21,18 +21,18 @@
 
         @if (!authService.isAuthenticated()) {
           <a routerLink="/login" routerLinkActive="active" class="nav-link" (click)="closeMenus()">
-            {{ 'LOGIN' | translate }}
+            {{ 'HEADER.LOGIN' | translate }}
           </a>
           <div class="nav-dropdown" [class.open]="registerDropdownOpen()">
             <button class="nav-link " (click)="toggleRegisterDropdown()">
-              {{ 'REGISTER '  | translate }}
+              {{ 'HEADER.REGISTER' | translate }}
             </button>
             <div class="dropdown-menu" [class.open]="registerDropdownOpen()">
               <a routerLink="/register/client" class="dropdown-item" (click)="closeMenus()">
-                {{ 'CLIENT' | translate }}
+                {{ 'HEADER.REGISTER_AS_CLIENT' | translate }}
               </a>
               <a routerLink="/register/craftsman" class="dropdown-item" (click)="closeMenus()">
-                {{ 'CRAFTSMAN' | translate }}
+                {{ 'HEADER.REGISTER_AS_CRAFTSMAN' | translate }}
               </a>
             </div>
           </div>
@@ -42,7 +42,7 @@
               <span class="user-name">{{ user.fName }} {{ user.lName }}</span>
             }
             <button (click)="onLogout(); closeMenus()" class="btn-logout">
-              {{ 'LOGOUT' | translate }}
+              {{ 'HEADER.LOGOUT' | translate }}
             </button>
           </div>
         }
