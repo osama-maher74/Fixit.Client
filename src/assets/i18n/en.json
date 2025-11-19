@@ -41,6 +41,7 @@
     "NO_ACCOUNT": "Don't have an account?",
     "REGISTER_CLIENT": "Register as Client",
     "REGISTER_CRAFTSMAN": "Register as Craftsman",
+    "ERROR_DEFAULT": "Login failed. Please check your credentials.",
     "VALIDATION": {
       "EMAIL_REQUIRED": "Email is required",
       "EMAIL_INVALID": "Please enter a valid email address",
@@ -70,6 +71,7 @@
     "HAVE_ACCOUNT": "Already have an account?",
     "LOGIN_HERE": "Login here",
     "SUCCESS_MESSAGE": "Registration successful! Redirecting to home...",
+    "ERROR_DEFAULT": "Registration failed. Please try again.",
     "VALIDATION": {
       "FIRST_NAME_REQUIRED": "First name is required",
       "FIRST_NAME_MIN_LENGTH": "Minimum 2 characters required",
@@ -144,7 +146,9 @@
       "HOURLY_RATE_MIN": "Hourly rate must be at least $1",
       "EXPERIENCE_REQUIRED": "Years of experience is required",
       "EXPERIENCE_MIN": "Experience cannot be negative",
-      "EXPERIENCE_MAX": "Experience cannot exceed 50 years"
-    }
+      "EXPERIENCE_MAX": "Experience cannot exceed 50 years",
+      "PROFILE_IMAGE_REQUIRED": "Profile image is required"
+    },
+    "ERROR_DEFAULT": "Registration failed. Please try again."
   }
 }

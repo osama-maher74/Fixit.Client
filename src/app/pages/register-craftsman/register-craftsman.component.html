@@ -1,7 +1,7 @@
 <div class="register-container">
   <div class="register-card">
-    <h2>Register as Craftsman</h2>
-    <p class="subtitle">Create your craftsman account and start offering your services</p>
+    <h2>{{ 'REGISTER_CRAFTSMAN.TITLE' | translate }}</h2>
+    <p class="subtitle">{{ 'REGISTER_CRAFTSMAN.SUBTITLE' | translate }}</p>
 
     @if (errorMessage()) {
       <div class="alert alert-error">
@@ -17,48 +17,48 @@
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <!-- Personal Information Section -->
-      <div class="section-header">Personal Information</div>
+      <div class="section-header">{{ 'REGISTER_CRAFTSMAN.PERSONAL_INFO' | translate }}</div>
 
       <div class="form-row">
         <div class="form-group">
-          <label for="fName">First Name *</label>
+          <label for="fName">{{ 'REGISTER_CRAFTSMAN.FIRST_NAME' | translate }} *</label>
           <input
             type="text"
             id="fName"
             formControlName="fName"
             class="form-control"
             [class.error]="fName?.invalid && fName?.touched"
-            placeholder="Enter first name"
+            [placeholder]="'REGISTER_CRAFTSMAN.FIRST_NAME' | translate"
           />
           @if (fName?.invalid && fName?.touched) {
             <div class="error-message">
               @if (fName?.errors?.['required']) {
-                <span>First name is required</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.FIRST_NAME_REQUIRED' | translate }}</span>
               }
               @if (fName?.errors?.['minlength']) {
-                <span>Minimum 2 characters required</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.FIRST_NAME_MIN_LENGTH' | translate }}</span>
               }
             </div>
           }
         </div>
 
         <div class="form-group">
-          <label for="lName">Last Name *</label>
+          <label for="lName">{{ 'REGISTER_CRAFTSMAN.LAST_NAME' | translate }} *</label>
           <input
             type="text"
             id="lName"
             formControlName="lName"
             class="form-control"
             [class.error]="lName?.invalid && lName?.touched"
-            placeholder="Enter last name"
+            [placeholder]="'REGISTER_CRAFTSMAN.LAST_NAME' | translate"
           />
           @if (lName?.invalid && lName?.touched) {
             <div class="error-message">
               @if (lName?.errors?.['required']) {
-                <span>Last name is required</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.LAST_NAME_REQUIRED' | translate }}</span>
               }
               @if (lName?.errors?.['minlength']) {
-                <span>Minimum 2 characters required</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.FIRST_NAME_MIN_LENGTH' | translate }}</span>
               }
             </div>
           }
@@ -66,22 +66,22 @@
       </div>
 
       <div class="form-group">
-        <label for="email">Email *</label>
+        <label for="email">{{ 'REGISTER_CRAFTSMAN.EMAIL' | translate }} *</label>
         <input
           type="email"
           id="email"
           formControlName="email"
           class="form-control"
           [class.error]="email?.invalid && email?.touched"
-          placeholder="Enter your email"
+          [placeholder]="'REGISTER_CRAFTSMAN.EMAIL' | translate"
         />
         @if (email?.invalid && email?.touched) {
           <div class="error-message">
             @if (email?.errors?.['required']) {
-              <span>Email is required</span>
+              <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.EMAIL_REQUIRED' | translate }}</span>
             }
             @if (email?.errors?.['email']) {
-              <span>Please enter a valid email</span>
+              <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.EMAIL_INVALID' | translate }}</span>
             }
           </div>
         }
@@ -89,7 +89,7 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label for="password">Password *</label>
+          <label for="password">{{ 'REGISTER_CRAFTSMAN.PASSWORD' | translate }} *</label>
           <div class="password-wrapper">
             <input
               [type]="showPassword() ? 'text' : 'password'"
@@ -97,7 +97,7 @@
               formControlName="password"
               class="form-control"
               [class.error]="password?.invalid && password?.touched"
-              placeholder="Enter password"
+              [placeholder]="'REGISTER_CRAFTSMAN.PASSWORD' | translate"
             />
             <button
               type="button"
@@ -110,20 +110,20 @@
           @if (password?.invalid && password?.touched) {
             <div class="error-message">
               @if (password?.errors?.['required']) {
-                <span>Password is required</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.PASSWORD_REQUIRED' | translate }}</span>
               }
               @if (password?.errors?.['minlength']) {
-                <span>Minimum 8 characters required</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.PASSWORD_MIN_LENGTH' | translate }}</span>
               }
               @if (password?.errors?.['passwordStrength']) {
-                <span>Must contain uppercase, lowercase, number, and special character</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.PASSWORD_STRENGTH' | translate }}</span>
               }
             </div>
           }
         </div>
 
         <div class="form-group">
-          <label for="confirmPassword">Confirm Password *</label>
+          <label for="confirmPassword">{{ 'REGISTER_CRAFTSMAN.CONFIRM_PASSWORD' | translate }} *</label>
           <div class="password-wrapper">
             <input
               [type]="showConfirmPassword() ? 'text' : 'password'"
@@ -131,7 +131,7 @@
               formControlName="confirmPassword"
               class="form-control"
               [class.error]="confirmPassword?.invalid && confirmPassword?.touched"
-              placeholder="Confirm password"
+              [placeholder]="'REGISTER_CRAFTSMAN.CONFIRM_PASSWORD' | translate"
             />
             <button
               type="button"
@@ -143,7 +143,7 @@
           </div>
           @if (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched) {
             <div class="error-message">
-              <span>Passwords do not match</span>
+              <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.PASSWORD_MISMATCH' | translate }}</span>
             </div>
           }
         </div>
@@ -151,44 +151,44 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label for="phoneNumber">Phone Number *</label>
+          <label for="phoneNumber">{{ 'REGISTER_CRAFTSMAN.PHONE' | translate }} *</label>
           <input
             type="tel"
             id="phoneNumber"
             formControlName="phoneNumber"
             class="form-control"
             [class.error]="phoneNumber?.invalid && phoneNumber?.touched"
-            placeholder="Enter phone number (10-15 digits)"
+            [placeholder]="'REGISTER_CRAFTSMAN.PHONE_PLACEHOLDER' | translate"
           />
           @if (phoneNumber?.invalid && phoneNumber?.touched) {
             <div class="error-message">
               @if (phoneNumber?.errors?.['required']) {
-                <span>Phone number is required</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.PHONE_REQUIRED' | translate }}</span>
               }
               @if (phoneNumber?.errors?.['pattern']) {
-                <span>Enter a valid phone number (10-15 digits)</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.PHONE_INVALID' | translate }}</span>
               }
             </div>
           }
         </div>
 
         <div class="form-group">
-          <label for="nationalId">National ID *</label>
+          <label for="nationalId">{{ 'REGISTER_CRAFTSMAN.NATIONAL_ID' | translate }} *</label>
           <input
             type="text"
             id="nationalId"
             formControlName="nationalId"
             class="form-control"
             [class.error]="nationalId?.invalid && nationalId?.touched"
-            placeholder="Enter national ID"
+            [placeholder]="'REGISTER_CRAFTSMAN.NATIONAL_ID_PLACEHOLDER' | translate"
           />
           @if (nationalId?.invalid && nationalId?.touched) {
             <div class="error-message">
               @if (nationalId?.errors?.['required']) {
-                <span>National ID is required</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.NATIONAL_ID_REQUIRED' | translate }}</span>
               }
               @if (nationalId?.errors?.['pattern']) {
-                <span>Enter a valid national ID (5-20 characters)</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.NATIONAL_ID_INVALID' | translate }}</span>
               }
             </div>
           }
@@ -196,38 +196,38 @@
       </div>
 
       <div class="form-group">
-        <label for="location">Location *</label>
+        <label for="location">{{ 'REGISTER_CRAFTSMAN.LOCATION' | translate }} *</label>
         <input
           type="text"
           id="location"
           formControlName="location"
           class="form-control"
           [class.error]="location?.invalid && location?.touched"
-          placeholder="Enter your location"
+          [placeholder]="'REGISTER_CRAFTSMAN.LOCATION_PLACEHOLDER' | translate"
         />
         @if (location?.invalid && location?.touched) {
           <div class="error-message">
-            <span>Location is required</span>
+            <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.LOCATION_REQUIRED' | translate }}</span>
           </div>
         }
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label for="gender">Gender *</label>
+          <label for="gender">{{ 'REGISTER_CRAFTSMAN.GENDER' | translate }} *</label>
           <select
             id="gender"
             formControlName="gender"
             class="form-control"
           >
             @for (option of genderOptions; track option.value) {
-              <option [value]="option.value">{{ option.label }}</option>
+              <option [value]="option.value">{{ option.label | translate }}</option>
             }
           </select>
         </div>
 
         <div class="form-group">
-          <label for="dateOfBirth">Date of Birth *</label>
+          <label for="dateOfBirth">{{ 'REGISTER_CRAFTSMAN.DATE_OF_BIRTH' | translate }} *</label>
           <input
             type="date"
             id="dateOfBirth"
@@ -238,10 +238,10 @@
           @if (dateOfBirth?.invalid && dateOfBirth?.touched) {
             <div class="error-message">
               @if (dateOfBirth?.errors?.['required']) {
-                <span>Date of birth is required</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.DOB_REQUIRED' | translate }}</span>
               }
               @if (dateOfBirth?.errors?.['underAge']) {
-                <span>You must be at least 18 years old</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.UNDER_AGE' | translate }}</span>
               }
             </div>
           }
@@ -257,7 +257,7 @@
           formControlName="description"
           class="form-control"
           rows="4"
-          placeholder="Describe your skills, experience, and services"
+          [placeholder]="'REGISTER_CRAFTSMAN.DESCRIPTION_PLACEHOLDER' | translate"
         ></textarea>
       </div>
 
@@ -270,37 +270,37 @@
             formControlName="hourlyRate"
             class="form-control"
             [class.error]="hourlyRate?.invalid && hourlyRate?.touched"
-            placeholder="Enter hourly rate (optional)"
+            [placeholder]="'REGISTER_CRAFTSMAN.HOURLY_RATE_PLACEHOLDER' | translate"
             min="0"
           />
           @if (hourlyRate?.invalid && hourlyRate?.touched) {
             <div class="error-message">
               @if (hourlyRate?.errors?.['min']) {
-                <span>Hourly rate cannot be negative</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.HOURLY_RATE_MIN' | translate }}</span>
               }
             </div>
           }
         </div>
 
         <div class="form-group">
-          <label for="experienceOfYears">Years of Experience</label>
+          <label for="experienceOfYears">{{ 'REGISTER_CRAFTSMAN.EXPERIENCE_YEARS' | translate }}</label>
           <input
             type="number"
             id="experienceOfYears"
             formControlName="experienceOfYears"
             class="form-control"
             [class.error]="experienceOfYears?.invalid && experienceOfYears?.touched"
-            placeholder="Enter years of experience (optional)"
+            [placeholder]="'REGISTER_CRAFTSMAN.EXPERIENCE_PLACEHOLDER' | translate"
             min="0"
             max="50"
           />
           @if (experienceOfYears?.invalid && experienceOfYears?.touched) {
             <div class="error-message">
               @if (experienceOfYears?.errors?.['min']) {
-                <span>Experience cannot be negative</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.EXPERIENCE_MIN' | translate }}</span>
               }
               @if (experienceOfYears?.errors?.['max']) {
-                <span>Experience cannot exceed 50 years</span>
+                <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.EXPERIENCE_MAX' | translate }}</span>
               }
             </div>
           }
@@ -308,7 +308,7 @@
       </div>
 
       <div class="form-group">
-        <label for="profileImage">Profile Image *</label>
+        <label for="profileImage">{{ 'REGISTER_CRAFTSMAN.PROFILE_IMAGE' | translate }} *</label>
         <input
           type="file"
           id="profileImage"
@@ -319,7 +319,7 @@
         />
         @if (registerForm.get('profileImage')?.invalid && registerForm.get('profileImage')?.touched) {
           <div class="error-message">
-            <span>Profile image is required</span>
+            <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.PROFILE_IMAGE_REQUIRED' | translate }}</span>
           </div>
         }
       </div>
@@ -331,15 +331,15 @@
       >
         @if (isLoading()) {
           <span class="spinner"></span>
-          <span>Registering...</span>
+          <span>{{ 'REGISTER_CRAFTSMAN.REGISTERING' | translate }}</span>
         } @else {
-          <span>Register as Craftsman</span>
+          <span>{{ 'REGISTER_CRAFTSMAN.REGISTER_BUTTON' | translate }}</span>
         }
       </button>
     </form>
 
     <div class="login-link">
-      <p>Already have an account? <a routerLink="/login">Login here</a></p>
+      <p>{{ 'REGISTER_CRAFTSMAN.HAVE_ACCOUNT' | translate }} <a routerLink="/login">{{ 'REGISTER_CRAFTSMAN.LOGIN_HERE' | translate }}</a></p>
     </div>
   </div>
 </div>

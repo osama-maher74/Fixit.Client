@@ -2,12 +2,13 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -16,6 +17,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private translate = inject(TranslateService);
 
   loginForm: FormGroup;
   isLoading = signal(false);
@@ -56,7 +58,7 @@ export class LoginComponent {
         },
         error: (error) => {
           this.isLoading.set(false);
-          this.errorMessage.set(error.message || 'Login failed. Please check your credentials.');
+          this.errorMessage.set(error.message || this.translate.instant('LOGIN.ERROR_DEFAULT'));
         }
       });
     } else {

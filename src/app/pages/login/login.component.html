@@ -1,7 +1,7 @@
 <div class="login-container">
   <div class="login-card">
-    <h2>Login to FixIt</h2>
-    <p class="subtitle">Enter your credentials to access your account</p>
+    <h2>{{ 'LOGIN.TITLE' | translate }}</h2>
+    <p class="subtitle">{{ 'LOGIN.SUBTITLE' | translate }}</p>
 
     @if (errorMessage()) {
       <div class="alert alert-error">
@@ -11,29 +11,29 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="email">{{ 'LOGIN.EMAIL' | translate }}</label>
         <input
           type="email"
           id="email"
           formControlName="email"
           class="form-control"
           [class.error]="email?.invalid && email?.touched"
-          placeholder="Enter your email"
+          [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate"
         />
         @if (email?.invalid && email?.touched) {
           <div class="error-message">
             @if (email?.errors?.['required']) {
-              <span>Email is required</span>
+              <span>{{ 'LOGIN.VALIDATION.EMAIL_REQUIRED' | translate }}</span>
             }
             @if (email?.errors?.['email']) {
-              <span>Please enter a valid email address</span>
+              <span>{{ 'LOGIN.VALIDATION.EMAIL_INVALID' | translate }}</span>
             }
           </div>
         }
       </div>
 
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password">{{ 'LOGIN.PASSWORD' | translate }}</label>
         <div class="password-wrapper">
           <input
             [type]="showPassword() ? 'text' : 'password'"
@@ -41,7 +41,7 @@
             formControlName="password"
             class="form-control"
             [class.error]="password?.invalid && password?.touched"
-            placeholder="Enter your password"
+            [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
           />
           <button
             type="button"
@@ -54,10 +54,10 @@
         @if (password?.invalid && password?.touched) {
           <div class="error-message">
             @if (password?.errors?.['required']) {
-              <span>Password is required</span>
+              <span>{{ 'LOGIN.VALIDATION.PASSWORD_REQUIRED' | translate }}</span>
             }
             @if (password?.errors?.['minlength']) {
-              <span>Password must be at least 6 characters</span>
+              <span>{{ 'LOGIN.VALIDATION.PASSWORD_MIN_LENGTH' | translate }}</span>
             }
           </div>
         }
@@ -70,18 +70,18 @@
       >
         @if (isLoading()) {
           <span class="spinner"></span>
-          <span>Logging in...</span>
+          <span>{{ 'LOGIN.LOGGING_IN' | translate }}</span>
         } @else {
-          <span>Login</span>
+          <span>{{ 'LOGIN.LOGIN_BUTTON' | translate }}</span>
         }
       </button>
     </form>
 
     <div class="register-links">
-      <p>Don't have an account?</p>
+      <p>{{ 'LOGIN.NO_ACCOUNT' | translate }}</p>
       <div class="link-buttons">
-        <a routerLink="/register/client" class="link-btn">Register as Client</a>
-        <a routerLink="/register/craftsman" class="link-btn">Register as Craftsman</a>
+        <a routerLink="/register/client" class="link-btn">{{ 'LOGIN.REGISTER_CLIENT' | translate }}</a>
+        <a routerLink="/register/craftsman" class="link-btn">{{ 'LOGIN.REGISTER_CRAFTSMAN' | translate }}</a>
       </div>
     </div>
   </div>

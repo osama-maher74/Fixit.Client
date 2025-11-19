@@ -1,7 +1,7 @@
 <div class="register-container">
   <div class="register-card">
-    <h2>Register as Client</h2>
-    <p class="subtitle">Create your client account to get started</p>
+    <h2>{{ 'REGISTER_CLIENT.TITLE' | translate }}</h2>
+    <p class="subtitle">{{ 'REGISTER_CLIENT.SUBTITLE' | translate }}</p>
 
     @if (errorMessage()) {
       <div class="alert alert-error">
@@ -18,44 +18,44 @@
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="form-row">
         <div class="form-group">
-          <label for="fName">First Name *</label>
+          <label for="fName">{{ 'REGISTER_CLIENT.FIRST_NAME' | translate }} *</label>
           <input
             type="text"
             id="fName"
             formControlName="fName"
             class="form-control"
             [class.error]="fName?.invalid && fName?.touched"
-            placeholder="Enter first name"
+            [placeholder]="'REGISTER_CLIENT.FIRST_NAME' | translate"
           />
           @if (fName?.invalid && fName?.touched) {
             <div class="error-message">
               @if (fName?.errors?.['required']) {
-                <span>First name is required</span>
+                <span>{{ 'REGISTER_CLIENT.VALIDATION.FIRST_NAME_REQUIRED' | translate }}</span>
               }
               @if (fName?.errors?.['minlength']) {
-                <span>Minimum 2 characters required</span>
+                <span>{{ 'REGISTER_CLIENT.VALIDATION.FIRST_NAME_MIN_LENGTH' | translate }}</span>
               }
             </div>
           }
         </div>
 
         <div class="form-group">
-          <label for="lName">Last Name *</label>
+          <label for="lName">{{ 'REGISTER_CLIENT.LAST_NAME' | translate }} *</label>
           <input
             type="text"
             id="lName"
             formControlName="lName"
             class="form-control"
             [class.error]="lName?.invalid && lName?.touched"
-            placeholder="Enter last name"
+            [placeholder]="'REGISTER_CLIENT.LAST_NAME' | translate"
           />
           @if (lName?.invalid && lName?.touched) {
             <div class="error-message">
               @if (lName?.errors?.['required']) {
-                <span>Last name is required</span>
+                <span>{{ 'REGISTER_CLIENT.VALIDATION.LAST_NAME_REQUIRED' | translate }}</span>
               }
               @if (lName?.errors?.['minlength']) {
-                <span>Minimum 2 characters required</span>
+                <span>{{ 'REGISTER_CLIENT.VALIDATION.LAST_NAME_MIN_LENGTH' | translate }}</span>
               }
             </div>
           }
@@ -63,22 +63,22 @@
       </div>
 
       <div class="form-group">
-        <label for="email">Email *</label>
+        <label for="email">{{ 'REGISTER_CLIENT.EMAIL' | translate }} *</label>
         <input
           type="email"
           id="email"
           formControlName="email"
           class="form-control"
           [class.error]="email?.invalid && email?.touched"
-          placeholder="Enter your email"
+          [placeholder]="'REGISTER_CLIENT.EMAIL' | translate"
         />
         @if (email?.invalid && email?.touched) {
           <div class="error-message">
             @if (email?.errors?.['required']) {
-              <span>Email is required</span>
+              <span>{{ 'REGISTER_CLIENT.VALIDATION.EMAIL_REQUIRED' | translate }}</span>
             }
             @if (email?.errors?.['email']) {
-              <span>Please enter a valid email</span>
+              <span>{{ 'REGISTER_CLIENT.VALIDATION.EMAIL_INVALID' | translate }}</span>
             }
           </div>
         }
@@ -86,7 +86,7 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label for="password">Password *</label>
+          <label for="password">{{ 'REGISTER_CLIENT.PASSWORD' | translate }} *</label>
           <div class="password-wrapper">
             <input
               [type]="showPassword() ? 'text' : 'password'"
@@ -94,7 +94,7 @@
               formControlName="password"
               class="form-control"
               [class.error]="password?.invalid && password?.touched"
-              placeholder="Enter password"
+              [placeholder]="'REGISTER_CLIENT.PASSWORD' | translate"
             />
             <button
               type="button"
@@ -107,20 +107,20 @@
           @if (password?.invalid && password?.touched) {
             <div class="error-message">
               @if (password?.errors?.['required']) {
-                <span>Password is required</span>
+                <span>{{ 'REGISTER_CLIENT.VALIDATION.PASSWORD_REQUIRED' | translate }}</span>
               }
               @if (password?.errors?.['minlength']) {
-                <span>Minimum 8 characters required</span>
+                <span>{{ 'REGISTER_CLIENT.VALIDATION.PASSWORD_MIN_LENGTH' | translate }}</span>
               }
               @if (password?.errors?.['passwordStrength']) {
-                <span>Must contain uppercase, lowercase, number, and special character</span>
+                <span>{{ 'REGISTER_CLIENT.VALIDATION.PASSWORD_STRENGTH' | translate }}</span>
               }
             </div>
           }
         </div>
 
         <div class="form-group">
-          <label for="confirmPassword">Confirm Password *</label>
+          <label for="confirmPassword">{{ 'REGISTER_CLIENT.CONFIRM_PASSWORD' | translate }} *</label>
           <div class="password-wrapper">
             <input
               [type]="showConfirmPassword() ? 'text' : 'password'"
@@ -128,7 +128,7 @@
               formControlName="confirmPassword"
               class="form-control"
               [class.error]="confirmPassword?.invalid && confirmPassword?.touched"
-              placeholder="Confirm password"
+              [placeholder]="'REGISTER_CLIENT.CONFIRM_PASSWORD' | translate"
             />
             <button
               type="button"
@@ -140,67 +140,67 @@
           </div>
           @if (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched) {
             <div class="error-message">
-              <span>Passwords do not match</span>
+              <span>{{ 'REGISTER_CLIENT.VALIDATION.PASSWORD_MISMATCH' | translate }}</span>
             </div>
           }
         </div>
       </div>
 
       <div class="form-group">
-        <label for="phoneNumber">Phone Number *</label>
+        <label for="phoneNumber">{{ 'REGISTER_CLIENT.PHONE' | translate }} *</label>
         <input
           type="tel"
           id="phoneNumber"
           formControlName="phoneNumber"
           class="form-control"
           [class.error]="phoneNumber?.invalid && phoneNumber?.touched"
-          placeholder="Enter phone number (10-15 digits)"
+          [placeholder]="'REGISTER_CLIENT.PHONE_PLACEHOLDER' | translate"
         />
         @if (phoneNumber?.invalid && phoneNumber?.touched) {
           <div class="error-message">
             @if (phoneNumber?.errors?.['required']) {
-              <span>Phone number is required</span>
+              <span>{{ 'REGISTER_CLIENT.VALIDATION.PHONE_REQUIRED' | translate }}</span>
             }
             @if (phoneNumber?.errors?.['pattern']) {
-              <span>Enter a valid phone number (10-15 digits)</span>
+              <span>{{ 'REGISTER_CLIENT.VALIDATION.PHONE_INVALID' | translate }}</span>
             }
           </div>
         }
       </div>
 
       <div class="form-group">
-        <label for="location">Location *</label>
+        <label for="location">{{ 'REGISTER_CLIENT.LOCATION' | translate }} *</label>
         <input
           type="text"
           id="location"
           formControlName="location"
           class="form-control"
           [class.error]="location?.invalid && location?.touched"
-          placeholder="Enter your location"
+          [placeholder]="'REGISTER_CLIENT.LOCATION_PLACEHOLDER' | translate"
         />
         @if (location?.invalid && location?.touched) {
           <div class="error-message">
-            <span>Location is required</span>
+            <span>{{ 'REGISTER_CLIENT.VALIDATION.LOCATION_REQUIRED' | translate }}</span>
           </div>
         }
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label for="gender">Gender *</label>
+          <label for="gender">{{ 'REGISTER_CLIENT.GENDER' | translate }} *</label>
           <select
             id="gender"
             formControlName="gender"
             class="form-control"
           >
             @for (option of genderOptions; track option.value) {
-              <option [value]="option.value">{{ option.label }}</option>
+              <option [value]="option.value">{{ option.label | translate }}</option>
             }
           </select>
         </div>
 
         <div class="form-group">
-          <label for="dateOfBirth">Date of Birth *</label>
+          <label for="dateOfBirth">{{ 'REGISTER_CLIENT.DATE_OF_BIRTH' | translate }} *</label>
           <input
             type="date"
             id="dateOfBirth"
@@ -211,10 +211,10 @@
           @if (dateOfBirth?.invalid && dateOfBirth?.touched) {
             <div class="error-message">
               @if (dateOfBirth?.errors?.['required']) {
-                <span>Date of birth is required</span>
+                <span>{{ 'REGISTER_CLIENT.VALIDATION.DOB_REQUIRED' | translate }}</span>
               }
               @if (dateOfBirth?.errors?.['underAge']) {
-                <span>You must be at least 18 years old</span>
+                <span>{{ 'REGISTER_CLIENT.VALIDATION.UNDER_AGE' | translate }}</span>
               }
             </div>
           }
@@ -222,7 +222,7 @@
       </div>
 
       <div class="form-group">
-        <label for="profileImage">Profile Image (Optional)</label>
+        <label for="profileImage">{{ 'REGISTER_CLIENT.PROFILE_IMAGE' | translate }}</label>
         <input
           type="file"
           id="profileImage"
@@ -239,15 +239,15 @@
       >
         @if (isLoading()) {
           <span class="spinner"></span>
-          <span>Registering...</span>
+          <span>{{ 'REGISTER_CLIENT.REGISTERING' | translate }}</span>
         } @else {
-          <span>Register</span>
+          <span>{{ 'REGISTER_CLIENT.REGISTER_BUTTON' | translate }}</span>
         }
       </button>
     </form>
 
     <div class="login-link">
-      <p>Already have an account? <a routerLink="/login">Login here</a></p>
+      <p>{{ 'REGISTER_CLIENT.HAVE_ACCOUNT' | translate }} <a routerLink="/login">{{ 'REGISTER_CLIENT.LOGIN_HERE' | translate }}</a></p>
     </div>
   </div>
 </div>

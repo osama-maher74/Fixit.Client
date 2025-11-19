@@ -2,13 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { Gender } from '../../models/auth.models';
 
 @Component({
   selector: 'app-register-client',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
   templateUrl: './register-client.component.html',
   styleUrl: './register-client.component.css'
 })
@@ -16,6 +17,7 @@ export class RegisterClientComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private translate = inject(TranslateService);
 
   registerForm: FormGroup;
   isLoading = signal(false);
@@ -25,8 +27,8 @@ export class RegisterClientComponent {
   showConfirmPassword = signal(false);
 
   genderOptions = [
-    { value: Gender.Male, label: 'Male' },
-    { value: Gender.Female, label: 'Female' }
+    { value: Gender.Male, label: 'REGISTER_CLIENT.MALE' },
+    { value: Gender.Female, label: 'REGISTER_CLIENT.FEMALE' }
   ];
 
   constructor() {
@@ -120,7 +122,7 @@ export class RegisterClientComponent {
       this.authService.registerClient(formData).subscribe({
         next: (response) => {
           this.isLoading.set(false);
-          this.successMessage.set('Registration successful! Redirecting to home...');
+          this.successMessage.set(this.translate.instant('REGISTER_CLIENT.SUCCESS_MESSAGE'));
 
           setTimeout(() => {
             this.router.navigate(['/']);
@@ -128,7 +130,7 @@ export class RegisterClientComponent {
         },
         error: (error) => {
           this.isLoading.set(false);
-          this.errorMessage.set(error.message || 'Registration failed. Please try again.');
+          this.errorMessage.set(error.message || this.translate.instant('REGISTER_CLIENT.ERROR_DEFAULT'));
         }
       });
     } else {

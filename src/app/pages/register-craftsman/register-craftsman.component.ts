@@ -2,13 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { Gender } from '../../models/auth.models';
 
 @Component({
   selector: 'app-register-craftsman',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
   templateUrl: './register-craftsman.component.html',
   styleUrl: './register-craftsman.component.css'
 })
@@ -16,6 +17,7 @@ export class RegisterCraftsmanComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private translate = inject(TranslateService);
 
   registerForm: FormGroup;
   isLoading = signal(false);
@@ -25,8 +27,8 @@ export class RegisterCraftsmanComponent {
   showConfirmPassword = signal(false);
 
   genderOptions = [
-    { value: Gender.Male, label: 'Male' },
-    { value: Gender.Female, label: 'Female' }
+    { value: Gender.Male, label: 'REGISTER_CRAFTSMAN.MALE' },
+    { value: Gender.Female, label: 'REGISTER_CRAFTSMAN.FEMALE' }
   ];
 
   constructor() {
@@ -128,7 +130,7 @@ export class RegisterCraftsmanComponent {
       this.authService.registerCraftsman(formData).subscribe({
         next: (response) => {
           this.isLoading.set(false);
-          this.successMessage.set('Registration successful! Redirecting to home...');
+          this.successMessage.set(this.translate.instant('REGISTER_CRAFTSMAN.SUCCESS_MESSAGE'));
 
           setTimeout(() => {
             this.router.navigate(['/']);
@@ -136,7 +138,7 @@ export class RegisterCraftsmanComponent {
         },
         error: (error) => {
           this.isLoading.set(false);
-          this.errorMessage.set(error.message || 'Registration failed. Please try again.');
+          this.errorMessage.set(error.message || this.translate.instant('REGISTER_CRAFTSMAN.ERROR_DEFAULT'));
         }
       });
     } else {

@@ -1,19 +1,19 @@
 <div class="home-container">
   <div class="hero-section">
     <div class="container">
-      <h1>Welcome to FixIt</h1>
-      <p class="hero-subtitle">Connect with skilled craftsmen or offer your services</p>
+      <h1>{{ 'HOME.TITLE' | translate }}</h1>
+      <p class="hero-subtitle">{{ 'HOME.SUBTITLE' | translate }}</p>
 
       @if (!authService.isAuthenticated()) {
         <div class="cta-buttons">
-          <a routerLink="/register/client" class="btn btn-primary">Find Craftsmen</a>
-          <a routerLink="/register/craftsman" class="btn btn-secondary">Become a Craftsman</a>
+          <a routerLink="/register/client" class="btn btn-primary">{{ 'HOME.FIND_CRAFTSMEN' | translate }}</a>
+          <a routerLink="/register/craftsman" class="btn btn-secondary">{{ 'HOME.BECOME_CRAFTSMAN' | translate }}</a>
         </div>
       } @else {
         @if (authService.currentUser$ | async; as user) {
           <div class="welcome-message">
-            <h2>Welcome back, {{ user.fName }}!</h2>
-            <p>You're logged in as {{ user.role }}</p>
+            <h2>{{ 'HOME.WELCOME_BACK' | translate }}, {{ user.fName }}!</h2>
+            <p>{{ 'HOME.LOGGED_IN_AS' | translate }} {{ user.role }}</p>
           </div>
         }
       }
@@ -22,31 +22,31 @@
 
   <div class="features-section">
     <div class="container">
-      <h2 class="section-title">Why Choose FixIt?</h2>
+      <h2 class="section-title">{{ 'HOME.WHY_CHOOSE' | translate }}</h2>
 
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">🔧</div>
-          <h3>Skilled Professionals</h3>
-          <p>Connect with verified craftsmen with years of experience</p>
+          <h3>{{ 'HOME.FEATURE_1_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.FEATURE_1_DESC' | translate }}</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">⚡</div>
-          <h3>Quick Response</h3>
-          <p>Get fast responses and book services at your convenience</p>
+          <h3>{{ 'HOME.FEATURE_2_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.FEATURE_2_DESC' | translate }}</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">💰</div>
-          <h3>Transparent Pricing</h3>
-          <p>Clear hourly rates with no hidden fees</p>
+          <h3>{{ 'HOME.FEATURE_3_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.FEATURE_3_DESC' | translate }}</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">🛡️</div>
-          <h3>Secure Platform</h3>
-          <p>Your data and transactions are protected</p>
+          <h3>{{ 'HOME.FEATURE_4_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.FEATURE_4_DESC' | translate }}</p>
         </div>
       </div>
     </div>
