@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
-import { Gender } from '../../models/auth.models';
+import { Gender, CraftsmanRegisterRequest } from '../../models/auth.models';
 
 @Component({
   selector: 'app-register-craftsman',
@@ -40,7 +40,6 @@ export class RegisterCraftsmanComponent {
       confirmPassword: ['', [Validators.required]],
       location: ['', [Validators.required]],
       phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]],
-      profileImage: ['', [Validators.required]],
       description: [''],
       hourlyRate: [0, [Validators.min(0)]],
       experienceOfYears: [0, [Validators.min(0), Validators.max(50)]],
@@ -101,19 +100,6 @@ export class RegisterCraftsmanComponent {
     }
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.registerForm.patchValue({
-          profileImage: reader.result as string
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  }
 
   onSubmit(): void {
     if (this.registerForm.valid) {
@@ -121,13 +107,25 @@ export class RegisterCraftsmanComponent {
       this.errorMessage.set(null);
       this.successMessage.set(null);
 
-      const formData = { ...this.registerForm.value };
-      delete formData.confirmPassword;
+      // Build JSON payload matching backend DTO exactly
+      const payload: CraftsmanRegisterRequest = {
+        fName: this.registerForm.value.fName,
+        lName: this.registerForm.value.lName,
+        email: this.registerForm.value.email,
+        password: this.registerForm.value.password,
+        location: this.registerForm.value.location,
+        phoneNumber: this.registerForm.value.phoneNumber,
+        description: this.registerForm.value.description || '',
+        hourlyRate: this.registerForm.value.hourlyRate || 0,
+        experienceOfYears: this.registerForm.value.experienceOfYears || 0,
+        nationalId: this.registerForm.value.nationalId,
+        gender: this.registerForm.value.gender, // Number: 0 = Male, 1 = Female
+        dateOfBirth: new Date(this.registerForm.value.dateOfBirth).toISOString() // ISO format: "2025-11-21T12:38:45.051Z"
+      };
 
-      // Convert date to ISO string format
-      formData.dateOfBirth = new Date(formData.dateOfBirth).toISOString();
+      console.log('Submitting craftsman registration JSON:', payload);
 
-      this.authService.registerCraftsman(formData).subscribe({
+      this.authService.registerCraftsman(payload).subscribe({
         next: (response) => {
           this.isLoading.set(false);
           this.successMessage.set(this.translate.instant('REGISTER_CRAFTSMAN.SUCCESS_MESSAGE'));
@@ -138,6 +136,7 @@ export class RegisterCraftsmanComponent {
         },
         error: (error) => {
           this.isLoading.set(false);
+          console.error('Craftsman registration error:', error);
           this.errorMessage.set(error.message || this.translate.instant('REGISTER_CRAFTSMAN.ERROR_DEFAULT'));
         }
       });

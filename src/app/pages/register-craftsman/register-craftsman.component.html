@@ -251,7 +251,7 @@
      
 
       <div class="form-group">
-        <label for="description">Description (Optional)</label>
+        <label for="description">{{ 'REGISTER_CRAFTSMAN.DESCRIPTION' | translate }}</label>
         <textarea
           id="description"
           formControlName="description"
@@ -263,7 +263,7 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label for="hourlyRate">Hourly Rate ($)</label>
+          <label for="hourlyRate">{{ 'REGISTER_CRAFTSMAN.HOURLY_RATE' | translate }}</label>
           <input
             type="number"
             id="hourlyRate"
@@ -305,23 +305,6 @@
             </div>
           }
         </div>
-      </div>
-
-      <div class="form-group">
-        <label for="profileImage">{{ 'REGISTER_CRAFTSMAN.PROFILE_IMAGE' | translate }} *</label>
-        <input
-          type="file"
-          id="profileImage"
-          accept="image/*"
-          (change)="onFileSelected($event)"
-          class="form-control"
-          [class.error]="registerForm.get('profileImage')?.invalid && registerForm.get('profileImage')?.touched"
-        />
-        @if (registerForm.get('profileImage')?.invalid && registerForm.get('profileImage')?.touched) {
-          <div class="error-message">
-            <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.PROFILE_IMAGE_REQUIRED' | translate }}</span>
-          </div>
-        }
       </div>
 
       <button

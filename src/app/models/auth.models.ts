@@ -4,8 +4,8 @@ export enum Gender {
 }
 
 export interface LoginRequest {
-  email: string;
-  password: string;
+  Email: string;
+  Password: string;
 }
 
 export interface ClientRegisterRequest {
@@ -15,7 +15,6 @@ export interface ClientRegisterRequest {
   password: string;
   location: string;
   phoneNumber: string;
-  profileImage: string;
   gender: Gender;
   dateOfBirth: string;
 }
@@ -27,8 +26,7 @@ export interface CraftsmanRegisterRequest {
   password: string;
   location: string;
   phoneNumber: string;
-  profileImage: string;
-  description: string;
+  description?: string;
   hourlyRate: number;
   experienceOfYears: number;
   nationalId: string;

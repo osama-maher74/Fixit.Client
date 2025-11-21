@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
+import { LoginRequest } from '../../models/auth.models';
 
 @Component({
   selector: 'app-login',
@@ -48,7 +49,12 @@ export class LoginComponent {
       this.isLoading.set(true);
       this.errorMessage.set(null);
 
-      this.authService.login(this.loginForm.value).subscribe({
+      const loginData: LoginRequest = {
+        Email: this.loginForm.value.email,
+        Password: this.loginForm.value.password
+      };
+
+      this.authService.login(loginData).subscribe({
         next: (response) => {
           this.isLoading.set(false);
 

@@ -40,18 +40,55 @@ export class AuthService {
   }
 
   registerClient(data: ClientRegisterRequest): Observable<AuthResponse> {
+    // Client registration sends JSON body with camelCase properties
+    // Backend expects: fName, lName, email, password, location, phoneNumber, gender, dateOfBirth
+
+    const payload = {
+      fName: data.fName,
+      lName: data.lName,
+      email: data.email,
+      password: data.password,
+      location: data.location,
+      phoneNumber: data.phoneNumber,
+      gender: data.gender, // Number (0 or 1)
+      dateOfBirth: data.dateOfBirth // ISO format string
+    };
+
+    console.log('Sending client registration JSON:', payload);
+
     return this.http.post<AuthResponse>(
       `${environment.apiUrl}/Account/register/client`,
-      data
+      payload
     ).pipe(
       tap(response => this.handleAuthResponse(response))
     );
   }
 
   registerCraftsman(data: CraftsmanRegisterRequest): Observable<AuthResponse> {
+    // Craftsman registration sends JSON body with camelCase properties
+    // Backend expects: fName, lName, email, password, location, phoneNumber, description,
+    // hourlyRate, experienceOfYears, nationalId, gender, dateOfBirth
+
+    const payload = {
+      fName: data.fName,
+      lName: data.lName,
+      email: data.email,
+      password: data.password,
+      location: data.location,
+      phoneNumber: data.phoneNumber,
+      description: data.description || '',
+      hourlyRate: data.hourlyRate,
+      experienceOfYears: data.experienceOfYears,
+      nationalId: data.nationalId,
+      gender: data.gender, // Number (0 or 1)
+      dateOfBirth: data.dateOfBirth // ISO format string
+    };
+
+    console.log('Sending craftsman registration JSON:', payload);
+
     return this.http.post<AuthResponse>(
       `${environment.apiUrl}/Account/register/craftsman`,
-      data
+      payload
     ).pipe(
       tap(response => this.handleAuthResponse(response))
     );

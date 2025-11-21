@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
-import { Gender } from '../../models/auth.models';
+import { Gender, ClientRegisterRequest } from '../../models/auth.models';
 
 @Component({
   selector: 'app-register-client',
@@ -40,7 +40,6 @@ export class RegisterClientComponent {
       confirmPassword: ['', [Validators.required]],
       location: ['', [Validators.required]],
       phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]],
-      profileImage: [''],
       gender: [Gender.Male, [Validators.required]],
       dateOfBirth: ['', [Validators.required, this.ageValidator]]
     }, { validators: this.passwordMatchValidator });
@@ -93,19 +92,6 @@ export class RegisterClientComponent {
     }
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.registerForm.patchValue({
-          profileImage: reader.result as string
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  }
 
   onSubmit(): void {
     if (this.registerForm.valid) {
@@ -113,13 +99,21 @@ export class RegisterClientComponent {
       this.errorMessage.set(null);
       this.successMessage.set(null);
 
-      const formData = { ...this.registerForm.value };
-      delete formData.confirmPassword;
+      // Build JSON payload matching backend DTO exactly
+      const payload: ClientRegisterRequest = {
+        fName: this.registerForm.value.fName,
+        lName: this.registerForm.value.lName,
+        email: this.registerForm.value.email,
+        password: this.registerForm.value.password,
+        location: this.registerForm.value.location,
+        phoneNumber: this.registerForm.value.phoneNumber,
+        gender: this.registerForm.value.gender, // Number: 0 = Male, 1 = Female
+        dateOfBirth: new Date(this.registerForm.value.dateOfBirth).toISOString() // ISO format: "2025-11-21T12:08:22.258Z"
+      };
 
-      // Convert date to ISO string format
-      formData.dateOfBirth = new Date(formData.dateOfBirth).toISOString();
+      console.log('Submitting client registration JSON:', payload);
 
-      this.authService.registerClient(formData).subscribe({
+      this.authService.registerClient(payload).subscribe({
         next: (response) => {
           this.isLoading.set(false);
           this.successMessage.set(this.translate.instant('REGISTER_CLIENT.SUCCESS_MESSAGE'));
@@ -130,6 +124,7 @@ export class RegisterClientComponent {
         },
         error: (error) => {
           this.isLoading.set(false);
+          console.error('Client registration error:', error);
           this.errorMessage.set(error.message || this.translate.instant('REGISTER_CLIENT.ERROR_DEFAULT'));
         }
       });
