@@ -131,7 +131,7 @@ export class RegisterCraftsmanComponent {
           this.successMessage.set(this.translate.instant('REGISTER_CRAFTSMAN.SUCCESS_MESSAGE'));
 
           setTimeout(() => {
-            this.router.navigate(['/']);
+            this.router.navigate(['/login']);
           }, 2000);
         },
         error: (error) => {

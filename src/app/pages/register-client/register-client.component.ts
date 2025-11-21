@@ -119,7 +119,7 @@ export class RegisterClientComponent {
           this.successMessage.set(this.translate.instant('REGISTER_CLIENT.SUCCESS_MESSAGE'));
 
           setTimeout(() => {
-            this.router.navigate(['/']);
+            this.router.navigate(['/login']);
           }, 2000);
         },
         error: (error) => {

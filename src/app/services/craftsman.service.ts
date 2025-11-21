@@ -1,0 +1,58 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { CraftsmanProfile } from '../models/craftsman.models';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CraftsmanService {
+  private http = inject(HttpClient);
+  private readonly CRAFTSMAN_API = `${environment.apiUrl}/CraftsMan`;
+
+  /**
+   * Get craftsman profile by email
+   * @param email - Craftsman's email address
+   * @returns Observable of CraftsmanProfile
+   */
+  getCraftsmanByEmail(email: string): Observable<CraftsmanProfile> {
+    const params = new HttpParams().set('email', email);
+    const url = `${this.CRAFTSMAN_API}/GetByEmail`;
+
+    console.log('CraftsmanService - Making API call to:', url);
+    console.log('CraftsmanService - With email:', email);
+    console.log('CraftsmanService - Full URL with params:', `${url}?email=${email}`);
+
+    return this.http.get<CraftsmanProfile>(url, { params });
+  }
+
+  /**
+   * Get logged-in user's email from localStorage
+   * @returns email string or null
+   */
+  getLoggedInEmail(): string | null {
+    return localStorage.getItem('email');
+  }
+
+  /**
+   * Get current user's profile
+   * @returns Observable of CraftsmanProfile or Observable error
+   */
+  getCurrentUserProfile(): Observable<CraftsmanProfile> {
+    const email = this.getLoggedInEmail();
+
+    console.log('CraftsmanService - getCurrentUserProfile called');
+    console.log('CraftsmanService - Email from localStorage:', email);
+
+    if (!email) {
+      console.error('CraftsmanService - No email found in localStorage!');
+      console.error('CraftsmanService - All localStorage keys:', Object.keys(localStorage));
+      console.error('CraftsmanService - localStorage.email value:', localStorage.getItem('email'));
+
+      return throwError(() => new Error('No logged-in user found'));
+    }
+
+    return this.getCraftsmanByEmail(email);
+  }
+}

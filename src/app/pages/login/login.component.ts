@@ -75,8 +75,9 @@ export class LoginComponent {
             }
           }, 100);
 
-          // Get return URL from route parameters or default to home
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          // Redirect to profile page (unified for both client and craftsman)
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
+          console.log('User role:', response.role);
           console.log('Navigating to:', returnUrl);
           this.router.navigate([returnUrl]);
         },
