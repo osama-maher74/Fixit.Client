@@ -4,12 +4,16 @@ export enum Gender {
 }
 
 export interface CraftsmanProfile {
+  id: number;
   fName: string;
   lName: string;
   describtion: string;
+  phoneNumber: string;
   profileImage?: string | null;
   rating: number;
   location: string;
   isVerified: boolean;
   normalizedEmail: string;
+  experienceOfYears: number;
+  hourlyRate: number;
 }

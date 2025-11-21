@@ -56,4 +56,19 @@ export class ClientService {
 
     return this.getClientByEmail(email);
   }
+
+  /**
+   * Update client profile
+   * @param id - Client ID
+   * @param formData - FormData containing update fields and optional profile image
+   * @returns Observable of updated ClientProfile
+   */
+  updateClient(id: number, formData: FormData): Observable<ClientProfile> {
+    const url = `${this.CLIENT_API}/${id}`;
+
+    console.log('ClientService - Updating client with ID:', id);
+    console.log('ClientService - Update URL:', url);
+
+    return this.http.put<ClientProfile>(url, formData);
+  }
 }

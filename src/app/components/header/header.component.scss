@@ -207,6 +207,43 @@ $hover-red: #c0392b;
   flex-wrap: nowrap;
 }
 
+// Edit Profile Link
+.edit-profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background-color: transparent;
+  border: 2px solid $primary-gold;
+  border-radius: 8px;
+  color: $primary-gold;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+  white-space: nowrap;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background-color: $primary-gold;
+    color: $primary-dark;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(253, 184, 19, 0.4);
+  }
+
+  &.active {
+    background-color: $primary-gold;
+    color: $primary-dark;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
 // Profile Icon Link
 .profile-icon-link {
   display: inline-flex;

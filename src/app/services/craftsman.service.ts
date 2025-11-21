@@ -55,4 +55,19 @@ export class CraftsmanService {
 
     return this.getCraftsmanByEmail(email);
   }
+
+  /**
+   * Update craftsman profile
+   * @param id - Craftsman ID
+   * @param formData - FormData containing update fields and optional profile image
+   * @returns Observable of updated CraftsmanProfile
+   */
+  updateCraftsman(id: number, formData: FormData): Observable<CraftsmanProfile> {
+    const url = `${this.CRAFTSMAN_API}/${id}`;
+
+    console.log('CraftsmanService - Updating craftsman with ID:', id);
+    console.log('CraftsmanService - Update URL:', url);
+
+    return this.http.put<CraftsmanProfile>(url, formData);
+  }
 }

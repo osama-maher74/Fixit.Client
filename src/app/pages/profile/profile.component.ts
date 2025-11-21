@@ -206,21 +206,9 @@ export class ProfileComponent implements OnInit {
         return p.profileImage;
       }
 
-      // If it's a local file path, extract filename and construct API URL
-      let fileName = p.profileImage;
-
-      // Extract filename from Windows path (handles both \ and /)
-      if (fileName.includes('\\')) {
-        fileName = fileName.split('\\').pop() || fileName;
-      } else if (fileName.includes('/')) {
-        fileName = fileName.split('/').pop() || fileName;
-      }
-
-      console.log('Extracted filename:', fileName);
-
-      // Construct the URL - ASP.NET Core serves static files from wwwroot without /api prefix
-      // So if image is in wwwroot/Images/default.png, the URL is https://localhost:7058/Images/default.png
-      const imageUrl = `https://localhost:7058/Images/${fileName}`;
+      // Backend returns the path like /images/ProfilePics/699cd57a-cbcc-4c81-a777-28af484aa6d6.png
+      // Just prepend the base URL
+      const imageUrl = `https://localhost:7058${p.profileImage}`;
       console.log('Constructed image URL:', imageUrl);
 
       return imageUrl;
