@@ -18,12 +18,11 @@ export const routes: Routes = [
     path: 'register/craftsman',
     loadComponent: () => import('./pages/register-craftsman/register-craftsman.component').then(m => m.RegisterCraftsmanComponent)
   },
-  // Protected routes example - uncomment and modify as needed
-  // {
-  //   path: 'dashboard',
-  //   loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
-  //   canActivate: [authGuard]
-  // },
+  {
+    path: 'profile',
+    loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent),
+    canActivate: [authGuard]
+  },
   {
     path: '**',
     redirectTo: ''

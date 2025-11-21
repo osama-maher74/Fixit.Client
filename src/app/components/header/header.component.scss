@@ -207,6 +207,38 @@ $hover-red: #c0392b;
   flex-wrap: nowrap;
 }
 
+// Profile Icon Link
+.profile-icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s;
+  background-color: transparent;
+
+  &:hover {
+    background-color: rgba(253, 184, 19, 0.2);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// Profile Icon SVG
+.profile-icon {
+  width: 32px;
+  height: 32px;
+  color: $primary-gold;
+  transition: all 0.3s;
+
+  .profile-icon-link:hover & {
+    color: $text-white;
+  }
+}
+
 .user-name {
   color: $text-white;
   font-weight: 600;

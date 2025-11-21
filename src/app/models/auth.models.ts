@@ -35,8 +35,12 @@ export interface CraftsmanRegisterRequest {
 }
 
 export interface AuthResponse {
+  id?: number;
   token?: string;
-  user?: User;
+  fName?: string;
+  lName?: string;
+  email?: string;
+  role?: string;
   message?: string;
   success?: boolean;
 }

@@ -41,6 +41,11 @@
             @if (authService.currentUser$ | async; as user) {
               <span class="user-name">{{ user.fName }} {{ user.lName }}</span>
             }
+            <a routerLink="/profile" class="profile-icon-link" (click)="closeMenus()" [attr.aria-label]="'HEADER.PROFILE' | translate">
+              <svg class="profile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </a>
             <button (click)="onLogout(); closeMenus()" class="btn-logout">
               {{ 'HEADER.LOGOUT' | translate }}
             </button>

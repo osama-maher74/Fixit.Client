@@ -97,6 +97,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
+    localStorage.removeItem('email');
     this.currentUserSubject.next(null);
     this.isAuthenticated.set(false);
     this.router.navigate(['/login']);
@@ -111,23 +112,63 @@ export class AuthService {
   }
 
   private handleAuthResponse(response: AuthResponse): void {
-    console.log('Auth response received:', response);
+    console.log('========== AUTH RESPONSE START ==========');
+    console.log('Full response:', response);
+    console.log('Response type:', typeof response);
+    console.log('Response keys:', Object.keys(response));
 
+    // Store token
     if (response.token) {
+      console.log('✅ Token found:', response.token.substring(0, 20) + '...');
       localStorage.setItem(this.TOKEN_KEY, response.token);
+    } else {
+      console.warn('⚠️ No token in response');
     }
 
-    if (response.user) {
-      console.log('Storing user:', response.user);
-      localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
-      this.currentUserSubject.next(response.user);
+    // Backend returns flat structure with user properties at root level
+    // Create User object from response properties
+    if (response.email && response.fName && response.lName) {
+      console.log('✅ User data found at root level');
+      console.log('- ID:', response.id);
+      console.log('- Email:', response.email);
+      console.log('- Name:', response.fName, response.lName);
+      console.log('- Role:', response.role);
+
+      const user: User = {
+        id: response.id?.toString() || '',
+        email: response.email,
+        fName: response.fName,
+        lName: response.lName,
+        role: response.role || 'Client'
+      };
+
+      console.log('✅ Created user object:', user);
+      localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+
+      // Store email separately for profile API calls
+      console.log('✅ Storing email in localStorage:', response.email);
+      localStorage.setItem('email', response.email);
+      console.log('✅ Email stored. Verification:', localStorage.getItem('email'));
+
+      this.currentUserSubject.next(user);
+    } else {
+      console.warn('⚠️ Incomplete user data in response');
+      console.warn('- email:', response.email);
+      console.warn('- fName:', response.fName);
+      console.warn('- lName:', response.lName);
     }
 
     if (response.success || response.token) {
       this.isAuthenticated.set(true);
-      console.log('User authenticated, isAuthenticated:', this.isAuthenticated());
-      console.log('Current user:', this.currentUserSubject.value);
+      console.log('✅ User authenticated, isAuthenticated:', this.isAuthenticated());
+      console.log('✅ Current user:', this.currentUserSubject.value);
     }
+
+    console.log('========== AUTH RESPONSE END ==========');
+    console.log('Final localStorage state:');
+    console.log('- auth_token:', localStorage.getItem(this.TOKEN_KEY) ? 'EXISTS' : 'MISSING');
+    console.log('- current_user:', localStorage.getItem(this.USER_KEY) ? 'EXISTS' : 'MISSING');
+    console.log('- email:', localStorage.getItem('email') || 'MISSING');
   }
 
   private hasToken(): boolean {

@@ -221,7 +221,7 @@
             class="form-control"
           >
             @for (option of genderOptions; track option.value) {
-              <option [value]="option.value">{{ option.label | translate }}</option>
+              <option [ngValue]="option.value">{{ option.label | translate }}</option>
             }
           </select>
         </div>

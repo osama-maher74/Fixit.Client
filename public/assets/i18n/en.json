@@ -7,7 +7,8 @@
     "REGISTER_AS_CRAFTSMAN": "Craftsman",
     "LOGOUT": "Logout",
     "WELCOME": "Welcome back",
-    "MENU": "Menu"
+    "MENU": "Menu",
+    "PROFILE": "Profile"
   },
   "FOOTER": {
     "COPYRIGHT": "All rights reserved"

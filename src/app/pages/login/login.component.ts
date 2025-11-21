@@ -54,20 +54,43 @@ export class LoginComponent {
         Password: this.loginForm.value.password
       };
 
+      console.log('========== LOGIN ATTEMPT START ==========');
+      console.log('Login form data:', this.loginForm.value);
+      console.log('Login payload (PascalCase):', loginData);
+      console.log('Email being sent:', loginData.Email);
+
       this.authService.login(loginData).subscribe({
         next: (response) => {
+          console.log('========== LOGIN SUCCESS ==========');
+          console.log('Login response received:', response);
           this.isLoading.set(false);
+
+          // Verify email was stored
+          setTimeout(() => {
+            const storedEmail = localStorage.getItem('email');
+            console.log('Verification - Email in localStorage after login:', storedEmail);
+            if (!storedEmail) {
+              console.error('❌ CRITICAL: Email was NOT stored in localStorage!');
+              console.error('Check auth.service.ts handleAuthResponse method');
+            }
+          }, 100);
 
           // Get return URL from route parameters or default to home
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          console.log('Navigating to:', returnUrl);
           this.router.navigate([returnUrl]);
         },
         error: (error) => {
+          console.error('========== LOGIN ERROR ==========');
+          console.error('Login error:', error);
+          console.error('Error message:', error.message);
+          console.error('Error status:', error.status);
           this.isLoading.set(false);
           this.errorMessage.set(error.message || this.translate.instant('LOGIN.ERROR_DEFAULT'));
         }
       });
     } else {
+      console.warn('Login form is invalid');
       // Mark all fields as touched to show validation errors
       Object.keys(this.loginForm.controls).forEach(key => {
         this.loginForm.get(key)?.markAsTouched();
