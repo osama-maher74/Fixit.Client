@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ClientService } from '../../services/client.service';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { ClientProfile } from '../../models/client.models';
@@ -11,7 +11,7 @@ type UserProfile = ClientProfile | CraftsmanProfile;
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

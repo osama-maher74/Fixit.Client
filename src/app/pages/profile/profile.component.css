@@ -489,6 +489,46 @@
 }
 
 /* ========================================
+   QUICK ACTIONS (WALLET BUTTON)
+   ======================================== */
+
+.quick-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.wallet-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary-gold) 0%, #f5a623 100%);
+  color: #000;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(253, 184, 19, 0.3);
+}
+
+.wallet-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.wallet-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(253, 184, 19, 0.5);
+  background: linear-gradient(135deg, #f5a623 0%, var(--primary-gold) 100%);
+}
+
+.wallet-button:active {
+  transform: translateY(-1px);
+}
+
+/* ========================================
    DETAILS GRID
    ======================================== */
 
