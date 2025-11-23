@@ -1,7 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { ViewportScroller } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ServiceService } from '../../services/service.service';
 import { ServiceCardComponent, ServiceCard } from '../../components/service-card/service-card.component';
@@ -16,6 +17,8 @@ import { ServiceCardComponent, ServiceCard } from '../../components/service-card
 export class HomeComponent implements OnInit {
   authService = inject(AuthService);
   private serviceService = inject(ServiceService);
+  private route = inject(ActivatedRoute);
+  private viewportScroller = inject(ViewportScroller);
 
   // Signals for services
   services = signal<ServiceCard[]>([]);
@@ -25,6 +28,24 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.loadServices();
     this.checkUserRole();
+    this.handleFragmentScroll();
+  }
+
+  /**
+   * Handle scroll to section based on URL fragment
+   */
+  private handleFragmentScroll(): void {
+    this.route.fragment.subscribe(fragment => {
+      if (fragment) {
+        // Wait for the view to fully render before scrolling
+        setTimeout(() => {
+          const element = document.getElementById(fragment);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 300);
+      }
+    });
   }
 
   /**

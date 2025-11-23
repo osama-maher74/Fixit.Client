@@ -1,16 +1,42 @@
 .services-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--background-light) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(135deg, var(--background-white) 0%, var(--background-light) 100%);
   padding-bottom: 60px;
+  transition: background 0.3s ease;
 
   .page-header {
     text-align: center;
     padding: 60px 24px 40px;
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--background-dark) 100%);
-    color: var(--text-white);
+    background: var(--background-white);
+    color: var(--text-dark);
     margin-bottom: 40px;
-    box-shadow: 0 4px 12px rgba(253, 184, 19, 0.2);
+    box-shadow: var(--shadow-md);
     position: relative;
+    border-bottom: 1px solid var(--border-light);
+    transition: all 0.3s ease;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://images.unsplash.com/photo-1504148455328-c376907d081c?w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.06;
+      filter: grayscale(40%);
+      z-index: 0;
+    }
+
+    .page-title,
+    .page-subtitle {
+      position: relative;
+      z-index: 1;
+    }
 
     &::after {
       content: '';
@@ -20,6 +46,7 @@
       right: 0;
       height: 4px;
       background: var(--primary-gold);
+      z-index: 2;
     }
 
     .page-title {
@@ -73,7 +100,7 @@
 
     .loading-text {
       font-size: 18px;
-      color: var(--text-light);
+      color: var(--text-secondary);
       font-weight: 500;
     }
   }
@@ -121,19 +148,19 @@
     .empty-icon {
       width: 80px;
       height: 80px;
-      color: var(--text-gray);
+      color: var(--text-secondary);
     }
 
     .empty-text {
       font-size: 20px;
-      color: var(--text-light);
+      color: var(--text-primary);
       margin: 0;
     }
 
     .retry-btn {
       padding: 12px 32px;
       background: var(--primary-gold);
-      color: var(--primary-dark);
+      color: var(--text-dark);
       border: 2px solid var(--primary-gold);
       border-radius: 30px;
       font-size: 16px;
@@ -143,7 +170,7 @@
       box-shadow: 0 4px 12px rgba(253, 184, 19, 0.4);
 
       &:hover {
-        background: var(--primary-dark);
+        background: var(--background-white);
         color: var(--primary-gold);
         border-color: var(--primary-gold);
         transform: translateY(-2px);

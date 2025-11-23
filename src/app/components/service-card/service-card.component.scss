@@ -1,15 +1,15 @@
 .service-card {
   position: relative;
-  background: var(--white);
+  background: var(--background-white);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   height: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--border-gray);
+  border: 1.5px solid var(--border-light);
 
   &:hover {
     transform: translateY(-8px);
@@ -26,12 +26,12 @@
     }
   }
 
-  // Card Image Section
+  // Card-Image Section
   .card-image {
     position: relative;
     width: 100%;
     height: 220px;
-    background: linear-gradient(135deg, var(--background-dark) 0%, var(--primary-dark) 100%);
+    background: linear-gradient(135deg, var(--background-accent) 0%, var(--background-light) 100%);
     overflow: hidden;
 
     img {
@@ -80,7 +80,7 @@
     .service-title {
       font-size: 20px;
       font-weight: 600;
-      color: var(--primary-dark);
+      color: var(--text-dark);
       margin: 0;
       line-height: 1.4;
       transition: color 0.2s ease;
@@ -91,7 +91,7 @@
 
       .price-label {
         font-size: 12px;
-        color: var(--text-gray);
+        color: var(--text-secondary);
         margin-bottom: 4px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -111,7 +111,7 @@
         .price {
           font-size: 24px;
           font-weight: 700;
-          color: var(--primary-dark);
+          color: var(--text-dark);
         }
       }
     }
@@ -124,11 +124,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(30, 30, 30, 0.95) 0%,
-      rgba(51, 51, 51, 0.95) 100%
-    );
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -139,23 +136,23 @@
     .view-details-btn {
       padding: 14px 32px;
       background: var(--primary-gold);
-      color: var(--primary-dark);
+      color: var(--text-dark);
       border: 2px solid var(--primary-gold);
       border-radius: 30px;
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(253, 184, 19, 0.4);
+      box-shadow: 0 4px 12px rgba(253, 184, 19, 0.5);
       transform: translateY(10px);
       animation: slideUp 0.3s ease forwards;
 
       &:hover {
-        background: var(--primary-dark);
+        background: var(--background-white);
         color: var(--primary-gold);
         border-color: var(--primary-gold);
         transform: scale(1.05) translateY(0);
-        box-shadow: 0 6px 16px rgba(253, 184, 19, 0.6);
+        box-shadow: 0 6px 16px rgba(253, 184, 19, 0.7);
       }
     }
   }

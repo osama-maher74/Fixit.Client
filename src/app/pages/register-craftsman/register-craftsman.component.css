@@ -4,18 +4,47 @@
   justify-content: center;
   align-items: center;
   padding: 2rem 1rem;
-  background: var(--background-dark);
+  position: relative;
+  background: linear-gradient(135deg, var(--background-light) 0%, var(--background-accent) 100%);
+  transition: background 0.3s ease;
+}
+
+.register-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://images.unsplash.com/photo-1581578017093-cd30171a0e46?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.05;
+  filter: grayscale(30%);
+  z-index: 0;
+}
+
+.register-container > * {
+  position: relative;
+  z-index: 1;
 }
 
 .register-card {
-  background: var(--primary-dark);
-  border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  background: var(--background-white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-xl);
   padding: 2.5rem;
   width: 100%;
   max-width: 800px;
   margin: 2rem auto;
-  border: 2px solid var(--primary-gold);
+  border: 2px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.register-card:hover {
+  border-color: var(--primary-gold);
+  box-shadow: var(--shadow-xl), 0 0 20px rgba(253, 184, 19, 0.2);
 }
 
 .register-card h2 {
@@ -27,7 +56,7 @@
 
 .subtitle {
   text-align: center;
-  color: var(--text-gray);
+  color: var(--text-secondary);
   margin-bottom: 2rem;
 }
 
@@ -37,7 +66,7 @@
   color: var(--primary-gold);
   margin: 2rem 0 1rem 0;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--border-gray);
+  border-bottom: 2px solid var(--border-light);
 }
 
 .alert {
@@ -77,21 +106,21 @@
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: var(--text-white);
+  color: var(--text-dark);
   font-weight: 500;
 }
 
 .form-control {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid var(--border-gray);
-  border-radius: 4px;
+  border: 2px solid var(--border-light);
+  border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s;
+  transition: all 0.3s;
   box-sizing: border-box;
   font-family: inherit;
   background-color: var(--background-light);
-  color: var(--text-white);
+  color: var(--text-dark);
 }
 
 .form-control:focus {
@@ -123,7 +152,12 @@ textarea.form-control {
   cursor: pointer;
   font-size: 1.2rem;
   padding: 0.25rem 0.5rem;
-  color: var(--text-gray);
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+  color: var(--primary-gold);
 }
 
 .error-message {
@@ -150,13 +184,13 @@ textarea.form-control {
 
 .btn-primary {
   background-color: var(--primary-gold);
-  color: var(--primary-dark);
+  color: var(--text-dark);
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(253, 184, 19, 0.4);
-  background-color: #e5a510;
+  background-color: var(--primary-gold-hover);
 }
 
 .btn:disabled {
@@ -167,8 +201,8 @@ textarea.form-control {
 .spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(30, 30, 30, 0.3);
-  border-top-color: var(--primary-dark);
+  border: 2px solid var(--border-light);
+  border-top-color: var(--text-dark);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }
@@ -183,7 +217,7 @@ textarea.form-control {
 }
 
 .login-link p {
-  color: var(--text-gray);
+  color: var(--text-secondary);
 }
 
 .login-link a {
