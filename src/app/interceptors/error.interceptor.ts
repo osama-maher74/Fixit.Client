@@ -10,6 +10,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       let errorMessage = 'An unknown error occurred';
 
+      // Skip error interceptor for OpenAI API calls and CORS proxy
+      const isOpenAIRequest = req.url.includes('api.openai.com') || req.url.includes('corsproxy.io');
+
       if (error.error instanceof ErrorEvent) {
         // Client-side error
         errorMessage = `Error: ${error.error.message}`;
@@ -67,9 +70,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           errorMessage = `HTTP Error ${error.status}`;
         }
 
-        // Handle 401 Unauthorized
-        if (error.status === 401) {
-          // Redirect to login
+        // Handle 401 Unauthorized - but ONLY for your backend API, NOT for OpenAI
+        if (error.status === 401 && !isOpenAIRequest) {
+          // Redirect to login only for backend authentication errors
           router.navigate(['/login']);
         }
       }

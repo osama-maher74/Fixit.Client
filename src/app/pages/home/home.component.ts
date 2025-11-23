@@ -6,11 +6,12 @@ import { ViewportScroller } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ServiceService } from '../../services/service.service';
 import { ServiceCardComponent, ServiceCard } from '../../components/service-card/service-card.component';
+import { ChatWidgetComponent } from '../../components/chat-widget/chat-widget.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, ServiceCardComponent],
+  imports: [CommonModule, RouterModule, TranslateModule, ServiceCardComponent, ChatWidgetComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
