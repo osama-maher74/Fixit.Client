@@ -1,0 +1,197 @@
+.service-card {
+  position: relative;
+  background: var(--white);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-gray);
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(253, 184, 19, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-color: var(--primary-gold);
+
+    .card-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .card-image img {
+      transform: scale(1.08);
+    }
+  }
+
+  // Card Image Section
+  .card-image {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(135deg, var(--background-dark) 0%, var(--primary-dark) 100%);
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .duration-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--primary-gold);
+      backdrop-filter: blur(10px);
+      padding: 6px 12px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary-dark);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+      .clock-icon {
+        width: 16px;
+        height: 16px;
+        color: var(--primary-dark);
+      }
+
+      .duration-value {
+        color: var(--primary-dark);
+      }
+    }
+  }
+
+  // Card Content Section
+  .card-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .service-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin: 0;
+      line-height: 1.4;
+      transition: color 0.2s ease;
+    }
+
+    .price-info {
+      margin-top: auto;
+
+      .price-label {
+        font-size: 12px;
+        color: var(--text-gray);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .price-amount {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .price-icon {
+          width: 20px;
+          height: 20px;
+          color: var(--primary-gold);
+        }
+
+        .price {
+          font-size: 24px;
+          font-weight: 700;
+          color: var(--primary-dark);
+        }
+      }
+    }
+  }
+
+  // Hover Overlay
+  .card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(30, 30, 30, 0.95) 0%,
+      rgba(51, 51, 51, 0.95) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .view-details-btn {
+      padding: 14px 32px;
+      background: var(--primary-gold);
+      color: var(--primary-dark);
+      border: 2px solid var(--primary-gold);
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(253, 184, 19, 0.4);
+      transform: translateY(10px);
+      animation: slideUp 0.3s ease forwards;
+
+      &:hover {
+        background: var(--primary-dark);
+        color: var(--primary-gold);
+        border-color: var(--primary-gold);
+        transform: scale(1.05) translateY(0);
+        box-shadow: 0 6px 16px rgba(253, 184, 19, 0.6);
+      }
+    }
+  }
+}
+
+@keyframes slideUp {
+  to {
+    transform: translateY(0);
+  }
+}
+
+// Container for multiple cards (to be used in parent component)
+.service-cards-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  // Tablet: 2 columns
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+
+  // Mobile: 1 column
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+}
+
+// Optional: Add to global styles for smooth page transitions
+* {
+  box-sizing: border-box;
+}

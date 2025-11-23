@@ -51,4 +51,37 @@
       </div>
     </div>
   </div>
+
+  <!-- Services Section (Hidden for Craftsmen) -->
+  @if (!isCraftsman()) {
+    <div class="services-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Our Services</h2>
+          <p class="section-subtitle">Explore our most popular home services</p>
+        </div>
+
+        @if (isLoadingServices()) {
+          <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading services...</p>
+          </div>
+        } @else if (services().length > 0) {
+          <div class="services-grid">
+            @for (service of services(); track service.serviceName) {
+              <app-service-card [service]="service"></app-service-card>
+            }
+          </div>
+          <div class="view-all-container">
+            <a routerLink="/services" class="btn btn-view-all">
+              View All Services
+              <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+              </svg>
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+  }
 </div>

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { clientOnlyGuard } from './guards/client-only.guard';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,11 @@ export const routes: Routes = [
     path: 'craftsman-wallet',
     loadComponent: () => import('./pages/craftsman-wallet/craftsman-wallet.component').then(m => m.CraftsmanWalletComponent),
     canActivate: [authGuard]
+  },
+  {
+    path: 'services',
+    loadComponent: () => import('./pages/services/services.component').then(m => m.ServicesComponent),
+    canActivate: [clientOnlyGuard]
   },
   {
     path: '**',
