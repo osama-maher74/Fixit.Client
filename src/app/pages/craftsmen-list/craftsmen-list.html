@@ -1,0 +1,95 @@
+<div class="craftsmen-list-container">
+    <div class="header-section">
+        <h1 class="page-title">Available Craftsmen</h1>
+        <p class="page-subtitle">
+            Found {{ craftsmen.length }} professionals for <strong>{{ serviceName }}</strong> in <strong>{{ location
+                }}</strong>
+        </p>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Finding the best professionals for you...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="error">
+        <div class="error-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+        </div>
+        <p>{{ error }}</p>
+        <button class="btn-retry" (click)="fetchCraftsmen()">Try Again</button>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && !error && craftsmen.length === 0">
+        <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+        </div>
+        <h3>No Craftsmen Found</h3>
+        <p>We couldn't find any verified professionals in this location for the selected service.</p>
+        <button class="btn-back" (click)="goBack()">Go Back</button>
+    </div>
+
+    <!-- Craftsmen Grid -->
+    <div class="craftsmen-grid" *ngIf="!isLoading && !error && craftsmen.length > 0">
+        <div class="craftsman-card" *ngFor="let craftsman of craftsmen">
+            <div class="card-header">
+                <div class="profile-image-wrapper">
+                    <img [src]="craftsman.profileImage || 'assets/images/default-avatar.png'"
+                        [alt]="craftsman.fName + ' ' + craftsman.lName" class="profile-image"
+                        onerror="this.src='assets/images/default-avatar.png'">
+                    <div class="verified-badge" *ngIf="craftsman.isVerified" title="Verified Professional">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="header-info">
+                    <h3 class="craftsman-name">{{ craftsman.fName }} {{ craftsman.lName }}</h3>
+                    <div class="rating-stars">
+                        <span *ngFor="let star of getStarArray(craftsman.rating)" [class.filled]="star === 1">★</span>
+                        <span class="rating-value">({{ craftsman.rating }})</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <p class="description">{{ craftsman.describtion }}</p>
+
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="label">Experience</span>
+                        <span class="value">{{ craftsman.experienceOfYears }} Years</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Rate</span>
+                        <span class="value">${{ craftsman.hourlyRate }}/hr</span>
+                    </div>
+                </div>
+
+                <div class="location-info">
+                    <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span class="location-text">{{ craftsman.location }}</span>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button class="btn-contact">
+                    Contact Professional
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
