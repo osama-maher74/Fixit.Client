@@ -44,6 +44,10 @@ export const routes: Routes = [
     canActivate: [clientOnlyGuard]
   },
   {
+    path: 'craftsmen-list',
+    loadComponent: () => import('./pages/craftsmen-list/craftsmen-list').then(m => m.CraftsmenListComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

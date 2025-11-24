@@ -321,7 +321,15 @@ export class ServiceBookingComponent implements OnInit {
           next: (response) => {
             this.isSubmitting = false;
             console.log('Service request created successfully:', response);
-            alert(`Booking request submitted successfully for ${this.selectedService?.serviceName}!`);
+
+            // Navigate to craftsmen list
+            this.router.navigate(['/craftsmen-list'], {
+              queryParams: {
+                location: this.bookingForm.value.location || clientProfile.location, // Use form location or client profile location
+                serviceName: this.selectedService?.serviceName
+              }
+            });
+
             this.bookingForm.reset();
             this.removeImage();
           },

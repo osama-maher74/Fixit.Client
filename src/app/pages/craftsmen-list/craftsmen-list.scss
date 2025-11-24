@@ -1,0 +1,311 @@
+.craftsmen-list-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: 80vh;
+
+    .header-section {
+        text-align: center;
+        margin-bottom: 3rem;
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1d2433;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+.loading-state,
+.error-state,
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #2563eb;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    p {
+        color: #64748b;
+        font-size: 1.1rem;
+    }
+}
+
+.error-state {
+    .error-icon {
+        color: #ef4444;
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 1rem;
+    }
+
+    .btn-retry {
+        margin-top: 1rem;
+        padding: 0.75rem 1.5rem;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.2s;
+
+        &:hover {
+            background: #1d4ed8;
+        }
+    }
+}
+
+.empty-state {
+    .empty-icon {
+        color: #94a3b8;
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 1rem;
+    }
+
+    h3 {
+        color: #1d2433;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-back {
+        margin-top: 1.5rem;
+        padding: 0.75rem 1.5rem;
+        background: #f1f5f9;
+        color: #475569;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s;
+
+        &:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+    }
+}
+
+.craftsmen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.craftsman-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #e2e8f0;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        border-bottom: 1px solid #f1f5f9;
+
+        .profile-image-wrapper {
+            position: relative;
+            width: 64px;
+            height: 64px;
+
+            .profile-image {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid #fff;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .verified-badge {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                background: #2563eb;
+                color: white;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid #fff;
+
+                svg {
+                    width: 12px;
+                    height: 12px;
+                }
+            }
+        }
+
+        .header-info {
+            flex: 1;
+
+            .craftsman-name {
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: #1d2433;
+                margin: 0 0 0.25rem 0;
+            }
+
+            .rating-stars {
+                display: flex;
+                align-items: center;
+                gap: 2px;
+                color: #cbd5e1;
+                font-size: 0.9rem;
+
+                .filled {
+                    color: #fbbf24;
+                }
+
+                .rating-value {
+                    color: #64748b;
+                    margin-left: 0.5rem;
+                    font-size: 0.85rem;
+                }
+            }
+        }
+    }
+
+    .card-body {
+        padding: 1.5rem;
+
+        .description {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+
+            .info-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .label {
+                    font-size: 0.75rem;
+                    color: #94a3b8;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    margin-bottom: 0.25rem;
+                }
+
+                .value {
+                    font-weight: 600;
+                    color: #1d2433;
+                }
+            }
+        }
+
+        .location-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            font-size: 0.9rem;
+
+            .location-icon {
+                width: 16px;
+                height: 16px;
+                flex-shrink: 0;
+            }
+
+            .location-text {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+
+    .card-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #f1f5f9;
+
+        .btn-contact {
+            width: 100%;
+            padding: 0.75rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+
+            &:hover {
+                background: #1d4ed8;
+            }
+        }
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 640px) {
+    .craftsmen-list-container {
+        padding: 1rem;
+
+        .header-section {
+            margin-bottom: 2rem;
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+        }
+    }
+
+    .craftsmen-grid {
+        grid-template-columns: 1fr;
+    }
+}

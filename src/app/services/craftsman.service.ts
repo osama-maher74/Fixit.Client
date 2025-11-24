@@ -70,4 +70,23 @@ export class CraftsmanService {
 
     return this.http.put<CraftsmanProfile>(url, formData);
   }
+
+  /**
+   * Get craftsmen by location and service name
+   * @param location - Location string
+   * @param serviceName - Service name string
+   * @returns Observable of CraftsmanProfile array
+   */
+  getCraftsmenByLocationAndService(location: string, serviceName: string): Observable<CraftsmanProfile[]> {
+    const params = new HttpParams()
+      .set('location', location)
+      .set('servicename', serviceName);
+
+    const url = `${this.CRAFTSMAN_API}/GetByLocation`;
+
+    console.log('CraftsmanService - Fetching craftsmen from:', url);
+    console.log('CraftsmanService - Params:', params.toString());
+
+    return this.http.get<CraftsmanProfile[]>(url, { params });
+  }
 }
