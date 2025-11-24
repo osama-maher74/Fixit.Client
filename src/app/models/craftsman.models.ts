@@ -17,3 +17,18 @@ export interface CraftsmanProfile {
   experienceOfYears: number;
   hourlyRate: number;
 }
+
+export interface Craftsman {
+  id: number;
+  fName: string;
+  lName: string;
+  describtion: string;
+  profileImage: string;
+  rating: number;
+  location: string;
+  isVerified: boolean;
+  normalizedEmail: string;
+  experienceOfYears: number;
+  hourlyRate: number;
+  phoneNumber: string;
+}

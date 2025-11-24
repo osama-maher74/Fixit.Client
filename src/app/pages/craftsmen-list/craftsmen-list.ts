@@ -1,27 +1,26 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CraftsmanService } from '../../services/craftsman.service';
-import { CraftsmanProfile } from '../../models/craftsman.models';
+import { Craftsman } from '../../models/craftsman.models';
 
 @Component({
     selector: 'app-craftsmen-list',
     standalone: true,
     imports: [CommonModule],
     templateUrl: './craftsmen-list.html',
-    styleUrls: ['./craftsmen-list.scss']
+    styleUrl: './craftsmen-list.scss'
 })
 export class CraftsmenListComponent implements OnInit {
-    private route = inject(ActivatedRoute);
-    private router = inject(Router);
-    private craftsmanService = inject(CraftsmanService);
-
-    craftsmen: CraftsmanProfile[] = [];
+    craftsmen: Craftsman[] = [];
     isLoading = true;
     error: string | null = null;
-
     location: string = '';
     serviceName: string = '';
+
+    private craftsmanService = inject(CraftsmanService);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
 
     ngOnInit(): void {
         this.route.queryParams.subscribe(params => {
@@ -29,35 +28,52 @@ export class CraftsmenListComponent implements OnInit {
             this.serviceName = params['serviceName'] || '';
 
             if (this.location && this.serviceName) {
-                this.fetchCraftsmen();
+                this.loadCraftsmen();
             } else {
+                this.error = 'Missing location or service name';
                 this.isLoading = false;
-                this.error = 'Missing location or service information.';
             }
         });
     }
 
-    fetchCraftsmen(): void {
+    loadCraftsmen(): void {
         this.isLoading = true;
         this.error = null;
 
-        this.craftsmanService.getCraftsmenByLocationAndService(this.location, this.serviceName)
-            .subscribe({
-                next: (data) => {
-                    this.craftsmen = data;
-                    this.isLoading = false;
-                    console.log('Craftsmen fetched:', this.craftsmen);
-                },
-                error: (err) => {
-                    console.error('Error fetching craftsmen:', err);
-                    this.error = 'Failed to load craftsmen. Please try again later.';
-                    this.isLoading = false;
-                }
-            });
+        this.craftsmanService.getCraftsmenByLocation(this.location, this.serviceName).subscribe({
+            next: (craftsmen) => {
+                this.craftsmen = craftsmen;
+                this.isLoading = false;
+                console.log('Craftsmen loaded:', craftsmen);
+            },
+            error: (error) => {
+                console.error('Error loading craftsmen:', error);
+                this.error = 'Failed to load craftsmen. Please try again later.';
+                this.isLoading = false;
+            }
+        });
     }
 
-    getStarArray(rating: number): number[] {
-        return Array(5).fill(0).map((_, i) => i < rating ? 1 : 0);
+    getFullName(craftsman: Craftsman): string {
+        return `${craftsman.fName} ${craftsman.lName}`;
+    }
+
+    getStarsArray(rating: number): boolean[] {
+        return Array(5).fill(false).map((_, index) => index < Math.round(rating));
+    }
+
+    getProfileImageUrl(profileImage: string): string {
+        if (!profileImage) {
+            return '/assets/images/default-avatar.png';
+        }
+        // Assuming the backend returns relative paths like '/images/ProfilePics/...'
+        return `https://localhost:7058${profileImage}`;
+    }
+
+    selectCraftsman(craftsman: Craftsman): void {
+        console.log('Selected craftsman:', craftsman);
+        // TODO: Navigate to craftsman profile or booking confirmation
+        alert(`Selected ${this.getFullName(craftsman)}`);
     }
 
     goBack(): void {

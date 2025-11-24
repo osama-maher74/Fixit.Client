@@ -319,23 +319,38 @@ export class ServiceBookingComponent implements OnInit {
         // Call API using the dedicated service
         this.serviceRequestService.createServiceRequest(serviceRequestDto).subscribe({
           next: (response) => {
+            console.log('=== API Success Response ===');
+            console.log('Response:', response);
+            console.log('Response type:', typeof response);
             this.isSubmitting = false;
-            console.log('Service request created successfully:', response);
 
-            // Navigate to craftsmen list
-            this.router.navigate(['/craftsmen-list'], {
-              queryParams: {
-                location: this.bookingForm.value.location || clientProfile.location, // Use form location or client profile location
-                serviceName: this.selectedService?.serviceName
-              }
-            });
+            try {
+              // Navigate to craftsmen list
+              const navLocation = this.bookingForm.value.location || clientProfile.location || 'Default Location';
+              const navServiceName = this.selectedService?.serviceName || 'Unknown Service';
 
-            this.bookingForm.reset();
-            this.removeImage();
+              console.log('Navigating with:', { location: navLocation, serviceName: navServiceName });
+
+              this.router.navigate(['/craftsmen-list'], {
+                queryParams: {
+                  location: navLocation,
+                  serviceName: navServiceName
+                }
+              });
+
+              this.bookingForm.reset();
+              this.removeImage();
+            } catch (err) {
+              console.error('Error after API success:', err);
+              alert('Booking submitted successfully! Please check craftsmen list manually.');
+            }
           },
           error: (error) => {
+            console.log('=== API Error Response ===');
+            console.log('Error object:', error);
+            console.log('Error status:', error.status);
+            console.log('Error message:', error.message);
             this.isSubmitting = false;
-            console.error('Error creating service request:', error);
             alert(`Failed to submit booking request. ${error.error?.message || 'Please try again later.'}`);
           }
         });

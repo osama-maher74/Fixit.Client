@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { CraftsmanProfile } from '../models/craftsman.models';
+import { CraftsmanProfile, Craftsman } from '../models/craftsman.models';
 
 @Injectable({
   providedIn: 'root'
@@ -74,19 +74,20 @@ export class CraftsmanService {
   /**
    * Get craftsmen by location and service name
    * @param location - Location string
-   * @param serviceName - Service name string
-   * @returns Observable of CraftsmanProfile array
+   * @param serviceName - Service name
+   * @returns Observable of Craftsman array
    */
-  getCraftsmenByLocationAndService(location: string, serviceName: string): Observable<CraftsmanProfile[]> {
+  getCraftsmenByLocation(location: string, serviceName: string): Observable<Craftsman[]> {
     const params = new HttpParams()
       .set('location', location)
       .set('servicename', serviceName);
-
     const url = `${this.CRAFTSMAN_API}/GetByLocation`;
 
-    console.log('CraftsmanService - Fetching craftsmen from:', url);
-    console.log('CraftsmanService - Params:', params.toString());
+    console.log('CraftsmanService - Getting craftsmen by location');
+    console.log('CraftsmanService - URL:', url);
+    console.log('CraftsmanService - Location:', location);
+    console.log('CraftsmanService - Service:', serviceName);
 
-    return this.http.get<CraftsmanProfile[]>(url, { params });
+    return this.http.get<Craftsman[]>(url, { params });
   }
 }

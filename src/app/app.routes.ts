@@ -39,13 +39,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/service-booking/service-booking').then(m => m.ServiceBookingComponent)
   },
   {
+    path: 'craftsmen-list',
+    loadComponent: () => import('./pages/craftsmen-list/craftsmen-list').then(m => m.CraftsmenListComponent)
+  },
+  {
     path: 'services',
     loadComponent: () => import('./pages/services/services.component').then(m => m.ServicesComponent),
     canActivate: [clientOnlyGuard]
-  },
-  {
-    path: 'craftsmen-list',
-    loadComponent: () => import('./pages/craftsmen-list/craftsmen-list').then(m => m.CraftsmenListComponent)
   },
   {
     path: '**',
