@@ -65,8 +65,11 @@ export class ServiceCardComponent {
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
     } else {
-      // TODO: Navigate to booking page or open booking modal
-      console.log('Proceeding with booking for:', this.service.serviceName);
+      // Navigate to the booking page
+      this.router.navigate(['/service-booking'], {
+        queryParams: { service: this.service.serviceName }
+      });
     }
   }
+
 }
