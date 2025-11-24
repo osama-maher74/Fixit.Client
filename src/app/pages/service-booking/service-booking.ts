@@ -275,7 +275,7 @@ export class ServiceBookingComponent implements OnInit {
   }
 
   onSubmitBooking(): void {
-    //Check if user is authenticated
+    // Check if user is authenticated
     if (!this.authService.isAuthenticated()) {
       alert('Please log in to book a service');
       this.router.navigate(['/auth/login']);
@@ -283,7 +283,6 @@ export class ServiceBookingComponent implements OnInit {
     }
 
     if (this.bookingForm.invalid) {
-      // Mark all fields as touched to show errors
       Object.keys(this.bookingForm.controls).forEach(key => {
         this.bookingForm.get(key)?.markAsTouched();
       });
@@ -295,6 +294,11 @@ export class ServiceBookingComponent implements OnInit {
       return;
     }
 
+    if (!this.selectedService.serviceId) {
+      alert('Error: Service ID is missing. Please refresh the page and try again.');
+      return;
+    }
+
     this.isSubmitting = true;
 
     // Get client profile to retrieve client ID
@@ -303,7 +307,7 @@ export class ServiceBookingComponent implements OnInit {
         // Prepare service request DTO
         const serviceRequestDto: CreateServiceRequestDto = {
           clientId: clientProfile.id,
-          serviceId: this.selectedService!.serviceId, // ServiceId from database endpoint
+          serviceId: this.selectedService!.serviceId,
           description: this.bookingForm.value.description,
           serviceStartTime: new Date(this.bookingForm.value.serviceStartTime).toISOString(),
           location: this.bookingForm.value.location || undefined,
@@ -311,45 +315,31 @@ export class ServiceBookingComponent implements OnInit {
           serviceRequestImage: this.selectedImage || undefined
         };
 
-        // Debug: Log request data
-        console.log('=== Creating Service Request ===');
-        console.log('Service ID (from database endpoint):', this.selectedService!.serviceId);
-        console.log('Request DTO:', serviceRequestDto);
-
         // Call API using the dedicated service
         this.serviceRequestService.createServiceRequest(serviceRequestDto).subscribe({
           next: (response) => {
-            console.log('=== API Success Response ===');
-            console.log('Response:', response);
-            console.log('Response type:', typeof response);
             this.isSubmitting = false;
 
-            try {
-              // Navigate to craftsmen list
-              const navLocation = this.bookingForm.value.location || clientProfile.location || 'Default Location';
-              const navServiceName = this.selectedService?.serviceName || 'Unknown Service';
+            // Navigate to craftsmen list
+            const navLocation = this.bookingForm.value.location || clientProfile.location || '';
+            const navServiceName = this.selectedService?.serviceName || '';
 
-              console.log('Navigating with:', { location: navLocation, serviceName: navServiceName });
-
+            if (navLocation && navServiceName) {
               this.router.navigate(['/craftsmen-list'], {
                 queryParams: {
                   location: navLocation,
                   serviceName: navServiceName
                 }
               });
-
-              this.bookingForm.reset();
-              this.removeImage();
-            } catch (err) {
-              console.error('Error after API success:', err);
-              alert('Booking submitted successfully! Please check craftsmen list manually.');
+            } else {
+              alert('Booking submitted successfully!');
+              this.router.navigate(['/']);
             }
+
+            this.bookingForm.reset();
+            this.removeImage();
           },
           error: (error) => {
-            console.log('=== API Error Response ===');
-            console.log('Error object:', error);
-            console.log('Error status:', error.status);
-            console.log('Error message:', error.message);
             this.isSubmitting = false;
             alert(`Failed to submit booking request. ${error.error?.message || 'Please try again later.'}`);
           }
@@ -357,7 +347,6 @@ export class ServiceBookingComponent implements OnInit {
       },
       error: (error) => {
         this.isSubmitting = false;
-        console.error('Error getting client profile:', error);
         alert('Failed to get client information. Please make sure you are logged in.');
       }
     });
