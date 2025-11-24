@@ -13,11 +13,11 @@
             <!-- Left Column: Service Details -->
             <div class="service-details-column">
                 <!-- Image Gallery -->
-                <div class="image-gallery">
+                <div class="image-gallery" *ngIf="selectedService.images && selectedService.images.length > 0">
                     <div class="gallery-main">
                         <img [src]="selectedService.images[0]" [alt]="selectedService.serviceName" class="main-image" />
                     </div>
-                    <div class="gallery-thumbnails">
+                    <div class="gallery-thumbnails" *ngIf="selectedService.images.length > 1">
                         <img *ngFor="let image of selectedService.images.slice(1)" [src]="image"
                             [alt]="selectedService.serviceName" class="thumbnail-image" />
                     </div>
@@ -29,7 +29,7 @@
                     <p class="service-description">{{ selectedService.description }}</p>
                 </div>
 
-                <div class="details-card">
+                <div class="details-card" *ngIf="selectedService.features && selectedService.features.length > 0">
                     <h2 class="section-title">What's Included</h2>
                     <ul class="features-list">
                         <li *ngFor="let feature of selectedService.features" class="feature-item">
