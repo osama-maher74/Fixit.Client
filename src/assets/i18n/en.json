@@ -150,5 +150,24 @@
       "PROFILE_IMAGE_REQUIRED": "Profile image is required"
     },
     "ERROR_DEFAULT": "Registration failed. Please try again."
+  },
+  "SERVICE_BOOKING": {
+    "TITLE": "Professional Home Services",
+    "SUBTITLE": "Your trusted partner for all home repair and maintenance needs",
+    "HOME_REPAIRS": "Home Repairs",
+    "HOME_REPAIRS_DESC": "General repairs and maintenance for your home with skilled professionals",
+    "ELECTRICAL": "Electrical Services",
+    "ELECTRICAL_DESC": "Safe and certified electrical installations, repairs, and inspections",
+    "PLUMBING": "Plumbing",
+    "PLUMBING_DESC": "Expert plumbing solutions for all your water and drainage needs",
+    "PAINTING": "Painting & Decoration",
+    "PAINTING_DESC": "Transform your space with professional painting and finishing services",
+    "CARPENTRY": "Carpentry",
+    "CARPENTRY_DESC": "Custom woodwork, furniture repair, and carpentry solutions",
+    "MAINTENANCE": "General Maintenance",
+    "MAINTENANCE_DESC": "Regular preventive maintenance to keep your home in perfect condition",
+    "READY_TO_START": "Ready to Get Started?",
+    "CTA_DESC": "Book a professional craftsman for your next project and experience quality service",
+    "BOOK_NOW": "Book Now"
   }
 }

@@ -35,6 +35,10 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'service-booking',
+    loadComponent: () => import('./pages/service-booking/service-booking').then(m => m.ServiceBookingComponent)
+  },
+  {
     path: 'services',
     loadComponent: () => import('./pages/services/services.component').then(m => m.ServicesComponent),
     canActivate: [clientOnlyGuard]
