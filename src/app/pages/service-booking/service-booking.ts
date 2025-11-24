@@ -4,6 +4,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ServiceService } from '../../services/service.service';
+import { ClientService } from '../../services/client.service';
 
 interface ServiceDetails {
   serviceId: number;
@@ -22,7 +24,7 @@ interface BookingRequest {
   description: string;
   location?: string;
   serviceRequestImage?: File;
-  requestAt: Date;
+  serviceStartTime: Date;
   suggestedPrice?: number;
 }
 
@@ -41,6 +43,8 @@ export class ServiceBookingComponent implements OnInit {
   isSubmitting = false;
 
   private authService = inject(AuthService);
+  private serviceService = inject(ServiceService);
+  private clientService = inject(ClientService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -215,6 +219,7 @@ export class ServiceBookingComponent implements OnInit {
     this.bookingForm = this.fb.group({
       description: ['', [Validators.required, Validators.minLength(10)]],
       location: [''],
+      serviceStartTime: ['', [Validators.required]],
       suggestedPrice: ['', [Validators.min(0)]]
     });
   }
@@ -307,33 +312,60 @@ export class ServiceBookingComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    // Prepare booking request
-    const currentUser = this.authService.getCurrentUser();
-    const bookingRequest: BookingRequest = {
-      clientId: currentUser?.id ? parseInt(currentUser.id) : 0,
-      serviceId: this.selectedService.serviceId,
-      description: this.bookingForm.value.description,
-      location: this.bookingForm.value.location || undefined,
-      requestAt: new Date(), // Auto-assigned to current time
-      suggestedPrice: this.bookingForm.value.suggestedPrice || undefined
-    };
+    // Get client profile to retrieve client ID
+    this.clientService.getCurrentUserProfile().subscribe({
+      next: (clientProfile) => {
+        // Prepare FormData for multipart/form-data request
+        const formData = new FormData();
 
-    // Add image if selected
-    if (this.selectedImage) {
-      bookingRequest.serviceRequestImage = this.selectedImage;
-    }
+        // Add required fields
+        formData.append('ClientId', clientProfile.id.toString());
+        formData.append('ServiceId', this.selectedService!.serviceId.toString());
+        formData.append('Description', this.bookingForm.value.description);
+        formData.append('ServiceStartTime', new Date(this.bookingForm.value.serviceStartTime).toISOString());
 
-    console.log('Booking Request:', bookingRequest);
-    console.log('Image file:', this.selectedImage);
+        // Add optional fields
+        if (this.bookingForm.value.location) {
+          formData.append('Location', this.bookingForm.value.location);
+        }
 
-    // TODO: Call API service to submit booking
-    // For now, just show success message
-    setTimeout(() => {
-      this.isSubmitting = false;
-      alert(`Booking request submitted successfully for ${this.selectedService?.serviceName}!`);
-      this.bookingForm.reset();
-      this.removeImage();
-    }, 1500);
+        if (this.bookingForm.value.suggestedPrice) {
+          formData.append('SuggestedPrice', this.bookingForm.value.suggestedPrice.toString());
+        }
+
+        // Add image if selected
+        if (this.selectedImage) {
+          formData.append('ServiceRequestImage', this.selectedImage, this.selectedImage.name);
+        }
+
+        // Debug: Log FormData contents
+        console.log('=== FormData Contents ===');
+        formData.forEach((value, key) => {
+          console.log(`${key}:`, value);
+        });
+
+        // Call API
+        this.serviceService.createServiceRequest(formData).subscribe({
+          next: (response) => {
+            this.isSubmitting = false;
+            console.log('Service request created successfully:', response);
+            alert(`Booking request submitted successfully for ${this.selectedService?.serviceName}!`);
+            this.bookingForm.reset();
+            this.removeImage();
+          },
+          error: (error) => {
+            this.isSubmitting = false;
+            console.error('Error creating service request:', error);
+            alert(`Failed to submit booking request. ${error.error?.message || 'Please try again later.'}`);
+          }
+        });
+      },
+      error: (error) => {
+        this.isSubmitting = false;
+        console.error('Error getting client profile:', error);
+        alert('Failed to get client information. Please make sure you are logged in.');
+      }
+    });
   }
 
   goToServices(): void {

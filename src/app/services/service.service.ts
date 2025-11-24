@@ -26,4 +26,15 @@ export class ServiceService {
   getServiceByName(serviceName: string): Observable<ServiceCard> {
     return this.http.get<ServiceCard>(`${this.API_URL}/${serviceName}`);
   }
+
+  /**
+   * Create a new service request
+   * POST /api/ServiceRequest
+   */
+  createServiceRequest(formData: FormData): Observable<any> {
+    // Don't set Content-Type header - let browser set it with boundary for multipart/form-data
+    return this.http.post(`${environment.apiUrl}/ServiceRequest`, formData, {
+      // No headers needed - Angular will auto-detect FormData
+    });
+  }
 }
