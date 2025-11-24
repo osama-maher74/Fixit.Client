@@ -150,5 +150,35 @@
       "PROFILE_IMAGE_REQUIRED": "Profile image is required"
     },
     "ERROR_DEFAULT": "Registration failed. Please try again."
+  },
+  "PAYMENT": {
+    "TITLE": "Payment Test",
+    "SUBTITLE": "Test Stripe payment integration",
+    "LOADING_STRIPE": "Loading payment form...",
+    "SERVICE_REQUEST_ID_LABEL": "Service Request ID",
+    "SERVICE_REQUEST_ID_REQUIRED": "Service Request ID is required",
+    "SERVICE_REQUEST_ID_MIN": "Service Request ID must be at least 1",
+    "SERVICE_REQUEST_ID_INVALID": "Please enter a valid service request ID (numbers only)",
+    "SERVICE_REQUEST_ID_HELPER": "For testing, use Service Request ID = 5",
+    "CARD_DETAILS_LABEL": "Card Details",
+    "CARD_NUMBER_LABEL": "Card Number",
+    "CARD_EXPIRY_LABEL": "Expiry Date",
+    "CARD_CVC_LABEL": "CVC",
+    "ERROR_CARD_VALIDATION": "Please check your card details",
+    "ACCEPTED_CARDS": "Accepted cards",
+    "SECURITY_NOTICE": "Your payment information is secure and encrypted",
+    "PAY_NOW": "Pay Now",
+    "PROCESSING": "Processing payment...",
+    "CANCEL": "Cancel",
+    "POWERED_BY": "Powered by",
+    "ERROR_STRIPE_INIT": "Failed to load payment form. Please refresh the page.",
+    "ERROR_STRIPE_NOT_READY": "Payment form is not ready. Please try again.",
+    "ERROR_GENERIC": "Payment failed. Please try again.",
+    "SUCCESS_TITLE": "Payment Successful!",
+    "SUCCESS_MESSAGE": "Your payment has been processed successfully.",
+    "AMOUNT": "Amount",
+    "TRANSACTION_ID": "Transaction ID",
+    "MAKE_ANOTHER_PAYMENT": "Make Another Payment",
+    "BACK_TO_HOME": "Back to Home"
   }
 }

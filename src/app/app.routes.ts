@@ -40,6 +40,10 @@ export const routes: Routes = [
     canActivate: [clientOnlyGuard]
   },
   {
+    path: 'payment-test',
+    loadComponent: () => import('./pages/payment-test/payment-test.component').then(m => m.PaymentTestComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

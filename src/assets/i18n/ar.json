@@ -150,5 +150,35 @@
       "PROFILE_IMAGE_REQUIRED": "صورة الملف الشخصي مطلوبة"
     },
     "ERROR_DEFAULT": "فشل التسجيل. يرجى المحاولة مرة أخرى."
+  },
+  "PAYMENT": {
+    "TITLE": "اختبار الدفع",
+    "SUBTITLE": "اختبار تكامل الدفع بواسطة Stripe",
+    "LOADING_STRIPE": "جاري تحميل نموذج الدفع...",
+    "SERVICE_REQUEST_ID_LABEL": "رقم طلب الخدمة",
+    "SERVICE_REQUEST_ID_REQUIRED": "رقم طلب الخدمة مطلوب",
+    "SERVICE_REQUEST_ID_MIN": "رقم طلب الخدمة يجب أن يكون 1 على الأقل",
+    "SERVICE_REQUEST_ID_INVALID": "الرجاء إدخال رقم طلب خدمة صحيح (أرقام فقط)",
+    "SERVICE_REQUEST_ID_HELPER": "للاختبار، استخدم رقم طلب الخدمة = 5",
+    "CARD_DETAILS_LABEL": "تفاصيل البطاقة",
+    "CARD_NUMBER_LABEL": "رقم البطاقة",
+    "CARD_EXPIRY_LABEL": "تاريخ الانتهاء",
+    "CARD_CVC_LABEL": "رمز الأمان",
+    "ERROR_CARD_VALIDATION": "يرجى التحقق من تفاصيل البطاقة",
+    "ACCEPTED_CARDS": "البطاقات المقبولة",
+    "SECURITY_NOTICE": "معلومات الدفع الخاصة بك آمنة ومشفرة",
+    "PAY_NOW": "ادفع الآن",
+    "PROCESSING": "جاري معالجة الدفع...",
+    "CANCEL": "إلغاء",
+    "POWERED_BY": "مدعوم بواسطة",
+    "ERROR_STRIPE_INIT": "فشل تحميل نموذج الدفع. يرجى تحديث الصفحة.",
+    "ERROR_STRIPE_NOT_READY": "نموذج الدفع غير جاهز. يرجى المحاولة مرة أخرى.",
+    "ERROR_GENERIC": "فشل الدفع. يرجى المحاولة مرة أخرى.",
+    "SUCCESS_TITLE": "تمت عملية الدفع بنجاح!",
+    "SUCCESS_MESSAGE": "تمت معالجة الدفع الخاص بك بنجاح.",
+    "AMOUNT": "المبلغ",
+    "TRANSACTION_ID": "رقم المعاملة",
+    "MAKE_ANOTHER_PAYMENT": "إجراء دفعة أخرى",
+    "BACK_TO_HOME": "العودة إلى الصفحة الرئيسية"
   }
 }
