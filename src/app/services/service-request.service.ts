@@ -8,7 +8,6 @@ export interface CreateServiceRequestDto {
     clientId: number;
     serviceId: number;
     description: string;
-    serviceStartTime: string;
     location?: string;
     suggestedPrice?: number;
     serviceRequestImage?: File;
@@ -69,7 +68,6 @@ export class ServiceRequestService {
         formData.append('ClientId', serviceRequest.clientId.toString());
         formData.append('ServiceId', serviceRequest.serviceId.toString());
         formData.append('Description', serviceRequest.description);
-        formData.append('ServiceStartTime', serviceRequest.serviceStartTime);
 
         if (serviceRequest.location) {
             formData.append('Location', serviceRequest.location);

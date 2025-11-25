@@ -197,7 +197,6 @@ export class ServiceBookingComponent implements OnInit {
     this.bookingForm = this.fb.group({
       description: ['', [Validators.required, Validators.minLength(10)]],
       location: [''],
-      serviceStartTime: ['', [Validators.required]],
       suggestedPrice: ['', [Validators.min(0)]]
     });
   }
@@ -309,7 +308,6 @@ export class ServiceBookingComponent implements OnInit {
           clientId: clientProfile.id,
           serviceId: this.selectedService!.serviceId,
           description: this.bookingForm.value.description,
-          serviceStartTime: new Date(this.bookingForm.value.serviceStartTime).toISOString(),
           location: this.bookingForm.value.location || undefined,
           suggestedPrice: this.bookingForm.value.suggestedPrice || undefined,
           serviceRequestImage: this.selectedImage || undefined

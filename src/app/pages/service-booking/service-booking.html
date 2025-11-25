@@ -124,18 +124,6 @@
                             </div>
                         </div>
 
-                        <!-- Service Start Time Field -->
-                        <div class="form-group">
-                            <label for="serviceStartTime" class="form-label">
-                                Service Start Time <span class="required">*</span>
-                            </label>
-                            <input type="datetime-local" id="serviceStartTime" formControlName="serviceStartTime"
-                                class="form-control" [class.error]="isFieldInvalid('serviceStartTime')" />
-                            <div class="error-message" *ngIf="isFieldInvalid('serviceStartTime')">
-                                {{ getFieldError('serviceStartTime') }}
-                            </div>
-                        </div>
-
                         <!-- Suggested Price Field -->
                         <div class="form-group">
                             <label for="suggestedPrice" class="form-label">
