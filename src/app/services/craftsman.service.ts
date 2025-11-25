@@ -11,11 +11,6 @@ export class CraftsmanService {
   private http = inject(HttpClient);
   private readonly CRAFTSMAN_API = `${environment.apiUrl}/CraftsMan`;
 
-  /**
-   * Get craftsman profile by email
-   * @param email - Craftsman's email address
-   * @returns Observable of CraftsmanProfile
-   */
   getCraftsmanByEmail(email: string): Observable<CraftsmanProfile> {
     const params = new HttpParams().set('email', email);
     const url = `${this.CRAFTSMAN_API}/GetByEmail`;
@@ -27,18 +22,10 @@ export class CraftsmanService {
     return this.http.get<CraftsmanProfile>(url, { params });
   }
 
-  /**
-   * Get logged-in user's email from localStorage
-   * @returns email string or null
-   */
   getLoggedInEmail(): string | null {
     return localStorage.getItem('email');
   }
 
-  /**
-   * Get current user's profile
-   * @returns Observable of CraftsmanProfile or Observable error
-   */
   getCurrentUserProfile(): Observable<CraftsmanProfile> {
     const email = this.getLoggedInEmail();
 
@@ -56,12 +43,6 @@ export class CraftsmanService {
     return this.getCraftsmanByEmail(email);
   }
 
-  /**
-   * Update craftsman profile
-   * @param id - Craftsman ID
-   * @param formData - FormData containing update fields and optional profile image
-   * @returns Observable of updated CraftsmanProfile
-   */
   updateCraftsman(id: number, formData: FormData): Observable<CraftsmanProfile> {
     const url = `${this.CRAFTSMAN_API}/${id}`;
 
@@ -71,12 +52,6 @@ export class CraftsmanService {
     return this.http.put<CraftsmanProfile>(url, formData);
   }
 
-  /**
-   * Get craftsmen by location and service name
-   * @param location - Location string
-   * @param serviceName - Service name
-   * @returns Observable of Craftsman array
-   */
   getCraftsmenByLocation(location: string, serviceName: string): Observable<Craftsman[]> {
     const params = new HttpParams()
       .set('location', location)
@@ -89,5 +64,10 @@ export class CraftsmanService {
     console.log('CraftsmanService - Service:', serviceName);
 
     return this.http.get<Craftsman[]>(url, { params });
+  }
+
+  getCraftsmanById(id: number): Observable<CraftsmanProfile> {
+    const url = `${this.CRAFTSMAN_API}/${id}`;
+    return this.http.get<CraftsmanProfile>(url);
   }
 }

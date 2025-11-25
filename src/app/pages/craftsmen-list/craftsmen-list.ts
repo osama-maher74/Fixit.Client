@@ -17,6 +17,8 @@ export class CraftsmenListComponent implements OnInit {
     error: string | null = null;
     location: string = '';
     serviceName: string = '';
+    serviceRequestId: number = 0;
+    duration: number = 60;
 
     private craftsmanService = inject(CraftsmanService);
     private route = inject(ActivatedRoute);
@@ -26,6 +28,8 @@ export class CraftsmenListComponent implements OnInit {
         this.route.queryParams.subscribe(params => {
             this.location = params['location'] || '';
             this.serviceName = params['serviceName'] || '';
+            this.serviceRequestId = +params['serviceRequestId'] || 0;
+            this.duration = +params['duration'] || 60;
 
             if (this.location && this.serviceName) {
                 this.loadCraftsmen();
@@ -72,8 +76,14 @@ export class CraftsmenListComponent implements OnInit {
 
     selectCraftsman(craftsman: Craftsman): void {
         console.log('Selected craftsman:', craftsman);
-        // TODO: Navigate to craftsman profile or booking confirmation
-        alert(`Selected ${this.getFullName(craftsman)}`);
+        // Navigate to appointment scheduling with service request details
+        this.router.navigate(['/appointment-scheduling'], {
+            queryParams: {
+                craftsmanId: craftsman.id,
+                serviceRequestId: this.serviceRequestId,
+                duration: this.duration
+            }
+        });
     }
 
     goBack(): void {
