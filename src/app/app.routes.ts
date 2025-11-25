@@ -43,6 +43,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/craftsmen-list/craftsmen-list').then(m => m.CraftsmenListComponent)
   },
   {
+    path: 'appointment-scheduling',
+    loadComponent: () => import('./pages/appointment-scheduling/appointment-scheduling').then(m => m.AppointmentSchedulingComponent)
+  },
+  {
     path: 'services',
     loadComponent: () => import('./pages/services/services.component').then(m => m.ServicesComponent),
     canActivate: [clientOnlyGuard]
