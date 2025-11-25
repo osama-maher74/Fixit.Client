@@ -322,12 +322,12 @@ export class ServiceBookingComponent implements OnInit {
             const navLocation = this.bookingForm.value.location || clientProfile.location || '';
             const navServiceName = this.selectedService?.serviceName || '';
 
-            if (navLocation && navServiceName && response.id) {
+            if (navLocation && navServiceName) {
               this.router.navigate(['/craftsmen-list'], {
                 queryParams: {
                   location: navLocation,
                   serviceName: navServiceName,
-                  serviceRequestId: response.id,
+                  // Note: Backend doesn't return serviceRequestId, will need to fetch it separately if needed
                   duration: this.selectedService!.duration
                 }
               });

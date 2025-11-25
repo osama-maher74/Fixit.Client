@@ -12,7 +12,7 @@ import { CraftsmanProfile } from '../../models/craftsman.models';
     standalone: true,
     imports: [CommonModule],
     templateUrl: './appointment-scheduling.html',
-    //styleUrl: './appointment-scheduling.scss'
+    styleUrl: './appointment-scheduling.scss'
 })
 export class AppointmentSchedulingComponent implements OnInit {
     craftsmanId: number = 0;

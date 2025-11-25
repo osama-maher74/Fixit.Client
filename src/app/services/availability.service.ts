@@ -33,7 +33,7 @@ export class AvailabilityService {
             .set('date', date)
             .set('duration', duration.toString());
 
-        return this.http.get<AvailabilityApiResponse>(` ${this.API_URL}/slots`, { params })
+       return this.http.get<AvailabilityApiResponse>(`${this.API_URL}/slots`, { params })
             .pipe(
                 map(response => response.data as TimeSlotDto[])
             );
