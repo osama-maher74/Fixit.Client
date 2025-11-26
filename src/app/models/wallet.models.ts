@@ -7,16 +7,40 @@ export interface WalletDto {
 
 export interface WalletTransactionDto {
   id: number;
-  walletId: number;
   amount: number;
-  transactionType: TransactionType;
-  description?: string;
+  transactionmethod?: TransactionMethod;
+  transactiontype?: TransactionType;
+  transationInfo?: string;
   createdAt: Date | string;
 }
 
+export enum TransactionMethod {
+  Withdraw = 0,
+  Deposits = 1
+}
+
 export enum TransactionType {
-  Deposit = 0,
-  Withdrawal = 1,
-  Payment = 2,
-  Refund = 3
+  Instapay = 0,
+  Ewallet = 1,
+  Credit = 2
+}
+
+export interface CreateWalletTransactionDto {
+  craftsManId: number;
+  walletId: number;
+  amount?: number;
+  transactionmethod?: TransactionMethod;
+  transactiontype?: TransactionType;
+  transationInfo?: string;
+  createdAt: Date;
+  serviceRequestId?: number;
+}
+
+export interface WithdrawalResponse {
+  message: string;
+  craftsManId: number;
+  amountWithdrawn: number;
+  date: Date;
+  withdrawmethod: TransactionType;
+  withdrawmethodinfo: string;
 }

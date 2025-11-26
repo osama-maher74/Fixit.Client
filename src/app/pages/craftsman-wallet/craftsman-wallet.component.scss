@@ -254,6 +254,14 @@ $shadow: rgba(0, 0, 0, 0.5);
   gap: 1.5rem;
   position: relative;
   z-index: 1;
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
+}
+
+.balance-content {
+  flex: 1;
 }
 
 .balance-icon {
@@ -537,6 +545,360 @@ $shadow: rgba(0, 0, 0, 0.5);
   color: $error;
 }
 
+/* ========== WITHDRAWAL BUTTON ========== */
+.btn-withdraw {
+  background: linear-gradient(135deg, $gold, #f5a623);
+  color: #000;
+  border: none;
+  padding: 0.875rem 1.75rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  font-family: 'Cairo', sans-serif;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba($gold, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+}
+
+/* ========== MODAL ========== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 550px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.4s ease-out;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 2rem 1rem;
+  border-bottom: 1px solid $border-color;
+}
+
+.modal-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0;
+}
+
+.modal-close {
+  background: transparent;
+  border: 1px solid $border-color;
+  color: $text-secondary;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    border-color: $error;
+    color: $error;
+    transform: rotate(90deg);
+  }
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.modal-subtitle {
+  color: $text-secondary;
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+}
+
+.available-balance {
+  background: rgba($gold, 0.1);
+  border: 1px solid rgba($gold, 0.3);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.available-label {
+  color: $text-secondary;
+  font-size: 0.95rem;
+}
+
+.available-amount {
+  color: $gold;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  color: $text-primary;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-prefix {
+  position: absolute;
+  left: 1rem;
+  color: $text-secondary;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.form-input {
+  width: 100%;
+  background: rgba($border-color, 0.3);
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  color: $text-primary;
+  font-size: 1rem;
+  font-family: 'Cairo', sans-serif;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $gold;
+    background: rgba($gold, 0.05);
+  }
+
+  &::placeholder {
+    color: $text-muted;
+  }
+
+  .input-wrapper & {
+    padding-left: 2.5rem;
+  }
+}
+
+.form-select {
+  width: 100%;
+  background: rgba($border-color, 0.3);
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  color: $text-primary;
+  font-size: 1rem;
+  font-family: 'Cairo', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $gold;
+    background: rgba($gold, 0.05);
+  }
+
+  option {
+    background: $card-bg;
+    color: $text-primary;
+  }
+}
+
+.error-text {
+  color: $error;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.alert {
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}
+
+.alert-error {
+  background: rgba($error, 0.15);
+  border: 1px solid rgba($error, 0.3);
+  color: $error;
+}
+
+.modal-footer {
+  padding: 1.5rem 2rem 2rem;
+  border-top: 1px solid $border-color;
+  display: flex;
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
+}
+
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, $gold, #f5a623);
+  color: #000;
+  border: none;
+  padding: 0.875rem 1.75rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  font-family: 'Cairo', sans-serif;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba($gold, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  flex: 1;
+  background: transparent;
+  border: 1px solid $border-color;
+  color: $text-secondary;
+  padding: 0.875rem 1.75rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Cairo', sans-serif;
+
+  &:hover:not(:disabled) {
+    border-color: $gold;
+    color: $gold;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(#000, 0.3);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ========== SUCCESS SCREEN ========== */
+.success-screen {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.success-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, rgba($success, 0.2), rgba($success, 0.1));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 50px;
+    height: 50px;
+    color: $success;
+  }
+}
+
+.success-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0 0 1rem;
+}
+
+.success-message {
+  color: $text-secondary;
+  margin: 0 0 2rem;
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+
 /* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 480px) {
   .wallet-container {
@@ -551,5 +913,14 @@ $shadow: rgba(0, 0, 0, 0.5);
 
   .transaction-amount {
     align-self: flex-end;
+  }
+
+  .modal-header,
+  .modal-body {
+    padding: 1.5rem;
+  }
+
+  .modal-footer {
+    padding: 1rem 1.5rem 1.5rem;
   }
 }
