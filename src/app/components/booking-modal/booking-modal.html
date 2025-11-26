@@ -1,0 +1,94 @@
+<h2 mat-dialog-title>Book Service</h2>
+
+<div mat-dialog-content>
+    <!-- Slot Information -->
+    <div class="slot-info">
+        <div class="info-row">
+            <span class="label">Selected Time:</span>
+            <span class="value">{{ formatTime(data.slot.time) }}</span>
+        </div>
+        <div class="info-row">
+            <span class="label">Date & Time:</span>
+            <span class="value">{{ formatDateTime(data.slot.startTime) }}</span>
+        </div>
+        @if (data.craftsmanName) {
+        <div class="info-row">
+            <span class="label">Craftsman:</span>
+            <span class="value">{{ data.craftsmanName }}</span>
+        </div>
+        }
+    </div>
+
+    <!-- Error Message -->
+    @if (errorMessage()) {
+    <div class="error-alert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>{{ errorMessage() }}</span>
+    </div>
+    }
+
+    <!-- Booking Form -->
+    <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+        <!-- Service Selection -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Select Service</mat-label>
+            <mat-select formControlName="serviceId" [disabled]="isLoadingServices()">
+                @if (isLoadingServices()) {
+                <mat-option disabled>Loading services...</mat-option>
+                } @else {
+                @for (service of services(); track service.serviceId) {
+                <mat-option [value]="service.serviceId">
+                    {{ service.serviceName }}
+                </mat-option>
+                }
+                }
+            </mat-select>
+            @if (hasError('serviceId')) {
+            <mat-error>{{ getErrorMessage('serviceId') }}</mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" placeholder="Describe the work you need done..."
+                rows="4"></textarea>
+            @if (hasError('description')) {
+            <mat-error>{{ getErrorMessage('description') }}</mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Location -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Location (Optional)</mat-label>
+            <input matInput formControlName="location" placeholder="Service location" />
+        </mat-form-field>
+
+        <!-- Suggested Price -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Suggested Price (Optional)</mat-label>
+            <input matInput type="number" formControlName="suggestedPrice" placeholder="0.00" step="0.01" />
+            <span matPrefix>$&nbsp;</span>
+            @if (hasError('suggestedPrice')) {
+            <mat-error>{{ getErrorMessage('suggestedPrice') }}</mat-error>
+            }
+        </mat-form-field>
+    </form>
+</div>
+
+<div mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="isSubmitting()">
+        Cancel
+    </button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="isSubmitting() || bookingForm.invalid">
+        @if (isSubmitting()) {
+        <mat-spinner diameter="20"></mat-spinner>
+        <span>Booking...</span>
+        } @else {
+        <span>Confirm Booking</span>
+        }
+    </button>
+</div>

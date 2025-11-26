@@ -47,6 +47,11 @@ export class AppointmentSchedulingComponent implements OnInit {
 
         const today = new Date();
         this.selectedDate = today.toISOString().split('T')[0];
+
+        // Load slots for today immediately if we have a craftsman
+        if (this.craftsmanId) {
+            this.loadAvailableSlots();
+        }
     }
 
     private loadCraftsmanInfo(): void {
@@ -84,9 +89,9 @@ export class AppointmentSchedulingComponent implements OnInit {
         this.slotsError = null;
         this.availableSlots = [];
 
-        this.availabilityService.getAvailableSlots(this.craftsmanId, this.selectedDate, this.serviceDuration)
+        this.availabilityService.getTimeSlots(this.craftsmanId, this.selectedDate, this.serviceDuration)
             .subscribe({
-                next: (slots) => {
+                next: (slots: TimeSlotDto[]) => {
                     this.availableSlots = slots;
                     this.loadingSlots = false;
 
@@ -94,7 +99,7 @@ export class AppointmentSchedulingComponent implements OnInit {
                         this.slotsError = 'No available slots for this date. Please select another date.';
                     }
                 },
-                error: (error) => {
+                error: (error: any) => {
                     console.error('Error loading slots:', error);
                     this.loadingSlots = false;
                     this.slotsError = 'Failed to load available time slots. Please try again.';

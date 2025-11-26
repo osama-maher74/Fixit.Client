@@ -1,13 +1,13 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { CraftsmanProfile, Gender } from '../../models/craftsman.models';
 
 @Component({
   selector: 'app-craftsman-profile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './craftsman-profile.component.html',
   styleUrl: './craftsman-profile.component.css'
 })

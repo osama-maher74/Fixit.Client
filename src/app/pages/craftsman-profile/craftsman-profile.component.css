@@ -83,7 +83,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-text {
@@ -198,10 +200,9 @@
 
 .craftsman-bg {
   background: linear-gradient(135deg,
-    var(--craftsman-orange) 0%,
-    #ff8c5a 50%,
-    var(--primary-gold) 100%
-  );
+      var(--craftsman-orange) 0%,
+      #ff8c5a 50%,
+      var(--primary-gold) 100%);
   opacity: 0.85;
 }
 
@@ -406,9 +407,54 @@
   font-weight: 500;
 }
 
+/* ==================== Book Appointment Button ==================== */
+.booking-cta {
+  margin-top: 1.5rem;
+  animation: fadeInUp 1s ease-out;
+}
+
+.book-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--success-green) 0%, var(--success-light) 100%);
+  color: var(--text-white);
+  text-decoration: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(39, 174, 96, 0.4);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.book-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.book-button:hover {
+  background: linear-gradient(135deg, var(--success-light) 0%, var(--success-green) 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(39, 174, 96, 0.6);
+  border-color: rgba(39, 174, 96, 0.5);
+}
+
+.book-button:active {
+  transform: translateY(-1px);
+}
+
 @keyframes starGlow {
-  0%, 100% { filter: drop-shadow(0 2px 6px rgba(253, 184, 19, 0.6)); }
-  50% { filter: drop-shadow(0 2px 12px rgba(253, 184, 19, 0.9)); }
+
+  0%,
+  100% {
+    filter: drop-shadow(0 2px 6px rgba(253, 184, 19, 0.6));
+  }
+
+  50% {
+    filter: drop-shadow(0 2px 12px rgba(253, 184, 19, 0.9));
+  }
 }
 
 /* ==================== Details Grid ==================== */
@@ -431,9 +477,17 @@
   animation-fill-mode: both;
 }
 
-.detail-card:nth-child(1) { animation-delay: 0.1s; }
-.detail-card:nth-child(2) { animation-delay: 0.2s; }
-.detail-card:nth-child(3) { animation-delay: 0.3s; }
+.detail-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.detail-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.detail-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
 
 .detail-card:hover {
   border-color: var(--primary-gold);
@@ -603,9 +657,8 @@
 
 .craftsman-stat {
   background: linear-gradient(135deg,
-    rgba(255, 107, 53, 0.1) 0%,
-    rgba(253, 184, 19, 0.1) 100%
-  );
+      rgba(255, 107, 53, 0.1) 0%,
+      rgba(253, 184, 19, 0.1) 100%);
   border-color: var(--craftsman-orange);
 }
 
@@ -721,6 +774,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -731,6 +785,7 @@
     opacity: 0;
     transform: scale(0.8);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -742,6 +797,7 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -753,6 +809,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -760,10 +817,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.8;
     transform: scale(1.05);
@@ -775,9 +835,11 @@
     opacity: 0;
     transform: scale(0.3);
   }
+
   50% {
     transform: scale(1.1);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -785,9 +847,19 @@
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  75% { transform: translateX(10px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-10px);
+  }
+
+  75% {
+    transform: translateX(10px);
+  }
 }
 
 @keyframes countUp {
@@ -795,6 +867,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

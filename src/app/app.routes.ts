@@ -47,6 +47,18 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/appointment-scheduling/appointment-scheduling').then(m => m.AppointmentSchedulingComponent)
   },
   {
+    path: 'craftsman/:id/availability',
+    loadComponent: () => import('./pages/availability-editor/availability-editor').then(m => m.AvailabilityEditorComponent)
+  },
+  {
+    path: 'craftsman/:id/timeslots',
+    loadComponent: () => import('./pages/time-slots/time-slots').then(m => m.TimeSlotsComponent)
+  },
+  {
+    path: 'craftsman/:id/timeoff',
+    loadComponent: () => import('./pages/time-off-manager/time-off-manager').then(m => m.TimeOffManagerComponent)
+  },
+  {
     path: 'services',
     loadComponent: () => import('./pages/services/services.component').then(m => m.ServicesComponent),
     canActivate: [clientOnlyGuard]
