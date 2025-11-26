@@ -81,7 +81,8 @@ export class AuthService {
       experienceOfYears: data.experienceOfYears,
       nationalId: data.nationalId,
       gender: data.gender, // Number (0 or 1)
-      dateOfBirth: data.dateOfBirth // ISO format string
+      dateOfBirth: data.dateOfBirth, // ISO format string
+      serviceId: data.serviceId
     };
 
     console.log('Sending craftsman registration JSON:', payload);

@@ -147,9 +147,12 @@
             "EXPERIENCE_REQUIRED": "Years of experience is required",
             "EXPERIENCE_MIN": "Experience cannot be negative",
             "EXPERIENCE_MAX": "Experience cannot exceed 50 years",
-            "PROFILE_IMAGE_REQUIRED": "Profile image is required"
+            "PROFILE_IMAGE_REQUIRED": "Profile image is required",
+            "SERVICE_REQUIRED": "Please select a service"
         },
-        "ERROR_DEFAULT": "Registration failed. Please try again."
+        "ERROR_DEFAULT": "Registration failed. Please try again.",
+        "SERVICE": "Service",
+        "SELECT_SERVICE": "Select a service"
     },
     "SERVICE_BOOKING": {
         "TITLE": "Professional Home Services",

@@ -32,6 +32,7 @@ export interface CraftsmanRegisterRequest {
   nationalId: string;
   gender: Gender;
   dateOfBirth: string;
+  serviceId: number;
 }
 
 export interface AuthResponse {

@@ -1,10 +1,12 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
+import { ServiceService } from '../../services/service.service';
 import { Gender, CraftsmanRegisterRequest } from '../../models/auth.models';
+import { ServiceCard } from '../../components/service-card/service-card.component';
 
 @Component({
   selector: 'app-register-craftsman',
@@ -13,9 +15,10 @@ import { Gender, CraftsmanRegisterRequest } from '../../models/auth.models';
   templateUrl: './register-craftsman.component.html',
   styleUrl: './register-craftsman.component.css'
 })
-export class RegisterCraftsmanComponent {
+export class RegisterCraftsmanComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private serviceService = inject(ServiceService);
   private router = inject(Router);
   private translate = inject(TranslateService);
 
@@ -25,6 +28,7 @@ export class RegisterCraftsmanComponent {
   successMessage = signal<string | null>(null);
   showPassword = signal(false);
   showConfirmPassword = signal(false);
+  services = signal<ServiceCard[]>([]);
 
   genderOptions = [
     { value: Gender.Male, label: 'REGISTER_CRAFTSMAN.MALE' },
@@ -45,8 +49,24 @@ export class RegisterCraftsmanComponent {
       experienceOfYears: [0, [Validators.min(0), Validators.max(50)]],
       nationalId: ['', [Validators.required, Validators.pattern(/^[0-9A-Za-z]{5,20}$/)]],
       gender: [Gender.Male, [Validators.required]],
-      dateOfBirth: ['', [Validators.required, this.ageValidator]]
+      dateOfBirth: ['', [Validators.required, this.ageValidator]],
+      serviceId: [null, [Validators.required]]
     }, { validators: this.passwordMatchValidator });
+  }
+
+  ngOnInit(): void {
+    this.loadServices();
+  }
+
+  loadServices(): void {
+    this.serviceService.getAllServices().subscribe({
+      next: (services) => {
+        this.services.set(services);
+      },
+      error: (error) => {
+        console.error('Error loading services:', error);
+      }
+    });
   }
 
   passwordStrengthValidator(control: any) {
@@ -91,6 +111,7 @@ export class RegisterCraftsmanComponent {
   get experienceOfYears() { return this.registerForm.get('experienceOfYears'); }
   get nationalId() { return this.registerForm.get('nationalId'); }
   get dateOfBirth() { return this.registerForm.get('dateOfBirth'); }
+  get serviceId() { return this.registerForm.get('serviceId'); }
 
   togglePasswordVisibility(field: 'password' | 'confirmPassword'): void {
     if (field === 'password') {
@@ -120,7 +141,8 @@ export class RegisterCraftsmanComponent {
         experienceOfYears: this.registerForm.value.experienceOfYears || 0,
         nationalId: this.registerForm.value.nationalId,
         gender: this.registerForm.value.gender, // Number: 0 = Male, 1 = Female
-        dateOfBirth: new Date(this.registerForm.value.dateOfBirth).toISOString() // ISO format: "2025-11-21T12:38:45.051Z"
+        dateOfBirth: new Date(this.registerForm.value.dateOfBirth).toISOString(), // ISO format: "2025-11-21T12:38:45.051Z"
+        serviceId: this.registerForm.value.serviceId
       };
 
       console.log('Submitting craftsman registration JSON:', payload);
@@ -131,7 +153,7 @@ export class RegisterCraftsmanComponent {
           this.successMessage.set(this.translate.instant('REGISTER_CRAFTSMAN.SUCCESS_MESSAGE'));
 
           setTimeout(() => {
-            this.router.navigate(['/login']);
+            this.router.navigate(['/craftsman-profile']);
           }, 2000);
         },
         error: (error) => {
