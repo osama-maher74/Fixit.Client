@@ -53,8 +53,8 @@ export interface TimeOffDto {
 
 export interface CreateTimeOffDto {
     craftsManId: number;
-    startDateTime: string; // ISO 8601 format
-    endDateTime: string; // ISO 8601 format
+    StartDate: string; // ISO 8601 format - capital S to match backend
+    EndDate: string; // ISO 8601 format - capital E to match backend
     reason?: string;
 }
 

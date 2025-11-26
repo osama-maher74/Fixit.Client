@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AvailabilityService } from '../../services/availability.service';
@@ -11,7 +11,7 @@ import { BookingModalComponent, BookingDialogData } from '../../components/booki
 @Component({
   selector: 'app-time-slots',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatSnackBarModule],
+  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatSnackBarModule, RouterLink],
   templateUrl: './time-slots.html',
   styleUrl: './time-slots.css'
 })
@@ -117,7 +117,17 @@ export class TimeSlotsComponent implements OnInit {
 
   // Format time for display
   formatTime(time: string): string {
-    const [hours, minutes] = time.split(':').map(Number);
+    if (!time || !time.includes(':')) {
+      return time || '';
+    }
+    const parts = time.split(':');
+    const hours = parseInt(parts[0], 10);
+    const minutes = parseInt(parts[1], 10);
+
+    if (isNaN(hours) || isNaN(minutes)) {
+      return time;
+    }
+
     const period = hours >= 12 ? 'PM' : 'AM';
     const hours12 = hours % 12 || 12;
     return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;

@@ -9,6 +9,8 @@
             Manage Availability
         </h1>
         <p class="subtitle">Select a date and duration to view and manage your available time slots</p>
+        <button type="button" routerLink="/profile" class="btn btn-primary" style="margin-top: 1rem;">← Back to
+            Profile</button>
     </header>
 
     <!-- Filter Section -->
@@ -23,7 +25,8 @@
             <div class="filter-row">
                 <div class="form-group">
                     <label>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                             <line x1="16" y1="2" x2="16" y2="6"></line>
                             <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -35,7 +38,8 @@
                 </div>
                 <div class="form-group">
                     <label>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
@@ -94,7 +98,7 @@
         <div class="slots-grid">
             @for (slot of timeSlots(); track slot.time) {
             <div class="slot-card" [class.available]="slot.isAvailable" [class.unavailable]="!slot.isAvailable"
-                 (click)="slot.isAvailable && selectSlot(slot)">
+                (click)="slot.isAvailable && selectSlot(slot)">
                 <div class="slot-icon">
                     @if (slot.isAvailable) {
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -109,7 +113,9 @@
                     </svg>
                     }
                 </div>
-                <div class="slot-time">{{ formatTime(slot.time) }}</div>
+                <div class="slot-time">
+                    {{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime || '') }}
+                </div>
                 <div class="slot-status" [class.available]="slot.isAvailable" [class.unavailable]="!slot.isAvailable">
                     {{ slot.isAvailable ? 'Available' : 'Booked' }}
                 </div>

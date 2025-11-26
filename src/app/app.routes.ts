@@ -55,10 +55,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/time-slots/time-slots').then(m => m.TimeSlotsComponent)
   },
   {
-    path: 'craftsman/:id/timeoff',
-    loadComponent: () => import('./pages/time-off-manager/time-off-manager').then(m => m.TimeOffManagerComponent)
-  },
-  {
     path: 'services',
     loadComponent: () => import('./pages/services/services.component').then(m => m.ServicesComponent),
     canActivate: [clientOnlyGuard]
