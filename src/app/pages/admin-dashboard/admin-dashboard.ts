@@ -1,13 +1,14 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { CraftsmanProfile } from '../../models/craftsman.models';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css'
 })

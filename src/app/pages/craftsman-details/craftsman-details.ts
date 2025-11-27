@@ -1,13 +1,14 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { CraftsmanProfile } from '../../models/craftsman.models';
 
 @Component({
   selector: 'app-craftsman-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './craftsman-details.html',
   styleUrl: './craftsman-details.css'
 })

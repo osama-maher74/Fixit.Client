@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CraftsmanProfile, Craftsman } from '../models/craftsman.models';
-import { CraftsmanProfile, UpdateCraftsmanVerificationDto } from '../models/craftsman.models';
+// import { CraftsmanProfile, UpdateCraftsmanVerificationDto } from '../models/craftsman.models';
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +70,8 @@ export class CraftsmanService {
   getCraftsmanById(id: number): Observable<CraftsmanProfile> {
     const url = `${this.CRAFTSMAN_API}/${id}`;
     return this.http.get<CraftsmanProfile>(url);
+  }
+
   /**
    * Get all craftsmen (Admin only)
    * @returns Observable of CraftsmanProfile array
