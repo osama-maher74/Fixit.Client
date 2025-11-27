@@ -22,6 +22,7 @@ export class HeaderComponent {
   // UI state signals
   public mobileMenuOpen = signal(false);
   public registerDropdownOpen = signal(false);
+  public userDropdownOpen = signal(false);
 
   onLogout(): void {
     this.authService.logout();
@@ -43,9 +44,14 @@ export class HeaderComponent {
     this.registerDropdownOpen.set(!this.registerDropdownOpen());
   }
 
+  toggleUserDropdown(): void {
+    this.userDropdownOpen.set(!this.userDropdownOpen());
+  }
+
   closeMenus(): void {
     this.mobileMenuOpen.set(false);
     this.registerDropdownOpen.set(false);
+    this.userDropdownOpen.set(false);
   }
 
   isAdmin(): boolean {

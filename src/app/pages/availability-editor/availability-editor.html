@@ -1,0 +1,108 @@
+<div class="availability-container">
+    <!-- Header -->
+    <div class="page-header">
+        <h1>Manage Availability</h1>
+        <p>Set your weekly schedule</p>
+        <button type="button" routerLink="/profile" class="btn btn-primary" style="margin-top: 1rem;">← Back to
+            Profile</button>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+    <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading availability...</p>
+    </div>
+    }
+
+    <!-- Error/Success Messages -->
+    @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+    }
+    @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+    }
+
+    <!-- Add Availability Form -->
+    <div class="form-card">
+        <h2>Add Availability</h2>
+        <form [formGroup]="availabilityForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dayOfWeek">Day of Week</label>
+                    <select id="dayOfWeek" formControlName="dayOfWeek" class="form-control">
+                        @for (day of daysOfWeek; track day.value) {
+                        <option [ngValue]="day.value">{{ day.name }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="startTime">Start Time</label>
+                    <input id="startTime" type="time" formControlName="startTime" class="form-control"
+                        [class.error]="hasError('startTime')" />
+                    @if (hasError('startTime')) {
+                    <span class="error-text">{{ getErrorMessage('startTime') }}</span>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="endTime">End Time</label>
+                    <input id="endTime" type="time" formControlName="endTime" class="form-control"
+                        [class.error]="hasError('endTime')" />
+                    @if (hasError('endTime')) {
+                    <span class="error-text">{{ getErrorMessage('endTime') }}</span>
+                    }
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" formControlName="isAvailable" />
+                        <span>Available</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+                @if (isSaving()) {
+                <span>Adding...</span>
+                } @else {
+                <span>Add Availability</span>
+                }
+            </button>
+        </form>
+    </div>
+
+    <!-- Weekly Schedule Grid -->
+    <div class="schedule-grid">
+        <h2>Weekly Schedule</h2>
+        @for (day of daysOfWeek; track day.value) {
+        <div class="day-card">
+            <div class="day-header">
+                <h3>{{ day.name }}</h3>
+            </div>
+            <div class="day-content">
+                @if (getAvailabilityByDay(day.value).length === 0) {
+                <p class="no-availability">No availability set</p>
+                } @else {
+                @for (av of getAvailabilityByDay(day.value); track av.id) {
+                <div class="availability-item" [class.unavailable]="!av.isAvailable">
+                    <div class="time-info">
+                        <span class="time">{{ formatTime(av.startTimeFormatted || av.startTime) }} - {{
+                            formatTime(av.endTimeFormatted || av.endTime) }}</span>
+                        <span class="status" [class.available]="av.isAvailable">
+                            {{ av.isAvailable ? 'Available' : 'Unavailable' }}
+                        </span>
+                    </div>
+                    <button type="button" class="btn-delete" (click)="deleteAvailability(av.id, day.name)"
+                        title="Delete">
+                        ×
+                    </button>
+                </div>
+                }
+                }
+            </div>
+        </div>
+        }
+    </div>
+</div>

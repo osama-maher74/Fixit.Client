@@ -75,41 +75,14 @@ export class HomeComponent implements OnInit {
         // Show only first 4 services on home page
         this.services.set(data.slice(0, 4));
         this.isLoadingServices.set(false);
+        console.log('Loaded services from API:', data.length, 'total, showing first 4');
       },
       error: (error: any) => {
-        console.error('Error loading services:', error);
+        console.error('Error loading services from API:', error);
         this.isLoadingServices.set(false);
-        // Fallback to demo data
-        this.loadDemoServices();
+        // Don't use fallback - show empty state instead
+        this.services.set([]);
       }
     });
-  }
-
-  /**
-   * Load demo services (fallback)
-   */
-  private loadDemoServices(): void {
-    this.services.set([
-      {
-        serviceName: 'Plumbing Repair',
-        initialPrice: 50,
-        displayDurationMinutes: 120
-      },
-      {
-        serviceName: 'Electrical Maintenance',
-        initialPrice: 75,
-        displayDurationMinutes: 120
-      },
-      {
-        serviceName: 'AC Cleaning & Service',
-        initialPrice: 120,
-        displayDurationMinutes: 120
-      },
-      {
-        serviceName: 'Home Deep Cleaning',
-        initialPrice: 100,
-        displayDurationMinutes: 120
-      }
-    ]);
   }
 }

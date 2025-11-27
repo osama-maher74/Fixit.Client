@@ -1,0 +1,598 @@
+/* ============================================
+   AVAILABILITY EDITOR - GOLD THEME (Matching Time Slots)
+   ============================================ */
+
+/* CSS Variables - Match Time Slots Theme */
+:root {
+    --primary-gold: #FDB813;
+    --gold-light: #FFCD3C;
+    --gold-dark: #E5A510;
+    --background-white: #FFFFFF;
+    --background-light: #F8F9FA;
+    --text-dark: #2C3E50;
+    --text-secondary: #6C757D;
+    --border-light: #E9ECEF;
+    --success-green: #27ae60;
+    --error-red: #e74c3c;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Main Container */
+.availability-container {
+    min-height: 100vh;
+    background: linear-gradient(180deg, var(--background-white) 0%, var(--background-light) 100%);
+    padding: 2.5rem;
+    color: var(--text-dark);
+}
+
+/* Page Header */
+.page-header {
+    margin-bottom: 3rem;
+    padding-top: 1.5rem;
+    text-align: center;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.page-header h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0 0 1rem 0;
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--primary-gold) 50%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    letter-spacing: -0.5px;
+}
+
+.page-header p {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* Loading Spinner */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem;
+    gap: 1.5rem;
+}
+
+.spinner {
+    width: 64px;
+    height: 64px;
+    border: 4px solid rgba(253, 184, 19, 0.2);
+    border-top-color: var(--primary-gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading p {
+    color: var(--gold-dark);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Alerts */
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+    animation: slideIn 0.3s ease-out;
+    box-shadow: var(--shadow-sm);
+}
+
+.alert-error {
+    background-color: #fff5f5;
+    border: 1px solid #feb2b2;
+    color: #c53030;
+}
+
+.alert-success {
+    background-color: #f0fff4;
+    border: 1px solid #9ae6b4;
+    color: #276749;
+}
+
+/* Form Card - Matches .filters style */
+.form-card {
+    background: var(--background-white);
+    border: 2px solid rgba(253, 184, 19, 0.25);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), 0 8px 25px rgba(253, 184, 19, 0.15);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    position: relative;
+}
+
+.form-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent 0%, var(--primary-gold) 20%, var(--primary-gold) 80%, transparent 100%);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 2px 8px rgba(253, 184, 19, 0.3);
+}
+
+.form-card:hover {
+    border-color: rgba(253, 184, 19, 0.4);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1), 0 12px 35px rgba(253, 184, 19, 0.25);
+    transform: translateY(-2px);
+}
+
+.form-card h2 {
+    color: var(--text-dark);
+    margin: 0 0 2rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.form-card h2::before {
+    content: '📅';
+    font-size: 1.5rem;
+}
+
+/* Form Layout */
+.form-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr auto;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    align-items: end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.form-group label {
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Form Controls */
+.form-control {
+    padding: 1rem 1.25rem;
+    background: var(--background-light);
+    border: 2px solid var(--border-light);
+    border-radius: 12px;
+    color: var(--text-dark);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-family: inherit;
+}
+
+.form-control:hover {
+    border-color: rgba(253, 184, 19, 0.3);
+    background: var(--background-white);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 0 3px rgba(253, 184, 19, 0.15);
+    background: var(--background-white);
+}
+
+.form-control.error {
+    border-color: var(--error-red);
+    background-color: #fff5f5;
+    animation: shake 0.3s ease;
+}
+
+.error-text {
+    color: var(--error-red);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 600;
+}
+
+/* Checkbox Group */
+.checkbox-group {
+    justify-content: flex-end;
+    padding-bottom: 0.5rem;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    transition: all 0.2s;
+    margin-top: auto;
+    background: var(--background-light);
+    border: 2px solid var(--border-light);
+    color: var(--text-dark);
+}
+
+.checkbox-group label:hover {
+    background: #fff;
+    border-color: var(--primary-gold);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--primary-gold);
+}
+
+/* Buttons */
+.btn {
+    padding: 0.875rem 2.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--gold-light) 100%);
+    color: #000;
+    box-shadow: 0 4px 15px rgba(253, 184, 19, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--primary-gold) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(253, 184, 19, 0.4);
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--text-dark);
+    border: 2px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary-gold);
+    color: var(--gold-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none;
+}
+
+/* Schedule Grid */
+.schedule-grid {
+    margin-top: 3rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.schedule-grid h2 {
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+    justify-content: center;
+}
+
+.schedule-grid h2::before {
+    content: '📆';
+    font-size: 1.5rem;
+}
+
+/* Day Cards */
+.day-card {
+    background: var(--background-white);
+    border: 2px solid var(--border-light);
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.5s ease-out both;
+}
+
+.day-card:hover {
+    border-color: var(--gold-light);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Day Header */
+.day-header {
+    background: linear-gradient(135deg, rgba(253, 184, 19, 0.1) 0%, rgba(255, 255, 255, 0.5) 100%);
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.day-card:hover .day-header {
+    background: linear-gradient(135deg, rgba(253, 184, 19, 0.2) 0%, rgba(255, 255, 255, 0.6) 100%);
+}
+
+.day-header h3 {
+    margin: 0;
+    color: var(--text-dark);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Day Content */
+.day-content {
+    padding: 1.5rem;
+}
+
+.no-availability {
+    color: var(--text-secondary);
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+    padding: 1rem;
+    background: var(--background-light);
+    border-radius: 8px;
+    border: 2px dashed var(--border-light);
+}
+
+/* Availability Items */
+.availability-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    background: var(--background-light);
+    border: 2px solid var(--border-light);
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.availability-item:last-child {
+    margin-bottom: 0;
+}
+
+.availability-item:hover {
+    border-color: var(--primary-gold);
+    gap: 1.5rem;
+    flex: 1;
+}
+
+.time {
+    color: var(--text-dark);
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.time::before {
+    content: '🕐';
+    font-size: 1.25rem;
+}
+
+/* Status Badge */
+.status {
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--border-light);
+    color: var(--text-secondary);
+}
+
+.status.available {
+    background: rgba(39, 174, 96, 0.1);
+    color: var(--success-green);
+    border: 1px solid rgba(39, 174, 96, 0.2);
+}
+
+/* Delete Button */
+.btn-delete {
+    width: 36px;
+    height: 36px;
+    background: #fff;
+    border: 2px solid #fee2e2;
+    border-radius: 50%;
+    color: var(--error-red);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: 1rem;
+}
+
+.btn-delete:hover {
+    background: var(--error-red);
+    border-color: var(--error-red);
+    color: white;
+    transform: rotate(90deg);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .form-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .checkbox-group {
+        grid-column: span 2;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .availability-container {
+        padding: 1rem;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    .form-card {
+        padding: 1.5rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .checkbox-group {
+        grid-column: 1;
+        width: 100%;
+    }
+
+    .checkbox-group label {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .availability-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .time-info {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .btn-delete {
+        align-self: flex-end;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}

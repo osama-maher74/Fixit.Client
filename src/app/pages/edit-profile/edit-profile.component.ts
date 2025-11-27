@@ -182,9 +182,15 @@ export class EditProfileComponent implements OnInit {
       return imagePath;
     }
 
+    // Normalize the path: convert backslashes to forward slashes and ensure leading slash
+    let normalizedPath = imagePath.replace(/\\/g, '/');
+    if (!normalizedPath.startsWith('/')) {
+      normalizedPath = '/' + normalizedPath;
+    }
+
     // Backend returns the path like /images/ProfilePics/699cd57a-cbcc-4c81-a777-28af484aa6d6.png
     // Just prepend the base URL
-    return `https://localhost:7058${imagePath}`;
+    return `https://localhost:7058${normalizedPath}`;
   }
 
   /**

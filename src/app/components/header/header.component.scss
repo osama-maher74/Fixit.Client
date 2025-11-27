@@ -45,6 +45,7 @@ $hover-red: #c0392b;
       .logo-text {
         color: $primary-gold;
       }
+
       img {
         transform: scale(1.05);
         filter: brightness(1.1);
@@ -285,12 +286,6 @@ $hover-red: #c0392b;
   }
 }
 
-// Hover fallback for desktop
-.nav-dropdown:hover .dropdown-menu {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
-}
 
 .dropdown-item {
   display: block;
@@ -564,11 +559,6 @@ $hover-red: #c0392b;
     }
   }
 
-  // Ensure hover doesn't interfere on mobile
-  .nav-dropdown:hover .dropdown-menu:not(.open) {
-    display: none !important;
-  }
-
   .dropdown-item {
     padding: 1rem 1.5rem;
 
@@ -628,5 +618,115 @@ $hover-red: #c0392b;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+// User Profile Dropdown Styles
+.user-dropdown {
+  position: relative;
+}
+
+.user-dropdown-menu {
+  min-width: 220px;
+  padding: 0;
+  right: 0;
+  left: auto;
+
+  [dir="rtl"] & {
+    right: auto;
+    left: 0;
+  }
+}
+
+.user-profile-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Cairo', sans-serif;
+
+  &:hover {
+    background-color: rgba(253, 184, 19, 0.15);
+  }
+
+  .profile-icon {
+    width: 32px;
+    height: 32px;
+    color: $primary-gold;
+    flex-shrink: 0;
+  }
+
+  .user-name {
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dropdown-arrow {
+    width: 14px;
+    height: 14px;
+    color: var(--text-dark);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+}
+
+.user-dropdown.open .user-profile-trigger {
+  background-color: rgba(253, 184, 19, 0.15);
+
+  .dropdown-arrow {
+    transform: rotate(180deg);
+  }
+}
+
+.item-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+
+  [dir="rtl"] & {
+    margin-right: 0;
+    margin-left: 0.75rem;
+  }
+}
+
+.logout-item {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $error-red;
+  font-family: 'Cairo', sans-serif;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #a82315; // Darker red, replaces darken($error-red, 10%)
+
+    [dir="rtl"] & {
+      box-shadow: inset -4px 0 0 $error-red;
+    }
+  }
+
+  [dir="rtl"] & {
+    text-align: right;
+  }
+
+  .item-icon {
+    color: currentColor;
   }
 }

@@ -1,0 +1,124 @@
+<div class="appointment-container">
+    <!-- Header -->
+    <div class="header">
+        <button class="back-button" (click)="goBack()">
+            <span>←</span> Back
+        </button>
+        <h1>Schedule Appointment</h1>
+    </div>
+
+    <!-- Craftsman Info -->
+    <div class="craftsman-card" *ngIf="craftsman">
+        <div class="profile-image">
+            <img [src]="craftsman.profileImage || '/assets/default-avatar.png'" [alt]="craftsman.fName">
+        </div>
+        <div class="craftsman-details">
+            <h2>{{ craftsman.fName }} {{ craftsman.lName }}</h2>
+            <p class="specialization">{{ craftsman.describtion }}</p>
+            <div class="info-row">
+                <div class="rating" *ngIf="craftsman.rating">
+                    <span class="stars">★</span>
+                    <span>{{ craftsman.rating }}</span>
+                </div>
+                <div class="rate">
+                    <span class="label">Rate:</span>
+                    <span class="value">${{ craftsman.hourlyRate }}/hr</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Week View Calendar -->
+    <div class="week-section">
+        <h3>Select Date</h3>
+
+        <!-- Loading Week -->
+        <div *ngIf="loadingWeek" class="loading-week">
+            <div class="spinner"></div>
+            <p>Loading available days...</p>
+        </div>
+
+        <!-- Week Days Grid -->
+        <div *ngIf="!loadingWeek" class="week-grid">
+            <button *ngFor="let day of weekDays" class="day-card" [class.selected]="selectedDay === day"
+                [class.available]="day.isAvailable" [class.unavailable]="!day.isAvailable" [class.today]="day.isToday"
+                (click)="onDaySelected(day)">
+                <span class="day-name">{{ day.dayName }}</span>
+                <span class="day-date">{{ day.dateString }}</span>
+                <span class="availability-badge" *ngIf="day.isAvailable">✓</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Time Slots -->
+    <div class="slots-section" *ngIf="selectedDay">
+        <div class="slots-header">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <h3>Available Time Slots for {{ selectedDay.fullDayName }}</h3>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loadingSlots" class="loading">
+            <div class="spinner"></div>
+            <p>Loading available times...</p>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="slotsError && !loadingSlots" class="error-message">
+            {{ slotsError }}
+        </div>
+
+        <!-- Slots Grid -->
+        <div *ngIf="!loadingSlots && !slotsError && availableSlots.length > 0" class="slots-grid">
+            <button *ngFor="let slot of availableSlots" class="slot-button" [class.selected]="selectedTimeSlot === slot"
+                [class.available]="slot.isAvailable" (click)="onSlotSelected(slot)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                {{ slot.time }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Booking Summary -->
+    <div class="booking-summary" *ngIf="selectedTimeSlot">
+        <h3>Booking Summary</h3>
+        <div class="summary-card">
+            <div class="summary-item">
+                <span class="summary-label">Craftsman:</span>
+                <span class="summary-value">{{ craftsman?.fName }} {{ craftsman?.lName }}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Service:</span>
+                <span class="summary-value">{{ craftsman?.describtion }}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Date:</span>
+                <span class="summary-value">{{ selectedDay?.fullDayName }}, {{ selectedDay?.dateString }}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Time:</span>
+                <span class="summary-value">{{ selectedTimeSlot.time }}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Duration:</span>
+                <span class="summary-value">{{ serviceDuration }} minutes</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Rate:</span>
+                <span class="summary-value">${{ craftsman?.hourlyRate }}/hr</span>
+            </div>
+        </div>
+
+        <div class="booking-actions">
+            <button class="confirm-button" (click)="confirmBooking()" [disabled]="isBooking">
+                <span *ngIf="!isBooking">Confirm Appointment</span>
+                <span *ngIf="isBooking">Booking...</span>
+            </button>
+        </div>
+    </div>
+</div>

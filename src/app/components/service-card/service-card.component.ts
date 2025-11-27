@@ -4,9 +4,14 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 export interface ServiceCard {
+  serviceId: number; // Service ID from database (matches API response)
   serviceName: string;
   initialPrice: number;
   displayDurationMinutes: number;
+  description?: string;
+  tagline?: string;
+  features?: string[];
+  images?: string[];
 }
 
 // Map service names to image URLs
@@ -65,8 +70,14 @@ export class ServiceCardComponent {
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
     } else {
-      // TODO: Navigate to booking page or open booking modal
-      console.log('Proceeding with booking for:', this.service.serviceName);
+      // Navigate to the booking page with service name and ID
+      this.router.navigate(['/service-booking'], {
+        queryParams: {
+          service: this.service.serviceName,
+          serviceId: this.service.serviceId
+        }
+      });
     }
   }
+
 }

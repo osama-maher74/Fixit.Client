@@ -193,6 +193,7 @@ export class ProfileComponent implements OnInit {
     return p?.isVerified ? 'Verified' : 'Not Verified';
   }
 
+
   /**
    * Get profile image URL or default avatar
    */
@@ -206,18 +207,25 @@ export class ProfileComponent implements OnInit {
         return p.profileImage;
       }
 
+      // Normalize the path: convert backslashes to forward slashes and ensure leading slash
+      let imagePath = p.profileImage.replace(/\\/g, '/');
+      if (!imagePath.startsWith('/')) {
+        imagePath = '/' + imagePath;
+      }
+
       // Backend returns the path like /images/ProfilePics/699cd57a-cbcc-4c81-a777-28af484aa6d6.png
       // Just prepend the base URL
-      const imageUrl = `https://localhost:7058${p.profileImage}`;
+      const imageUrl = `https://localhost:7058${imagePath}`;
       console.log('Constructed image URL:', imageUrl);
 
       return imageUrl;
     }
 
-    // Default avatar SVG with gray color
+    // Default avatar - simple SVG with gold background and white user icon
     console.log('No profile image, using default avatar');
-    return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="%239CA3AF"%3E%3Cpath stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /%3E%3C/svg%3E';
+    return 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22 viewBox=%220 0 200 200%22%3E%3Ccircle cx=%22100%22 cy=%22100%22 r=%22100%22 fill=%22%23FDB813%22/%3E%3Cpath fill=%22%23fff%22 d=%22M100 95c13.8 0 25-11.2 25-25s-11.2-25-25-25-25 11.2-25 25 11.2 25 25 25zm-40 20c0-16.7 13.3-30 40-30s40 13.3 40 30v10H60v-10z%22/%3E%3C/svg%3E';
   }
+
 
   /**
    * Retry loading profile
@@ -226,6 +234,7 @@ export class ProfileComponent implements OnInit {
     this.loadProfile();
   }
 }
+
 
 // Import environment at the bottom to avoid circular dependency
 import { environment } from '../../../environments/environment';

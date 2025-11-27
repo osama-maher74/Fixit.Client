@@ -29,3 +29,18 @@ export interface UpdateCraftsmanVerificationDto {
   hourlyRate: number;
   isVerified: boolean;
 }
+
+export interface Craftsman {
+  id: number;
+  fName: string;
+  lName: string;
+  describtion: string;
+  profileImage: string;
+  rating: number;
+  location: string;
+  isVerified: boolean;
+  normalizedEmail: string;
+  experienceOfYears: number;
+  hourlyRate: number;
+  phoneNumber: string;
+}
