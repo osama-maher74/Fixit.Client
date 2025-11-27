@@ -37,10 +37,30 @@ export class AvailabilityService {
      * Get availability for a specific day of the week
      * GET /api/availability/craftsman/{id}/day/{day}
      */
-    getAvailabilityByDay(craftsmanId: number, dayOfWeek: number): Observable<AvailabilityDto[]> {
+    getAvailabilityByDay(craftsmanId: number, dayOfWeek: number): Observable<AvailabilityDto> {
         const url = `${this.AVAILABILITY_API}/craftsman/${craftsmanId}/day/${dayOfWeek}`;
         console.log('AvailabilityService - Getting availability for day:', dayOfWeek);
-        return this.http.get<AvailabilityDto[]>(url);
+        return this.http.get<ApiResponse<AvailabilityDto>>(url).pipe(
+            map(response => response.data)
+        );
+    }
+
+    /**
+     * Get available time slots for a craftsman on a specific date
+     * GET /api/Availability/slots?craftsmanId={id}&date={date}&duration={duration}
+     */
+    getTimeSlots(craftsmanId: number, date: Date, duration: number): Observable<TimeSlotDto[]> {
+        // Ensure date is a Date object and format to ISO string
+        const dateObj = new Date(date);
+        dateObj.setHours(0, 0, 0, 0);
+        const dateString = dateObj.toISOString();
+
+        const url = `${this.AVAILABILITY_API}/slots?craftsmanId=${craftsmanId}&date=${encodeURIComponent(dateString)}&duration=${duration}`;
+        console.log('AvailabilityService - Getting time slots URL:', url);
+
+        return this.http.get<ApiResponse<TimeSlotDto[]>>(url).pipe(
+            map(response => response.data)
+        );
     }
 
     /**
@@ -72,36 +92,6 @@ export class AvailabilityService {
         const url = `${this.AVAILABILITY_API}/${id}`;
         console.log('AvailabilityService - Deleting availability:', id);
         return this.http.delete<void>(url);
-    }
-
-    /**
-     * Get available time slots for a specific date and duration
-     * GET /api/Availability/slots?craftsmanId={id}&date=YYYY-MM-DD&duration=60
-     */
-    getTimeSlots(
-        craftsmanId: number,
-        dateIso: string,
-        durationMinutes: number
-    ): Observable<TimeSlotDto[]> {
-        const url = `${this.AVAILABILITY_API}/slots`;
-        const params = new HttpParams()
-            .set('craftsmanId', craftsmanId.toString())
-            .set('date', dateIso)
-            .set('duration', durationMinutes.toString());
-
-        console.log('AvailabilityService - Getting time slots:', { url, craftsmanId, dateIso, durationMinutes });
-        return this.http.get<ApiResponse<TimeSlotDto[]>>(url, { params }).pipe(
-            map(response => response.data)
-        );
-    }
-
-    /**
-     * Create a time-off entry
-     * POST /api/timeoff
-     */
-    createTimeOff(dto: CreateTimeOffDto): Observable<TimeOffDto> {
-        console.log('AvailabilityService - Creating time-off:', dto);
-        return this.http.post<TimeOffDto>(this.TIMEOFF_API, dto);
     }
 
     /**

@@ -58,6 +58,18 @@ export interface CreateTimeOffDto {
     reason?: string;
 }
 
+// Week day view for appointment scheduling
+export interface WeekDayView {
+    date: Date;
+    dayOfWeek: number; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    dayName: string; // "Sun", "Mon", "Tue", etc.
+    fullDayName: string; // "Sunday", "Monday", etc.
+    dateString: string; // "26"
+    isToday: boolean;
+    isAvailable: boolean;
+    availabilityData?: AvailabilityDto;
+}
+
 // Helper constants
 export const DAYS_OF_WEEK = [
     { value: 0, name: 'Sunday', short: 'Sun' },
