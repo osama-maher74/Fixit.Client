@@ -127,7 +127,7 @@ export class AuthService {
 
     // Backend returns flat structure with user properties at root level
     // Create User object from response properties
-    if (response.email && response.fName && response.lName) {
+    if (response.email && response.fName) {
       console.log('✅ User data found at root level');
       console.log('- ID:', response.id);
       console.log('- Email:', response.email);
@@ -138,7 +138,7 @@ export class AuthService {
         id: response.id?.toString() || '',
         email: response.email,
         fName: response.fName,
-        lName: response.lName,
+        lName: response.lName || '',
         role: response.role || 'Client'
       };
 

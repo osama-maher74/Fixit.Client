@@ -47,4 +47,9 @@ export class HeaderComponent {
     this.mobileMenuOpen.set(false);
     this.registerDropdownOpen.set(false);
   }
+
+  isAdmin(): boolean {
+    const user = this.authService.getCurrentUser();
+    return user?.role === 'Admin';
+  }
 }
