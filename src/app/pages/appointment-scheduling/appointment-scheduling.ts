@@ -9,6 +9,8 @@ import { TimeSlotDto, WeekDayView, DAYS_OF_WEEK } from '../../models/availabilit
 import { CraftsmanProfile } from '../../models/craftsman.models';
 import { ClientProfile } from '../../models/client.models';
 import Swal from 'sweetalert2';
+import { NotificationService } from '../../services/notification.service';
+import { NotificationType } from '../../models/notification.models';
 
 @Component({
     selector: 'app-appointment-scheduling',
@@ -39,6 +41,7 @@ export class AppointmentSchedulingComponent implements OnInit {
     private craftsmanService = inject(CraftsmanService);
     private serviceRequestService = inject(ServiceRequestService);
     private clientService = inject(ClientService);
+    private notificationService = inject(NotificationService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
 
@@ -67,8 +70,6 @@ export class AppointmentSchedulingComponent implements OnInit {
             },
             error: (error) => {
                 console.error('Error loading client profile:', error);
-                // If we can't get the profile, we might want to redirect to login or show an error
-                // For now, we'll just log it, but the booking will likely fail
             }
         });
     }
@@ -100,7 +101,6 @@ export class AppointmentSchedulingComponent implements OnInit {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        // Generate 7 days starting from today - all are clickable
         for (let i = 0; i < 7; i++) {
             const date = new Date(today);
             date.setDate(today.getDate() + i);
@@ -115,7 +115,7 @@ export class AppointmentSchedulingComponent implements OnInit {
                 fullDayName: dayInfo?.name || '',
                 dateString: date.getDate().toString(),
                 isToday: i === 0,
-                isAvailable: true, // All days are clickable
+                isAvailable: true,
                 availabilityData: undefined
             };
 
@@ -126,27 +126,17 @@ export class AppointmentSchedulingComponent implements OnInit {
     }
 
     onDaySelected(day: WeekDayView): void {
-        console.log(`Day selected: ${day.fullDayName}`, {
-            craftsmanId: this.craftsmanId,
-            date: day.date.toISOString(),
-            duration: this.serviceDuration
-        });
-
         this.selectedDay = day;
         this.selectedTimeSlot = null;
         this.loadingSlots = true;
         this.slotsError = null;
         this.availableSlots = [];
 
-        // Fetch time slots using the /slots endpoint
         this.availabilityService.getTimeSlots(this.craftsmanId, day.date, this.serviceDuration)
             .subscribe({
                 next: (slots: TimeSlotDto[]) => {
-                    console.log('Time slots response:', slots);
-
                     this.availableSlots = slots;
                     this.loadingSlots = false;
-
                     if (slots.length === 0) {
                         this.slotsError = 'No time slots available for this day';
                     }
@@ -187,7 +177,6 @@ export class AppointmentSchedulingComponent implements OnInit {
 
         this.isBooking = true;
 
-        // Prepare the request data
         const requestData: ConfirmStartAtTimeDto = {
             serviceId: this.serviceId,
             clientId: this.clientId,
@@ -195,16 +184,22 @@ export class AppointmentSchedulingComponent implements OnInit {
             serviceStartTime: this.selectedTimeSlot.startTime
         };
 
-        console.log('Booking appointment with data:', requestData);
-
-        // Call the API
         this.serviceRequestService.updateServiceRequestStartTime(this.serviceRequestId, requestData)
             .subscribe({
                 next: (response: string) => {
                     console.log('Appointment confirmed successfully:', response);
                     this.isBooking = false;
 
-                    // Show success SweetAlert
+                    this.notificationService.createNotification({
+                        serviceRequestId: this.serviceRequestId,
+                        message: 'Client selected you for a service request',
+                        type: NotificationType.SelectCraftsman,
+                        recipientType: 'Craftsman'
+                    }).subscribe({
+                        next: () => console.log('Notification sent to craftsman'),
+                        error: (err) => console.error('Failed to send notification', err)
+                    });
+
                     Swal.fire({
                         icon: 'success',
                         title: 'Request Sent Successfully!',
@@ -235,7 +230,6 @@ export class AppointmentSchedulingComponent implements OnInit {
                             popup: 'animate__animated animate__fadeOutUp'
                         }
                     }).then(() => {
-                        // Navigate to home or service requests page
                         this.router.navigate(['/']);
                     });
                 },
