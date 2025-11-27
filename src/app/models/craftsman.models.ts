@@ -16,6 +16,18 @@ export interface CraftsmanProfile {
   normalizedEmail: string;
   experienceOfYears: number;
   hourlyRate: number;
+  nationalId: string;
+}
+
+export interface UpdateCraftsmanVerificationDto {
+  id: number;
+  fName: string;
+  lName: string;
+  describtion: string;
+  phoneNumber: string;
+  experienceOfYears: number;
+  hourlyRate: number;
+  isVerified: boolean;
 }
 
 export interface Craftsman {

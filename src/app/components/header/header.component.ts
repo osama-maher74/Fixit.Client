@@ -53,4 +53,9 @@ export class HeaderComponent {
     this.registerDropdownOpen.set(false);
     this.userDropdownOpen.set(false);
   }
+
+  isAdmin(): boolean {
+    const user = this.authService.getCurrentUser();
+    return user?.role === 'Admin';
+  }
 }

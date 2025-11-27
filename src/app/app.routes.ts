@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { clientOnlyGuard } from './guards/client-only.guard';
 import { loginGuard } from './guards/login.guard';
+import { adminOnlyGuard } from './guards/admin-only.guard';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,16 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent),
     canActivate: [loginGuard]
+  },
+  {
+    path: 'admin/dashboard',
+    loadComponent: () => import('./pages/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard),
+    canActivate: [adminOnlyGuard]
+  },
+  {
+    path: 'admin/craftsman/:id',
+    loadComponent: () => import('./pages/craftsman-details/craftsman-details').then(m => m.CraftsmanDetails),
+    canActivate: [adminOnlyGuard]
   },
   {
     path: 'register/client',
@@ -60,6 +71,10 @@ export const routes: Routes = [
     path: 'services',
     loadComponent: () => import('./pages/services/services.component').then(m => m.ServicesComponent),
     canActivate: [clientOnlyGuard]
+  },
+  {
+    path: 'payment-test',
+    loadComponent: () => import('./pages/payment-test/payment-test.component').then(m => m.PaymentTestComponent)
   },
   {
     path: '**',

@@ -63,23 +63,36 @@ export class LoginComponent {
         next: (response) => {
           console.log('========== LOGIN SUCCESS ==========');
           console.log('Login response received:', response);
-          this.isLoading.set(false);
 
-          // Verify email was stored
+          // Wait a moment for auth service to finish storing data
           setTimeout(() => {
             const storedEmail = localStorage.getItem('email');
+            const storedUser = localStorage.getItem('current_user');
             console.log('Verification - Email in localStorage after login:', storedEmail);
+            console.log('Verification - User in localStorage after login:', storedUser);
+
             if (!storedEmail) {
               console.error('❌ CRITICAL: Email was NOT stored in localStorage!');
               console.error('Check auth.service.ts handleAuthResponse method');
             }
-          }, 100);
+            if (!storedUser) {
+              console.error('❌ CRITICAL: User was NOT stored in localStorage!');
+            }
 
-          // Redirect to profile page (unified for both client and craftsman)
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
-          console.log('User role:', response.role);
-          console.log('Navigating to:', returnUrl);
-          this.router.navigate([returnUrl]);
+            // Redirect based on user role
+            console.log('User role:', response.role);
+
+            let redirectUrl: string;
+            if (response.role === 'Admin') {
+              redirectUrl = '/admin/dashboard';
+            } else {
+              redirectUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
+            }
+
+            console.log('Navigating to:', redirectUrl);
+            this.isLoading.set(false);
+            this.router.navigate([redirectUrl]);
+          }, 100);
         },
         error: (error) => {
           console.error('========== LOGIN ERROR ==========');

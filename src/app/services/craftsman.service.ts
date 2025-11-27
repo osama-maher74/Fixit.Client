@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CraftsmanProfile, Craftsman } from '../models/craftsman.models';
+import { CraftsmanProfile, UpdateCraftsmanVerificationDto } from '../models/craftsman.models';
 
 @Injectable({
   providedIn: 'root'
@@ -69,5 +70,53 @@ export class CraftsmanService {
   getCraftsmanById(id: number): Observable<CraftsmanProfile> {
     const url = `${this.CRAFTSMAN_API}/${id}`;
     return this.http.get<CraftsmanProfile>(url);
+  /**
+   * Get all craftsmen (Admin only)
+   * @returns Observable of CraftsmanProfile array
+   */
+  getAllCraftsMen(): Observable<CraftsmanProfile[]> {
+    const url = this.CRAFTSMAN_API;
+    console.log('CraftsmanService - getAllCraftsMen - API URL:', url);
+    console.log('CraftsmanService - Making GET request to:', url);
+    return this.http.get<CraftsmanProfile[]>(url);
+  }
+
+  /**
+   * Get craftsman by ID
+   * @param id - Craftsman ID
+   * @returns Observable of CraftsmanProfile
+   */
+  getCraftsManById(id: number): Observable<CraftsmanProfile> {
+    return this.http.get<CraftsmanProfile>(`${this.CRAFTSMAN_API}/${id}`);
+  }
+
+  /**
+   * Update craftsman verification status (Admin only)
+   * @param craftsman - Craftsman data with updated isVerified status
+   * @returns Observable of void
+   */
+  updateCraftsmanVerification(craftsman: CraftsmanProfile): Observable<void> {
+    console.log('CraftsmanService - updateCraftsmanVerification called with:', craftsman);
+
+    const formData = new FormData();
+    formData.append('Id', craftsman.id.toString());
+    formData.append('FName', craftsman.fName);
+    formData.append('LName', craftsman.lName);
+    formData.append('Describtion', craftsman.describtion);
+    formData.append('PhoneNumber', craftsman.phoneNumber);
+    formData.append('ExperienceOfYears', craftsman.experienceOfYears.toString());
+    formData.append('HourlyRate', craftsman.hourlyRate.toString());
+    formData.append('IsVerified', craftsman.isVerified.toString());
+
+    const url = `${this.CRAFTSMAN_API}/${craftsman.id}`;
+    console.log('CraftsmanService - PUT URL:', url);
+    console.log('CraftsmanService - IsVerified:', craftsman.isVerified);
+    console.log('CraftsmanService - FormData entries:');
+    formData.forEach((value, key) => {
+      console.log(`  ${key}: ${value}`);
+    });
+
+    console.log('CraftsmanService - Making HTTP PUT request...');
+    return this.http.put<void>(url, formData);
   }
 }
