@@ -75,4 +75,9 @@ export class HeaderComponent {
       this.closeMenus();
     }
   }
+
+  isAdmin(): boolean {
+    const user = this.authService.getCurrentUser();
+    return user?.role === 'Admin';
+  }
 }
