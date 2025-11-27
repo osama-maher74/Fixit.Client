@@ -18,6 +18,7 @@ export class CraftsmenListComponent implements OnInit {
     location: string = '';
     serviceName: string = '';
     serviceRequestId: number = 0;
+    serviceId: number = 0;
     duration: number = 60;
 
     private craftsmanService = inject(CraftsmanService);
@@ -29,6 +30,7 @@ export class CraftsmenListComponent implements OnInit {
             this.location = params['location'] || '';
             this.serviceName = params['serviceName'] || '';
             this.serviceRequestId = +params['serviceRequestId'] || 0;
+            this.serviceId = +params['serviceId'] || 0;
             this.duration = +params['duration'] || 60;
 
             if (this.location && this.serviceName) {
@@ -81,6 +83,7 @@ export class CraftsmenListComponent implements OnInit {
             queryParams: {
                 craftsmanId: craftsman.id,
                 serviceRequestId: this.serviceRequestId,
+                serviceId: this.serviceId,
                 duration: this.duration
             }
         });

@@ -3,9 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AvailabilityService } from '../../services/availability.service';
 import { CraftsmanService } from '../../services/craftsman.service';
-import { ServiceRequestService } from '../../services/service-request.service';
+import { ServiceRequestService, ConfirmStartAtTimeDto } from '../../services/service-request.service';
+import { ClientService } from '../../services/client.service';
 import { TimeSlotDto, WeekDayView, DAYS_OF_WEEK } from '../../models/availability.models';
 import { CraftsmanProfile } from '../../models/craftsman.models';
+import { ClientProfile } from '../../models/client.models';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-appointment-scheduling',
@@ -18,6 +21,8 @@ export class AppointmentSchedulingComponent implements OnInit {
     craftsmanId: number = 0;
     serviceRequestId: number = 0;
     serviceDuration: number = 60;
+    serviceId: number = 0;
+    clientId: number = 0;
 
     craftsman: CraftsmanProfile | null = null;
     weekDays: WeekDayView[] = [];
@@ -33,6 +38,7 @@ export class AppointmentSchedulingComponent implements OnInit {
     private availabilityService = inject(AvailabilityService);
     private craftsmanService = inject(CraftsmanService);
     private serviceRequestService = inject(ServiceRequestService);
+    private clientService = inject(ClientService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
 
@@ -41,10 +47,28 @@ export class AppointmentSchedulingComponent implements OnInit {
             this.craftsmanId = +params['craftsmanId'] || 0;
             this.serviceRequestId = +params['serviceRequestId'] || 0;
             this.serviceDuration = +params['duration'] || 60;
+            this.serviceId = +params['serviceId'] || 0;
+
+            // Get client profile to ensure we have the correct ID
+            this.fetchClientProfile();
 
             if (this.craftsmanId) {
                 this.loadCraftsmanInfo();
                 this.generateWeekView();
+            }
+        });
+    }
+
+    private fetchClientProfile(): void {
+        this.clientService.getCurrentUserProfile().subscribe({
+            next: (profile: ClientProfile) => {
+                console.log('Client profile loaded:', profile);
+                this.clientId = profile.id;
+            },
+            error: (error) => {
+                console.error('Error loading client profile:', error);
+                // If we can't get the profile, we might want to redirect to login or show an error
+                // For now, we'll just log it, but the booking will likely fail
             }
         });
     }
@@ -60,7 +84,12 @@ export class AppointmentSchedulingComponent implements OnInit {
                 error: (error: any) => {
                     console.error('Error loading craftsman:', error);
                     this.loadingCraftsman = false;
-                    alert('Failed to load craftsman information');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to load craftsman information',
+                        confirmButtonColor: '#FDB813'
+                    });
                 }
             });
     }
@@ -137,29 +166,91 @@ export class AppointmentSchedulingComponent implements OnInit {
 
     confirmBooking(): void {
         if (!this.selectedTimeSlot) {
-            alert('Please select a time slot');
+            Swal.fire({
+                icon: 'warning',
+                title: 'No Time Slot Selected',
+                text: 'Please select a time slot before confirming',
+                confirmButtonColor: '#FDB813'
+            });
             return;
         }
 
         if (!this.serviceRequestId) {
-            alert('Service request ID is missing');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Service request ID is missing',
+                confirmButtonColor: '#FDB813'
+            });
             return;
         }
 
         this.isBooking = true;
 
-        console.log('Booking appointment:', {
-            serviceRequestId: this.serviceRequestId,
-            craftsmanId: this.craftsmanId,
-            appointmentTime: this.selectedTimeSlot.startTime,
-            day: this.selectedDay?.fullDayName
-        });
+        // Prepare the request data
+        const requestData: ConfirmStartAtTimeDto = {
+            serviceId: this.serviceId,
+            clientId: this.clientId,
+            craftsManId: this.craftsmanId,
+            serviceStartTime: this.selectedTimeSlot.startTime
+        };
 
-        setTimeout(() => {
-            this.isBooking = false;
-            alert(`Appointment booked successfully!\nCraftsman: ${this.craftsman?.fName} ${this.craftsman?.lName}\nDay: ${this.selectedDay?.fullDayName}\nTime: ${this.selectedTimeSlot?.time}`);
-            this.router.navigate(['/']);
-        }, 1500);
+        console.log('Booking appointment with data:', requestData);
+
+        // Call the API
+        this.serviceRequestService.updateServiceRequestStartTime(this.serviceRequestId, requestData)
+            .subscribe({
+                next: (response: string) => {
+                    console.log('Appointment confirmed successfully:', response);
+                    this.isBooking = false;
+
+                    // Show success SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Request Sent Successfully!',
+                        html: `
+                            <div style="text-align: center;">
+                                <p style="font-size: 16px; color: #555; margin-bottom: 15px;">
+                                    Your appointment request has been sent to<br/>
+                                    <strong style="color: #FDB813;">${this.craftsman?.fName} ${this.craftsman?.lName}</strong>
+                                </p>
+                                <p style="font-size: 15px; color: #666;">
+                                    📅 <strong>${this.selectedDay?.fullDayName}</strong><br/>
+                                    🕐 <strong>${this.selectedTimeSlot?.time}</strong>
+                                </p>
+                                <div style="background: #FEF3E2; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                    <p style="font-size: 14px; color: #666; margin: 0;">
+                                        Please wait for craftsman confirmation.<br/>
+                                        You will be notified once confirmed.
+                                    </p>
+                                </div>
+                            </div>
+                        `,
+                        confirmButtonText: 'Got it!',
+                        confirmButtonColor: '#FDB813',
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    }).then(() => {
+                        // Navigate to home or service requests page
+                        this.router.navigate(['/']);
+                    });
+                },
+                error: (error: any) => {
+                    console.error('Error confirming appointment:', error);
+                    this.isBooking = false;
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Booking Failed',
+                        text: error.error || 'Failed to confirm appointment. Please try again.',
+                        confirmButtonColor: '#FDB813'
+                    });
+                }
+            });
     }
 
     goBack(): void {

@@ -316,6 +316,7 @@ export class ServiceBookingComponent implements OnInit {
         // Call API using the dedicated service
         this.serviceRequestService.createServiceRequest(serviceRequestDto).subscribe({
           next: (response) => {
+            console.log('Service creation response in component:', response);
             this.isSubmitting = false;
 
             // Navigate to craftsmen list
@@ -323,13 +324,17 @@ export class ServiceBookingComponent implements OnInit {
             const navServiceName = this.selectedService?.serviceName || '';
 
             if (navLocation && navServiceName) {
+              const queryParams = {
+                location: navLocation,
+                serviceName: navServiceName,
+                serviceRequestId: response.servicesRequestId || response.id || 0, // Pass the service request ID from response (prefer servicesRequestId)
+                serviceId: this.selectedService!.serviceId, // Pass serviceId for appointment confirmation
+                duration: this.selectedService!.duration
+              };
+              console.log('Navigating to craftsmen-list with params:', queryParams);
+
               this.router.navigate(['/craftsmen-list'], {
-                queryParams: {
-                  location: navLocation,
-                  serviceName: navServiceName,
-                  // Note: Backend doesn't return serviceRequestId, will need to fetch it separately if needed
-                  duration: this.selectedService!.duration
-                }
+                queryParams: queryParams
               });
             } else {
               alert('Booking submitted successfully!');
