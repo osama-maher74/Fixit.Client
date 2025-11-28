@@ -253,6 +253,23 @@
   line-height: 1.5;
 }
 
+.national-id-row {
+  background: var(--primary-gold-light);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-top: 4px;
+  border-left: 3px solid var(--primary-gold);
+}
+
+.national-id-row .info-icon {
+  color: var(--primary-gold);
+}
+
+.national-id-row .info-text {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
 /* Stats Grid */
 .stats-grid {
   display: grid;

@@ -10,6 +10,7 @@ export interface CraftsmanProfile {
   describtion: string;
   phoneNumber: string;
   profileImage?: string | null;
+  nationalIdPic?: string | null;
   rating: number;
   location: string;
   isVerified: boolean;

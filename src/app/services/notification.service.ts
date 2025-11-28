@@ -85,7 +85,7 @@ export class NotificationService {
 
         this.hubConnection.start()
             .then(() => console.log('SignalR Connected'))
-            .catch(err => console.error('Error while starting SignalR connection: ' + err));
+            .catch((err: any) => console.error('Error while starting SignalR connection: ' + err));
 
         this.hubConnection.on('NotificationReceived', (notification: ReadNotificationDto) => {
             console.log('Real-time notification received:', notification);

@@ -22,6 +22,7 @@ export class CraftsmanDetails implements OnInit {
   errorMessage = signal<string | null>(null);
   isUpdating = signal<boolean>(false);
   successMessage = signal<string | null>(null);
+  showNationalIdFullscreen = signal<boolean>(false);
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -77,6 +78,29 @@ export class CraftsmanDetails implements OnInit {
 
   getFullName(craftsman: CraftsmanProfile): string {
     return `${craftsman.fName} ${craftsman.lName}`;
+  }
+
+  getNationalIdUrl(): string | null {
+    const craftsman = this.craftsman();
+    if (!craftsman?.nationalIdPic) {
+      return null;
+    }
+
+    // If it's already a full URL, return it
+    if (craftsman.nationalIdPic.startsWith('http://') || craftsman.nationalIdPic.startsWith('https://')) {
+      return craftsman.nationalIdPic;
+    }
+
+    // Otherwise, construct the full URL
+    return `https://localhost:7058/${craftsman.nationalIdPic}`;
+  }
+
+  openNationalIdFullscreen(): void {
+    this.showNationalIdFullscreen.set(true);
+  }
+
+  closeNationalIdFullscreen(): void {
+    this.showNationalIdFullscreen.set(false);
   }
 
   toggleVerification(): void {
