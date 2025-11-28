@@ -77,6 +77,17 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/payment-test/payment-test.component').then(m => m.PaymentTestComponent)
   },
   {
+    path: 'offer-review/:serviceRequestId/:offerId',
+    loadComponent: () => import('./pages/offer-review/offer-review').then(m => m.OfferReviewComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'offers/:id',
+    loadComponent: () => import('./pages/offers/offers').then(m => m.OffersComponent),
+    canActivate: [authGuard]
+  },
+
+  {
     path: '**',
     redirectTo: ''
   }

@@ -4,6 +4,7 @@ export enum NotificationType {
     CraftsmanRejected = 'CraftsmanRejected',
     PriceRejectedByCraftsman = 'PriceRejectedByCraftsman',
     NewPriceOfferedByCraftsman = 'NewPriceOfferedByCraftsman',
+    NewOfferFromCraftsman = 'NewOfferFromCraftsman', // Added to match backend
     ClientAcceptedCraftsmanPrice = 'ClientAcceptedCraftsmanPrice',
     ClientRejectedCraftsmanPrice = 'ClientRejectedCraftsmanPrice',
     PaymentCompleted = 'PaymentCompleted',
@@ -17,6 +18,11 @@ export interface ReadNotificationDto {
     type: NotificationType;
     isRead: boolean;
     createdAt: string; // ISO Date string
+    // Offer details for NewPriceOfferedByCraftsman notifications
+    offerId?: number;
+    finalAmount?: number;
+    description?: string;
+    craftsmanName?: string;
 }
 
 export interface CreateNotificationDto {

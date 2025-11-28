@@ -16,15 +16,28 @@ export interface CreateServiceRequestDto {
 export interface ServiceRequestResponse {
     id?: number;
     servicesRequestId?: number; // New property from backend
+    craftsManId?: number; // Craftsman assigned to this request
+    craftsManName?: string; // Craftsman name if assigned
     clientId?: number;
+    clientName?: string;
     serviceId?: number;
+    serviceName?: string;
     description?: string;
     serviceStartTime?: string;
     location?: string;
     suggestedPrice?: number;
+    totalAmount?: number;
     status?: string;
     createdAt?: string;
+    requestAt?: string;
+    completedAt?: string;
     imageUrl?: string;
+    serviceRequestImage?: string;
+    waitingForClientPaymentAt?: string;
+    isCancelled?: boolean;
+    reviewRatingValue?: number;
+    reviewComment?: string;
+    clientSecret?: string;
 }
 
 export interface ConfirmStartAtTimeDto {

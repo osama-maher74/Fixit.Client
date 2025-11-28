@@ -6,6 +6,8 @@ import { NotificationType, ReadNotificationDto } from '../../../models/notificat
 import { ClientService } from '../../../services/client.service';
 import { CraftsmanService } from '../../../services/craftsman.service';
 import { AuthService } from '../../../services/auth.service';
+import { OfferService, ClientDecision } from '../../../services/offer.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-notification-list',
@@ -19,6 +21,7 @@ export class NotificationListComponent implements OnInit {
   clientService = inject(ClientService);
   craftsmanService = inject(CraftsmanService);
   authService = inject(AuthService);
+  offerService = inject(OfferService);
   router = inject(Router);
 
   ngOnInit() {
@@ -87,11 +90,165 @@ export class NotificationListComponent implements OnInit {
       });
     }
 
-    // Navigate based on type (currently all go to service request details if we had that page)
-    // For now, we can just log or navigate to a placeholder
-    console.log('Navigate to service request:', notification.serviceRequestId);
-    // this.router.navigate(['/service-request', notification.serviceRequestId]);
+    // DEBUG: Log the entire notification object
+    console.log('🔔 Notification clicked:', notification);
+    console.log('Notification type:', notification.type);
+    console.log('Notification finalAmount:', notification.finalAmount);
+    console.log('Notification offerId:', notification.offerId);
+
+    // Get current user role
+    const currentUser = this.authService.getCurrentUser();
+    const isClient = currentUser?.role?.toLowerCase() !== 'craftsman';
+
+    // Check if this is a new offer notification for client (check both types)
+    if (notification.type === NotificationType.NewPriceOfferedByCraftsman ||
+      notification.type === NotificationType.NewOfferFromCraftsman) {
+      // Navigate to offer review page with offer details in route state
+      const offerId = notification.offerId || notification.id;
+      console.log('✅ Matched new offer notification - navigating with state:', {
+        offerAmount: notification.finalAmount,
+        offerDescription: notification.description,
+        craftsmanName: notification.craftsmanName
+      });
+      if (notification.serviceRequestId) {
+        this.router.navigate(['/offer-review', notification.serviceRequestId, offerId], {
+          state: {
+            offerAmount: notification.finalAmount,
+            offerDescription: notification.description,
+            craftsmanName: notification.craftsmanName
+          }
+        });
+      }
+      return;
+    }
+
+    // Route based on user role
+    if (notification.serviceRequestId) {
+      if (isClient) {
+        // Client should go to offer-review page with offer details
+        const offerId = notification.offerId || notification.id;
+        console.log('📍 Client: Navigating to offer-review page with state:', {
+          offerAmount: notification.finalAmount,
+          offerDescription: notification.description,
+          craftsmanName: notification.craftsmanName
+        });
+        this.router.navigate(['/offer-review', notification.serviceRequestId, offerId], {
+          state: {
+            offerAmount: notification.finalAmount,
+            offerDescription: notification.description,
+            craftsmanName: notification.craftsmanName
+          }
+        });
+      } else {
+        // Craftsman should go to offers page
+        console.log('Craftsman: Navigating to offers page with service request ID:', notification.serviceRequestId);
+        this.router.navigate(['/offers', notification.serviceRequestId]);
+      }
+    } else {
+      console.warn('Notification has no serviceRequestId:', notification);
+    }
   }
+
+
+  showOfferResponseDialog(notification: ReadNotificationDto) {
+    const finalAmount = notification.finalAmount || 0;
+    const description = notification.description || 'No description provided';
+    const craftsmanName = notification.craftsmanName || 'Craftsman';
+    const offerId = notification.offerId || notification.id;
+
+    Swal.fire({
+      title: '💰 New Offer Received!',
+      html: `
+        <div style="text-align: left; max-width: 450px; margin: 0 auto;">
+          <div style="background: #F9FAFB; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="font-size: 14px; color: #6B7280; margin: 0 0 5px 0;">
+              From
+            </p>
+            <p style="font-size: 16px; font-weight: 600; color: #374151; margin: 0;">
+              ${craftsmanName}
+            </p>
+          </div>
+          
+          <div style="background: #FEF3E2; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #FDB813;">
+            <p style="font-size: 14px; color: #6B7280; margin: 0 0 5px 0;">
+              Offered Price
+            </p>
+            <p style="font-size: 28px; font-weight: 700; color: #FDB813; margin: 0;">
+              ${finalAmount.toFixed(2)} EGP
+            </p>
+          </div>
+          
+          <div style="background: #F9FAFB; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="font-size: 14px; color: #6B7280; margin: 0 0 8px 0; font-weight: 600;">
+              Description
+            </p>
+            <p style="font-size: 14px; color: #374151; margin: 0; line-height: 1.6;">
+              ${description}
+            </p>
+          </div>
+          
+          <div style="background: #EFF6FF; padding: 12px; border-radius: 8px; border-left: 4px solid #3B82F6;">
+            <p style="font-size: 13px; color: #1E40AF; margin: 0;">
+              ℹ️ Accept or decline this offer
+            </p>
+          </div>
+        </div>
+      `,
+      icon: undefined,
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: '✅ Accept Offer',
+      denyButtonText: '❌ Decline Offer',
+      confirmButtonColor: '#10B981',
+      denyButtonColor: '#DC2626',
+      allowOutsideClick: false,
+      width: '550px'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Client accepted
+        this.respondToOffer(offerId, ClientDecision.Accept);
+      } else if (result.isDenied) {
+        // Client rejected
+        this.respondToOffer(offerId, ClientDecision.Reject);
+      }
+    });
+  }
+
+  respondToOffer(offerId: number, decision: ClientDecision) {
+    this.offerService.clientRespond({ offerId, decision }).subscribe({
+      next: () => {
+        const message = decision === ClientDecision.Accept
+          ? 'You have accepted the offer!'
+          : 'You have declined the offer.';
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Response Sent',
+          text: message,
+          confirmButtonColor: '#FDB813',
+          timer: 3000
+        });
+
+        // Refresh notifications
+        const currentUser = this.authService.getCurrentUser();
+        if (currentUser?.role?.toLowerCase() !== 'craftsman') {
+          this.clientService.getCurrentUserProfile().subscribe({
+            next: (client) => this.loadClientNotifications(client.id)
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Failed to respond to offer:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to Respond',
+          text: 'An error occurred. Please try again.',
+          confirmButtonColor: '#FDB813'
+        });
+      }
+    });
+  }
+
 
   getIconForType(type: NotificationType): string {
     switch (type) {
@@ -103,6 +260,7 @@ export class NotificationListComponent implements OnInit {
       case NotificationType.ClientRejectedCraftsmanPrice:
         return '❌';
       case NotificationType.NewPriceOfferedByCraftsman:
+      case NotificationType.NewOfferFromCraftsman:
         return '💰';
       case NotificationType.ServiceCompleted:
         return '🎉';

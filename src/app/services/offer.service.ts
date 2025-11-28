@@ -1,0 +1,82 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+
+export interface ClientSelectCraftsmanDto {
+    serviceRequestId: number;
+    craftsmanId: number;
+}
+
+export interface CraftsmanAcceptDto {
+    serviceRequestId: number;
+}
+
+export interface CraftsmanRejectDto {
+    serviceRequestId: number;
+}
+
+export interface CraftsManNewOfferDto {
+    serviceRequestId: number;
+    craftsmanId: number;
+    finalAmount: number;
+    description: string;
+}
+
+export enum ClientDecision {
+    Accept = 0,
+    Reject = 1
+}
+
+export interface ClientRespondDto {
+    offerId: number;
+    decision: ClientDecision;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class OfferService {
+    private http = inject(HttpClient);
+    private readonly API_URL = `${environment.apiUrl}/Offer`;
+
+    /**
+     * Client selects a craftsman for their service request
+     * POST /api/Offer/select-craftsman
+     */
+    selectCraftsman(dto: ClientSelectCraftsmanDto): Observable<void> {
+        return this.http.post<void>(`${this.API_URL}/select-craftsman`, dto);
+    }
+
+    /**
+     * Craftsman accepts a service request offer
+     * POST /api/Offer/craftsman-accept
+     */
+    craftsmanAccept(dto: CraftsmanAcceptDto): Observable<void> {
+        return this.http.post<void>(`${this.API_URL}/craftsman-accept`, dto);
+    }
+
+    /**
+     * Craftsman rejects a service request offer
+     * POST /api/Offer/craftsman-reject
+     */
+    craftsmanReject(dto: CraftsmanRejectDto): Observable<void> {
+        return this.http.post<void>(`${this.API_URL}/craftsman-reject`, dto);
+    }
+
+    /**
+     * Craftsman submits a new offer with custom price
+     * POST /api/Offer/craftsman-new-offer
+     */
+    craftsmanNewOffer(dto: CraftsManNewOfferDto): Observable<void> {
+        return this.http.post<void>(`${this.API_URL}/craftsman-new-offer`, dto);
+    }
+
+    /**
+     * Client responds to a craftsman's offer
+     * POST /api/Offer/client-respond
+     */
+    clientRespond(dto: ClientRespondDto): Observable<void> {
+        return this.http.post<void>(`${this.API_URL}/client-respond`, dto);
+    }
+}

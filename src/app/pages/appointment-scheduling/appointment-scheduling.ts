@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AvailabilityService } from '../../services/availability.service';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { ServiceRequestService, ConfirmStartAtTimeDto } from '../../services/service-request.service';
+import { OfferService } from '../../services/offer.service';
 import { ClientService } from '../../services/client.service';
 import { TimeSlotDto, WeekDayView, DAYS_OF_WEEK } from '../../models/availability.models';
 import { CraftsmanProfile } from '../../models/craftsman.models';
@@ -40,6 +41,7 @@ export class AppointmentSchedulingComponent implements OnInit {
     private availabilityService = inject(AvailabilityService);
     private craftsmanService = inject(CraftsmanService);
     private serviceRequestService = inject(ServiceRequestService);
+    private offerService = inject(OfferService);
     private clientService = inject(ClientService);
     private notificationService = inject(NotificationService);
     private router = inject(Router);
@@ -177,70 +179,96 @@ export class AppointmentSchedulingComponent implements OnInit {
 
         this.isBooking = true;
 
-        const requestData: ConfirmStartAtTimeDto = {
-            serviceId: this.serviceId,
-            clientId: this.clientId,
-            craftsManId: this.craftsmanId,
-            serviceStartTime: this.selectedTimeSlot.startTime
+        // First, create the offer by selecting the craftsman
+        const selectCraftsmanData = {
+            serviceRequestId: this.serviceRequestId,
+            craftsmanId: this.craftsmanId
         };
 
-        this.serviceRequestService.updateServiceRequestStartTime(this.serviceRequestId, requestData)
+        this.offerService.selectCraftsman(selectCraftsmanData)
             .subscribe({
-                next: (response: string) => {
-                    console.log('Appointment confirmed successfully:', response);
-                    this.isBooking = false;
+                next: () => {
+                    console.log('Craftsman selected and offer created');
 
-                    this.notificationService.createNotification({
-                        serviceRequestId: this.serviceRequestId,
-                        message: 'Client selected you for a service request',
-                        type: NotificationType.SelectCraftsman,
-                        recipientType: 'Craftsman'
-                    }).subscribe({
-                        next: () => console.log('Notification sent to craftsman'),
-                        error: (err) => console.error('Failed to send notification', err)
-                    });
+                    // Then update the service request start time
+                    const requestData: ConfirmStartAtTimeDto = {
+                        serviceId: this.serviceId,
+                        clientId: this.clientId,
+                        craftsManId: this.craftsmanId,
+                        serviceStartTime: this.selectedTimeSlot!.startTime
+                    };
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Request Sent Successfully!',
-                        html: `
-                            <div style="text-align: center;">
-                                <p style="font-size: 16px; color: #555; margin-bottom: 15px;">
-                                    Your appointment request has been sent to<br/>
-                                    <strong style="color: #FDB813;">${this.craftsman?.fName} ${this.craftsman?.lName}</strong>
-                                </p>
-                                <p style="font-size: 15px; color: #666;">
-                                    📅 <strong>${this.selectedDay?.fullDayName}</strong><br/>
-                                    🕐 <strong>${this.selectedTimeSlot?.time}</strong>
-                                </p>
-                                <div style="background: #FEF3E2; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                                    <p style="font-size: 14px; color: #666; margin: 0;">
-                                        Please wait for craftsman confirmation.<br/>
-                                        You will be notified once confirmed.
-                                    </p>
-                                </div>
-                            </div>
-                        `,
-                        confirmButtonText: 'Got it!',
-                        confirmButtonColor: '#FDB813',
-                        showClass: {
-                            popup: 'animate__animated animate__fadeInDown'
-                        },
-                        hideClass: {
-                            popup: 'animate__animated animate__fadeOutUp'
-                        }
-                    }).then(() => {
-                        this.router.navigate(['/']);
-                    });
+                    this.serviceRequestService.updateServiceRequestStartTime(this.serviceRequestId, requestData)
+                        .subscribe({
+                            next: (response: string) => {
+                                console.log('Appointment confirmed successfully:', response);
+                                this.isBooking = false;
+
+                                // Send notification to craftsman
+                                this.notificationService.createNotification({
+                                    serviceRequestId: this.serviceRequestId,
+                                    message: 'Client selected you for a service request',
+                                    type: NotificationType.SelectCraftsman,
+                                    recipientType: 'Craftsman'
+                                }).subscribe({
+                                    next: () => console.log('Notification sent to craftsman'),
+                                    error: (err) => console.error('Failed to send notification', err)
+                                });
+
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Request Sent Successfully!',
+                                    html: `
+                                        <div style="text-align: center;">
+                                            <p style="font-size: 16px; color: #555; margin-bottom: 15px;">
+                                                Your appointment request has been sent to<br/>
+                                                <strong style="color: #FDB813;">${this.craftsman?.fName} ${this.craftsman?.lName}</strong>
+                                            </p>
+                                            <p style="font-size: 15px; color: #666;">
+                                                📅 <strong>${this.selectedDay?.fullDayName}</strong><br/>
+                                                🕐 <strong>${this.selectedTimeSlot?.time}</strong>
+                                            </p>
+                                            <div style="background: #FEF3E2; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                                <p style="font-size: 14px; color: #666; margin: 0;">
+                                                    Please wait for craftsman confirmation.<br/>
+                                                    You will be notified once confirmed.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    `,
+                                    confirmButtonText: 'Got it!',
+                                    confirmButtonColor: '#FDB813',
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(() => {
+                                    this.router.navigate(['/']);
+                                });
+                            },
+                            error: (error: any) => {
+                                console.error('Error updating appointment time:', error);
+                                this.isBooking = false;
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Time Update Failed',
+                                    text: error.error || 'Failed to set appointment time. Please try again.',
+                                    confirmButtonColor: '#FDB813'
+                                });
+                            }
+                        });
                 },
                 error: (error: any) => {
-                    console.error('Error confirming appointment:', error);
+                    console.error('Error selecting craftsman:', error);
                     this.isBooking = false;
 
                     Swal.fire({
                         icon: 'error',
-                        title: 'Booking Failed',
-                        text: error.error || 'Failed to confirm appointment. Please try again.',
+                        title: 'Selection Failed',
+                        text: error.error || 'Failed to select craftsman. Please try again.',
                         confirmButtonColor: '#FDB813'
                     });
                 }
