@@ -451,6 +451,24 @@
   font-size: 0.85rem;
   margin: 0;
 }
+/* National ID Preview - Rectangular (250x170px) */
+.national-id-preview {
+  border-radius: 12px !important;
+  width: 250px !important;
+  height: 170px !important;
+  flex-direction: column;
+}
+
+.national-id-preview:hover {
+  transform: scale(1.03);
+}
+
+.national-id-preview .placeholder-text {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
+  text-align: center;
+}
 
 /* ========================================
    FORM GROUPS

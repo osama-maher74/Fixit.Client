@@ -19,6 +19,8 @@ export class AdminDashboard implements OnInit {
   craftsmen = signal<CraftsmanProfile[]>([]);
   isLoading = signal<boolean>(true);
   errorMessage = signal<string | null>(null);
+  selectedNationalIdUrl = signal<string | null>(null);
+  showFullscreen = signal<boolean>(false);
 
   ngOnInit(): void {
     console.log('Admin Dashboard - Component Initialized');
@@ -70,5 +72,33 @@ export class AdminDashboard implements OnInit {
 
   getFullName(craftsman: CraftsmanProfile): string {
     return `${craftsman.fName} ${craftsman.lName}`;
+  }
+
+  getNationalIdUrl(craftsman: CraftsmanProfile): string | null {
+    if (!craftsman.nationalIdPic) {
+      return null;
+    }
+
+    // If it's already a full URL, return it
+    if (craftsman.nationalIdPic.startsWith('http://') || craftsman.nationalIdPic.startsWith('https://')) {
+      return craftsman.nationalIdPic;
+    }
+
+    // Otherwise, construct the full URL
+    return `https://localhost:7058/${craftsman.nationalIdPic}`;
+  }
+
+  openNationalIdFullscreen(event: Event, craftsman: CraftsmanProfile): void {
+    event.stopPropagation(); // Prevent card click
+    const url = this.getNationalIdUrl(craftsman);
+    if (url) {
+      this.selectedNationalIdUrl.set(url);
+      this.showFullscreen.set(true);
+    }
+  }
+
+  closeFullscreen(): void {
+    this.showFullscreen.set(false);
+    this.selectedNationalIdUrl.set(null);
   }
 }
