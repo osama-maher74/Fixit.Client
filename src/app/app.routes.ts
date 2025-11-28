@@ -76,8 +76,8 @@ export const routes: Routes = [
     canActivate: [clientOnlyGuard]
   },
   {
-    path: 'payment-test',
-    loadComponent: () => import('./pages/payment-test/payment-test.component').then(m => m.PaymentTestComponent)
+    path: 'payment/:serviceRequestId',
+    loadComponent: () => import('./pages/payment/payment.component').then(m => m.PaymentComponent)
   },
   {
     path: 'offer-review/:serviceRequestId/:offerId',

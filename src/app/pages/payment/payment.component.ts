@@ -2,21 +2,21 @@ import { Component, OnInit, AfterViewInit, OnDestroy, signal, inject } from '@an
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { StripeService } from '../../services/stripe.service';
 import { PaymentService } from '../../services/payment.service';
-// import { PaymentMockService } from '../../services/payment-mock.service'; // Uncomment to use mock
 import { ThemeService } from '../../services/theme.service';
 import { AuthService } from '../../services/auth.service';
 import { PaymentIntentRequest, PaymentResult } from '../../models/payment.models';
 
 /**
- * Payment Test Component
- * A complete Stripe payment integration page for testing payments
+ * Payment Component
+ * Professional Stripe payment integration for service requests
  *
  * Features:
  * - Stripe Elements card input
- * - Amount and description form
+ * - Automatic service request ID from route
+ * - Dynamic total amount from backend
  * - Real-time validation
  * - Loading states
  * - Error handling
@@ -24,24 +24,24 @@ import { PaymentIntentRequest, PaymentResult } from '../../models/payment.models
  * - Theme-aware styling
  */
 @Component({
-  selector: 'app-payment-test',
+  selector: 'app-payment',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
     TranslateModule
   ],
-  templateUrl: './payment-test.component.html',
-  styleUrl: './payment-test.component.css'
+  templateUrl: './payment.component.html',
+  styleUrl: './payment.component.css'
 })
-export class PaymentTestComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   // Services
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   public stripeService = inject(StripeService);
   private paymentService = inject(PaymentService);
-  // private paymentService = inject(PaymentMockService); // Uncomment to use mock service
   public themeService = inject(ThemeService);
   private authService = inject(AuthService);
 
@@ -50,19 +50,34 @@ export class PaymentTestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // State signals
   isLoadingStripe = signal(true);
+  isLoadingPaymentInfo = signal(true);
   isProcessing = signal(false);
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
   paymentCompleted = signal(false);
 
+  // Service request details
+  serviceRequestId = signal<number | null>(null);
+  totalAmount = signal<number | null>(null);
+
   // Payment details for success display
   completedPaymentAmount = signal<number | null>(null);
   completedPaymentId = signal<string | null>(null);
 
-  // Billing details form
-  billingName = signal<string>('');
-
   ngOnInit(): void {
+    // Get service request ID from route params
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('serviceRequestId');
+      if (id) {
+        const requestId = +id;
+        this.serviceRequestId.set(requestId);
+        this.loadPaymentInfo(requestId);
+      } else {
+        this.errorMessage.set('No service request ID provided');
+        this.isLoadingPaymentInfo.set(false);
+      }
+    });
+
     this.initializeForm();
   }
 
@@ -77,19 +92,35 @@ export class PaymentTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * Load payment information from backend
+   */
+  private loadPaymentInfo(serviceRequestId: number): void {
+    this.isLoadingPaymentInfo.set(true);
+
+    // Create payment intent to get the total amount
+    this.paymentService.createPaymentIntent(serviceRequestId).subscribe({
+      next: (response) => {
+        console.log('Payment info loaded:', response);
+
+        // Extract amount from response (amount is in cents)
+        const amount = response.amount || response.totalAmount || 0;
+        this.totalAmount.set(amount);
+
+        this.isLoadingPaymentInfo.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load payment info:', err);
+        this.errorMessage.set('Failed to load payment information. Please try again.');
+        this.isLoadingPaymentInfo.set(false);
+      }
+    });
+  }
+
+  /**
    * Initialize the payment form
    */
   private initializeForm(): void {
-    this.paymentForm = this.fb.group({
-      serviceRequestId: [
-        5,  // Default to 5 for testing
-        [
-          Validators.required,
-          Validators.min(1),
-          Validators.pattern(/^\d+$/)  // Only integers
-        ]
-      ]
-    });
+    this.paymentForm = this.fb.group({});
   }
 
   /**
@@ -150,9 +181,9 @@ export class PaymentTestComponent implements OnInit, AfterViewInit, OnDestroy {
     this.errorMessage.set(null);
     this.successMessage.set(null);
 
-    // Validate form
-    if (this.paymentForm.invalid) {
-      this.markFormAsTouched();
+    // Check if we have a service request ID
+    if (!this.serviceRequestId()) {
+      this.errorMessage.set('No service request ID available');
       return;
     }
 
@@ -175,8 +206,8 @@ export class PaymentTestComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       this.isProcessing.set(true);
 
-      // Step 1: Get service request ID from form
-      const serviceRequestId = this.paymentForm.get('serviceRequestId')?.value;
+      // Step 1: Get service request ID from signal
+      const serviceRequestId = this.serviceRequestId()!;
 
       // Step 2: Create payment intent on backend using service request ID
       const paymentIntentResponse = await this.createPaymentIntent(serviceRequestId);
@@ -291,34 +322,23 @@ export class PaymentTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Reset the payment form and start a new payment
-   */
-  resetPayment(): void {
-    this.paymentCompleted.set(false);
-    this.completedPaymentAmount.set(null);
-    this.completedPaymentId.set(null);
-    this.successMessage.set(null);
-    this.errorMessage.set(null);
-    this.paymentForm.reset();
-    this.stripeService.clearCards();
-  }
-
-  /**
    * Navigate back to home
    */
   goHome(): void {
     this.router.navigate(['/']);
   }
 
-  // Getters for form controls (for template validation)
-  get serviceRequestId() {
-    return this.paymentForm.get('serviceRequestId');
-  }
-
   /**
-   * Format amount for display
+   * Format amount for display (amount is in cents)
    */
   formatAmount(amountInCents: number): string {
     return (amountInCents / 100).toFixed(2);
+  }
+
+  /**
+   * Format amount for display in EGP
+   */
+  formatAmountEGP(amount: number): string {
+    return amount.toFixed(2);
   }
 }

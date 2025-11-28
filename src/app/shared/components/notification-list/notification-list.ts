@@ -83,22 +83,38 @@ export class NotificationListComponent implements OnInit {
   }
 
   onNotificationClick(notification: ReadNotificationDto) {
-    // Mark as read
-    if (!notification.isRead) {
-      this.notificationService.markAsRead(notification.id).subscribe(() => {
-        this.notificationService.markLocalAsRead(notification.id);
-      });
-    }
-
     // DEBUG: Log the entire notification object
     console.log('🔔 Notification clicked:', notification);
+    console.log('Notification ID:', notification.id);
     console.log('Notification type:', notification.type);
     console.log('Notification finalAmount:', notification.finalAmount);
     console.log('Notification offerId:', notification.offerId);
 
+    // Mark as read (only if notification has a valid ID)
+    if (!notification.isRead && notification.id) {
+      this.notificationService.markAsRead(notification.id).subscribe({
+        next: () => {
+          this.notificationService.markLocalAsRead(notification.id);
+        },
+        error: (err) => {
+          console.error('Failed to mark notification as read:', err);
+          // Don't block navigation if marking as read fails
+        }
+      });
+    }
+
     // Get current user role
     const currentUser = this.authService.getCurrentUser();
     const isClient = currentUser?.role?.toLowerCase() !== 'craftsman';
+
+    // Check if this is a craftsman accepted notification for client - route to payment
+    if (isClient && notification.type === NotificationType.CraftsmanAccepted) {
+      console.log('✅ Craftsman accepted - routing client to payment page');
+      if (notification.serviceRequestId) {
+        this.router.navigate(['/payment', notification.serviceRequestId]);
+      }
+      return;
+    }
 
     // Check if this is a new offer notification for client (check both types)
     if (notification.type === NotificationType.NewPriceOfferedByCraftsman ||
@@ -155,6 +171,7 @@ export class NotificationListComponent implements OnInit {
     const description = notification.description || 'No description provided';
     const craftsmanName = notification.craftsmanName || 'Craftsman';
     const offerId = notification.offerId || notification.id;
+    const serviceRequestId = notification.serviceRequestId;
 
     Swal.fire({
       title: '💰 New Offer Received!',
@@ -168,7 +185,7 @@ export class NotificationListComponent implements OnInit {
               ${craftsmanName}
             </p>
           </div>
-          
+
           <div style="background: #FEF3E2; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #FDB813;">
             <p style="font-size: 14px; color: #6B7280; margin: 0 0 5px 0;">
               Offered Price
@@ -177,7 +194,7 @@ export class NotificationListComponent implements OnInit {
               ${finalAmount.toFixed(2)} EGP
             </p>
           </div>
-          
+
           <div style="background: #F9FAFB; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
             <p style="font-size: 14px; color: #6B7280; margin: 0 0 8px 0; font-weight: 600;">
               Description
@@ -186,7 +203,7 @@ export class NotificationListComponent implements OnInit {
               ${description}
             </p>
           </div>
-          
+
           <div style="background: #EFF6FF; padding: 12px; border-radius: 8px; border-left: 4px solid #3B82F6;">
             <p style="font-size: 13px; color: #1E40AF; margin: 0;">
               ℹ️ Accept or decline this offer
@@ -205,8 +222,8 @@ export class NotificationListComponent implements OnInit {
       width: '550px'
     }).then((result) => {
       if (result.isConfirmed) {
-        // Client accepted
-        this.respondToOffer(offerId, ClientDecision.Accept);
+        // Client accepted - pass serviceRequestId for routing to payment
+        this.respondToOffer(offerId, ClientDecision.Accept, serviceRequestId);
       } else if (result.isDenied) {
         // Client rejected
         this.respondToOffer(offerId, ClientDecision.Reject);
@@ -214,27 +231,38 @@ export class NotificationListComponent implements OnInit {
     });
   }
 
-  respondToOffer(offerId: number, decision: ClientDecision) {
+  respondToOffer(offerId: number, decision: ClientDecision, serviceRequestId?: number) {
     this.offerService.clientRespond({ offerId, decision }).subscribe({
       next: () => {
-        const message = decision === ClientDecision.Accept
-          ? 'You have accepted the offer!'
-          : 'You have declined the offer.';
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Response Sent',
-          text: message,
-          confirmButtonColor: '#FDB813',
-          timer: 3000
-        });
-
-        // Refresh notifications
-        const currentUser = this.authService.getCurrentUser();
-        if (currentUser?.role?.toLowerCase() !== 'craftsman') {
-          this.clientService.getCurrentUserProfile().subscribe({
-            next: (client) => this.loadClientNotifications(client.id)
+        if (decision === ClientDecision.Accept && serviceRequestId) {
+          // Client accepted - route to payment page
+          Swal.fire({
+            icon: 'success',
+            title: 'Offer Accepted!',
+            text: 'Redirecting to payment page...',
+            confirmButtonColor: '#FDB813',
+            timer: 2000,
+            showConfirmButton: false
+          }).then(() => {
+            this.router.navigate(['/payment', serviceRequestId]);
           });
+        } else {
+          // Client rejected
+          Swal.fire({
+            icon: 'success',
+            title: 'Response Sent',
+            text: 'You have declined the offer.',
+            confirmButtonColor: '#FDB813',
+            timer: 3000
+          });
+
+          // Refresh notifications
+          const currentUser = this.authService.getCurrentUser();
+          if (currentUser?.role?.toLowerCase() !== 'craftsman') {
+            this.clientService.getCurrentUserProfile().subscribe({
+              next: (client) => this.loadClientNotifications(client.id)
+            });
+          }
         }
       },
       error: (err) => {

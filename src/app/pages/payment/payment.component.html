@@ -33,13 +33,6 @@
           <button
             type="button"
             class="btn btn-primary"
-            (click)="resetPayment()"
-          >
-            {{ 'PAYMENT.MAKE_ANOTHER_PAYMENT' | translate }}
-          </button>
-          <button
-            type="button"
-            class="btn btn-secondary"
             (click)="goHome()"
           >
             {{ 'PAYMENT.BACK_TO_HOME' | translate }}
@@ -51,8 +44,16 @@
     <!-- Payment Form -->
     @else {
       <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="payment-form">
-        <!-- Loading State -->
-        @if (isLoadingStripe()) {
+        <!-- Loading Payment Info State -->
+        @if (isLoadingPaymentInfo()) {
+          <div class="loading-container">
+            <div class="spinner"></div>
+            <p>Loading payment information...</p>
+          </div>
+        }
+
+        <!-- Loading Stripe State -->
+        @if (isLoadingStripe() && !isLoadingPaymentInfo()) {
           <div class="loading-container">
             <div class="spinner"></div>
             <p>{{ 'PAYMENT.LOADING_STRIPE' | translate }}</p>
@@ -69,39 +70,18 @@
           </div>
         }
 
-        <!-- Service Request ID Field -->
-        <div class="form-group">
-          <label for="serviceRequestId" class="form-label">
-            {{ 'PAYMENT.SERVICE_REQUEST_ID_LABEL' | translate }} *
-          </label>
-          <input
-            type="number"
-            id="serviceRequestId"
-            formControlName="serviceRequestId"
-            class="form-control"
-            [class.error]="serviceRequestId?.invalid && serviceRequestId?.touched"
-            placeholder="5"
-            min="1"
-          />
-
-          <!-- Service Request ID Validation Errors -->
-          @if (serviceRequestId?.invalid && serviceRequestId?.touched) {
-            <div class="error-message">
-              @if (serviceRequestId?.errors?.['required']) {
-                <span>{{ 'PAYMENT.SERVICE_REQUEST_ID_REQUIRED' | translate }}</span>
-              }
-              @if (serviceRequestId?.errors?.['min']) {
-                <span>{{ 'PAYMENT.SERVICE_REQUEST_ID_MIN' | translate }}</span>
-              }
-              @if (serviceRequestId?.errors?.['pattern']) {
-                <span>{{ 'PAYMENT.SERVICE_REQUEST_ID_INVALID' | translate }}</span>
-              }
+        <!-- Payment Summary (only show when not loading) -->
+        @if (!isLoadingPaymentInfo() && totalAmount() !== null) {
+          <div class="payment-summary">
+            <div class="summary-card">
+              <h3 class="summary-title">Payment Summary</h3>
+              <div class="summary-row">
+                <span class="summary-label">Total Amount:</span>
+                <span class="summary-value">{{ formatAmount(totalAmount()!) }} EGP</span>
+              </div>
             </div>
-          }
-
-          <!-- Helper text -->
-          <p class="form-helper-text">{{ 'PAYMENT.SERVICE_REQUEST_ID_HELPER' | translate }}</p>
-        </div>
+          </div>
+        }
 
         <!-- Card Details Section -->
         <div class="card-section">
@@ -187,11 +167,13 @@
         <button
           type="submit"
           class="btn btn-primary submit-btn"
-          [disabled]="isProcessing() || paymentForm.invalid"
+          [disabled]="isProcessing() || isLoadingPaymentInfo() || isLoadingStripe()"
         >
           @if (isProcessing()) {
             <span class="spinner"></span>
             <span>{{ 'PAYMENT.PROCESSING' | translate }}</span>
+          } @else if (totalAmount() !== null) {
+            <span>Pay {{ formatAmount(totalAmount()!) }} EGP</span>
           } @else {
             <span>{{ 'PAYMENT.PAY_NOW' | translate }}</span>
           }

@@ -117,19 +117,30 @@ export class OfferReviewComponent implements OnInit {
     respondToOffer(decision: ClientDecision) {
         this.offerService.clientRespond({ offerId: this.offerId, decision }).subscribe({
             next: () => {
-                const message = decision === ClientDecision.Accept
-                    ? 'You have accepted the offer!'
-                    : 'You have declined the offer.';
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Response Sent',
-                    text: message,
-                    confirmButtonColor: '#FDB813',
-                    timer: 3000
-                }).then(() => {
-                    this.router.navigate(['/']);
-                });
+                if (decision === ClientDecision.Accept) {
+                    // Client accepted the offer - route to payment page
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Offer Accepted!',
+                        text: 'Redirecting to payment page...',
+                        confirmButtonColor: '#FDB813',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        this.router.navigate(['/payment', this.serviceRequestId]);
+                    });
+                } else {
+                    // Client rejected the offer
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Offer Declined',
+                        text: 'You have declined the offer.',
+                        confirmButtonColor: '#FDB813',
+                        timer: 3000
+                    }).then(() => {
+                        this.router.navigate(['/']);
+                    });
+                }
             },
             error: (err) => {
                 console.error('Failed to respond to offer:', err);
