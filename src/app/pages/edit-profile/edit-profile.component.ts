@@ -31,6 +31,8 @@ export class EditProfileComponent implements OnInit {
   successMessage = signal<string | null>(null);
   selectedImageFile = signal<File | null>(null);
   imagePreviewUrl = signal<string | null>(null);
+  selectedNationalIdFile = signal<File | null>(null);
+  nationalIdPreviewUrl = signal<string | null>(null);
 
   // Forms
   clientForm!: FormGroup;
@@ -168,9 +170,14 @@ export class EditProfileComponent implements OnInit {
       hourlyRate: profile.hourlyRate || 0
     });
 
-    // Set image preview if exists
+    // Set profile image preview if exists
     if (profile.profileImage) {
       this.imagePreviewUrl.set(this.getProfileImageUrl(profile.profileImage));
+    }
+
+    // Set National ID preview if exists (backend returns full URL)
+    if (profile.nationalIdPic) {
+      this.nationalIdPreviewUrl.set(profile.nationalIdPic);
     }
   }
 
@@ -257,6 +264,60 @@ export class EditProfileComponent implements OnInit {
 
     // Reset file input
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+
+  /**
+   * Handle National ID image file selection
+   */
+  onNationalIdSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        this.errorMessage.set('Please select a valid image file');
+        return;
+      }
+
+      // Validate file size (max 3MB)
+      if (file.size > 3 * 1024 * 1024) {
+        this.errorMessage.set('National ID image must be less than 3MB');
+        return;
+      }
+
+      this.selectedNationalIdFile.set(file);
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        this.nationalIdPreviewUrl.set(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+
+      this.errorMessage.set(null);
+    }
+  }
+
+  /**
+   * Remove selected National ID and revert to original
+   */
+  removeNationalId(): void {
+    this.selectedNationalIdFile.set(null);
+
+    // Revert to original National ID if it exists
+    const profile = this.profile() as CraftsmanProfile;
+    if (profile?.nationalIdPic) {
+      this.nationalIdPreviewUrl.set(profile.nationalIdPic);
+    } else {
+      this.nationalIdPreviewUrl.set(null);
+    }
+
+    // Reset file input
+    const fileInput = document.querySelector('input[type="file"]#nationalIdPic') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
@@ -359,6 +420,12 @@ export class EditProfileComponent implements OnInit {
     } else if (profile.profileImage) {
       // No new image - send old image path as text so backend knows to keep it
       formData.append('existingImagePath', profile.profileImage);
+    }
+
+    // Handle National ID picture
+    if (this.selectedNationalIdFile()) {
+      // New National ID selected - send the file with exact key name from backend
+      formData.append('NationalIdPic', this.selectedNationalIdFile()!);
     }
 
     // Submit to API

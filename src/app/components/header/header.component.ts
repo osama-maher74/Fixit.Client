@@ -80,4 +80,8 @@ export class HeaderComponent {
     const user = this.authService.getCurrentUser();
     return user?.role === 'Admin';
   }
+
+  getProfileRoute(): string {
+    return this.isAdmin() ? '/admin/dashboard' : '/profile';
+  }
 }
