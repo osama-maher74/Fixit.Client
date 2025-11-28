@@ -74,7 +74,7 @@
                 } @else {
                 @if (authService.currentUser$ | async; as user) {
                 <div class="user-menu">
-                    @if (user.role.toLowerCase() !== 'craftsman') {
+                    @if (user.role.toLowerCase() !== 'craftsman' && user.role.toLowerCase() !== 'admin') {
                     <a [routerLink]="['/']" fragment="services" class="nav-link services-link" (click)="closeMenus()">
                         <svg class="services-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
@@ -85,6 +85,7 @@
                     </a>
                     }
 
+                    @if (user.role.toLowerCase() !== 'admin') {
                     <a [routerLink]="['/']" fragment="about-us" class="nav-link" (click)="closeMenus()">
                         <svg class="services-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
@@ -93,6 +94,7 @@
                         </svg>
                         About Us
                     </a>
+                    }
 
                     <!-- Notification Dropdown -->
                     <div class="nav-dropdown notification-dropdown" [class.open]="notificationDropdownOpen()">
@@ -129,15 +131,16 @@
                         </button>
 
                         <div class="dropdown-menu user-dropdown-menu" [class.open]="userDropdownOpen()">
-                            <a routerLink="/profile" class="dropdown-item" (click)="closeMenus()">
+                            <a [routerLink]="getProfileRoute()" class="dropdown-item" (click)="closeMenus()">
                                 <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
-                                Profile
+                                {{ isAdmin() ? 'Dashboard' : 'Profile' }}
                             </a>
 
+                            @if (!isAdmin()) {
                             <a routerLink="/edit-profile" class="dropdown-item" (click)="closeMenus()">
                                 <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
@@ -146,6 +149,7 @@
                                 </svg>
                                 Edit Profile
                             </a>
+                            }
 
                             <button (click)="onLogout(); closeMenus()" class="dropdown-item logout-item">
                                 <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"

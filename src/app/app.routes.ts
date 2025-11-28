@@ -3,11 +3,14 @@ import { authGuard } from './guards/auth.guard';
 import { clientOnlyGuard } from './guards/client-only.guard';
 import { loginGuard } from './guards/login.guard';
 import { adminOnlyGuard } from './guards/admin-only.guard';
+import { homeGuard } from './guards/home.guard';
+import { profileGuard } from './guards/profile.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
+    canActivate: [homeGuard]
   },
   {
     path: 'login',
@@ -35,7 +38,7 @@ export const routes: Routes = [
   {
     path: 'profile',
     loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent),
-    canActivate: [authGuard]
+    canActivate: [profileGuard]
   },
   {
     path: 'edit-profile',
