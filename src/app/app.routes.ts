@@ -89,6 +89,16 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/offers/offers').then(m => m.OffersComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'my-requests',
+    loadComponent: () => import('./pages/my-requests/my-requests.component').then(m => m.MyRequestsComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'request-details/:id',
+    loadComponent: () => import('./pages/request-details/request-details.component').then(m => m.RequestDetailsComponent),
+    canActivate: [authGuard]
+  },
 
   {
     path: '**',

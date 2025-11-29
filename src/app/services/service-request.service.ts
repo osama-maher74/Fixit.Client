@@ -91,6 +91,14 @@ export class ServiceRequestService {
         return this.http.get<ServiceRequestResponse>(`${this.API_URL}/${id}`);
     }
 
+    /**
+     * Get all service requests for a specific client by client ID
+     * GET /api/ServiceRequest/Client/ById/{clientId}
+     */
+    getAllServiceRequestsForClientById(clientId: number): Observable<ServiceRequestResponse[]> {
+        return this.http.get<ServiceRequestResponse[]>(`${this.API_URL}/Client/ById/${clientId}`);
+    }
+
     cancelServiceRequest(id: number): Observable<void> {
         return this.http.delete<void>(`${this.API_URL}/${id}`);
     }
@@ -103,6 +111,18 @@ export class ServiceRequestService {
         return this.http.put(
             `${this.API_URL}/StartAtTime/${serviceRequestId}`,
             data,
+            { responseType: 'text' }
+        );
+    }
+
+    /**
+     * Complete service request
+     * POST /api/ServiceRequest/complete/{requestId}
+     */
+    completeServiceRequest(requestId: number): Observable<string> {
+        return this.http.post(
+            `${this.API_URL}/complete/${requestId}`,
+            {},
             { responseType: 'text' }
         );
     }
