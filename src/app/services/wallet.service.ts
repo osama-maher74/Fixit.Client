@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { WalletDto, CreateWalletTransactionDto, WithdrawalResponse, WalletTransactionDto } from '../models/wallet.models';
+import { WalletDto, CreateWalletTransactionDto, WithdrawalResponse, WalletTransactionDto, UpdateWalletTransactionDto } from '../models/wallet.models';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,22 @@ export class WalletService {
   getWalletTransactions(craftsManId: number): Observable<WalletTransactionDto[]> {
     const url = `${this.WALLET_API}/${craftsManId}/transactions`;
     console.log('WalletService - Fetching transactions for craftsman ID:', craftsManId);
-    return this.http.get<WalletTransactionDto[]>(url);
+    return this.http.get<any[]>(url).pipe(
+      map(transactions => transactions.map(tx => ({
+        ...tx,
+        isPayed: tx.isPayed !== undefined ? tx.isPayed : tx.ispayed // Handle backend casing
+      })))
+    );
+  }
+
+  /**
+   * Update wallet transaction (admin only - update isPayed status)
+   * @param dto - UpdateWalletTransactionDto
+   * @returns Observable of any
+   */
+  updateWalletTransaction(dto: UpdateWalletTransactionDto): Observable<any> {
+    const url = `${this.WALLET_API}`;
+    console.log('WalletService - Updating transaction:', dto);
+    return this.http.put<any>(url, dto);
   }
 }

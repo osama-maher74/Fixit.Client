@@ -105,6 +105,7 @@
                     }
 
                     <!-- Notification Dropdown -->
+                    @if (!isAdmin()) {
                     <div class="nav-dropdown notification-dropdown" [class.open]="notificationDropdownOpen()">
                         <button class="notification-trigger" (click)="toggleNotificationDropdown()"
                             [attr.aria-label]="'Notifications'">
@@ -123,6 +124,7 @@
                             <app-notification-list></app-notification-list>
                         </div>
                     </div>
+                    }
 
                     <div class="nav-dropdown user-dropdown" [class.open]="userDropdownOpen()">
                         <button class="user-profile-trigger" (click)="toggleUserDropdown()"

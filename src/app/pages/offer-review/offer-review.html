@@ -116,13 +116,17 @@
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-            <button class="btn-accept" (click)="onAccept()">
-                <span class="btn-icon">✅</span>
-                Accept Offer
+            <button class="btn btn-accept" (click)="onAccept()">
+                <span class="btn-icon">✓</span>
+                <span class="btn-text">Accept Offer</span>
             </button>
-            <button class="btn-reject" (click)="onReject()">
-                <span class="btn-icon">❌</span>
-                Reject Offer
+            <button class="btn btn-reject" (click)="onReject()">
+                <span class="btn-icon">✕</span>
+                <span class="btn-text">Reject Offer</span>
+            </button>
+            <button class="btn btn-new-offer" (click)="onNewOffer()" *ngIf="isCraftsman">
+                <span class="btn-icon">💰</span>
+                <span class="btn-text">New Offer</span>
             </button>
         </div>
     </div>
