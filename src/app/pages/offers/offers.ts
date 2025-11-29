@@ -313,4 +313,9 @@ export class OffersComponent implements OnInit {
       minute: '2-digit'
     });
   }
+
+  getStatusClass(status: any): string {
+    if (!status) return '';
+    return String(status).toLowerCase();
+  }
 }

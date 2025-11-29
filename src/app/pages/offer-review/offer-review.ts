@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServiceRequestService, ServiceRequestResponse } from '../../services/service-request.service';
 import { OfferService, ClientDecision } from '../../services/offer.service';
+import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
 import Swal from 'sweetalert2';
 
@@ -18,6 +19,7 @@ export class OfferReviewComponent implements OnInit {
     private router = inject(Router);
     private serviceRequestService = inject(ServiceRequestService);
     private offerService = inject(OfferService);
+    private authService = inject(AuthService);
 
     serviceRequest: ServiceRequestResponse | null = null;
     loading = true;
@@ -178,6 +180,120 @@ export class OfferReviewComponent implements OnInit {
             hour: '2-digit',
             minute: '2-digit'
         });
+    }
+
+    onNewOffer() {
+        // Show themed form modal
+        Swal.fire({
+            title: 'Submit New Offer',
+            html: `
+                <div style="text-align: left;">
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+                            Final Amount (EGP)
+                        </label>
+                        <input
+                            id="finalAmount"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            class="swal2-input"
+                            placeholder="Enter amount in EGP"
+                            style="width: 100%; padding: 12px; border: 1.5px solid #E5E7EB; border-radius: 8px; font-size: 16px;"
+                        />
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+                            Description
+                        </label>
+                        <textarea
+                            id="description"
+                            class="swal2-textarea"
+                            placeholder="Describe your offer details..."
+                            rows="4"
+                            style="width: 100%; padding: 12px; border: 1.5px solid #E5E7EB; border-radius: 8px; font-size: 16px; resize: vertical;"
+                        ></textarea>
+                    </div>
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Submit Offer',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#FDB813',
+            cancelButtonColor: '#6B7280',
+            focusConfirm: false,
+            preConfirm: () => {
+                const finalAmountInput = document.getElementById('finalAmount') as HTMLInputElement;
+                const descriptionInput = document.getElementById('description') as HTMLTextAreaElement;
+
+                const finalAmount = parseFloat(finalAmountInput.value);
+                const description = descriptionInput.value.trim();
+
+                if (!finalAmountInput.value || isNaN(finalAmount) || finalAmount <= 0) {
+                    Swal.showValidationMessage('Please enter a valid amount greater than 0');
+                    return false;
+                }
+
+                if (!description) {
+                    Swal.showValidationMessage('Please provide a description for your offer');
+                    return false;
+                }
+
+                return { finalAmount, description };
+            }
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                // Get craftsman ID from current user
+                const userId = this.authService.getCurrentUser()?.id;
+                const craftsmanId = userId ? parseInt(userId, 10) : 0;
+
+                if (!craftsmanId) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Craftsman ID not found.',
+                        confirmButtonColor: '#FDB813'
+                    });
+                    return;
+                }
+
+                const newOfferData = {
+                    serviceRequestId: this.serviceRequestId,
+                    craftsmanId: craftsmanId,
+                    finalAmount: result.value.finalAmount,
+                    description: result.value.description
+                };
+
+                console.log('Submitting new offer:', newOfferData);
+
+                this.offerService.craftsmanNewOffer(newOfferData).subscribe({
+                    next: () => {
+                        console.log('New offer submitted successfully');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Offer Submitted!',
+                            text: 'Your new offer has been sent to the client successfully.',
+                            confirmButtonColor: '#FDB813',
+                            timer: 3000
+                        });
+                    },
+                    error: (err) => {
+                        console.error('Failed to submit new offer:', err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Submission Failed',
+                            text: err.error?.message || 'Failed to submit your offer. Please try again.',
+                            confirmButtonColor: '#FDB813'
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    get isCraftsman(): boolean {
+        const user = this.authService.getCurrentUser();
+        return user?.role?.toLowerCase() === 'craftsman';
     }
 
     goBack() {

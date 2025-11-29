@@ -328,99 +328,82 @@
 /* Action Buttons */
 .offer-actions {
     padding: 0 2rem 2rem;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
     background: var(--background-accent, #333333);
 }
 
-.btn-action {
+/* Base Button Styles - Matching Payment Page */
+.btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Cairo', sans-serif;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.625rem;
-    padding: 1.5rem;
-    border: none;
-    border-radius: 14px;
-    font-family: 'Cairo', sans-serif;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    gap: 0.5rem;
+    text-decoration: none;
+    width: 100%;
 }
 
-.btn-action::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.15);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-action:hover::before {
-    width: 350px;
-    height: 350px;
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
 }
 
 .btn-icon {
-    font-size: 1.75rem;
-    z-index: 1;
+    font-size: 1.25rem;
 }
 
 .btn-text {
     font-size: 1rem;
-    z-index: 1;
 }
 
 .btn-accept {
-    background: var(--success-green, #10B981);
+    background: #10B981;
     color: white;
-    border: 2px solid transparent;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
-.btn-accept:hover {
+.btn-accept:hover:not(:disabled) {
     background: #059669;
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
-    border-color: var(--primary-gold, #FDB813);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
 
 .btn-reject {
-    background: var(--error-red, #EF4444);
+    background: #DC2626;
     color: white;
-    border: 2px solid transparent;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
 }
 
-.btn-reject:hover {
-    background: #DC2626;
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(239, 68, 68, 0.4);
-    border-color: var(--primary-gold, #FDB813);
+.btn-reject:hover:not(:disabled) {
+    background: #B91C1C;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
 }
 
 .btn-new-offer {
-    background: var(--primary-gold, #FDB813);
-    color: #1E1E1E;
-    border: 2px solid var(--primary-gold, #FDB813);
+    background: #FDB813;
+    color: #1a1a1a;
+    box-shadow: 0 2px 8px rgba(253, 184, 19, 0.3);
 }
 
-.btn-new-offer:hover {
-    background: var(--primary-gold-hover, #FFCD3C);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(253, 184, 19, 0.5);
-    border-color: #FFCD3C;
-}
-
-.btn-action:active {
+.btn-new-offer:hover:not(:disabled) {
+    background: #E5A50A;
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(253, 184, 19, 0.4);
+}
+
+.btn:active {
+    transform: translateY(-1px);
 }
 
 /* Responsive Design */
@@ -468,18 +451,12 @@
 
     .offer-actions {
         padding: 0 1.5rem 1.5rem;
-        grid-template-columns: 1fr;
         gap: 0.75rem;
     }
 
-    .btn-action {
-        flex-direction: row;
-        justify-content: center;
-        padding: 1rem;
-    }
-
-    .btn-icon {
-        font-size: 1.5rem;
+    .btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
     }
 }
 
