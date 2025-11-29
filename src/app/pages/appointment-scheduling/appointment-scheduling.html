@@ -57,13 +57,13 @@
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12 16 14"></polyline>
             </svg>
-            <h3>Available Time Slots for {{ selectedDay.fullDayName }}</h3>
+            <h3>Time Slots for {{ selectedDay.fullDayName }}</h3>
         </div>
 
         <!-- Loading State -->
         <div *ngIf="loadingSlots" class="loading">
             <div class="spinner"></div>
-            <p>Loading available times...</p>
+            <p>Loading time slots...</p>
         </div>
 
         <!-- Error State -->
@@ -74,12 +74,14 @@
         <!-- Slots Grid -->
         <div *ngIf="!loadingSlots && !slotsError && availableSlots.length > 0" class="slots-grid">
             <button *ngFor="let slot of availableSlots" class="slot-button" [class.selected]="selectedTimeSlot === slot"
-                [class.available]="slot.isAvailable" (click)="onSlotSelected(slot)">
+                [class.available]="slot.status === 'Available'" [class.booked]="slot.status === 'Booked'"
+                [disabled]="slot.status === 'Booked'" (click)="slot.status === 'Available' && onSlotSelected(slot)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                 </svg>
-                {{ slot.time }}
+                <span class="slot-time">{{ slot.time }}</span>
+                <span *ngIf="slot.status === 'Booked'" class="booked-label">Booked</span>
             </button>
         </div>
     </div>

@@ -286,7 +286,13 @@ export class OffersComponent implements OnInit {
 
   get isCraftsman(): boolean {
     const user = this.authService.getCurrentUser();
-    return user?.role?.toLowerCase() === 'craftsman';
+    const result = user?.role?.toLowerCase() === 'craftsman';
+    console.log('🔍 Offers Page - isCraftsman check:');
+    console.log('  - User:', user);
+    console.log('  - User role:', user?.role);
+    console.log('  - Role lowercase:', user?.role?.toLowerCase());
+    console.log('  - isCraftsman result:', result);
+    return result;
   }
 
   getImageUrl(): string {

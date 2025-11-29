@@ -134,9 +134,10 @@ export class AppointmentSchedulingComponent implements OnInit {
         this.slotsError = null;
         this.availableSlots = [];
 
-        this.availabilityService.getTimeSlots(this.craftsmanId, day.date, this.serviceDuration)
+        this.availabilityService.getTimeSlots(this.craftsmanId, day.date)
             .subscribe({
                 next: (slots: TimeSlotDto[]) => {
+                    // Show all slots (both available and booked)
                     this.availableSlots = slots;
                     this.loadingSlots = false;
                     if (slots.length === 0) {
@@ -190,12 +191,38 @@ export class AppointmentSchedulingComponent implements OnInit {
                 next: () => {
                     console.log('Craftsman selected and offer created');
 
+                    // Convert time from "09:00 AM" format to ISO 8601 datetime string
+                    const timeString = this.selectedTimeSlot!.time; // e.g., "09:00 AM"
+                    const dateString = this.selectedTimeSlot!.date; // e.g., "2025-12-01"
+
+                    // Parse the time
+                    const timeParts = timeString.match(/(\d+):(\d+)\s*(AM|PM)/i);
+                    if (!timeParts) {
+                        console.error('Invalid time format:', timeString);
+                        this.isBooking = false;
+                        return;
+                    }
+
+                    let hours = parseInt(timeParts[1]);
+                    const minutes = parseInt(timeParts[2]);
+                    const period = timeParts[3].toUpperCase();
+
+                    // Convert to 24-hour format
+                    if (period === 'PM' && hours !== 12) {
+                        hours += 12;
+                    } else if (period === 'AM' && hours === 12) {
+                        hours = 0;
+                    }
+
+                    // Create ISO 8601 datetime string
+                    const serviceStartTime = `${dateString}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
+
                     // Then update the service request start time
                     const requestData: ConfirmStartAtTimeDto = {
                         serviceId: this.serviceId,
                         clientId: this.clientId,
                         craftsManId: this.craftsmanId,
-                        serviceStartTime: this.selectedTimeSlot!.startTime
+                        serviceStartTime: serviceStartTime
                     };
 
                     this.serviceRequestService.updateServiceRequestStartTime(this.serviceRequestId, requestData)

@@ -96,11 +96,12 @@
             </div>
         </div>
         <div class="slots-grid">
-            @for (slot of timeSlots(); track slot.time) {
-            <div class="slot-card" [class.available]="slot.isAvailable" [class.unavailable]="!slot.isAvailable"
-                (click)="slot.isAvailable && selectSlot(slot)">
+            @for (slot of timeSlots(); track slot.id) {
+            <div class="slot-card" [class.available]="slot.status === 'Available'"
+                [class.unavailable]="slot.status !== 'Available'"
+                (click)="slot.status === 'Available' && selectSlot(slot)">
                 <div class="slot-icon">
-                    @if (slot.isAvailable) {
+                    @if (slot.status === 'Available') {
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 6 12 12 16 14"></polyline>
@@ -114,10 +115,11 @@
                     }
                 </div>
                 <div class="slot-time">
-                    {{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime || '') }}
+                    {{ slot.time }}
                 </div>
-                <div class="slot-status" [class.available]="slot.isAvailable" [class.unavailable]="!slot.isAvailable">
-                    {{ slot.isAvailable ? 'Available' : 'Booked' }}
+                <div class="slot-status" [class.available]="slot.status === 'Available'"
+                    [class.unavailable]="slot.status !== 'Available'">
+                    {{ slot.status }}
                 </div>
             </div>
             }

@@ -19,6 +19,7 @@ import {
 export class AvailabilityService {
     private http = inject(HttpClient);
     private readonly AVAILABILITY_API = `${environment.apiUrl}/availability`;
+    private readonly TIMESLOTS_API = `${environment.apiUrl}/TimeSlots`;
     private readonly TIMEOFF_API = `${environment.apiUrl}/timeoff`;
 
     /**
@@ -47,20 +48,20 @@ export class AvailabilityService {
 
     /**
      * Get available time slots for a craftsman on a specific date
-     * GET /api/Availability/slots?craftsmanId={id}&date={date}&duration={duration}
+     * GET /api/TimeSlots/available?craftsmanId={id}&date={date}
      */
-    getTimeSlots(craftsmanId: number, date: Date, duration: number): Observable<TimeSlotDto[]> {
-        // Ensure date is a Date object and format to ISO string
+    getTimeSlots(craftsmanId: number, date: Date): Observable<TimeSlotDto[]> {
+        // Format date as yyyy-MM-dd
         const dateObj = new Date(date);
-        dateObj.setHours(0, 0, 0, 0);
-        const dateString = dateObj.toISOString();
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const dateString = `${year}-${month}-${day}`;
 
-        const url = `${this.AVAILABILITY_API}/slots?craftsmanId=${craftsmanId}&date=${encodeURIComponent(dateString)}&duration=${duration}`;
+        const url = `${this.TIMESLOTS_API}/available?craftsmanId=${craftsmanId}&date=${dateString}`;
         console.log('AvailabilityService - Getting time slots URL:', url);
 
-        return this.http.get<ApiResponse<TimeSlotDto[]>>(url).pipe(
-            map(response => response.data)
-        );
+        return this.http.get<TimeSlotDto[]>(url);
     }
 
     /**

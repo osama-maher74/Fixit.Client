@@ -5,11 +5,7 @@
     <div class="slot-info">
         <div class="info-row">
             <span class="label">Selected Time:</span>
-            <span class="value">{{ formatTime(data.slot.time) }}</span>
-        </div>
-        <div class="info-row">
-            <span class="label">Date & Time:</span>
-            <span class="value">{{ formatDateTime(data.slot.startTime) }}</span>
+            <span class="value">{{ data.slot.time }}</span>
         </div>
         @if (data.craftsmanName) {
         <div class="info-row">

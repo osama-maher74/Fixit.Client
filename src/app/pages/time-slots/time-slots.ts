@@ -64,15 +64,17 @@ export class TimeSlotsComponent implements OnInit {
     this.errorMessage.set(null);
     this.timeSlots.set([]);
 
-    const { date, duration } = this.selectionForm.value;
+    const { date } = this.selectionForm.value;
+    const dateObj = new Date(date);
 
     this.availabilityService.getTimeSlots(
       this.craftsmanId(),
-      date,
-      duration
+      dateObj
     ).subscribe({
       next: (slots) => {
-        this.timeSlots.set(slots);
+        // Filter only available slots
+        const availableSlots = slots.filter(slot => slot.status === 'Available');
+        this.timeSlots.set(availableSlots);
         this.isLoading.set(false);
       },
       error: (error: any) => {
@@ -84,7 +86,7 @@ export class TimeSlotsComponent implements OnInit {
   }
 
   selectSlot(slot: TimeSlotDto): void {
-    if (!slot.isAvailable) {
+    if (slot.status !== 'Available') {
       return;
     }
 
@@ -115,26 +117,8 @@ export class TimeSlotsComponent implements OnInit {
     });
   }
 
-  // Format time for display
-  formatTime(time: string): string {
-    if (!time || !time.includes(':')) {
-      return time || '';
-    }
-    const parts = time.split(':');
-    const hours = parseInt(parts[0], 10);
-    const minutes = parseInt(parts[1], 10);
-
-    if (isNaN(hours) || isNaN(minutes)) {
-      return time;
-    }
-
-    const period = hours >= 12 ? 'PM' : 'AM';
-    const hours12 = hours % 12 || 12;
-    return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
-  }
-
   // Count available slots
   availableSlotsCount(): number {
-    return this.timeSlots().filter(slot => slot.isAvailable).length;
+    return this.timeSlots().filter(slot => slot.status === 'Available').length;
   }
 }

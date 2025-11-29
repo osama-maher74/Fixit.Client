@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AvailabilityService } from '../../services/availability.service';
+import { CraftsmanService } from '../../services/craftsman.service';
 import {
   AvailabilityDto,
   CreateAvailabilityDto,
@@ -22,6 +23,7 @@ export class AvailabilityEditorComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private availabilityService = inject(AvailabilityService);
+  private craftsmanService = inject(CraftsmanService);
 
   // Signals
   craftsmanId = signal<number>(0);
@@ -52,12 +54,26 @@ export class AvailabilityEditorComponent implements OnInit {
   }
 
   private loadCraftsmanId(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.craftsmanId.set(+id);
+    // First check if there's an ID in the route (for admin/viewing other craftsmen)
+    const routeId = this.route.snapshot.paramMap.get('id');
+
+    if (routeId) {
+      // Admin viewing another craftsman's availability
+      this.craftsmanId.set(+routeId);
       this.loadAvailability();
     } else {
-      this.errorMessage.set('No craftsman ID provided');
+      // Get current logged-in craftsman's ID
+      this.craftsmanService.getCurrentUserProfile().subscribe({
+        next: (craftsman) => {
+          console.log('✅ Loaded craftsman profile:', craftsman);
+          this.craftsmanId.set(craftsman.id);
+          this.loadAvailability();
+        },
+        error: (error) => {
+          console.error('❌ Failed to load craftsman profile:', error);
+          this.errorMessage.set('Failed to load your profile. Please try logging in again.');
+        }
+      });
     }
   }
 

@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { CraftsmanProfile, Craftsman } from '../models/craftsman.models';
+import { CraftsmanProfile, CraftsmanResponse, Craftsman } from '../models/craftsman.models';
 // import { CraftsmanProfile, UpdateCraftsmanVerificationDto } from '../models/craftsman.models';
 
 @Injectable({
@@ -20,7 +21,17 @@ export class CraftsmanService {
     console.log('CraftsmanService - With email:', email);
     console.log('CraftsmanService - Full URL with params:', `${url}?email=${email}`);
 
-    return this.http.get<CraftsmanProfile>(url, { params });
+    return this.http.get<CraftsmanResponse>(url, { params }).pipe(
+      map(response => {
+        console.log('✅ CraftsmanService - API response:', response);
+        // Extract craftsman from the wrapper object
+        if (response && response.craftsMan) {
+          console.log('✅ CraftsmanService - Extracted craftsman:', response.craftsMan);
+          return response.craftsMan;
+        }
+        throw new Error('Invalid response format: craftsMan property not found');
+      })
+    );
   }
 
   getLoggedInEmail(): string | null {

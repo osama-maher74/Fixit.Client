@@ -37,10 +37,11 @@ export interface ApiResponse<T> {
 }
 
 export interface TimeSlotDto {
-    time: string; // "09:00" format
-    startTime: string; // ISO 8601 format
-    endTime?: string; // ISO 8601 format
-    isAvailable: boolean;
+    id: number;
+    date: string; // "2025-12-01" format
+    time: string; // "09:00 AM" format
+    status: string; // "Available" or "Booked"
+    priceMultiplier: number;
 }
 
 export interface TimeOffDto {

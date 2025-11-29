@@ -18,6 +18,13 @@ export interface CraftsmanProfile {
   experienceOfYears: number;
   hourlyRate: number;
   nationalId: string;
+  serviceName?: string;
+}
+
+// Backend API response wrapper
+export interface CraftsmanResponse {
+  craftsMan: CraftsmanProfile;
+  reviews: any[];
 }
 
 export interface UpdateCraftsmanVerificationDto {

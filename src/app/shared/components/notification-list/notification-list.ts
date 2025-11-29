@@ -90,15 +90,22 @@ export class NotificationListComponent implements OnInit {
     console.log('Notification finalAmount:', notification.finalAmount);
     console.log('Notification offerId:', notification.offerId);
 
-    // Mark as read (only if notification has a valid ID)
+    // Mark as read optimistically (update UI immediately)
     if (!notification.isRead && notification.id) {
+      // Update local state first for instant UI feedback
+      this.notificationService.markLocalAsRead(notification.id);
+
+      // Then update backend in background
       this.notificationService.markAsRead(notification.id).subscribe({
         next: () => {
-          this.notificationService.markLocalAsRead(notification.id);
+          console.log('✅ Notification marked as read on backend:', notification.id);
         },
         error: (err) => {
-          console.error('Failed to mark notification as read:', err);
-          // Don't block navigation if marking as read fails
+          console.error('❌ Failed to mark notification as read on backend:', err);
+          // Revert local state if backend update fails
+          this.notificationService.notifications.update(current =>
+            current.map(n => n.id === notification.id ? { ...n, isRead: false } : n)
+          );
         }
       });
     }
