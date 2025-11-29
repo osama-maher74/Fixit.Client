@@ -3,27 +3,21 @@
    Following craftsman-wallet pattern
    ======================================== */
 
-// Color Variables
-$gold: #FDB813;
-$gold-hover: #E5A510;
-$gold-light: #FEF3E2;
-$dark-bg: #0A0A0A;
-$card-bg: #1E1E1E;
-$card-hover: #252525;
-$border-color: #333333;
-$text-primary: #FFFFFF;
-$text-secondary: #B8B8B8;
-$text-muted: #808080;
-$success: #10B981;
-$success-light: #D1FAE5;
-$error: #EF4444;
-$error-light: #FEE2E2;
+// Color Variables - Use CSS Custom Properties for theme support
+$gold: var(--primary-gold);
+$gold-hover: var(--primary-gold-hover);
+$gold-light: var(--primary-gold-light);
+$success: var(--success-green);
+$success-light: var(--success-light);
+$error: var(--error-red);
+$error-light: var(--error-light);
 
 // Animations
 @keyframes fade-in {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -34,6 +28,7 @@ $error-light: #FEE2E2;
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -45,6 +40,7 @@ $error-light: #FEE2E2;
     opacity: 0;
     transform: translateX(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -52,12 +48,16 @@ $error-light: #FEE2E2;
 }
 
 @keyframes shake {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(0);
   }
+
   25% {
     transform: translateX(-5px);
   }
+
   75% {
     transform: translateX(5px);
   }
@@ -66,7 +66,7 @@ $error-light: #FEE2E2;
 // Main Container
 .availability-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, $dark-bg 0%, #1a1a1a 100%);
+  background: var(--background-light);
   padding: 2.5rem 1rem;
   animation: fade-in 0.6s ease-out;
 }
@@ -89,7 +89,7 @@ $error-light: #FEE2E2;
   }
 
   p {
-    color: $text-secondary;
+    color: var(--text-secondary);
     font-size: 1.125rem;
     font-weight: 500;
     margin-bottom: 1.5rem;
@@ -101,7 +101,7 @@ $error-light: #FEE2E2;
     gap: 0.5rem;
     padding: 0.75rem 1.5rem;
     background: $gold;
-    color: $dark-bg;
+    color: #000;
     font-weight: 700;
     border-radius: 0.75rem;
     border: none;
@@ -172,7 +172,7 @@ $error-light: #FEE2E2;
   &.success {
     background: $success-light;
     border: 2px solid $success;
-    color: darken($success, 10%);
+    color: $success;
   }
 }
 
@@ -181,11 +181,11 @@ $error-light: #FEE2E2;
   position: relative;
   max-width: 80rem;
   margin: 0 auto 3rem;
-  background: $card-bg;
+  background: var(--background-white);
   border: 2px solid rgba($gold, 0.25);
   border-radius: 1.5rem;
   padding: 2rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
   transition: all 0.3s ease;
   animation: fade-in-up 0.5s ease-out;
 
@@ -202,13 +202,13 @@ $error-light: #FEE2E2;
 
   &:hover {
     border-color: rgba($gold, 0.4);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-xl);
   }
 
   h2 {
     font-size: 1.5rem;
     font-weight: 700;
-    color: $text-primary;
+    color: var(--text-dark);
     margin-bottom: 2rem;
     display: flex;
     align-items: center;
@@ -242,7 +242,7 @@ $error-light: #FEE2E2;
         label {
           font-size: 0.875rem;
           font-weight: 600;
-          color: $text-secondary;
+          color: var(--text-secondary);
           text-transform: uppercase;
           letter-spacing: 0.05em;
         }
@@ -250,10 +250,10 @@ $error-light: #FEE2E2;
         select,
         input[type="time"] {
           padding: 0.75rem 1rem;
-          background: lighten($card-bg, 5%);
-          border: 2px solid $border-color;
+          background: var(--background-light);
+          border: 2px solid var(--border-light);
           border-radius: 0.75rem;
-          color: $text-primary;
+          color: var(--text-dark);
           font-weight: 500;
           font-size: 1rem;
           transition: all 0.3s ease;
@@ -296,17 +296,17 @@ $error-light: #FEE2E2;
           align-items: center;
           gap: 0.75rem;
           padding: 0.75rem 1.25rem;
-          background: lighten($card-bg, 5%);
-          border: 2px solid $border-color;
+          background: var(--background-light);
+          border: 2px solid var(--border-light);
           border-radius: 0.75rem;
           cursor: pointer;
           transition: all 0.3s ease;
 
           &:hover {
-            background: lighten($card-bg, 8%);
+            background: var(--background-accent);
             border-color: $gold;
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-md);
           }
 
           input[type="checkbox"] {
@@ -319,7 +319,7 @@ $error-light: #FEE2E2;
           span {
             font-size: 0.875rem;
             font-weight: 600;
-            color: $text-secondary;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.05em;
           }
@@ -330,8 +330,8 @@ $error-light: #FEE2E2;
     .submit-button {
       width: 100%;
       padding: 1rem 2.5rem;
-      background: linear-gradient(135deg, $gold 0%, #FFCD3C 100%);
-      color: $dark-bg;
+      background: linear-gradient(135deg, $gold 0%, $gold-hover 100%);
+      color: #000;
       font-weight: 700;
       font-size: 1rem;
       text-transform: uppercase;
@@ -370,7 +370,7 @@ $error-light: #FEE2E2;
   h2 {
     font-size: 1.875rem;
     font-weight: 800;
-    color: $text-primary;
+    color: var(--text-dark);
     margin-bottom: 2rem;
     text-align: center;
     display: flex;
@@ -389,29 +389,29 @@ $error-light: #FEE2E2;
     gap: 1.5rem;
 
     .day-card {
-      background: $card-bg;
-      border: 2px solid $border-color;
+      background: var(--background-white);
+      border: 2px solid var(--border-light);
       border-radius: 1rem;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: var(--shadow-md);
       transition: all 0.3s ease;
       animation: fade-in-up 0.5s ease-out;
 
       &:hover {
         transform: translateY(-4px);
         border-color: rgba($gold, 0.3);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        box-shadow: var(--shadow-lg);
       }
 
       .day-header {
         background: linear-gradient(135deg, rgba($gold, 0.1) 0%, transparent 100%);
         padding: 1rem 1.5rem;
-        border-bottom: 2px solid lighten($border-color, 5%);
+        border-bottom: 2px solid var(--border-light);
 
         h3 {
           font-size: 1.125rem;
           font-weight: 700;
-          color: $text-primary;
+          color: var(--text-dark);
           text-transform: uppercase;
           letter-spacing: 0.05em;
         }
@@ -423,11 +423,11 @@ $error-light: #FEE2E2;
         .empty-state {
           text-align: center;
           padding: 2rem 1rem;
-          color: $text-muted;
+          color: var(--text-muted);
           font-style: italic;
-          background: lighten($card-bg, 3%);
+          background: var(--background-accent);
           border-radius: 0.75rem;
-          border: 2px dashed $border-color;
+          border: 2px dashed var(--border-light);
         }
 
         .slots-container {
@@ -440,14 +440,14 @@ $error-light: #FEE2E2;
             align-items: center;
             justify-content: space-between;
             padding: 1rem 1.25rem;
-            background: lighten($card-bg, 3%);
-            border: 2px solid $border-color;
+            background: var(--background-light);
+            border: 2px solid var(--border-light);
             border-radius: 0.75rem;
             transition: all 0.3s ease;
 
             &:hover {
               border-color: rgba($gold, 0.4);
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+              box-shadow: var(--shadow-md);
 
               .delete-button {
                 transform: scale(1.1);
@@ -467,7 +467,7 @@ $error-light: #FEE2E2;
               .time-text {
                 font-size: 1.125rem;
                 font-weight: 700;
-                color: $text-primary;
+                color: var(--text-dark);
               }
 
               .status-badge {
@@ -485,9 +485,9 @@ $error-light: #FEE2E2;
                 }
 
                 &.unavailable {
-                  background: rgba($text-muted, 0.2);
-                  color: $text-muted;
-                  border: 1px solid $text-muted;
+                  background: var(--background-accent);
+                  color: var(--text-muted);
+                  border: 1px solid var(--border-light);
                 }
               }
             }
@@ -498,7 +498,7 @@ $error-light: #FEE2E2;
               display: flex;
               align-items: center;
               justify-content: center;
-              background: lighten($card-bg, 8%);
+              background: var(--background-light);
               border: 2px solid rgba($error, 0.3);
               color: $error;
               border-radius: 50%;
@@ -509,7 +509,7 @@ $error-light: #FEE2E2;
 
               &:hover {
                 background: $error;
-                color: $text-primary;
+                color: var(--text-dark);
                 border-color: $error;
                 transform: rotate(90deg) scale(1.1);
                 box-shadow: 0 4px 12px rgba($error, 0.3);

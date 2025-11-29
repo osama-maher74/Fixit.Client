@@ -428,7 +428,7 @@
 
 .detail-value {
   font-size: 18px;
-  color: var(--text-dark);
+  color: var(--primary-gold);
   font-weight: 700;
 }
 
@@ -802,7 +802,9 @@
     width: 100%;
     justify-content: center;
   }
-}/* Wallet Navigation Button */
+}
+
+/* Wallet Navigation Button */
 .wallet-navigation {
   margin-top: 2rem;
   padding-top: 2rem;

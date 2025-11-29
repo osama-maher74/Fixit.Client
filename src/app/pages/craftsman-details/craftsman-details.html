@@ -205,7 +205,7 @@
           </svg>
           <div class="detail-content">
             <span class="detail-label">National ID</span>
-            <span class="detail-value">{{ craftsman()!.nationalId }}</span>
+            <span class="detail-value">{{ getNationalId() }}</span>
           </div>
         </div>
       </div>
@@ -215,6 +215,38 @@
     <div class="info-card admin-actions-card">
       <h2 class="section-title">Admin Actions</h2>
       <div class="admin-actions">
+        <!-- Verification Toggle -->
+        <div class="verification-toggle">
+          <div class="toggle-info">
+            <h3 class="toggle-title">Verification Status</h3>
+            <p class="toggle-description">
+              Control whether this craftsman appears as verified to clients. Verified craftsmen are more likely to receive bookings.
+            </p>
+          </div>
+          <button
+            class="toggle-btn"
+            [class.verified]="craftsman()!.isVerified"
+            [class.not-verified]="!craftsman()!.isVerified"
+            [disabled]="isUpdating()"
+            (click)="toggleVerification()">
+            @if (isUpdating()) {
+              <span class="button-spinner"></span>
+              Updating...
+            } @else if (craftsman()!.isVerified) {
+              <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Unverify Craftsman
+            } @else {
+              <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Verify Craftsman
+            }
+          </button>
+        </div>
+
+        <!-- Wallet Navigation -->
         <div class="wallet-navigation">
           <div class="wallet-nav-info">
             <h3 class="wallet-nav-title">Wallet Management</h3>

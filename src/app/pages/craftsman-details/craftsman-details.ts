@@ -40,6 +40,18 @@ export class CraftsmanDetails implements OnInit {
 
     this.craftsmanService.getCraftsManById(id).subscribe({
       next: (data: CraftsmanProfile) => {
+        console.log('Craftsman data received from backend:', data);
+        console.log('National ID value:', data.nationalId);
+        console.log('All properties:', Object.keys(data));
+
+        // Check for case variations
+        const dataAsAny = data as any;
+        console.log('Checking case variations:');
+        console.log('  nationalId:', dataAsAny.nationalId);
+        console.log('  NationalId:', dataAsAny.NationalId);
+        console.log('  nationalID:', dataAsAny.nationalID);
+        console.log('  NationalID:', dataAsAny.NationalID);
+
         this.craftsman.set(data);
         this.isLoading.set(false);
       },
@@ -164,5 +176,29 @@ export class CraftsmanDetails implements OnInit {
     if (craftsmanId) {
       this.router.navigate(['/craftsman-wallet', craftsmanId]);
     }
+  }
+
+  /**
+   * Get national ID value, handling potential case variations from backend
+   */
+  getNationalId(): string {
+    const craftsman = this.craftsman();
+    console.log('getNationalId() called, craftsman:', craftsman);
+
+    if (!craftsman) {
+      console.log('getNationalId() returning N/A - no craftsman');
+      return 'N/A';
+    }
+
+    // Try different case variations
+    const dataAsAny = craftsman as any;
+    const nationalId = dataAsAny.nationalId ||
+      dataAsAny.NationalId ||
+      dataAsAny.nationalID ||
+      dataAsAny.NationalID ||
+      'N/A';
+
+    console.log('getNationalId() returning:', nationalId);
+    return nationalId;
   }
 }
