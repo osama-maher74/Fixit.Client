@@ -16,7 +16,7 @@ import {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './availability-editor.html',
-  styleUrl: './availability-editor.css'
+  styleUrl: './availability-editor.scss'
 })
 export class AvailabilityEditorComponent implements OnInit {
   private fb = inject(FormBuilder);

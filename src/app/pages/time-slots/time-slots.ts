@@ -13,7 +13,7 @@ import { BookingModalComponent, BookingDialogData } from '../../components/booki
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatSnackBarModule, RouterLink],
   templateUrl: './time-slots.html',
-  styleUrl: './time-slots.css'
+  styleUrl: './time-slots.scss'
 })
 export class TimeSlotsComponent implements OnInit {
   private fb = inject(FormBuilder);

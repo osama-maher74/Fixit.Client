@@ -44,14 +44,6 @@
     <!-- Craftsmen Grid -->
     <div *ngIf="!isLoading && !error && craftsmen.length > 0" class="craftsmen-grid">
         <div *ngFor="let craftsman of craftsmen" class="craftsman-card">
-            <!-- Verified Badge -->
-            <div *ngIf="craftsman.isVerified" class="verified-badge">
-                <svg class="verified-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>Verified</span>
-            </div>
-
             <!-- Profile Image -->
             <div class="profile-image-wrapper">
                 <img [src]="getProfileImageUrl(craftsman.profileImage)" [alt]="getFullName(craftsman)"

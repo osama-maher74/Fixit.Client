@@ -85,10 +85,6 @@
             <span class="info-value">{{ getFullName() }}</span>
           </div>
           <div class="info-row">
-            <span class="info-label">Client ID</span>
-            <span class="info-value info-value-accent">#{{ getClientProfile()?.id }}</span>
-          </div>
-          <div class="info-row">
             <span class="info-label">Gender</span>
             <span class="info-value">{{ getGenderText() }}</span>
           </div>
@@ -324,27 +320,6 @@
             <div class="rating-bar">
               <div class="rating-bar-fill" [style.width.%]="(getCraftsmanProfile()?.rating || 0) * 20"></div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Verification Status Card -->
-      <div class="detail-card" [class.verified-card]="getCraftsmanProfile()?.isVerified">
-        <div class="card-header">
-          <div class="card-icon" [class.card-icon-success]="getCraftsmanProfile()?.isVerified"
-            [class.card-icon-gray]="!getCraftsmanProfile()?.isVerified">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm-1 15l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z" />
-            </svg>
-          </div>
-          <h2 class="card-title">Verification Status</h2>
-        </div>
-        <div class="card-content">
-          <div class="verification-status">
-            <div class="status-indicator" [class.status-indicator-verified]="getCraftsmanProfile()?.isVerified"
-              [class.status-indicator-pending]="!getCraftsmanProfile()?.isVerified"></div>
-            <span class="status-text">{{ getVerificationText() }}</span>
           </div>
         </div>
       </div>

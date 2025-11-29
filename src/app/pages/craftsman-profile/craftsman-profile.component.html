@@ -1,25 +1,32 @@
-<div class="profile-container">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-amber-50/30 py-8 px-4 relative overflow-x-hidden">
+  <!-- Top accent border -->
+  <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 shadow-lg shadow-amber-500/30"></div>
+
+  <!-- Decorative background element -->
+  <div class="absolute top-[10%] right-[-10%] w-96 h-96 bg-gradient-radial from-amber-500/5 to-transparent rounded-full pointer-events-none animate-float"></div>
+
   <!-- Loading State -->
   @if (isLoading()) {
-  <div class="loading-state">
-    <div class="spinner"></div>
-    <p class="loading-text">Loading your profile...</p>
+  <div class="flex flex-col items-center justify-center min-h-[60vh] gap-6">
+    <div class="w-16 h-16 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin"></div>
+    <p class="text-amber-500 text-lg font-semibold tracking-wide">Loading profile...</p>
   </div>
   }
 
   <!-- Error State -->
   @else if (errorMessage()) {
-  <div class="error-container">
-    <div class="error-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  <div class="max-w-lg mx-auto mt-16 bg-white border-2 border-gray-200 rounded-3xl p-12 text-center shadow-2xl animate-slide-up">
+    <div class="w-16 h-16 mx-auto mb-6 text-red-500">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full drop-shadow-lg">
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       </svg>
     </div>
-    <h3 class="error-title">Unable to Load Profile</h3>
-    <p class="error-message">{{ errorMessage() }}</p>
-    <button class="retry-button" (click)="retryLoad()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <h3 class="text-2xl font-bold text-gray-800 mb-3">Unable to Load Profile</h3>
+    <p class="text-gray-600 mb-8 leading-relaxed">{{ errorMessage() }}</p>
+    <button (click)="retryLoad()"
+      class="inline-flex items-center gap-2 px-8 py-3 bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold rounded-xl transition-all duration-300 shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 hover:-translate-y-0.5 active:translate-y-0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
       </svg>
@@ -28,21 +35,38 @@
   </div>
   }
 
-  <!-- CRAFTSMAN PROFILE -->
+  <!-- Craftsman Profile -->
   @else if (profile()) {
-  <div class="profile-wrapper">
+  <div class="max-w-6xl mx-auto animate-fade-in">
+
     <!-- Profile Header Card -->
-    <div class="profile-header-card craftsman-header">
-      <div class="header-background craftsman-bg"></div>
-      <div class="header-content">
+    <div class="relative bg-white/80 backdrop-blur-xl border-2 border-amber-500/20 rounded-3xl overflow-hidden mb-10 shadow-2xl transition-all duration-500 hover:shadow-3xl hover:-translate-y-1 hover:border-amber-500/40 animate-slide-down">
+
+      <!-- Header Background with Gradient -->
+      <div class="h-48 bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-400 relative overflow-hidden">
+        <!-- Animated pattern overlay -->
+        <div class="absolute inset-0 bg-gradient-radial-pattern opacity-30 animate-header-shine"></div>
+        <!-- Bottom accent line -->
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-white/50 via-white/80 to-white/50 shadow-inner"></div>
+      </div>
+
+      <!-- Header Content -->
+      <div class="relative px-8 pb-8 -mt-12">
+
         <!-- Avatar Section -->
-        <div class="avatar-container">
-          <div class="avatar-wrapper">
-            <img [src]="getProfileImageUrl()" [alt]="getFullName()" class="avatar-image" />
-            <div class="avatar-ring craftsman-ring"></div>
+        <div class="flex justify-center mb-6">
+          <div class="relative w-40 h-40">
+            <!-- Avatar Image -->
+            <img [src]="getProfileImageUrl()" [alt]="getFullName()"
+              class="w-full h-full rounded-full object-cover border-5 border-white shadow-2xl" />
+
+            <!-- Avatar Ring -->
+            <div class="absolute -inset-1 rounded-full border-4 border-orange-500 opacity-60 animate-pulse-ring"></div>
+
+            <!-- Verified Badge -->
             @if (profile()?.isVerified) {
-            <div class="verified-badge">
-              <svg viewBox="0 0 24 24" fill="currentColor">
+            <div class="absolute bottom-2 right-2 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center border-4 border-white shadow-lg animate-scale-in">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
               </svg>
             </div>
@@ -50,46 +74,58 @@
           </div>
         </div>
 
-        <!-- User Info Section -->
-        <div class="user-info">
-          <h1 class="user-name">{{ getFullName() }}</h1>
-          <div class="user-meta">
-            <span class="meta-badge meta-badge-craftsman">
-              <svg viewBox="0 0 24 24" fill="currentColor">
+        <!-- User Info -->
+        <div class="text-center">
+          <!-- Name -->
+          <h1 class="text-4xl font-bold text-gray-800 mb-4 tracking-tight">{{ getFullName() }}</h1>
+
+          <!-- Meta Badges -->
+          <div class="flex items-center justify-center gap-4 flex-wrap mb-6">
+            <!-- Craftsman Badge -->
+            <span class="inline-flex items-center gap-2 px-5 py-2 bg-orange-500 text-white text-sm font-bold rounded-full shadow-lg shadow-orange-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-orange-500/40">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-4.5 h-4.5">
                 <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
               </svg>
               Craftsman
             </span>
-            <span class="meta-item status-verified" [class.status-unverified]="!profile()?.isVerified">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm-1 15l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z" />
+
+            <!-- Verification Status -->
+            <span class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full transition-all duration-300"
+              [ngClass]="profile()?.isVerified
+                ? 'bg-green-500 text-white border-none'
+                : 'bg-gray-100 border border-gray-300 text-gray-600'">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm-1 15l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z" />
               </svg>
               {{ getVerificationText() }}
             </span>
           </div>
 
           <!-- Rating Display -->
-          <div class="rating-display">
-            <div class="stars">
+          <div class="flex flex-col items-center gap-3 mt-4 p-4 bg-amber-50 rounded-xl">
+            <!-- Stars -->
+            <div class="flex gap-1">
               @for (star of getStarArray().filled; track star) {
-              <svg viewBox="0 0 24 24" fill="currentColor" class="star star-filled">
+              <svg viewBox="0 0 24 24" fill="currentColor"
+                class="w-6 h-6 text-amber-500 drop-shadow-lg transition-transform duration-200 hover:scale-110">
                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
               </svg>
               }
               @for (star of getStarArray().empty; track star) {
-              <svg viewBox="0 0 24 24" fill="currentColor" class="star star-empty">
+              <svg viewBox="0 0 24 24" fill="currentColor"
+                class="w-6 h-6 text-gray-300 transition-transform duration-200 hover:scale-110">
                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
               </svg>
               }
             </div>
-            <span class="rating-text">{{ profile()?.rating || 0 }} out of 5</span>
+            <span class="text-sm font-semibold text-amber-600">{{ profile()?.rating || 0 }} out of 5</span>
           </div>
 
           <!-- Book Appointment Button -->
-          <div class="booking-cta">
-            <a [routerLink]="['/craftsman', profile()?.id, 'timeslots']" class="book-button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <div class="mt-6">
+            <a [routerLink]="['/craftsman', profile()?.id, 'timeslots']"
+              class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-base rounded-xl shadow-lg shadow-green-500/30 transition-all duration-300 hover:from-emerald-500 hover:to-green-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-green-500/45 border-2 border-transparent hover:border-green-400/30 active:translate-y-0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
@@ -101,31 +137,40 @@
     </div>
 
     <!-- Profile Details Grid -->
-    <div class="details-grid">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+
       <!-- Professional Information Card -->
-      <div class="detail-card">
-        <div class="card-header">
-          <div class="card-icon card-icon-orange">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <div class="bg-white border-2 border-amber-500/15 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-amber-500 hover:shadow-2xl animate-fade-in-up" style="animation-delay: 0.1s">
+        <!-- Card Header -->
+        <div class="flex items-center gap-4 px-6 py-6 border-b-2 border-gray-100">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-orange-500/10 border-2 border-orange-500/20">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 text-orange-500">
               <path stroke-linecap="round" stroke-linejoin="round"
                 d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h2 class="card-title">Professional Info</h2>
+          <h2 class="text-lg font-bold text-gray-800 tracking-tight">Professional Info</h2>
         </div>
-        <div class="card-content">
-          <div class="info-row">
-            <span class="info-label">Full Name</span>
-            <span class="info-value">{{ getFullName() }}</span>
+
+        <!-- Card Content -->
+        <div class="px-6 pb-6">
+          <!-- Full Name -->
+          <div class="flex justify-between items-center py-4 border-b border-gray-100">
+            <span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Full Name</span>
+            <span class="text-base font-semibold text-gray-800">{{ getFullName() }}</span>
           </div>
-          <div class="info-row">
-            <span class="info-label">Email Address</span>
-            <span class="info-value info-value-email">{{ profile()?.normalizedEmail }}</span>
+
+          <!-- Email -->
+          <div class="flex justify-between items-center py-4 border-b border-gray-100">
+            <span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Email</span>
+            <span class="text-sm font-semibold text-amber-500 break-all text-right">{{ profile()?.normalizedEmail }}</span>
           </div>
-          <div class="info-row">
-            <span class="info-label">Location</span>
-            <span class="info-value">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="location-icon">
+
+          <!-- Location -->
+          <div class="flex justify-between items-center py-4">
+            <span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Location</span>
+            <span class="flex items-center gap-2 text-base font-semibold text-gray-800">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-amber-500">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -136,63 +181,53 @@
         </div>
       </div>
 
-      <!-- Performance Metrics Card -->
-      <div class="detail-card detail-card-highlight craftsman-highlight">
-        <div class="card-header">
-          <div class="card-icon card-icon-gold">
-            <svg viewBox="0 0 24 24" fill="currentColor">
+      <!-- Performance Rating Card -->
+      <div class="bg-white border-2 border-orange-500/30 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-orange-500 hover:shadow-2xl animate-fade-in-up" style="animation-delay: 0.2s">
+        <!-- Card Header -->
+        <div class="flex items-center gap-4 px-6 py-6 border-b-2 border-gray-100">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-amber-500/15 to-amber-500/25 border-2 border-amber-500">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-amber-500">
               <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
             </svg>
           </div>
-          <h2 class="card-title">Performance Rating</h2>
+          <h2 class="text-lg font-bold text-gray-800 tracking-tight">Performance Rating</h2>
         </div>
-        <div class="card-content">
-          <div class="stat-display craftsman-stat">
-            <div class="stat-number craftsman-stat-number">{{ profile()?.rating || 0 }}<span
-                class="stat-unit">/5.0</span></div>
-            <div class="stat-label">Overall Rating</div>
-            <div class="rating-bar">
-              <div class="rating-bar-fill" [style.width.%]="(profile()?.rating || 0) * 20"></div>
+
+        <!-- Card Content -->
+        <div class="px-6 pb-6">
+          <div class="text-center py-6">
+            <div class="text-5xl font-extrabold text-orange-500 leading-none mb-2">
+              {{ profile()?.rating || 0 }}<span class="text-2xl font-semibold text-gray-400">/5.0</span>
+            </div>
+            <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Overall Rating</div>
+
+            <!-- Rating Bar -->
+            <div class="w-full h-3 bg-amber-500/10 rounded-full overflow-hidden mt-4">
+              <div class="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full transition-all duration-1000 shadow-glow-amber"
+                [style.width.%]="(profile()?.rating || 0) * 20"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Verification Status Card -->
-      <div class="detail-card" [class.verified-card]="profile()?.isVerified">
-        <div class="card-header">
-          <div class="card-icon" [class.card-icon-success]="profile()?.isVerified"
-            [class.card-icon-gray]="!profile()?.isVerified">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm-1 15l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z" />
-            </svg>
-          </div>
-          <h2 class="card-title">Verification Status</h2>
-        </div>
-        <div class="card-content">
-          <div class="verification-status">
-            <div class="status-indicator" [class.status-indicator-verified]="profile()?.isVerified"
-              [class.status-indicator-pending]="!profile()?.isVerified"></div>
-            <span class="status-text">{{ getVerificationText() }}</span>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- About Section -->
     @if (profile()?.describtion) {
-    <div class="about-card">
-      <div class="card-header">
-        <div class="card-icon card-icon-blue">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <div class="bg-white border-2 border-amber-500/15 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-amber-500 hover:shadow-2xl animate-fade-in-up" style="animation-delay: 0.4s">
+      <!-- Card Header -->
+      <div class="flex items-center gap-4 px-6 py-6 border-b-2 border-gray-100">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-blue-500/10 border-2 border-blue-500/20">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 text-blue-500">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" />
           </svg>
         </div>
-        <h2 class="card-title">About Me</h2>
+        <h2 class="text-lg font-bold text-gray-800 tracking-tight">About Me</h2>
       </div>
-      <div class="card-content">
-        <p class="about-text">{{ profile()?.describtion }}</p>
+
+      <!-- Card Content -->
+      <div class="px-6 pb-6">
+        <p class="text-base leading-relaxed text-gray-700 whitespace-pre-wrap">{{ profile()?.describtion }}</p>
       </div>
     </div>
     }
