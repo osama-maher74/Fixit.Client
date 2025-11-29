@@ -802,4 +802,87 @@
     width: 100%;
     justify-content: center;
   }
+}/* Wallet Navigation Button */
+.wallet-navigation {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.wallet-nav-info {
+  flex: 1;
+}
+
+.wallet-nav-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+}
+
+.wallet-nav-description {
+  font-size: 0.9rem;
+  color: #B0B0B0;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.wallet-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #FDB813, #f5a623);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Cairo', sans-serif;
+  flex-shrink: 0;
+}
+
+.wallet-nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(253, 184, 19, 0.4);
+}
+
+.wallet-nav-btn:active {
+  transform: translateY(0);
+}
+
+.wallet-nav-btn .wallet-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.wallet-nav-btn .arrow-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.wallet-nav-btn:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .wallet-navigation {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .wallet-nav-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

@@ -158,4 +158,11 @@ export class CraftsmanDetails implements OnInit {
       }
     });
   }
+
+  navigateToWallet(): void {
+    const craftsmanId = this.craftsman()?.id;
+    if (craftsmanId) {
+      this.router.navigate(['/craftsman-wallet', craftsmanId]);
+    }
+  }
 }

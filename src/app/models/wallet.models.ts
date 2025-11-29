@@ -12,6 +12,7 @@ export interface WalletTransactionDto {
   transactiontype?: TransactionType;
   transationInfo?: string;
   createdAt: Date | string;
+  isPayed?: boolean;
 }
 
 export enum TransactionMethod {
@@ -43,4 +44,9 @@ export interface WithdrawalResponse {
   date: Date;
   withdrawmethod: TransactionType;
   withdrawmethodinfo: string;
+}
+
+export interface UpdateWalletTransactionDto {
+  id: number;
+  isPayed?: boolean;
 }

@@ -1,12 +1,13 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { WalletService } from '../../services/wallet.service';
 import { CraftsmanService } from '../../services/craftsman.service';
+import { AuthService } from '../../services/auth.service';
 import { TranslationService } from '../../services/translation.service';
-import { WalletDto, WalletTransactionDto, TransactionType, TransactionMethod, CreateWalletTransactionDto } from '../../models/wallet.models';
+import { WalletDto, WalletTransactionDto, TransactionType, TransactionMethod, CreateWalletTransactionDto, UpdateWalletTransactionDto } from '../../models/wallet.models';
 import { CraftsmanProfile } from '../../models/craftsman.models';
 
 @Component({
@@ -19,7 +20,9 @@ import { CraftsmanProfile } from '../../models/craftsman.models';
 export class CraftsmanWalletComponent implements OnInit {
   private walletService = inject(WalletService);
   private craftsmanService = inject(CraftsmanService);
+  private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   translationService = inject(TranslationService);
 
   // Signals for reactive state
@@ -28,6 +31,8 @@ export class CraftsmanWalletComponent implements OnInit {
   isLoading = signal<boolean>(true);
   errorMessage = signal<string | null>(null);
   currentCraftsmanId = signal<number | null>(null);
+  isAdminView = signal<boolean>(false);
+  isUpdatingTransaction = signal<number | null>(null);
 
   // Withdrawal modal state
   showWithdrawalModal = signal<boolean>(false);
@@ -45,7 +50,44 @@ export class CraftsmanWalletComponent implements OnInit {
   TransactionMethod = TransactionMethod;
 
   ngOnInit(): void {
-    this.loadCraftsmanProfileAndWallet();
+    // Check if user is an admin
+    const currentUser = this.authService.getCurrentUser();
+    const isAdmin = currentUser?.role === 'Admin';
+
+    // Check if there's a craftsman ID in the route
+    const routeCraftsmanId = this.route.snapshot.paramMap.get('id');
+
+    console.log('CraftsmanWallet ngOnInit - isAdmin:', isAdmin, 'routeCraftsmanId:', routeCraftsmanId);
+
+    if (isAdmin && routeCraftsmanId) {
+      // Admin viewing a specific craftsman's wallet
+      console.log('Setting isAdminView to true');
+      this.isAdminView.set(true);
+      const craftsmanId = +routeCraftsmanId;
+      this.currentCraftsmanId.set(craftsmanId);
+      this.loadWallet(craftsmanId);
+      this.loadTransactions(craftsmanId);
+    } else if (isAdmin && !routeCraftsmanId) {
+      // Admin without ID - redirect to dashboard
+      this.errorMessage.set('Please select a craftsman from the dashboard.');
+      this.isLoading.set(false);
+      setTimeout(() => {
+        this.router.navigate(['/admin/dashboard']);
+      }, 2000);
+    } else if (!isAdmin && routeCraftsmanId) {
+      // Craftsman with ID in route (from "My Wallet" button)
+      console.log('Setting isAdminView to false - craftsman view');
+      this.isAdminView.set(false);
+      const craftsmanId = +routeCraftsmanId;
+      this.currentCraftsmanId.set(craftsmanId);
+      this.loadWallet(craftsmanId);
+      this.loadTransactions(craftsmanId);
+    } else {
+      // Craftsman without ID - should not happen, but fallback to loading profile
+      console.log('Setting isAdminView to false - fallback to profile');
+      this.isAdminView.set(false);
+      this.loadCraftsmanProfileAndWallet();
+    }
   }
 
   /**
@@ -136,10 +178,21 @@ export class CraftsmanWalletComponent implements OnInit {
   }
 
   /**
-   * Navigate back to profile
+   * Navigate back to appropriate page based on view mode
    */
   goBack(): void {
-    this.router.navigate(['/profile']);
+    if (this.isAdminView()) {
+      // Admin view - go back to craftsman details
+      const craftsmanId = this.currentCraftsmanId();
+      if (craftsmanId) {
+        this.router.navigate(['/admin/craftsman', craftsmanId]);
+      } else {
+        this.router.navigate(['/admin/dashboard']);
+      }
+    } else {
+      // User view - go back to profile
+      this.router.navigate(['/profile']);
+    }
   }
 
   /**
@@ -298,17 +351,67 @@ export class CraftsmanWalletComponent implements OnInit {
   }
 
   /**
+   * Get account info label based on transaction type
+   */
+  getAccountInfoLabel(type: TransactionType): string {
+    switch (type) {
+      case TransactionType.Instapay:
+        return 'Account:';
+      case TransactionType.Ewallet:
+        return 'Number:';
+      case TransactionType.Credit:
+        return 'Card Info:';
+      default:
+        return 'Info:';
+    }
+  }
+
+  /**
    * Check if transaction is a deposit (addition)
    * Based on the transactionmethod enum
    */
   isAddTransaction(transaction: WalletTransactionDto): boolean {
     // Check if transactionmethod is defined and equals Deposits (1)
     const isDeposit = transaction.transactionmethod !== undefined &&
-                      transaction.transactionmethod !== null &&
-                      transaction.transactionmethod === TransactionMethod.Deposits;
+      transaction.transactionmethod !== null &&
+      transaction.transactionmethod === TransactionMethod.Deposits;
 
     console.log(`Transaction ${transaction.id}: method=${transaction.transactionmethod}, isDeposit=${isDeposit}, expected Deposits value=${TransactionMethod.Deposits}`);
 
     return isDeposit;
+  }
+
+  /**
+   * Toggle payment status for withdrawal transactions (Admin only)
+   */
+  togglePaymentStatus(transaction: WalletTransactionDto): void {
+    if (!this.isAdminView() || !transaction.id) {
+      return;
+    }
+
+    const newStatus = !transaction.isPayed;
+    const dto: UpdateWalletTransactionDto = {
+      id: transaction.id,
+      isPayed: newStatus
+    };
+
+    this.isUpdatingTransaction.set(transaction.id);
+
+    this.walletService.updateWalletTransaction(dto).subscribe({
+      next: () => {
+        // Update the local transaction status
+        const updatedTransactions = this.transactions().map(t =>
+          t.id === transaction.id ? { ...t, isPayed: newStatus } : t
+        );
+        this.transactions.set(updatedTransactions);
+        this.isUpdatingTransaction.set(null);
+        console.log(`Transaction ${transaction.id} updated to ${newStatus ? 'Paid' : 'Pending'}`);
+      },
+      error: (error) => {
+        console.error('Error updating transaction:', error);
+        this.isUpdatingTransaction.set(null);
+        alert('Failed to update payment status. Please try again.');
+      }
+    });
   }
 }
