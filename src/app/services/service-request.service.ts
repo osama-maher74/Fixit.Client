@@ -37,6 +37,7 @@ export interface ServiceRequestResponse {
     isCancelled?: boolean;
     reviewRatingValue?: number;
     reviewComment?: string;
+    reviewId?: number; // ID of the review if it exists
     clientSecret?: string;
 }
 

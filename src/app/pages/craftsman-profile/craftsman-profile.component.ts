@@ -2,7 +2,9 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { CraftsmanService } from '../../services/craftsman.service';
-import { CraftsmanProfile, Gender } from '../../models/craftsman.models';
+import { ReviewService } from '../../services/review.service';
+import { CraftsmanProfile, Gender, Review } from '../../models/craftsman.models';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-craftsman-profile',
@@ -13,12 +15,17 @@ import { CraftsmanProfile, Gender } from '../../models/craftsman.models';
 })
 export class CraftsmanProfileComponent implements OnInit {
   private craftsmanService = inject(CraftsmanService);
+  private reviewService = inject(ReviewService);
   private router = inject(Router);
 
   // Signals for reactive state management
   profile = signal<CraftsmanProfile | null>(null);
   isLoading = signal<boolean>(true);
   errorMessage = signal<string | null>(null);
+  averageRating = signal<number>(0);
+  totalReviews = signal<number>(0);
+  reviews = signal<Review[]>([]);
+  showReviews = signal<boolean>(false);
 
   // Expose Gender enum to template
   Gender = Gender;
@@ -44,6 +51,14 @@ export class CraftsmanProfileComponent implements OnInit {
         console.log('Craftsman Profile Component - Profile data received:', data);
         this.profile.set(data);
         this.isLoading.set(false);
+
+        // Fetch average rating if we have a craftsman ID
+        if (data.id) {
+          this.loadAverageRating(data.id);
+        }
+
+        // Load full response with reviews
+        this.loadReviews();
       },
       error: (error) => {
         console.error('Craftsman Profile Component - Error loading profile:', error);
@@ -67,6 +82,87 @@ export class CraftsmanProfileComponent implements OnInit {
   }
 
   /**
+   * Load average rating and review count from API
+   */
+  loadAverageRating(craftsmanId: number): void {
+    console.log('🔍 Loading average rating for craftsman ID:', craftsmanId);
+    console.log('📡 API URL will be:', `${environment.apiUrl}/Review/craftsman/${craftsmanId}/average-rating`);
+
+    this.reviewService.getCraftsmanAverageRating(craftsmanId).subscribe({
+      next: (data) => {
+        console.log('✅ Average rating data received:', data);
+        console.log('📊 Average Rating:', data.averageRating);
+        console.log('📝 Total Reviews:', data.totalReviews);
+        this.averageRating.set(data.averageRating);
+        this.totalReviews.set(data.totalReviews);
+        console.log('✅ Signals updated - averageRating:', this.averageRating(), 'totalReviews:', this.totalReviews());
+      },
+      error: (error) => {
+        console.error('❌ Failed to load average rating:', error);
+        console.error('❌ Error status:', error.status);
+        console.error('❌ Error message:', error.message);
+        console.error('❌ Full error object:', error);
+        // Keep default values (0) if fetch fails
+      }
+    });
+  }
+
+  /**
+   * Load reviews from the API response
+   */
+  loadReviews(): void {
+    const email = localStorage.getItem('email');
+    if (!email) return;
+
+    // Fetch the full response including reviews
+    this.craftsmanService.getCraftsmanWithReviewsByEmail(email).subscribe({
+      next: (response) => {
+        console.log('📝 Reviews loaded:', response.reviews);
+        this.reviews.set(response.reviews || []);
+      },
+      error: (error) => {
+        console.error('❌ Failed to load reviews:', error);
+        this.reviews.set([]);
+      }
+    });
+  }
+
+  /**
+   * Toggle reviews display
+   */
+  toggleReviews(): void {
+    this.showReviews.set(!this.showReviews());
+  }
+
+  /**
+   * Get star array for a specific rating value
+   */
+  getStarArrayForRating(rating: number): { filled: number[], empty: number[] } {
+    const fullStars = Math.floor(rating);
+    const emptyStars = 5 - fullStars;
+
+    return {
+      filled: Array(fullStars).fill(0).map((_, i) => i),
+      empty: Array(emptyStars).fill(0).map((_, i) => i)
+    };
+  }
+
+  /**
+   * Format review date
+   */
+  formatReviewDate(dateString: string): string {
+    if (!dateString || dateString.startsWith('0001-01-01')) {
+      return 'Recently';
+    }
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  }
+
+  /**
    * Get full name
    */
   getFullName(): string {
@@ -82,9 +178,12 @@ export class CraftsmanProfileComponent implements OnInit {
     if (p?.profileImage && p.profileImage.trim() !== '') {
       console.log('Profile image path from backend:', p.profileImage);
 
-      // If it's a full HTTP/HTTPS URL, return as is
+      // If it's a full HTTP/HTTPS URL, clean up double slashes and return
       if (p.profileImage.startsWith('http://') || p.profileImage.startsWith('https://')) {
-        return p.profileImage;
+        // Fix double slashes in the URL (e.g., https://localhost:7058//images/... -> https://localhost:7058/images/...)
+        const cleanedUrl = p.profileImage.replace(/([^:]\/)\/+/g, '$1');
+        console.log('Cleaned image URL:', cleanedUrl);
+        return cleanedUrl;
       }
 
       // If it's a local file path, extract filename and construct API URL
@@ -114,10 +213,10 @@ export class CraftsmanProfileComponent implements OnInit {
 
   /**
    * Get star rating display (full stars and empty stars)
+   * Uses average rating from API if available, otherwise falls back to profile rating
    */
   getStarArray(): { filled: number[], empty: number[] } {
-    const p = this.profile();
-    const rating = p?.rating || 0;
+    const rating = this.averageRating() || this.profile()?.rating || 0;
     const fullStars = Math.floor(rating);
     const emptyStars = 5 - fullStars;
 
@@ -141,6 +240,3 @@ export class CraftsmanProfileComponent implements OnInit {
     this.loadProfile();
   }
 }
-
-// Import environment at the bottom to avoid circular dependency
-import { environment } from '../../../environments/environment';

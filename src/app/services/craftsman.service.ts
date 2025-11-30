@@ -34,6 +34,24 @@ export class CraftsmanService {
     );
   }
 
+  /**
+   * Get craftsman with reviews by email
+   * Returns the full response including  reviews array
+   */
+  getCraftsmanWithReviewsByEmail(email: string): Observable<CraftsmanResponse> {
+    const params = new HttpParams().set('email', email);
+    const url = `${this.CRAFTSMAN_API}/GetByEmail`;
+
+    console.log('CraftsmanService - Fetching craftsman with reviews for email:', email);
+
+    return this.http.get<CraftsmanResponse>(url, { params }).pipe(
+      map(response => {
+        console.log('✅ CraftsmanService - Full response with reviews:', response);
+        return response;
+      })
+    );
+  }
+
   getLoggedInEmail(): string | null {
     return localStorage.getItem('email');
   }

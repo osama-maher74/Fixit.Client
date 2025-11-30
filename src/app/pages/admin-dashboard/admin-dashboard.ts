@@ -61,9 +61,10 @@ export class AdminDashboard implements OnInit {
       return 'https://ui-avatars.com/api/?name=' + encodeURIComponent(this.getFullName(craftsman)) + '&size=400&background=FDB813&color=1E1E1E&bold=true';
     }
 
-    // If it's already a full URL, return it
+    // If it's already a full URL, clean up double slashes and return
     if (craftsman.profileImage.startsWith('http://') || craftsman.profileImage.startsWith('https://')) {
-      return craftsman.profileImage;
+      const cleanedUrl = craftsman.profileImage.replace(/([^:]\/)\/+/g, '$1');
+      return cleanedUrl;
     }
 
     // Otherwise, construct the full URL with the backend API
@@ -79,9 +80,10 @@ export class AdminDashboard implements OnInit {
       return null;
     }
 
-    // If it's already a full URL, return it
+    // If it's already a full URL, clean up double slashes and return
     if (craftsman.nationalIdPic.startsWith('http://') || craftsman.nationalIdPic.startsWith('https://')) {
-      return craftsman.nationalIdPic;
+      const cleanedUrl = craftsman.nationalIdPic.replace(/([^:]\/)\/+/g, '$1');
+      return cleanedUrl;
     }
 
     // Otherwise, construct the full URL

@@ -202,9 +202,12 @@ export class ProfileComponent implements OnInit {
     if (p?.profileImage && p.profileImage.trim() !== '') {
       console.log('Profile image path from backend:', p.profileImage);
 
-      // If it's a full HTTP/HTTPS URL, return as is
+      // If it's a full HTTP/HTTPS URL, clean up double slashes and return
       if (p.profileImage.startsWith('http://') || p.profileImage.startsWith('https://')) {
-        return p.profileImage;
+        // Fix double slashes in the URL (e.g., https://localhost:7058//images/... -> https://localhost:7058/images/...)
+        const cleanedUrl = p.profileImage.replace(/([^:]\/)\/+/g, '$1');
+        console.log('Cleaned image URL:', cleanedUrl);
+        return cleanedUrl;
       }
 
       // Normalize the path: convert backslashes to forward slashes and ensure leading slash

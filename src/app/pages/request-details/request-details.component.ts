@@ -1,15 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServiceRequestService, ServiceRequestResponse } from '../../services/service-request.service';
-import { ReviewService, CreateReviewDTO } from '../../services/review.service';
+import { ReviewService, CreateReviewDTO, UpdateReviewDTO } from '../../services/review.service';
 import { environment } from '../../../environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-request-details',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, FormsModule],
     templateUrl: './request-details.component.html',
     styleUrl: './request-details.component.css'
 })
@@ -24,6 +25,12 @@ export class RequestDetailsComponent implements OnInit {
     error: string | null = null;
     apiUrl = environment.apiUrl;
     completingRequest = false;
+
+    // Review form properties
+    reviewRating = 0;
+    reviewComment = '';
+    reviewId: number | null = null;
+    submittingReview = false;
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
@@ -46,6 +53,9 @@ export class RequestDetailsComponent implements OnInit {
                 console.log('Request details loaded:', data);
                 this.request = data;
                 this.loading = false;
+
+                // Initialize review form if review exists
+                this.initializeReviewForm();
             },
             error: (err) => {
                 console.error('Failed to load request details:', err);
@@ -53,6 +63,29 @@ export class RequestDetailsComponent implements OnInit {
                 this.loading = false;
             }
         });
+    }
+
+    initializeReviewForm() {
+        if (this.request?.reviewRatingValue && this.request?.reviewComment) {
+            this.reviewRating = this.request.reviewRatingValue;
+            this.reviewComment = this.request.reviewComment;
+            // Get review ID from the request data
+            this.reviewId = this.request.reviewId || null;
+        } else {
+            this.reviewRating = 0;
+            this.reviewComment = '';
+            this.reviewId = null;
+        }
+    }
+
+    hasExistingReview(): boolean {
+        return !!(this.request?.reviewRatingValue || this.request?.reviewComment);
+    }
+
+    isCompleted(): boolean {
+        if (!this.request?.status) return false;
+        const statusNum = typeof this.request.status === 'number' ? this.request.status : parseInt(this.request.status as any);
+        return statusNum === 7; // 7 = Completed
     }
 
     getImageUrl(): string {
@@ -402,6 +435,175 @@ export class RequestDetailsComponent implements OnInit {
         }).then(() => {
             // Reload the request details to show updated status
             this.loadRequestDetails(requestId);
+        });
+    }
+
+    setStarRating(rating: number) {
+        this.reviewRating = rating;
+    }
+
+    submitReviewForm() {
+        if (!this.request) return;
+
+        // Validation
+        if (this.reviewRating < 1 || this.reviewRating > 5) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Invalid Rating',
+                text: 'Please select a rating between 1 and 5 stars.',
+                confirmButtonColor: '#d4af37'
+            });
+            return;
+        }
+
+        if (!this.reviewComment.trim()) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Comment Required',
+                text: 'Please provide a comment for your review.',
+                confirmButtonColor: '#d4af37'
+            });
+            return;
+        }
+
+        this.submittingReview = true;
+        const requestId = this.request.servicesRequestId || this.request.id;
+
+        if (!requestId) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Invalid request ID',
+                confirmButtonColor: '#d4af37'
+            });
+            this.submittingReview = false;
+            return;
+        }
+
+        // Check if we're updating or creating
+        if (this.hasExistingReview()) {
+            // For updates, we need to fetch the review ID if we don't have it
+            if (!this.reviewId) {
+                // Fetch review ID from backend
+                console.log('Fetching review ID for service request:', requestId);
+                this.reviewService.getReviewByServiceRequest(requestId).subscribe({
+                    next: (existingReview) => {
+                        if (existingReview && existingReview.id) {
+                            console.log('Found existing review with ID:', existingReview.id);
+                            this.reviewId = existingReview.id;
+                            // Now update the review
+                            this.performReviewUpdate(requestId);
+                        } else {
+                            // No review found, create new one
+                            console.log('No existing review found, creating new review');
+                            this.performReviewCreate(requestId);
+                        }
+                    },
+                    error: (err) => {
+                        console.error('Failed to fetch existing review:', err);
+                        // If fetch fails, assume we need to create
+                        this.performReviewCreate(requestId);
+                    }
+                });
+            } else {
+                // We have review ID, perform update
+                this.performReviewUpdate(requestId);
+            }
+        } else {
+            // Create new review
+            this.performReviewCreate(requestId);
+        }
+    }
+
+    private performReviewUpdate(requestId: number) {
+        if (!this.reviewId || !this.request) {
+            this.submittingReview = false;
+            return;
+        }
+
+        const updateDto: UpdateReviewDTO = {
+            ratingValue: this.reviewRating,
+            comment: this.reviewComment.trim()
+        };
+
+        console.log('Updating review with ID:', this.reviewId, 'DTO:', updateDto);
+
+        this.reviewService.updateReview(this.reviewId, updateDto).subscribe({
+            next: (response) => {
+                console.log('Review updated successfully:', response);
+                this.submittingReview = false;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Review Updated!',
+                    html: `
+                        <p>Your review has been updated successfully!</p>
+                        <p style="margin-top: 1rem; color: #6B7280;">Rating: <span style="color: #FDB813; font-weight: 600;">${this.reviewRating} ★</span></p>
+                    `,
+                    confirmButtonColor: '#d4af37'
+                }).then(() => {
+                    this.loadRequestDetails(requestId);
+                });
+            },
+            error: (err) => {
+                console.error('Failed to update review:', err);
+                this.submittingReview = false;
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to Update Review',
+                    text: err.error?.message || 'Failed to update your review. Please try again.',
+                    confirmButtonColor: '#d4af37'
+                });
+            }
+        });
+    }
+
+    private performReviewCreate(requestId: number) {
+        if (!this.request) {
+            this.submittingReview = false;
+            return;
+        }
+
+        const createDto: CreateReviewDTO = {
+            ratingValue: this.reviewRating,
+            comment: this.reviewComment.trim(),
+            servicesRequestId: requestId,
+            clientId: this.request.clientId,
+            craftsManId: this.request.craftsManId
+        };
+
+        console.log('Creating new review, DTO:', createDto);
+
+        this.reviewService.createReview(createDto).subscribe({
+            next: (response) => {
+                console.log('Review created successfully:', response);
+                this.submittingReview = false;
+                this.reviewId = response.id; // Store the new review ID
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Review Submitted!',
+                    html: `
+                        <p>Your review has been submitted successfully!</p>
+                        <p style="margin-top: 1rem; color: #6B7280;">Rating: <span style="color: #FDB813; font-weight: 600;">${this.reviewRating} ★</span></p>
+                    `,
+                    confirmButtonColor: '#d4af37'
+                }).then(() => {
+                    this.loadRequestDetails(requestId);
+                });
+            },
+            error: (err) => {
+                console.error('Failed to create review:', err);
+                this.submittingReview = false;
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to Submit Review',
+                    text: err.error?.message || 'Failed to submit your review. Please try again.',
+                    confirmButtonColor: '#d4af37'
+                });
+            }
         });
     }
 

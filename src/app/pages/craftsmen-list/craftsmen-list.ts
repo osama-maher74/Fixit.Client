@@ -72,6 +72,13 @@ export class CraftsmenListComponent implements OnInit {
         if (!profileImage) {
             return '/assets/images/default-avatar.png';
         }
+
+        // If it's already a full URL, clean up double slashes and return
+        if (profileImage.startsWith('http://') || profileImage.startsWith('https://')) {
+            const cleanedUrl = profileImage.replace(/([^:]\/)\/+/g, '$1');
+            return cleanedUrl;
+        }
+
         // Assuming the backend returns relative paths like '/images/ProfilePics/...'
         return `https://localhost:7058${profileImage}`;
     }

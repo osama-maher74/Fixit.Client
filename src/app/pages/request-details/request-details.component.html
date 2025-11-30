@@ -1,214 +1,249 @@
 <div class="request-details-container">
     <!-- Loading State -->
     @if (loading) {
-        <div class="loading-container">
-            <div class="spinner"></div>
-            <p>Loading request details...</p>
-        </div>
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <p>Loading request details...</p>
+    </div>
     }
 
     <!-- Error State -->
     @if (error && !loading) {
-        <div class="error-container">
-            <div class="error-icon">⚠️</div>
-            <p class="error-message">{{ error }}</p>
-            <button class="btn-back" (click)="goBack()">Back to My Requests</button>
-        </div>
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <p class="error-message">{{ error }}</p>
+        <button class="btn-back" (click)="goBack()">Back to My Requests</button>
+    </div>
     }
 
     <!-- Request Details -->
     @if (!loading && !error && request) {
-        <div class="details-wrapper">
-            <!-- Back Button -->
-            <button class="btn-back-top" (click)="goBack()">
-                <span class="back-icon">←</span>
-                Back to My Requests
-            </button>
+    <div class="details-wrapper">
+        <!-- Back Button -->
+        <button class="btn-back-top" (click)="goBack()">
+            <span class="back-icon">←</span>
+            Back to My Requests
+        </button>
 
-            <!-- Details Card -->
-            <div class="details-card">
-                <!-- Header with Status -->
-                <div class="card-header">
-                    <h1 class="request-title">{{ request.serviceName || 'Service Request' }}</h1>
-                    <div class="status-badge" [ngClass]="getStatusClass(request.status)">
-                        <span class="status-icon">{{ getStatusIcon(request.status) }}</span>
-                        <span class="status-text">{{ getStatusText(request.status) }}</span>
-                    </div>
-                </div>
-
-                <!-- Request Image -->
-                <div class="image-container">
-                    <img
-                        [src]="getImageUrl()"
-                        [alt]="request.serviceName || 'Service'"
-                        class="request-image"
-                    />
-                </div>
-
-                <!-- Details Grid -->
-                <div class="details-grid">
-                    <!-- Craftsman Info -->
-                    @if (request.craftsManName) {
-                        <div class="detail-item">
-                            <div class="detail-label">
-                                <span class="detail-icon">👷</span>
-                                <span>Craftsman</span>
-                            </div>
-                            <div class="detail-value">{{ request.craftsManName }}</div>
-                        </div>
-                    }
-
-                    <!-- Client Info -->
-                    @if (request.clientName) {
-                        <div class="detail-item">
-                            <div class="detail-label">
-                                <span class="detail-icon">👤</span>
-                                <span>Client</span>
-                            </div>
-                            <div class="detail-value">{{ request.clientName }}</div>
-                        </div>
-                    }
-
-                    <!-- Location -->
-                    <div class="detail-item">
-                        <div class="detail-label">
-                            <span class="detail-icon">📍</span>
-                            <span>Location</span>
-                        </div>
-                        <div class="detail-value">{{ request.location || 'Not specified' }}</div>
-                    </div>
-
-                    <!-- Request Date -->
-                    <div class="detail-item">
-                        <div class="detail-label">
-                            <span class="detail-icon">📅</span>
-                            <span>Requested At</span>
-                        </div>
-                        <div class="detail-value">{{ formatDate(request.requestAt) }}</div>
-                    </div>
-
-                    <!-- Service Start Time -->
-                    @if (request.serviceStartTime) {
-                        <div class="detail-item">
-                            <div class="detail-label">
-                                <span class="detail-icon">🕐</span>
-                                <span>Service Start Time</span>
-                            </div>
-                            <div class="detail-value">{{ formatDate(request.serviceStartTime) }}</div>
-                        </div>
-                    }
-
-                    <!-- Completed At -->
-                    @if (request.completedAt) {
-                        <div class="detail-item highlight">
-                            <div class="detail-label">
-                                <span class="detail-icon">✅</span>
-                                <span>Completed At</span>
-                            </div>
-                            <div class="detail-value completed-value">{{ formatDate(request.completedAt) }}</div>
-                        </div>
-                    }
-
-                    <!-- Suggested Price -->
-                    @if (request.suggestedPrice) {
-                        <div class="detail-item">
-                            <div class="detail-label">
-                                <span class="detail-icon">💵</span>
-                                <span>Suggested Price</span>
-                            </div>
-                            <div class="detail-value">{{ request.suggestedPrice }} EGP</div>
-                        </div>
-                    }
-
-                    <!-- Total Amount -->
-                    @if (request.totalAmount) {
-                        <div class="detail-item highlight">
-                            <div class="detail-label">
-                                <span class="detail-icon">💰</span>
-                                <span>Total Amount</span>
-                            </div>
-                            <div class="detail-value price-value">{{ request.totalAmount }} EGP</div>
-                        </div>
-                    }
-                </div>
-
-                <!-- In Progress Notification -->
-                @if (isInProgress()) {
-                    <div class="in-progress-notification">
-                        <div class="notification-icon">🚀</div>
-                        <div class="notification-content">
-                            <h3 class="notification-title">Service In Progress</h3>
-                            <p class="notification-message">
-                                <strong>{{ request.craftsManName }}</strong> will arrive at your location:
-                            </p>
-                            <div class="notification-details">
-                                <div class="detail-row">
-                                    <span class="detail-icon">📍</span>
-                                    <span class="detail-text">{{ request.location || 'Location not specified' }}</span>
-                                </div>
-                                @if (request.serviceStartTime) {
-                                    <div class="detail-row">
-                                        <span class="detail-icon">🕐</span>
-                                        <span class="detail-text">{{ formatDate(request.serviceStartTime) }}</span>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                }
-
-                <!-- Description Section -->
-                <div class="description-section">
-                    <h2 class="section-title">
-                        <span class="section-icon">📝</span>
-                        Description
-                    </h2>
-                    <p class="description-text">{{ request.description || 'No description provided' }}</p>
-                </div>
-
-                <!-- Review Section -->
-                @if (request.reviewRatingValue || request.reviewComment) {
-                    <div class="review-section">
-                        <h2 class="section-title">
-                            <span class="section-icon">⭐</span>
-                            Review
-                        </h2>
-                        @if (request.reviewRatingValue) {
-                            <div class="rating-container">
-                                <span class="rating-label">Rating:</span>
-                                <div class="stars">
-                                    @for (star of [1, 2, 3, 4, 5]; track star) {
-                                        <span class="star" [class.filled]="star <= (request.reviewRatingValue || 0)">★</span>
-                                    }
-                                </div>
-                                <span class="rating-value">({{ request.reviewRatingValue }}/5)</span>
-                            </div>
-                        }
-                        @if (request.reviewComment) {
-                            <p class="review-comment">{{ request.reviewComment }}</p>
-                        }
-                    </div>
-                }
-
-                <!-- Action Buttons -->
-                <div class="action-buttons">
-                    @if (isInProgress()) {
-                        <button
-                            class="btn-complete"
-                            (click)="completeRequest()"
-                            [disabled]="completingRequest"
-                        >
-                            @if (completingRequest) {
-                                <span class="spinner-small"></span>
-                                <span>Completing...</span>
-                            } @else {
-                                <span>✓ Complete Request</span>
-                            }
-                        </button>
-                    }
-                    <button class="btn-secondary" (click)="goBack()">Back to My Requests</button>
+        <!-- Details Card -->
+        <div class="details-card">
+            <!-- Header with Status -->
+            <div class="card-header">
+                <h1 class="request-title">{{ request.serviceName || 'Service Request' }}</h1>
+                <div class="status-badge" [ngClass]="getStatusClass(request.status)">
+                    <span class="status-icon">{{ getStatusIcon(request.status) }}</span>
+                    <span class="status-text">{{ getStatusText(request.status) }}</span>
                 </div>
             </div>
+
+            <!-- Request Image -->
+            <div class="image-container">
+                <img [src]="getImageUrl()" [alt]="request.serviceName || 'Service'" class="request-image" />
+            </div>
+
+            <!-- Details Grid -->
+            <div class="details-grid">
+                <!-- Craftsman Info -->
+                @if (request.craftsManName) {
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <span class="detail-icon">👷</span>
+                        <span>Craftsman</span>
+                    </div>
+                    <div class="detail-value">{{ request.craftsManName }}</div>
+                </div>
+                }
+
+                <!-- Client Info -->
+                @if (request.clientName) {
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <span class="detail-icon">👤</span>
+                        <span>Client</span>
+                    </div>
+                    <div class="detail-value">{{ request.clientName }}</div>
+                </div>
+                }
+
+                <!-- Location -->
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <span class="detail-icon">📍</span>
+                        <span>Location</span>
+                    </div>
+                    <div class="detail-value">{{ request.location || 'Not specified' }}</div>
+                </div>
+
+                <!-- Request Date -->
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <span class="detail-icon">📅</span>
+                        <span>Requested At</span>
+                    </div>
+                    <div class="detail-value">{{ formatDate(request.requestAt) }}</div>
+                </div>
+
+                <!-- Service Start Time -->
+                @if (request.serviceStartTime) {
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <span class="detail-icon">🕐</span>
+                        <span>Service Start Time</span>
+                    </div>
+                    <div class="detail-value">{{ formatDate(request.serviceStartTime) }}</div>
+                </div>
+                }
+
+                <!-- Completed At -->
+                @if (request.completedAt) {
+                <div class="detail-item highlight">
+                    <div class="detail-label">
+                        <span class="detail-icon">✅</span>
+                        <span>Completed At</span>
+                    </div>
+                    <div class="detail-value completed-value">{{ formatDate(request.completedAt) }}</div>
+                </div>
+                }
+
+                <!-- Suggested Price -->
+                @if (request.suggestedPrice) {
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <span class="detail-icon">💵</span>
+                        <span>Suggested Price</span>
+                    </div>
+                    <div class="detail-value">{{ request.suggestedPrice }} EGP</div>
+                </div>
+                }
+
+                <!-- Total Amount -->
+                @if (request.totalAmount) {
+                <div class="detail-item highlight">
+                    <div class="detail-label">
+                        <span class="detail-icon">💰</span>
+                        <span>Total Amount</span>
+                    </div>
+                    <div class="detail-value price-value">{{ request.totalAmount }} EGP</div>
+                </div>
+                }
+            </div>
+
+            <!-- In Progress Notification -->
+            @if (isInProgress()) {
+            <div class="in-progress-notification">
+                <div class="notification-icon">🚀</div>
+                <div class="notification-content">
+                    <h3 class="notification-title">Service In Progress</h3>
+                    <p class="notification-message">
+                        <strong>{{ request.craftsManName }}</strong> will arrive at your location:
+                    </p>
+                    <div class="notification-details">
+                        <div class="detail-row">
+                            <span class="detail-icon">📍</span>
+                            <span class="detail-text">{{ request.location || 'Location not specified' }}</span>
+                        </div>
+                        @if (request.serviceStartTime) {
+                        <div class="detail-row">
+                            <span class="detail-icon">🕐</span>
+                            <span class="detail-text">{{ formatDate(request.serviceStartTime) }}</span>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+
+            <!-- Description Section -->
+            <div class="description-section">
+                <h2 class="section-title">
+                    <span class="section-icon">📝</span>
+                    Description
+                </h2>
+                <p class="description-text">{{ request.description || 'No description provided' }}</p>
+            </div>
+
+            <!-- Review Section (Display existing review) -->
+            @if (request.reviewRatingValue || request.reviewComment) {
+            <div class="review-section">
+                <h2 class="section-title">
+                    <span class="section-icon">⭐</span>
+                    Review
+                </h2>
+                @if (request.reviewRatingValue) {
+                <div class="rating-container">
+                    <span class="rating-label">Rating:</span>
+                    <div class="stars">
+                        @for (star of [1, 2, 3, 4, 5]; track star) {
+                        <span class="star" [class.filled]="star <= (request.reviewRatingValue || 0)">★</span>
+                        }
+                    </div>
+                    <span class="rating-value">({{ request.reviewRatingValue }}/5)</span>
+                </div>
+                }
+                @if (request.reviewComment) {
+                <p class="review-comment">{{ request.reviewComment }}</p>
+                }
+            </div>
+            }
+
+            <!-- Review Form Section (Add/Edit Review) -->
+            @if (isCompleted()) {
+            <div class="review-form-section">
+                <h2 class="section-title">
+                    <span class="section-icon">{{ hasExistingReview() ? '✏️' : '➕' }}</span>
+                    {{ hasExistingReview() ? 'Edit Review' : 'Add Review' }}
+                </h2>
+
+                <div class="review-form">
+                    <!-- Star Rating Input -->
+                    <div class="form-group">
+                        <label class="form-label">Rating (1-5 stars)</label>
+                        <div class="star-rating-input">
+                            @for (star of [1, 2, 3, 4, 5]; track star) {
+                            <span class="star-input" [class.filled]="star <= reviewRating"
+                                (click)="setStarRating(star)">★</span>
+                            }
+                        </div>
+                        @if (reviewRating > 0) {
+                        <span class="rating-display">{{ reviewRating }} / 5</span>
+                        }
+                    </div>
+
+                    <!-- Comment Input -->
+                    <div class="form-group">
+                        <label for="review-comment-input" class="form-label">Comment</label>
+                        <textarea id="review-comment-input" class="form-textarea" [(ngModel)]="reviewComment"
+                            placeholder="Share your experience with this craftsman..." rows="4"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button class="btn-submit-review" (click)="submitReviewForm()" [disabled]="submittingReview">
+                        @if (submittingReview) {
+                        <span class="spinner-small"></span>
+                        <span>{{ hasExistingReview() ? 'Updating...' : 'Submitting...' }}</span>
+                        } @else {
+                        <span>{{ hasExistingReview() ? '✓ Update Review' : '✓ Submit Review' }}</span>
+                        }
+                    </button>
+                </div>
+            </div>
+            }
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                @if (isInProgress()) {
+                <button class="btn-complete" (click)="completeRequest()" [disabled]="completingRequest">
+                    @if (completingRequest) {
+                    <span class="spinner-small"></span>
+                    <span>Completing...</span>
+                    } @else {
+                    <span>✓ Complete Request</span>
+                    }
+                </button>
+                }
+                <button class="btn-secondary" (click)="goBack()">Back to My Requests</button>
+            </div>
         </div>
+    </div>
     }
 </div>

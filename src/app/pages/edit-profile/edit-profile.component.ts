@@ -175,9 +175,11 @@ export class EditProfileComponent implements OnInit {
       this.imagePreviewUrl.set(this.getProfileImageUrl(profile.profileImage));
     }
 
-    // Set National ID preview if exists (backend returns full URL)
+    // Set National ID preview if exists (backend returns full URL with possible double slashes)
     if (profile.nationalIdPic) {
-      this.nationalIdPreviewUrl.set(profile.nationalIdPic);
+      // Clean up any double slashes in the URL
+      const cleanedUrl = profile.nationalIdPic.replace(/([^:]\/)\/+/g, '$1');
+      this.nationalIdPreviewUrl.set(cleanedUrl);
     }
   }
 
@@ -185,8 +187,11 @@ export class EditProfileComponent implements OnInit {
    * Get profile image URL from path
    */
   private getProfileImageUrl(imagePath: string): string {
+    // If it's a full HTTP/HTTPS URL, clean up double slashes and return
     if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-      return imagePath;
+      // Fix double slashes in the URL (e.g., https://localhost:7058//images/... -> https://localhost:7058/images/...)
+      const cleanedUrl = imagePath.replace(/([^:]\/)\/+/g, '$1');
+      return cleanedUrl;
     }
 
     // Normalize the path: convert backslashes to forward slashes and ensure leading slash
@@ -311,7 +316,9 @@ export class EditProfileComponent implements OnInit {
     // Revert to original National ID if it exists
     const profile = this.profile() as CraftsmanProfile;
     if (profile?.nationalIdPic) {
-      this.nationalIdPreviewUrl.set(profile.nationalIdPic);
+      // Clean up any double slashes in the URL
+      const cleanedUrl = profile.nationalIdPic.replace(/([^:]\/)\/+/g, '$1');
+      this.nationalIdPreviewUrl.set(cleanedUrl);
     } else {
       this.nationalIdPreviewUrl.set(null);
     }

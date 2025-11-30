@@ -21,10 +21,21 @@ export interface CraftsmanProfile {
   serviceName?: string;
 }
 
+// Review interface
+export interface Review {
+  id: number;
+  ratingValue: number;
+  comment: string;
+  reviewDate: string;
+  clientId: number;
+  craftsManId: number;
+  servicesRequestId: number;
+}
+
 // Backend API response wrapper
 export interface CraftsmanResponse {
   craftsMan: CraftsmanProfile;
-  reviews: any[];
+  reviews: Review[];
 }
 
 export interface UpdateCraftsmanVerificationDto {
