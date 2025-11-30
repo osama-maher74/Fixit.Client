@@ -65,6 +65,15 @@ export class NotificationListComponent implements OnInit {
     this.notificationService.getNotificationsForClient(clientId).subscribe({
       next: (data) => {
         console.log('NotificationList - Client notifications loaded:', data);
+        console.log('🔍 DEBUG - Backend Response Analysis:');
+        data.forEach((notif, index) => {
+          console.log(`  Notification #${index + 1}:`, {
+            id: notif.id,
+            title: notif.title,
+            isRead: notif.isRead,
+            createdAt: notif.createdAt
+          });
+        });
         this.notificationService.updateNotificationsList(data);
       },
       error: (err) => console.error('NotificationList - Failed to load client notifications', err)
@@ -76,6 +85,15 @@ export class NotificationListComponent implements OnInit {
     this.notificationService.getNotificationsForCraftsman(craftsmanId).subscribe({
       next: (data) => {
         console.log('NotificationList - Craftsman notifications loaded:', data);
+        console.log('🔍 DEBUG - Backend Response Analysis:');
+        data.forEach((notif, index) => {
+          console.log(`  Notification #${index + 1}:`, {
+            id: notif.id,
+            title: notif.title,
+            isRead: notif.isRead,
+            createdAt: notif.createdAt
+          });
+        });
         this.notificationService.updateNotificationsList(data);
       },
       error: (err) => console.error('NotificationList - Failed to load craftsman notifications', err)
@@ -83,92 +101,138 @@ export class NotificationListComponent implements OnInit {
   }
 
   onNotificationClick(notification: ReadNotificationDto) {
-    // DEBUG: Log the entire notification object
+    // DEBUG: Log the notification
     console.log('🔔 Notification clicked:', notification);
-    console.log('Notification ID:', notification.id);
-    console.log('Notification type:', notification.type);
-    console.log('Notification finalAmount:', notification.finalAmount);
-    console.log('Notification offerId:', notification.offerId);
+    console.log('  - Title:', notification.title);
+    console.log('  - Message:', notification.message);
+    console.log('  - ServiceRequestId:', notification.serviceRequestId);
+    console.log('  - OfferId:', notification.offerId);
 
     // Mark as read optimistically (update UI immediately)
     if (!notification.isRead && notification.id) {
       // Update local state first for instant UI feedback
       this.notificationService.markLocalAsRead(notification.id);
 
-      // Then update backend in background
-      this.notificationService.markAsRead(notification.id).subscribe({
-        next: () => {
-          console.log('✅ Notification marked as read on backend:', notification.id);
-        },
-        error: (err) => {
-          console.error('❌ Failed to mark notification as read on backend:', err);
-          // Revert local state if backend update fails
-          this.notificationService.notifications.update(current =>
-            current.map(n => n.id === notification.id ? { ...n, isRead: false } : n)
-          );
-        }
-      });
+      // Only call backend if the ID looks like a real backend ID (not our generated timestamp)
+      // Real backend IDs are typically small numbers, timestamps are 13+ digits
+      const isRealBackendId = notification.id < 1000000000000; // Less than 1 trillion
+
+      if (isRealBackendId) {
+        console.log(`📤 Calling backend markAsRead API for notification ID: ${notification.id}`);
+        // Then update backend in background
+        this.notificationService.markAsRead(notification.id).subscribe({
+          next: () => {
+            console.log('✅ SUCCESS - Notification marked as read on backend:', notification.id);
+            console.log('  - Notification Title:', notification.title);
+            console.log('  - Current Time:', new Date().toISOString());
+          },
+          error: (err) => {
+            console.error('❌ FAILED - Could not mark notification as read on backend');
+            console.error('  - Notification ID:', notification.id);
+            console.error('  - Error details:', err);
+            console.error('  - Error status:', err.status);
+            console.error('  - Error message:', err.message);
+            // Revert local state if backend update fails
+            this.notificationService.notifications.update(current =>
+              current.map(n => n.id === notification.id ? { ...n, isRead: false } : n)
+            );
+          }
+        });
+      } else {
+        console.log('⚠️ Skipping backend update - using frontend-generated ID:', notification.id);
+      }
     }
 
     // Get current user role
     const currentUser = this.authService.getCurrentUser();
     const isClient = currentUser?.role?.toLowerCase() !== 'craftsman';
+    const title = notification.title?.toLowerCase() || '';
 
-    // Check if this is a craftsman accepted notification for client - route to payment
-    if (isClient && notification.type === NotificationType.CraftsmanAccepted) {
-      console.log('✅ Craftsman accepted - routing client to payment page');
+    console.log('🔍 User role:', isClient ? 'Client' : 'Craftsman');
+    console.log('🔍 Notification title (lowercase):', title);
+
+    // Handle different notification types based on title
+
+    // 1. Craftsman Accepted - Client side (redirect to payment)
+    if (isClient && title.includes('craftsman accepted')) {
+      console.log('✅ Craftsman Accepted → Redirecting to payment page');
       if (notification.serviceRequestId) {
         this.router.navigate(['/payment', notification.serviceRequestId]);
       }
       return;
     }
 
-    // Check if this is a new offer notification for client (check both types)
-    if (notification.type === NotificationType.NewPriceOfferedByCraftsman ||
-      notification.type === NotificationType.NewOfferFromCraftsman) {
-      // Navigate to offer review page with offer details in route state
-      const offerId = notification.offerId || notification.id;
-      console.log('✅ Matched new offer notification - navigating with state:', {
-        offerAmount: notification.finalAmount,
-        offerDescription: notification.description,
-        craftsmanName: notification.craftsmanName
+    // 2. Craftsman Rejected - Client side (show alert)
+    if (isClient && (title.includes('craftsman rejected') || title.includes('rejected your'))) {
+      console.log('❌ Craftsman Rejected → Showing alert');
+      Swal.fire({
+        icon: 'info',
+        title: 'Offer Rejected',
+        text: notification.message || `Craftsman has rejected your service request.`,
+        confirmButtonColor: '#FDB813'
       });
+      return;
+    }
+
+    // 3. New Offer From Craftsman - Client side (redirect to offer review)
+    if (isClient && (title.includes('new offer') || title.includes('price offered'))) {
+      console.log('💰 New Offer → Redirecting to offer review page');
       if (notification.serviceRequestId) {
+        const offerId = notification.offerId || notification.id;
         this.router.navigate(['/offer-review', notification.serviceRequestId, offerId], {
           state: {
             offerAmount: notification.finalAmount,
             offerDescription: notification.description,
-            craftsmanName: notification.craftsmanName
+            craftsmanName: notification.craftsManName
           }
         });
       }
       return;
     }
 
-    // Route based on user role
+    // 4. Client Rejected Offer - Craftsman side (show alert)
+    if (!isClient && (title.includes('client rejected') || title.includes('rejected your'))) {
+      console.log('❌ Client Rejected → Showing alert');
+      Swal.fire({
+        icon: 'info',
+        title: 'Offer Rejected',
+        text: notification.message || 'The client has rejected your offer.',
+        confirmButtonColor: '#FDB813'
+      });
+      return;
+    }
+
+    // 5. Client Accepted Offer - Craftsman side (navigate to service request details)
+    if (!isClient && title.includes('client accepted')) {
+      console.log('✅ Client Accepted → Navigating to offer details');
+      if (notification.serviceRequestId) {
+        this.router.navigate(['/offers', notification.serviceRequestId]);
+      }
+      return;
+    }
+
+    // 6. Service Request Scheduled - Craftsman side (navigate to service request)
+    if (!isClient && title.includes('service request scheduled')) {
+      console.log('📅 Service Scheduled → Navigating to offer details');
+      if (notification.serviceRequestId) {
+        this.router.navigate(['/offers', notification.serviceRequestId]);
+      }
+      return;
+    }
+
+    // Default fallback - navigate based on user role
+    console.log('⚠️ No specific handler matched, using default navigation');
     if (notification.serviceRequestId) {
       if (isClient) {
-        // Client should go to offer-review page with offer details
+        // Client default: go to offer review
         const offerId = notification.offerId || notification.id;
-        console.log('📍 Client: Navigating to offer-review page with state:', {
-          offerAmount: notification.finalAmount,
-          offerDescription: notification.description,
-          craftsmanName: notification.craftsmanName
-        });
-        this.router.navigate(['/offer-review', notification.serviceRequestId, offerId], {
-          state: {
-            offerAmount: notification.finalAmount,
-            offerDescription: notification.description,
-            craftsmanName: notification.craftsmanName
-          }
-        });
+        this.router.navigate(['/offer-review', notification.serviceRequestId, offerId]);
       } else {
-        // Craftsman should go to offers page
-        console.log('Craftsman: Navigating to offers page with service request ID:', notification.serviceRequestId);
+        // Craftsman default: go to offers page
         this.router.navigate(['/offers', notification.serviceRequestId]);
       }
     } else {
-      console.warn('Notification has no serviceRequestId:', notification);
+      console.warn('⚠️ Notification has no serviceRequestId:', notification);
     }
   }
 
@@ -285,23 +349,41 @@ export class NotificationListComponent implements OnInit {
   }
 
 
-  getIconForType(type: NotificationType): string {
-    switch (type) {
-      case NotificationType.CraftsmanAccepted:
-      case NotificationType.ClientAcceptedCraftsmanPrice:
-        return '✅';
-      case NotificationType.CraftsmanRejected:
-      case NotificationType.PriceRejectedByCraftsman:
-      case NotificationType.ClientRejectedCraftsmanPrice:
-        return '❌';
-      case NotificationType.NewPriceOfferedByCraftsman:
-      case NotificationType.NewOfferFromCraftsman:
-        return '💰';
-      case NotificationType.ServiceCompleted:
-        return '🎉';
-      default:
-        return 'ℹ️';
+  getIconForType(notification: ReadNotificationDto): string {
+    const title = notification.title?.toLowerCase() || '';
+
+    // Accepted notifications
+    if (title.includes('accepted')) {
+      return '✅';
     }
+
+    // Rejected notifications
+    if (title.includes('rejected')) {
+      return '❌';
+    }
+
+    // New offer / price offered
+    if (title.includes('new offer') || title.includes('price offered')) {
+      return '💰';
+    }
+
+    // Scheduled / confirmed
+    if (title.includes('scheduled') || title.includes('confirmed')) {
+      return '📅';
+    }
+
+    // Service completed
+    if (title.includes('completed')) {
+      return '🎉';
+    }
+
+    // Payment related
+    if (title.includes('payment')) {
+      return '💳';
+    }
+
+    // Default notification icon
+    return 'ℹ️';
   }
 
   getTimeAgo(dateString: string): string {

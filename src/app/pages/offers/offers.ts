@@ -24,6 +24,7 @@ export class OffersComponent implements OnInit {
   serviceRequest: ServiceRequestResponse | null = null;
   loading = true;
   error: string | null = null;
+  actionTaken = false;
   apiUrl = environment.apiUrl;
 
   ngOnInit() {
@@ -56,6 +57,9 @@ export class OffersComponent implements OnInit {
   }
 
   onAccept() {
+    // Hide buttons immediately
+    this.actionTaken = true;
+
     if (!this.serviceRequest?.id && !this.serviceRequest?.servicesRequestId) {
       Swal.fire({
         icon: 'error',
@@ -108,6 +112,9 @@ export class OffersComponent implements OnInit {
   }
 
   onReject() {
+    // Hide buttons immediately
+    this.actionTaken = true;
+
     if (!this.serviceRequest?.id && !this.serviceRequest?.servicesRequestId) {
       Swal.fire({
         icon: 'error',
@@ -160,6 +167,9 @@ export class OffersComponent implements OnInit {
   }
 
   onNewOffer() {
+    // Hide buttons immediately
+    this.actionTaken = true;
+
     if (!this.serviceRequest?.id && !this.serviceRequest?.servicesRequestId) {
       Swal.fire({
         icon: 'error',

@@ -74,11 +74,22 @@
     flex: 1;
 }
 
-.message {
-    margin: 0 0 5px 0;
-    font-size: 14px;
-    color: #444;
+.notification-title {
+    margin: 0 0 4px 0;
+    font-size: 15px;
+    color: var(--text-primary, #1a1a1a);
     line-height: 1.4;
+    font-weight: 600;
+    font-family: 'Cairo', sans-serif;
+}
+
+.message {
+    margin: 0 0 6px 0;
+    font-size: 13px;
+    color: var(--text-secondary, #6b7280);
+    line-height: 1.4;
+    font-weight: 400;
+    font-family: 'Cairo', sans-serif;
 }
 
 .time {

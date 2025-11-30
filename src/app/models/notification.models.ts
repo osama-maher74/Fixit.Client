@@ -14,15 +14,18 @@ export enum NotificationType {
 export interface ReadNotificationDto {
     id: number;
     serviceRequestId: number;
+    title: string; // Added to match backend
     message: string;
     type: NotificationType;
     isRead: boolean;
     createdAt: string; // ISO Date string
     // Offer details for NewPriceOfferedByCraftsman notifications
-    offerId?: number;
-    finalAmount?: number;
-    description?: string;
+    offerId?: number | null;
+    finalAmount?: number | null;
+    description?: string | null;
     craftsmanName?: string;
+    craftsManName?: string; // Backend uses this capitalization
+    clientName?: string; // Added to match backend
 }
 
 export interface CreateNotificationDto {

@@ -15,11 +15,12 @@
             [class.unread]="!notification.isRead" (click)="onNotificationClick(notification)">
 
             <div class="notification-icon">
-                {{ getIconForType(notification.type) }}
+                {{ getIconForType(notification) }}
             </div>
 
             <div class="notification-content">
-                <p class="message">{{ notification.message }}</p>
+                <p class="notification-title">{{ notification.title }}</p>
+                <p class="message" *ngIf="notification.message">{{ notification.message }}</p>
                 <span class="time">{{ getTimeAgo(notification.createdAt) }}</span>
             </div>
 

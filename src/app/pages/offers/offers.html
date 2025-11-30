@@ -73,7 +73,7 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="offer-actions">
+        <div class="offer-actions" *ngIf="!actionTaken">
             <button class="btn btn-accept" (click)="onAccept()">
                 <span class="btn-icon">✓</span>
                 <span class="btn-text">Accept</span>

@@ -46,8 +46,14 @@ export class NotificationService {
     // --- State Management Helpers ---
 
     updateNotificationsList(notifications: ReadNotificationDto[]) {
+        // Add unique IDs if missing (backend doesn't always provide id)
+        const notificationsWithIds = notifications.map((n, index) => ({
+            ...n,
+            id: n.id || new Date(n.createdAt).getTime() + index // Use timestamp + index as fallback ID
+        }));
+
         // Sort by date DESC
-        const sorted = notifications.sort((a, b) =>
+        const sorted = notificationsWithIds.sort((a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
         this.notifications.set(sorted);
@@ -55,7 +61,18 @@ export class NotificationService {
     }
 
     private updateUnreadCount() {
-        const count = this.notifications().filter(n => !n.isRead).length;
+        const unreadNotifications = this.notifications().filter(n => !n.isRead);
+        const count = unreadNotifications.length;
+        console.log('📊 Unread Count Update:');
+        console.log('  - Total notifications:', this.notifications().length);
+        console.log('  - Unread notifications:', count);
+        console.log('  - Unread items (full objects):', unreadNotifications);
+        console.log('  - All notifications with ID check:', this.notifications().map(n => ({
+            id: n.id,
+            hasId: !!n.id,
+            title: n.title,
+            isRead: n.isRead
+        })));
         this.unreadCount.set(count);
     }
 
