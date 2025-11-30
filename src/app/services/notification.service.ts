@@ -108,9 +108,19 @@ export class NotificationService {
         // Adjust if your backend uses a different path
         const hubUrl = `${environment.apiUrl.replace('/api', '')}/notificationHub`;
 
+        console.log('🔌 Starting SignalR connection to:', hubUrl);
+        const token = this.authService.getToken();
+        console.log('🔑 Token exists:', !!token);
+        console.log('🔑 Token length:', token?.length || 0);
+        console.log('🔑 Token value:', token);
+
         this.hubConnection = new HubConnectionBuilder()
             .withUrl(hubUrl, {
-                accessTokenFactory: () => this.authService.getToken() || ''
+                accessTokenFactory: () => {
+                    const currentToken = this.authService.getToken();
+                    console.log('🔑 accessTokenFactory called - Token:', currentToken);
+                    return currentToken || '';
+                }
             })
             .withAutomaticReconnect()
             .build();

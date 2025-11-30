@@ -128,8 +128,8 @@
                 }
             </div>
 
-            <!-- In Progress Notification -->
-            @if (isInProgress()) {
+            <!-- In Progress Notification (Client only) -->
+            @if (isInProgress() && !isCraftsman()) {
             <div class="in-progress-notification">
                 <div class="notification-icon">🚀</div>
                 <div class="notification-content">
@@ -186,8 +186,8 @@
             </div>
             }
 
-            <!-- Review Form Section (Add/Edit Review) -->
-            @if (isCompleted()) {
+            <!-- Review Form Section (Add/Edit Review - Client only) -->
+            @if (isCompleted() && !isCraftsman()) {
             <div class="review-form-section">
                 <h2 class="section-title">
                     <span class="section-icon">{{ hasExistingReview() ? '✏️' : '➕' }}</span>
@@ -231,7 +231,7 @@
 
             <!-- Action Buttons -->
             <div class="action-buttons">
-                @if (isInProgress()) {
+                @if (isInProgress() && !isCraftsman()) {
                 <button class="btn-complete" (click)="completeRequest()" [disabled]="completingRequest">
                     @if (completingRequest) {
                     <span class="spinner-small"></span>

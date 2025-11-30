@@ -1,0 +1,95 @@
+<div class="craftsman-requests-container">
+    <div class="page-header">
+        <h1 class="page-title">My Service Requests</h1>
+        <p class="page-subtitle">View your in progress and completed service requests</p>
+    </div>
+
+    <!-- Loading State -->
+    @if (loading) {
+        <div class="loading-container">
+            <div class="spinner"></div>
+            <p>Loading your requests...</p>
+        </div>
+    }
+
+    <!-- Error State -->
+    @if (error && !loading) {
+        <div class="error-container">
+            <div class="error-icon">⚠️</div>
+            <p class="error-message">{{ error }}</p>
+            <button class="btn-retry" (click)="loadCraftsmanRequests()">Try Again</button>
+        </div>
+    }
+
+    <!-- Empty State -->
+    @if (!loading && !error && filteredRequests.length === 0) {
+        <div class="empty-container">
+            <div class="empty-icon">📋</div>
+            <h2 class="empty-title">No Requests Found</h2>
+            <p class="empty-message">You don't have any in progress or completed service requests yet.</p>
+        </div>
+    }
+
+    <!-- Requests List -->
+    @if (!loading && !error && filteredRequests.length > 0) {
+        <div class="requests-grid">
+            @for (request of filteredRequests; track request.servicesRequestId || request.id) {
+                <div class="request-card" (click)="viewRequestDetails(request)">
+                    <!-- Request Image -->
+                    <div class="request-image-container">
+                        <img
+                            [src]="getImageUrl(request)"
+                            [alt]="request.serviceName || 'Service'"
+                            class="request-image"
+                        />
+                        <div class="status-badge" [ngClass]="getStatusClass(request.status)">
+                            <span class="status-icon">{{ getStatusIcon(request.status) }}</span>
+                            <span class="status-text">{{ getStatusText(request.status) }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Request Info -->
+                    <div class="request-info">
+                        <h3 class="request-title">{{ request.serviceName || 'Service Request' }}</h3>
+
+                        @if (request.clientName) {
+                            <div class="info-row">
+                                <span class="info-icon">👤</span>
+                                <span class="info-text">{{ request.clientName }}</span>
+                            </div>
+                        }
+
+                        <div class="info-row">
+                            <span class="info-icon">📍</span>
+                            <span class="info-text">{{ request.location || 'No location' }}</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-icon">📅</span>
+                            <span class="info-text">{{ formatDate(request.requestAt) }}</span>
+                        </div>
+
+                        @if (request.totalAmount) {
+                            <div class="info-row price-row">
+                                <span class="info-icon">💰</span>
+                                <span class="price-text">{{ request.totalAmount }} EGP</span>
+                            </div>
+                        }
+
+                        @if (request.completedAt) {
+                            <div class="info-row">
+                                <span class="info-icon">✓</span>
+                                <span class="info-text completed-text">Completed: {{ formatDate(request.completedAt) }}</span>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Action Arrow -->
+                    <div class="action-arrow">
+                        <span>→</span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServiceRequestService, ServiceRequestResponse } from '../../services/service-request.service';
 import { ReviewService, CreateReviewDTO, UpdateReviewDTO } from '../../services/review.service';
+import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
 import Swal from 'sweetalert2';
 
@@ -19,6 +20,7 @@ export class RequestDetailsComponent implements OnInit {
     private router = inject(Router);
     private serviceRequestService = inject(ServiceRequestService);
     private reviewService = inject(ReviewService);
+    private authService = inject(AuthService);
 
     request: ServiceRequestResponse | null = null;
     loading = true;
@@ -607,7 +609,17 @@ export class RequestDetailsComponent implements OnInit {
         });
     }
 
+    isCraftsman(): boolean {
+        const user = this.authService.getCurrentUser();
+        return user?.role?.toLowerCase() === 'craftsman';
+    }
+
     goBack() {
-        this.router.navigate(['/my-requests']);
+        // Navigate based on user role
+        if (this.isCraftsman()) {
+            this.router.navigate(['/craftsman-requests']);
+        } else {
+            this.router.navigate(['/my-requests']);
+        }
     }
 }

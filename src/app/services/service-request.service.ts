@@ -100,6 +100,14 @@ export class ServiceRequestService {
         return this.http.get<ServiceRequestResponse[]>(`${this.API_URL}/Client/ById/${clientId}`);
     }
 
+    /**
+     * Get all service requests for a specific craftsman by craftsman ID
+     * GET /api/ServiceRequest/Craftsman/ById/{craftsManId}
+     */
+    getAllServiceRequestsForCraftsmanById(craftsManId: number): Observable<ServiceRequestResponse[]> {
+        return this.http.get<ServiceRequestResponse[]>(`${this.API_URL}/Craftsman/ById/${craftsManId}`);
+    }
+
     cancelServiceRequest(id: number): Observable<void> {
         return this.http.delete<void>(`${this.API_URL}/${id}`);
     }

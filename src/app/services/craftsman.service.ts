@@ -129,25 +129,16 @@ export class CraftsmanService {
   updateCraftsmanVerification(craftsman: CraftsmanProfile): Observable<void> {
     console.log('CraftsmanService - updateCraftsmanVerification called with:', craftsman);
 
-    const formData = new FormData();
-    formData.append('Id', craftsman.id.toString());
-    formData.append('FName', craftsman.fName);
-    formData.append('LName', craftsman.lName);
-    formData.append('Describtion', craftsman.describtion);
-    formData.append('PhoneNumber', craftsman.phoneNumber);
-    formData.append('ExperienceOfYears', craftsman.experienceOfYears.toString());
-    formData.append('HourlyRate', craftsman.hourlyRate.toString());
-    formData.append('IsVerified', craftsman.isVerified.toString());
+    // Use the dedicated verification endpoint with VerficationOfCraftsmanDto
+    const verificationDto = {
+      IsVerified: craftsman.isVerified
+    };
 
-    const url = `${this.CRAFTSMAN_API}/${craftsman.id}`;
+    const url = `${this.CRAFTSMAN_API}/verfication/${craftsman.id}`;
     console.log('CraftsmanService - PUT URL:', url);
-    console.log('CraftsmanService - IsVerified:', craftsman.isVerified);
-    console.log('CraftsmanService - FormData entries:');
-    formData.forEach((value, key) => {
-      console.log(`  ${key}: ${value}`);
-    });
+    console.log('CraftsmanService - Verification DTO:', verificationDto);
 
-    console.log('CraftsmanService - Making HTTP PUT request...');
-    return this.http.put<void>(url, formData);
+    console.log('CraftsmanService - Making HTTP PUT request to verification endpoint...');
+    return this.http.put<void>(url, verificationDto);
   }
 }

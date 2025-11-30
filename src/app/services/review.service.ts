@@ -20,11 +20,12 @@ export interface ReviewResponse {
     id: number;
     ratingValue: number;
     comment: string;
-    reviewDate?: string;
-    clientId?: number;
-    craftsManId?: number;
+    reviewDate: string; // Required - provided by backend as ReviewDate
+    clientId: number; // Required - provided by backend as ClientId
+    clientName?: string; // Optional - not provided by backend GetAllReviewsDTO
+    craftsManId: number; // Required - provided by backend as CraftsManId
     servicesRequestId: number;
-    createdAt?: string;
+    createdAt?: string; // Optional - may be used in other contexts
 }
 
 export interface AverageRatingResponse {
@@ -70,5 +71,13 @@ export class ReviewService {
      */
     getCraftsmanAverageRating(craftsmanId: number): Observable<AverageRatingResponse> {
         return this.http.get<AverageRatingResponse>(`${this.API_URL}/craftsman/${craftsmanId}/average-rating`);
+    }
+
+    /**
+     * Get all reviews for a craftsman
+     * GET /api/Review/craftsman/{craftsmanId}
+     */
+    getReviewsForCraftsman(craftsmanId: number): Observable<ReviewResponse[]> {
+        return this.http.get<ReviewResponse[]>(`${this.API_URL}/craftsman/${craftsmanId}`);
     }
 }

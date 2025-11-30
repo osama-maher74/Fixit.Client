@@ -989,3 +989,35 @@
     padding: 0 1rem 1.5rem;
   }
 }
+
+/* ========================================
+   CLICKABLE CARD (FOR PERFORMANCE RATING)
+   ======================================== */
+
+.clickable-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.clickable-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.clickable-card .card-header {
+  position: relative;
+}
+
+.card-arrow {
+  font-size: 1.5rem;
+  color: var(--primary-gold);
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  opacity: 0.7;
+}
+
+.clickable-card:hover .card-arrow {
+  transform: translateX(4px);
+  opacity: 1;
+}

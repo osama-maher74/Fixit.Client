@@ -95,6 +95,16 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'craftsman-requests',
+    loadComponent: () => import('./pages/craftsman-requests/craftsman-requests.component').then(m => m.CraftsmanRequestsComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'craftsman-reviews',
+    loadComponent: () => import('./pages/craftsman-reviews/craftsman-reviews.component').then(m => m.CraftsmanReviewsComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'request-details/:id',
     loadComponent: () => import('./pages/request-details/request-details.component').then(m => m.RequestDetailsComponent),
     canActivate: [authGuard]

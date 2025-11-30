@@ -231,6 +231,13 @@ export class ProfileComponent implements OnInit {
 
 
   /**
+   * Navigate to craftsman reviews page
+   */
+  goToReviews(): void {
+    this.router.navigate(['/craftsman-reviews']);
+  }
+
+  /**
    * Retry loading profile
    */
   retryLoad(): void {

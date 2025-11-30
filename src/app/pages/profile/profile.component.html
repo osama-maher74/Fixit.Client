@@ -303,7 +303,7 @@
       </div>
 
       <!-- Performance Metrics Card -->
-      <div class="detail-card detail-card-highlight craftsman-highlight">
+      <div class="detail-card detail-card-highlight craftsman-highlight clickable-card" (click)="goToReviews()">
         <div class="card-header">
           <div class="card-icon card-icon-gold">
             <svg viewBox="0 0 24 24" fill="currentColor">
@@ -311,6 +311,7 @@
             </svg>
           </div>
           <h2 class="card-title">Performance Rating</h2>
+          <span class="card-arrow">→</span>
         </div>
         <div class="card-content">
           <div class="stat-display craftsman-stat">
