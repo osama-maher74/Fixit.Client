@@ -15,7 +15,7 @@
             [class.unread]="!notification.isRead" (click)="onNotificationClick(notification)">
 
             <div class="notification-icon">
-                {{ getIconForType(notification) }}
+                {{ getIconForType(notification.type) }}
             </div>
 
             <div class="notification-content">

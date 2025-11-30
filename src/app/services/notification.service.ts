@@ -170,6 +170,7 @@ export class NotificationService {
         const testNotification: ReadNotificationDto = {
             id: Math.floor(Math.random() * 10000),
             serviceRequestId: 123,
+            title: 'New Offer Received',
             message: 'This is a TEST notification to verify real-time updates work!',
             type: 'NewOfferFromCraftsman' as any,
             isRead: false,
