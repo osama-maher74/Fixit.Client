@@ -103,13 +103,15 @@ export class NotificationListComponent implements OnInit {
   onNotificationClick(notification: ReadNotificationDto) {
     // DEBUG: Log the notification
     console.log('🔔 Notification clicked:', notification);
-    console.log('  - Title:', notification.title);
-    console.log('  - Message:', notification.message);
-    console.log('  - ServiceRequestId:', notification.serviceRequestId);
-    console.log('  - OfferId:', notification.offerId);
+    console.log('Notification ID:', notification.id);
+    console.log('Notification type:', notification.type);
+    console.log('Notification isRead:', notification.isRead);  // ✅ Check isRead status
+    console.log('Notification finalAmount:', notification.finalAmount);
+    console.log('Notification offerId:', notification.offerId);
 
     // Mark as read optimistically (update UI immediately)
     if (!notification.isRead && notification.id) {
+      console.log('📝 Marking notification as read:', notification.id);
       // Update local state first for instant UI feedback
       this.notificationService.markLocalAsRead(notification.id);
 
@@ -162,21 +164,15 @@ export class NotificationListComponent implements OnInit {
       return;
     }
 
-    // 2. Craftsman Rejected - Client side (show alert)
-    if (isClient && (title.includes('craftsman rejected') || title.includes('rejected your'))) {
-      console.log('❌ Craftsman Rejected → Showing alert');
-      Swal.fire({
-        icon: 'info',
-        title: 'Offer Rejected',
-        text: notification.message || `Craftsman has rejected your service request.`,
-        confirmButtonColor: '#FDB813'
+    // Check if this is a new offer notification for client
+    if (notification.type === NotificationType.NewOfferFromCraftsman) {
+      // Navigate to offer review page with offer details in route state
+      const offerId = notification.offerId || notification.id;
+      console.log('✅ Matched new offer notification - navigating with state:', {
+        offerAmount: notification.finalAmount,
+        offerDescription: notification.description,
+        craftsmanName: notification.craftsmanName
       });
-      return;
-    }
-
-    // 3. New Offer From Craftsman - Client side (redirect to offer review)
-    if (isClient && (title.includes('new offer') || title.includes('price offered'))) {
-      console.log('💰 New Offer → Redirecting to offer review page');
       if (notification.serviceRequestId) {
         const offerId = notification.offerId || notification.id;
         this.router.navigate(['/offer-review', notification.serviceRequestId, offerId], {
@@ -349,41 +345,21 @@ export class NotificationListComponent implements OnInit {
   }
 
 
-  getIconForType(notification: ReadNotificationDto): string {
-    const title = notification.title?.toLowerCase() || '';
-
-    // Accepted notifications
-    if (title.includes('accepted')) {
-      return '✅';
+  getIconForType(type: NotificationType): string {
+    switch (type) {
+      case NotificationType.CraftsmanAccepted:
+      case NotificationType.ClientAcceptedOffer:
+        return '✅';
+      case NotificationType.CraftsmanRejected:
+      case NotificationType.ClientRejectedOffer:
+        return '❌';
+      case NotificationType.NewOfferFromCraftsman:
+        return '💰';
+      case NotificationType.PaymentRequested:
+        return '💳';
+      default:
+        return 'ℹ️';
     }
-
-    // Rejected notifications
-    if (title.includes('rejected')) {
-      return '❌';
-    }
-
-    // New offer / price offered
-    if (title.includes('new offer') || title.includes('price offered')) {
-      return '💰';
-    }
-
-    // Scheduled / confirmed
-    if (title.includes('scheduled') || title.includes('confirmed')) {
-      return '📅';
-    }
-
-    // Service completed
-    if (title.includes('completed')) {
-      return '🎉';
-    }
-
-    // Payment related
-    if (title.includes('payment')) {
-      return '💳';
-    }
-
-    // Default notification icon
-    return 'ℹ️';
   }
 
   getTimeAgo(dateString: string): string {

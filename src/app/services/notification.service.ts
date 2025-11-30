@@ -4,12 +4,14 @@ import { Observable, Subject } from 'rxjs';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment } from '../../environments/environment';
 import { CreateNotificationDto, ReadNotificationDto } from '../models/notification.models';
+import { AuthService } from './auth.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class NotificationService {
     private http = inject(HttpClient);
+    private authService = inject(AuthService);
     private readonly API_URL = `${environment.apiUrl}/Notification`;
     private hubConnection: HubConnection | null = null;
 
@@ -77,10 +79,21 @@ export class NotificationService {
     }
 
     markLocalAsRead(id: number) {
+        console.log('🔄 markLocalAsRead called for notification:', id);
+        const before = this.notifications().find(n => n.id === id);
+        console.log('   Before update - isRead:', before?.isRead);
+
         this.notifications.update(current =>
             current.map(n => n.id === id ? { ...n, isRead: true } : n)
         );
+
+        const after = this.notifications().find(n => n.id === id);
+        console.log('   After update - isRead:', after?.isRead);
+        console.log('   Unread count before:', this.unreadCount());
+
         this.updateUnreadCount();
+
+        console.log('   Unread count after:', this.unreadCount());
     }
 
     addRealTimeNotification(notification: ReadNotificationDto) {
@@ -96,18 +109,79 @@ export class NotificationService {
         const hubUrl = `${environment.apiUrl.replace('/api', '')}/notificationHub`;
 
         this.hubConnection = new HubConnectionBuilder()
-            .withUrl(hubUrl)
+            .withUrl(hubUrl, {
+                accessTokenFactory: () => this.authService.getToken() || ''
+            })
             .withAutomaticReconnect()
             .build();
 
         this.hubConnection.start()
-            .then(() => console.log('SignalR Connected'))
-            .catch((err: any) => console.error('Error while starting SignalR connection: ' + err));
+            .then(() => console.log('✅ SignalR Connected Successfully'))
+            .catch((err: any) => console.error('❌ Error while starting SignalR connection:', err));
 
         this.hubConnection.on('NotificationReceived', (notification: ReadNotificationDto) => {
-            console.log('Real-time notification received:', notification);
+            console.log('🔔 Real-time notification received:', notification);
             this.notificationReceivedSubject.next(notification);
             this.addRealTimeNotification(notification);
         });
+
+        // Handle reconnection events
+        this.hubConnection.onreconnecting((error) => {
+            console.log('⚠️ SignalR reconnecting...', error);
+        });
+
+        this.hubConnection.onreconnected((connectionId) => {
+            console.log('✅ SignalR reconnected. Connection ID:', connectionId);
+        });
+
+        this.hubConnection.onclose((error) => {
+            console.log('❌ SignalR connection closed', error);
+        });
+    }
+
+    /**
+     * Disconnect from SignalR hub (call on logout)
+     */
+    async disconnectSignalR(): Promise<void> {
+        if (this.hubConnection) {
+            try {
+                await this.hubConnection.stop();
+                console.log('✅ SignalR disconnected successfully');
+            } catch (err) {
+                console.error('❌ Error disconnecting SignalR:', err);
+            }
+        }
+    }
+
+    /**
+     * Reconnect to SignalR hub (call on login)
+     */
+    async reconnectSignalR(): Promise<void> {
+        await this.disconnectSignalR();
+        this.startSignalRConnection();
+    }
+
+    /**
+     * TEST ONLY: Simulate receiving a real-time notification
+     * Call this from browser console to test UI updates without refresh
+     * Example: notificationService.testRealTimeNotification()
+     */
+    testRealTimeNotification(): void {
+        const testNotification: ReadNotificationDto = {
+            id: Math.floor(Math.random() * 10000),
+            serviceRequestId: 123,
+            message: 'This is a TEST notification to verify real-time updates work!',
+            type: 'NewOfferFromCraftsman' as any,
+            isRead: false,
+            createdAt: new Date().toISOString(),
+            offerId: 456,
+            finalAmount: 250.00,
+            description: 'Test offer description',
+            craftsmanName: 'Test Craftsman'
+        };
+
+        console.log('🧪 Simulating real-time notification:', testNotification);
+        this.addRealTimeNotification(testNotification);
+        console.log('✅ Notification added! Check the bell icon - it should update WITHOUT refresh');
     }
 }

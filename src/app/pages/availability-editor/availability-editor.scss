@@ -1,0 +1,554 @@
+/* ========================================
+   AVAILABILITY EDITOR - SCSS STYLES
+   Following craftsman-wallet pattern
+   ======================================== */
+
+// Color Variables - Use CSS Custom Properties for theme support
+$gold: var(--primary-gold);
+$gold-hover: var(--primary-gold-hover);
+$gold-light: var(--primary-gold-light);
+$success: var(--success-green);
+$success-light: var(--success-light);
+$error: var(--error-red);
+$error-light: var(--error-light);
+
+// Animations
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+// Main Container
+.availability-container {
+  min-height: 100vh;
+  background: var(--background-light);
+  padding: 2.5rem 1rem;
+  animation: fade-in 0.6s ease-out;
+}
+
+// Page Header
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fade-in-up 0.5s ease-out;
+
+  h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, $gold 0%, #FFCD3C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: $gold;
+    color: #000;
+    font-weight: 700;
+    border-radius: 0.75rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba($gold, 0.25);
+
+    &:hover {
+      background: $gold-hover;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba($gold, 0.4);
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+// Loading State
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 0;
+  gap: 1.5rem;
+  animation: fade-in 0.5s ease-out;
+
+  .spinner {
+    width: 4rem;
+    height: 4rem;
+    border: 4px solid rgba($gold, 0.2);
+    border-top-color: $gold;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  p {
+    color: $gold;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Alert Messages
+.alert-message {
+  max-width: 48rem;
+  margin: 0 auto 1.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  animation: slide-in 0.3s ease-out;
+
+  &.error {
+    background: $error-light;
+    border: 2px solid $error;
+    color: $error;
+  }
+
+  &.success {
+    background: $success-light;
+    border: 2px solid $success;
+    color: $success;
+  }
+}
+
+// Form Card
+.form-card {
+  position: relative;
+  max-width: 80rem;
+  margin: 0 auto 3rem;
+  background: var(--background-white);
+  border: 2px solid rgba($gold, 0.25);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+  animation: fade-in-up 0.5s ease-out;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, $gold, transparent);
+    border-radius: 1.5rem 1.5rem 0 0;
+  }
+
+  &:hover {
+    border-color: rgba($gold, 0.4);
+    box-shadow: var(--shadow-xl);
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    span {
+      font-size: 1.875rem;
+    }
+  }
+
+  form {
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (min-width: 1024px) {
+        grid-template-columns: 1.5fr 1fr 1fr auto;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: var(--text-secondary);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        select,
+        input[type="time"] {
+          padding: 0.75rem 1rem;
+          background: var(--background-light);
+          border: 2px solid var(--border-light);
+          border-radius: 0.75rem;
+          color: var(--text-dark);
+          font-weight: 500;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+
+          &:hover {
+            border-color: rgba($gold, 0.3);
+          }
+
+          &:focus {
+            outline: none;
+            border-color: $gold;
+            box-shadow: 0 0 0 3px rgba($gold, 0.15);
+          }
+
+          &.error {
+            background: rgba($error, 0.1);
+            border-color: $error;
+            animation: shake 0.3s ease;
+
+            &:focus {
+              box-shadow: 0 0 0 3px rgba($error, 0.15);
+            }
+          }
+        }
+
+        .error-text {
+          color: $error;
+          font-size: 0.875rem;
+          font-weight: 600;
+        }
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        label {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.75rem 1.25rem;
+          background: var(--background-light);
+          border: 2px solid var(--border-light);
+          border-radius: 0.75rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: var(--background-accent);
+            border-color: $gold;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+          }
+
+          input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: $gold;
+            cursor: pointer;
+          }
+
+          span {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+          }
+        }
+      }
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, $gold 0%, $gold-hover 100%);
+      color: #000;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba($gold, 0.3);
+
+      &:hover:not(:disabled) {
+        background: linear-gradient(135deg, $gold-hover 0%, $gold 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba($gold, 0.4);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      @media (min-width: 768px) {
+        width: auto;
+      }
+    }
+  }
+}
+
+// Schedule Grid
+.schedule-grid {
+  max-width: 96rem;
+  margin: 0 auto;
+  animation: fade-in 0.6s ease-out;
+
+  h2 {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+
+    span {
+      font-size: 2.5rem;
+    }
+  }
+
+  .days-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .day-card {
+      background: var(--background-white);
+      border: 2px solid var(--border-light);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      animation: fade-in-up 0.5s ease-out;
+
+      &:hover {
+        transform: translateY(-4px);
+        border-color: rgba($gold, 0.3);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .day-header {
+        background: linear-gradient(135deg, rgba($gold, 0.1) 0%, transparent 100%);
+        padding: 1rem 1.5rem;
+        border-bottom: 2px solid var(--border-light);
+
+        h3 {
+          font-size: 1.125rem;
+          font-weight: 700;
+          color: var(--text-dark);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+      }
+
+      .day-content {
+        padding: 1.5rem;
+
+        .empty-state {
+          text-align: center;
+          padding: 2rem 1rem;
+          color: var(--text-muted);
+          font-style: italic;
+          background: var(--background-accent);
+          border-radius: 0.75rem;
+          border: 2px dashed var(--border-light);
+        }
+
+        .slots-container {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+
+          .slot-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            background: var(--background-light);
+            border: 2px solid var(--border-light);
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+
+            &:hover {
+              border-color: rgba($gold, 0.4);
+              box-shadow: var(--shadow-md);
+
+              .delete-button {
+                transform: scale(1.1);
+              }
+            }
+
+            .slot-info {
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+              flex: 1;
+
+              .icon {
+                font-size: 1.5rem;
+              }
+
+              .time-text {
+                font-size: 1.125rem;
+                font-weight: 700;
+                color: var(--text-dark);
+              }
+
+              .status-badge {
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+                font-size: 0.75rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+
+                &.available {
+                  background: rgba($success, 0.2);
+                  color: $success;
+                  border: 1px solid $success;
+                }
+
+                &.unavailable {
+                  background: var(--background-accent);
+                  color: var(--text-muted);
+                  border: 1px solid var(--border-light);
+                }
+              }
+            }
+
+            .delete-button {
+              width: 2.5rem;
+              height: 2.5rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: var(--background-light);
+              border: 2px solid rgba($error, 0.3);
+              color: $error;
+              border-radius: 50%;
+              font-size: 1.5rem;
+              font-weight: 700;
+              cursor: pointer;
+              transition: all 0.3s ease;
+
+              &:hover {
+                background: $error;
+                color: var(--text-dark);
+                border-color: $error;
+                transform: rotate(90deg) scale(1.1);
+                box-shadow: 0 4px 12px rgba($error, 0.3);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .availability-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .page-header {
+    h1 {
+      font-size: 2rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .form-card {
+    padding: 1.5rem;
+
+    h2 {
+      font-size: 1.25rem;
+    }
+  }
+
+  .schedule-grid {
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+}

@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { AvailabilityService } from '../../services/availability.service';
 import { CraftsmanService } from '../../services/craftsman.service';
 import {
@@ -14,9 +15,9 @@ import {
 @Component({
   selector: 'app-availability-editor',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule],
   templateUrl: './availability-editor.html',
-  styleUrl: './availability-editor.css'
+  styleUrl: './availability-editor.scss'
 })
 export class AvailabilityEditorComponent implements OnInit {
   private fb = inject(FormBuilder);

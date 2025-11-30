@@ -2,13 +2,10 @@ export enum NotificationType {
     SelectCraftsman = 'SelectCraftsman',
     CraftsmanAccepted = 'CraftsmanAccepted',
     CraftsmanRejected = 'CraftsmanRejected',
-    PriceRejectedByCraftsman = 'PriceRejectedByCraftsman',
-    NewPriceOfferedByCraftsman = 'NewPriceOfferedByCraftsman',
-    NewOfferFromCraftsman = 'NewOfferFromCraftsman', // Added to match backend
-    ClientAcceptedCraftsmanPrice = 'ClientAcceptedCraftsmanPrice',
-    ClientRejectedCraftsmanPrice = 'ClientRejectedCraftsmanPrice',
-    PaymentCompleted = 'PaymentCompleted',
-    ServiceCompleted = 'ServiceCompleted'
+    NewOfferFromCraftsman = 'NewOfferFromCraftsman',
+    ClientAcceptedOffer = 'ClientAcceptedOffer',
+    ClientRejectedOffer = 'ClientRejectedOffer',
+    PaymentRequested = 'PaymentRequested'
 }
 
 export interface ReadNotificationDto {

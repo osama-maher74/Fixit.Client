@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateModule } from '@ngx-translate/core';
 import { AvailabilityService } from '../../services/availability.service';
 import { TimeSlotDto } from '../../models/availability.models';
 import { BookingModalComponent, BookingDialogData } from '../../components/booking-modal/booking-modal';
@@ -11,9 +12,9 @@ import { BookingModalComponent, BookingDialogData } from '../../components/booki
 @Component({
   selector: 'app-time-slots',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatSnackBarModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatSnackBarModule, RouterLink, TranslateModule],
   templateUrl: './time-slots.html',
-  styleUrl: './time-slots.css'
+  styleUrl: './time-slots.scss'
 })
 export class TimeSlotsComponent implements OnInit {
   private fb = inject(FormBuilder);
