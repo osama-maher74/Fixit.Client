@@ -10,8 +10,6 @@ import { TimeSlotDto, WeekDayView, DAYS_OF_WEEK } from '../../models/availabilit
 import { CraftsmanProfile } from '../../models/craftsman.models';
 import { ClientProfile } from '../../models/client.models';
 import Swal from 'sweetalert2';
-import { NotificationService } from '../../services/notification.service';
-import { NotificationType } from '../../models/notification.models';
 
 @Component({
     selector: 'app-appointment-scheduling',
@@ -43,7 +41,6 @@ export class AppointmentSchedulingComponent implements OnInit {
     private serviceRequestService = inject(ServiceRequestService);
     private offerService = inject(OfferService);
     private clientService = inject(ClientService);
-    private notificationService = inject(NotificationService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
 
@@ -231,16 +228,8 @@ export class AppointmentSchedulingComponent implements OnInit {
                                 console.log('Appointment confirmed successfully:', response);
                                 this.isBooking = false;
 
-                                // Send notification to craftsman
-                                this.notificationService.createNotification({
-                                    serviceRequestId: this.serviceRequestId,
-                                    message: 'Client selected you for a service request',
-                                    type: NotificationType.SelectCraftsman,
-                                    recipientType: 'Craftsman'
-                                }).subscribe({
-                                    next: () => console.log('Notification sent to craftsman'),
-                                    error: (err) => console.error('Failed to send notification', err)
-                                });
+                                // ✅ Backend automatically creates SelectCraftsman notification
+                                // No need to manually create notification here
 
                                 Swal.fire({
                                     icon: 'success',

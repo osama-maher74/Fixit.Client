@@ -87,11 +87,13 @@ export class NotificationListComponent implements OnInit {
     console.log('🔔 Notification clicked:', notification);
     console.log('Notification ID:', notification.id);
     console.log('Notification type:', notification.type);
+    console.log('Notification isRead:', notification.isRead);  // ✅ Check isRead status
     console.log('Notification finalAmount:', notification.finalAmount);
     console.log('Notification offerId:', notification.offerId);
 
     // Mark as read optimistically (update UI immediately)
     if (!notification.isRead && notification.id) {
+      console.log('📝 Marking notification as read:', notification.id);
       // Update local state first for instant UI feedback
       this.notificationService.markLocalAsRead(notification.id);
 
@@ -123,9 +125,8 @@ export class NotificationListComponent implements OnInit {
       return;
     }
 
-    // Check if this is a new offer notification for client (check both types)
-    if (notification.type === NotificationType.NewPriceOfferedByCraftsman ||
-      notification.type === NotificationType.NewOfferFromCraftsman) {
+    // Check if this is a new offer notification for client
+    if (notification.type === NotificationType.NewOfferFromCraftsman) {
       // Navigate to offer review page with offer details in route state
       const offerId = notification.offerId || notification.id;
       console.log('✅ Matched new offer notification - navigating with state:', {
@@ -288,17 +289,15 @@ export class NotificationListComponent implements OnInit {
   getIconForType(type: NotificationType): string {
     switch (type) {
       case NotificationType.CraftsmanAccepted:
-      case NotificationType.ClientAcceptedCraftsmanPrice:
+      case NotificationType.ClientAcceptedOffer:
         return '✅';
       case NotificationType.CraftsmanRejected:
-      case NotificationType.PriceRejectedByCraftsman:
-      case NotificationType.ClientRejectedCraftsmanPrice:
+      case NotificationType.ClientRejectedOffer:
         return '❌';
-      case NotificationType.NewPriceOfferedByCraftsman:
       case NotificationType.NewOfferFromCraftsman:
         return '💰';
-      case NotificationType.ServiceCompleted:
-        return '🎉';
+      case NotificationType.PaymentRequested:
+        return '💳';
       default:
         return 'ℹ️';
     }
