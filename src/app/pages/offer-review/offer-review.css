@@ -222,8 +222,7 @@
 
 /* Pricing Card */
 .pricing-card {
-    background: linear-gradient(135deg, #FEF3E2 0%, #FFF9E6 100%);
-    border: 2px solid #FDB813;
+    background: var(--background-white);
 }
 
 .price-row {
@@ -259,12 +258,12 @@
 
 .price-value.total {
     font-size: 32px;
-    color: #FDB813;
+    color: var(--primary-gold);
 }
 
 .price-divider {
     height: 1px;
-    background: #FDB813;
+    background: var(--primary-gold);
     margin: 10px 0;
     opacity: 0.3;
 }
