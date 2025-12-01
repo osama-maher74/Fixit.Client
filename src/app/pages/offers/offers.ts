@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ServiceRequestService, ServiceRequestResponse } from '../../services/service-request.service';
 import { OfferService } from '../../services/offer.service';
 import { AuthService } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme.service';
+import { getSwalThemeConfig } from '../../helpers/swal-theme.helper';
 import { environment } from '../../../environments/environment';
 import { TranslateModule } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
@@ -21,6 +23,7 @@ export class OffersComponent implements OnInit {
   private serviceRequestService = inject(ServiceRequestService);
   private offerService = inject(OfferService);
   private authService = inject(AuthService);
+  private themeService = inject(ThemeService);
 
   serviceRequest: ServiceRequestResponse | null = null;
   loading = true;
@@ -74,12 +77,13 @@ export class OffersComponent implements OnInit {
     const serviceRequestId = this.serviceRequest.id || this.serviceRequest.servicesRequestId || 0;
 
     Swal.fire({
+      ...getSwalThemeConfig(this.themeService.isDark()),
       title: 'Accept Offer?',
       text: 'Are you sure you want to accept this service request?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#10B981',
-      cancelButtonColor: '#6B7280',
+      cancelButtonColor: this.themeService.isDark() ? '#555555' : '#6B7280',
       confirmButtonText: 'Yes, Accept',
       cancelButtonText: 'Cancel'
     }).then((result) => {
@@ -87,10 +91,10 @@ export class OffersComponent implements OnInit {
         this.offerService.craftsmanAccept({ serviceRequestId }).subscribe({
           next: () => {
             Swal.fire({
+              ...getSwalThemeConfig(this.themeService.isDark()),
               icon: 'success',
               title: 'Offer Accepted!',
               text: 'You have successfully accepted this service request',
-              confirmButtonColor: '#FDB813',
               timer: 3000
             });
             // Optionally navigate away or refresh data
@@ -101,10 +105,10 @@ export class OffersComponent implements OnInit {
           error: (err) => {
             console.error('Failed to accept offer:', err);
             Swal.fire({
+              ...getSwalThemeConfig(this.themeService.isDark()),
               icon: 'error',
               title: 'Failed to Accept',
-              text: 'An error occurred while accepting the offer. Please try again.',
-              confirmButtonColor: '#FDB813'
+              text: 'An error occurred while accepting the offer. Please try again.'
             });
           }
         });
@@ -118,10 +122,10 @@ export class OffersComponent implements OnInit {
 
     if (!this.serviceRequest?.id && !this.serviceRequest?.servicesRequestId) {
       Swal.fire({
+        ...getSwalThemeConfig(this.themeService.isDark()),
         icon: 'error',
         title: 'Error',
-        text: 'Service request ID not found',
-        confirmButtonColor: '#FDB813'
+        text: 'Service request ID not found'
       });
       return;
     }
@@ -129,12 +133,13 @@ export class OffersComponent implements OnInit {
     const serviceRequestId = this.serviceRequest.id || this.serviceRequest.servicesRequestId || 0;
 
     Swal.fire({
+      ...getSwalThemeConfig(this.themeService.isDark()),
       title: 'Reject Offer?',
       text: 'Are you sure you want to reject this service request?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#DC2626',
-      cancelButtonColor: '#6B7280',
+      cancelButtonColor: this.themeService.isDark() ? '#555555' : '#6B7280',
       confirmButtonText: 'Yes, Reject',
       cancelButtonText: 'Cancel'
     }).then((result) => {
@@ -142,10 +147,10 @@ export class OffersComponent implements OnInit {
         this.offerService.craftsmanReject({ serviceRequestId }).subscribe({
           next: () => {
             Swal.fire({
+              ...getSwalThemeConfig(this.themeService.isDark()),
               icon: 'success',
               title: 'Offer Rejected',
               text: 'You have rejected this service request',
-              confirmButtonColor: '#FDB813',
               timer: 3000
             });
             // Optionally navigate away or refresh data
@@ -156,10 +161,10 @@ export class OffersComponent implements OnInit {
           error: (err) => {
             console.error('Failed to reject offer:', err);
             Swal.fire({
+              ...getSwalThemeConfig(this.themeService.isDark()),
               icon: 'error',
               title: 'Failed to Reject',
-              text: 'An error occurred while rejecting the offer. Please try again.',
-              confirmButtonColor: '#FDB813'
+              text: 'An error occurred while rejecting the offer. Please try again.'
             });
           }
         });
@@ -173,10 +178,10 @@ export class OffersComponent implements OnInit {
 
     if (!this.serviceRequest?.id && !this.serviceRequest?.servicesRequestId) {
       Swal.fire({
+        ...getSwalThemeConfig(this.themeService.isDark()),
         icon: 'error',
         title: 'Error',
-        text: 'Service request ID not found',
-        confirmButtonColor: '#FDB813'
+        text: 'Service request ID not found'
       });
       return;
     }
@@ -184,13 +189,22 @@ export class OffersComponent implements OnInit {
     // Get serviceRequestId from the loaded service request
     const serviceRequestId = this.serviceRequest.id || this.serviceRequest.servicesRequestId || 0;
 
+    // Get theme colors
+    const isDark = this.themeService.isDark();
+    const labelColor = isDark ? '#F0F0F0' : '#374151';
+    const inputBg = isDark ? '#333333' : '#FFFFFF';
+    const inputBorder = isDark ? '#555555' : '#E5E7EB';
+    const inputText = isDark ? '#F0F0F0' : '#1F2937';
+    const placeholderColor = isDark ? '#808080' : '#9CA3AF';
+
     // Show themed form modal
     Swal.fire({
+      ...getSwalThemeConfig(isDark),
       title: 'Submit New Offer',
       html: `
         <div style="text-align: left;">
           <div style="margin-bottom: 20px;">
-            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: ${labelColor};">
               Final Amount (EGP)
             </label>
             <input 
@@ -200,11 +214,11 @@ export class OffersComponent implements OnInit {
               step="0.01"
               class="swal2-input" 
               placeholder="Enter amount in EGP"
-              style="width: 100%; padding: 12px; border: 1.5px solid #E5E7EB; border-radius: 8px; font-size: 16px;"
+              style="width: 100%; padding: 12px; border: 1.5px solid ${inputBorder}; border-radius: 8px; font-size: 16px; background-color: ${inputBg}; color: ${inputText};"
             />
           </div>
           <div style="margin-bottom: 20px;">
-            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: ${labelColor};">
               Description
             </label>
             <textarea 
@@ -212,7 +226,7 @@ export class OffersComponent implements OnInit {
               class="swal2-textarea" 
               placeholder="Describe your offer details..."
               rows="4"
-              style="width: 100%; padding: 12px; border: 1.5px solid #E5E7EB; border-radius: 8px; font-size: 16px; resize: vertical;"
+              style="width: 100%; padding: 12px; border: 1.5px solid ${inputBorder}; border-radius: 8px; font-size: 16px; resize: vertical; background-color: ${inputBg}; color: ${inputText};"
             ></textarea>
           </div>
         </div>
@@ -221,8 +235,19 @@ export class OffersComponent implements OnInit {
       confirmButtonText: 'Submit Offer',
       cancelButtonText: 'Cancel',
       confirmButtonColor: '#FDB813',
-      cancelButtonColor: '#6B7280',
+      cancelButtonColor: isDark ? '#555555' : '#6B7280',
       focusConfirm: false,
+      didOpen: () => {
+        // Apply placeholder color styling
+        const style = document.createElement('style');
+        style.textContent = `
+          #finalAmount::placeholder,
+          #description::placeholder {
+            color: ${placeholderColor};
+          }
+        `;
+        document.head.appendChild(style);
+      },
       preConfirm: () => {
         const finalAmountInput = document.getElementById('finalAmount') as HTMLInputElement;
         const descriptionInput = document.getElementById('description') as HTMLTextAreaElement;
@@ -249,10 +274,10 @@ export class OffersComponent implements OnInit {
 
         if (!craftsmanId) {
           Swal.fire({
+            ...getSwalThemeConfig(this.themeService.isDark()),
             icon: 'error',
             title: 'Error',
-            text: 'Craftsman ID not found in service request.',
-            confirmButtonColor: '#FDB813'
+            text: 'Craftsman ID not found in service request.'
           });
           return;
         }
@@ -270,20 +295,20 @@ export class OffersComponent implements OnInit {
           next: () => {
             console.log('New offer submitted successfully');
             Swal.fire({
+              ...getSwalThemeConfig(this.themeService.isDark()),
               icon: 'success',
               title: 'Offer Submitted!',
               text: 'Your new offer has been sent to the client successfully.',
-              confirmButtonColor: '#FDB813',
               timer: 3000
             });
           },
           error: (err) => {
             console.error('Failed to submit new offer:', err);
             Swal.fire({
+              ...getSwalThemeConfig(this.themeService.isDark()),
               icon: 'error',
               title: 'Submission Failed',
-              text: err.error?.message || 'Failed to submit your offer. Please try again.',
-              confirmButtonColor: '#FDB813'
+              text: err.error?.message || 'Failed to submit your offer. Please try again.'
             });
           }
         });

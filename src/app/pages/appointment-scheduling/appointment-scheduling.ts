@@ -6,6 +6,8 @@ import { CraftsmanService } from '../../services/craftsman.service';
 import { ServiceRequestService, ConfirmStartAtTimeDto } from '../../services/service-request.service';
 import { OfferService } from '../../services/offer.service';
 import { ClientService } from '../../services/client.service';
+import { ThemeService } from '../../services/theme.service';
+import { getSwalThemeConfig } from '../../helpers/swal-theme.helper';
 import { TimeSlotDto, WeekDayView, DAYS_OF_WEEK } from '../../models/availability.models';
 import { CraftsmanProfile } from '../../models/craftsman.models';
 import { ClientProfile } from '../../models/client.models';
@@ -41,6 +43,7 @@ export class AppointmentSchedulingComponent implements OnInit {
     private serviceRequestService = inject(ServiceRequestService);
     private offerService = inject(OfferService);
     private clientService = inject(ClientService);
+    private themeService = inject(ThemeService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
 
@@ -85,10 +88,10 @@ export class AppointmentSchedulingComponent implements OnInit {
                     console.error('Error loading craftsman:', error);
                     this.loadingCraftsman = false;
                     Swal.fire({
+                        ...getSwalThemeConfig(this.themeService.isDark()),
                         icon: 'error',
                         title: 'Error',
-                        text: 'Failed to load craftsman information',
-                        confirmButtonColor: '#FDB813'
+                        text: 'Failed to load craftsman information'
                     });
                 }
             });
@@ -157,20 +160,20 @@ export class AppointmentSchedulingComponent implements OnInit {
     confirmBooking(): void {
         if (!this.selectedTimeSlot) {
             Swal.fire({
+                ...getSwalThemeConfig(this.themeService.isDark()),
                 icon: 'warning',
                 title: 'No Time Slot Selected',
-                text: 'Please select a time slot before confirming',
-                confirmButtonColor: '#FDB813'
+                text: 'Please select a time slot before confirming'
             });
             return;
         }
 
         if (!this.serviceRequestId) {
             Swal.fire({
+                ...getSwalThemeConfig(this.themeService.isDark()),
                 icon: 'error',
                 title: 'Error',
-                text: 'Service request ID is missing',
-                confirmButtonColor: '#FDB813'
+                text: 'Service request ID is missing'
             });
             return;
         }
@@ -231,21 +234,27 @@ export class AppointmentSchedulingComponent implements OnInit {
                                 // ✅ Backend automatically creates SelectCraftsman notification
                                 // No need to manually create notification here
 
+                                const isDark = this.themeService.isDark();
+                                const textPrimary = isDark ? '#F0F0F0' : '#555';
+                                const textSecondary = isDark ? '#B8B8B8' : '#666';
+                                const infoBg = isDark ? 'rgba(253, 184, 19, 0.15)' : '#FEF3E2';
+
                                 Swal.fire({
+                                    ...getSwalThemeConfig(isDark),
                                     icon: 'success',
                                     title: 'Request Sent Successfully!',
                                     html: `
                                         <div style="text-align: center;">
-                                            <p style="font-size: 16px; color: #555; margin-bottom: 15px;">
+                                            <p style="font-size: 16px; color: ${textPrimary}; margin-bottom: 15px;">
                                                 Your appointment request has been sent to<br/>
                                                 <strong style="color: #FDB813;">${this.craftsman?.fName} ${this.craftsman?.lName}</strong>
                                             </p>
-                                            <p style="font-size: 15px; color: #666;">
+                                            <p style="font-size: 15px; color: ${textSecondary};">
                                                 📅 <strong>${this.selectedDay?.fullDayName}</strong><br/>
                                                 🕐 <strong>${this.selectedTimeSlot?.time}</strong>
                                             </p>
-                                            <div style="background: #FEF3E2; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                                                <p style="font-size: 14px; color: #666; margin: 0;">
+                                            <div style="background: ${infoBg}; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                                <p style="font-size: 14px; color: ${textSecondary}; margin: 0;">
                                                     Please wait for craftsman confirmation.<br/>
                                                     You will be notified once confirmed.
                                                 </p>
@@ -253,7 +262,6 @@ export class AppointmentSchedulingComponent implements OnInit {
                                         </div>
                                     `,
                                     confirmButtonText: 'Got it!',
-                                    confirmButtonColor: '#FDB813',
                                     showClass: {
                                         popup: 'animate__animated animate__fadeInDown'
                                     },
@@ -269,10 +277,10 @@ export class AppointmentSchedulingComponent implements OnInit {
                                 this.isBooking = false;
 
                                 Swal.fire({
+                                    ...getSwalThemeConfig(this.themeService.isDark()),
                                     icon: 'error',
                                     title: 'Time Update Failed',
-                                    text: error.error || 'Failed to set appointment time. Please try again.',
-                                    confirmButtonColor: '#FDB813'
+                                    text: error.error || 'Failed to set appointment time. Please try again.'
                                 });
                             }
                         });
@@ -282,10 +290,10 @@ export class AppointmentSchedulingComponent implements OnInit {
                     this.isBooking = false;
 
                     Swal.fire({
+                        ...getSwalThemeConfig(this.themeService.isDark()),
                         icon: 'error',
                         title: 'Selection Failed',
-                        text: error.error || 'Failed to select craftsman. Please try again.',
-                        confirmButtonColor: '#FDB813'
+                        text: error.error || 'Failed to select craftsman. Please try again.'
                     });
                 }
             });

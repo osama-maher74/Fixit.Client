@@ -7,6 +7,8 @@ import { ClientService } from '../../../services/client.service';
 import { CraftsmanService } from '../../../services/craftsman.service';
 import { AuthService } from '../../../services/auth.service';
 import { OfferService, ClientDecision } from '../../../services/offer.service';
+import { ThemeService } from '../../../services/theme.service';
+import { getSwalThemeConfig } from '../../../helpers/swal-theme.helper';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -22,6 +24,7 @@ export class NotificationListComponent implements OnInit {
   craftsmanService = inject(CraftsmanService);
   authService = inject(AuthService);
   offerService = inject(OfferService);
+  themeService = inject(ThemeService);
   router = inject(Router);
 
   ngOnInit() {
@@ -190,10 +193,10 @@ export class NotificationListComponent implements OnInit {
     if (!isClient && (title.includes('client rejected') || title.includes('rejected your'))) {
       console.log('❌ Client Rejected → Showing alert');
       Swal.fire({
+        ...getSwalThemeConfig(this.themeService.isDark()),
         icon: 'info',
         title: 'Offer Rejected',
-        text: notification.message || 'The client has rejected your offer.',
-        confirmButtonColor: '#FDB813'
+        text: notification.message || 'The client has rejected your offer.'
       });
       return;
     }
@@ -240,21 +243,31 @@ export class NotificationListComponent implements OnInit {
     const offerId = notification.offerId || notification.id;
     const serviceRequestId = notification.serviceRequestId;
 
+    const isDark = this.themeService.isDark();
+    const bgPrimary = isDark ? '#333333' : '#F9FAFB';
+    const bgSecondary = isDark ? '#2A2A2A' : '#FFFFFF';
+    const textPrimary = isDark ? '#F0F0F0' : '#374151';
+    const textSecondary = isDark ? '#B8B8B8' : '#6B7280';
+    const accentBg = isDark ? 'rgba(253, 184, 19, 0.15)' : '#FEF3E2';
+    const infoBg = isDark ? 'rgba(59, 130, 246, 0.15)' : '#EFF6FF';
+    const infoText = isDark ? '#60A5FA' : '#1E40AF';
+
     Swal.fire({
+      ...getSwalThemeConfig(isDark),
       title: '💰 New Offer Received!',
       html: `
         <div style="text-align: left; max-width: 450px; margin: 0 auto;">
-          <div style="background: #F9FAFB; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <p style="font-size: 14px; color: #6B7280; margin: 0 0 5px 0;">
+          <div style="background: ${bgPrimary}; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="font-size: 14px; color: ${textSecondary}; margin: 0 0 5px 0;">
               From
             </p>
-            <p style="font-size: 16px; font-weight: 600; color: #374151; margin: 0;">
+            <p style="font-size: 16px; font-weight: 600; color: ${textPrimary}; margin: 0;">
               ${craftsmanName}
             </p>
           </div>
 
-          <div style="background: #FEF3E2; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #FDB813;">
-            <p style="font-size: 14px; color: #6B7280; margin: 0 0 5px 0;">
+          <div style="background: ${accentBg}; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #FDB813;">
+            <p style="font-size: 14px; color: ${textSecondary}; margin: 0 0 5px 0;">
               Offered Price
             </p>
             <p style="font-size: 28px; font-weight: 700; color: #FDB813; margin: 0;">
@@ -262,17 +275,17 @@ export class NotificationListComponent implements OnInit {
             </p>
           </div>
 
-          <div style="background: #F9FAFB; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <p style="font-size: 14px; color: #6B7280; margin: 0 0 8px 0; font-weight: 600;">
+          <div style="background: ${bgPrimary}; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="font-size: 14px; color: ${textSecondary}; margin: 0 0 8px 0; font-weight: 600;">
               Description
             </p>
-            <p style="font-size: 14px; color: #374151; margin: 0; line-height: 1.6;">
+            <p style="font-size: 14px; color: ${textPrimary}; margin: 0; line-height: 1.6;">
               ${description}
             </p>
           </div>
 
-          <div style="background: #EFF6FF; padding: 12px; border-radius: 8px; border-left: 4px solid #3B82F6;">
-            <p style="font-size: 13px; color: #1E40AF; margin: 0;">
+          <div style="background: ${infoBg}; padding: 12px; border-radius: 8px; border-left: 4px solid #3B82F6;">
+            <p style="font-size: 13px; color: ${infoText}; margin: 0;">
               ℹ️ Accept or decline this offer
             </p>
           </div>
@@ -304,10 +317,10 @@ export class NotificationListComponent implements OnInit {
         if (decision === ClientDecision.Accept && serviceRequestId) {
           // Client accepted - route to payment page
           Swal.fire({
+            ...getSwalThemeConfig(this.themeService.isDark()),
             icon: 'success',
             title: 'Offer Accepted!',
             text: 'Redirecting to payment page...',
-            confirmButtonColor: '#FDB813',
             timer: 2000,
             showConfirmButton: false
           }).then(() => {
@@ -316,10 +329,10 @@ export class NotificationListComponent implements OnInit {
         } else {
           // Client rejected
           Swal.fire({
+            ...getSwalThemeConfig(this.themeService.isDark()),
             icon: 'success',
             title: 'Response Sent',
             text: 'You have declined the offer.',
-            confirmButtonColor: '#FDB813',
             timer: 3000
           });
 
@@ -335,10 +348,10 @@ export class NotificationListComponent implements OnInit {
       error: (err) => {
         console.error('Failed to respond to offer:', err);
         Swal.fire({
+          ...getSwalThemeConfig(this.themeService.isDark()),
           icon: 'error',
           title: 'Failed to Respond',
-          text: 'An error occurred. Please try again.',
-          confirmButtonColor: '#FDB813'
+          text: 'An error occurred. Please try again.'
         });
       }
     });
