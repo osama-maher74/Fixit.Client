@@ -5,12 +5,13 @@ import { ServiceRequestService, ServiceRequestResponse } from '../../services/se
 import { OfferService } from '../../services/offer.service';
 import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
+import { TranslateModule } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-offers',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './offers.html',
   styleUrl: './offers.css'
 })
@@ -306,6 +307,17 @@ export class OffersComponent implements OnInit {
   }
 
   getImageUrl(): string {
+    // Check for serviceRequestImage first (the image uploaded by the client)
+    if (this.serviceRequest?.serviceRequestImage) {
+      // Check if it's already a full URL
+      if (this.serviceRequest.serviceRequestImage.startsWith('http')) {
+        return this.serviceRequest.serviceRequestImage;
+      }
+      // Otherwise prepend the API base URL
+      return `${this.apiUrl}${this.serviceRequest.serviceRequestImage}`;
+    }
+
+    // Fallback to imageUrl if serviceRequestImage is not available
     if (this.serviceRequest?.imageUrl) {
       // Check if it's already a full URL
       if (this.serviceRequest.imageUrl.startsWith('http')) {
@@ -314,7 +326,9 @@ export class OffersComponent implements OnInit {
       // Otherwise prepend the API base URL
       return `${this.apiUrl}${this.serviceRequest.imageUrl}`;
     }
-    return 'assets/offer-placeholder.png'; // Fallback image
+
+    // Return a default service-related image if no image is available
+    return 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80';
   }
 
   formatDate(dateString: string | undefined): string {
@@ -330,8 +344,63 @@ export class OffersComponent implements OnInit {
     });
   }
 
+  /**
+   * Map numeric status values to enum names
+   */
+  private getStatusEnumName(status: any): string {
+    // Handle null/undefined
+    if (status === null || status === undefined) return 'Pending';
+
+    // If it's already a string, return it
+    if (typeof status === 'string') return status;
+
+    // Map numeric values to enum names based on C# enum
+    const statusMap: { [key: number]: string } = {
+      0: 'Pending',
+      1: 'WaitingForCraftsmanResponse',
+      2: 'WaitingForClientDecision',
+      3: 'WaitingForClientPayment',
+      4: 'RejectedByCraftsman',
+      5: 'RejectedByClient',
+      6: 'InProgress',
+      7: 'Completed',
+      8: 'Approved',
+      9: 'Cancelled',
+      10: 'CancelledDueToNonPayment'
+    };
+
+    const numericStatus = Number(status);
+    return statusMap[numericStatus] || 'Pending';
+  }
+
   getStatusClass(status: any): string {
-    if (!status) return '';
-    return String(status).toLowerCase();
+    const statusName = this.getStatusEnumName(status);
+    const statusStr = statusName.toLowerCase();
+
+    // Map backend status to CSS classes
+    if (statusStr.includes('waiting')) return 'waiting';
+    if (statusStr.includes('reject')) return 'rejected';
+    if (statusStr.includes('approved') || statusStr.includes('completed')) return 'approved';
+    if (statusStr.includes('inprogress')) return 'inprogress';
+    if (statusStr.includes('cancel')) return 'cancelled';
+    if (statusStr === 'pending') return 'pending';
+
+    return 'pending';
+  }
+
+  /**
+   * Get translation key for status
+   */
+  formatStatus(status: any): string {
+    const statusName = this.getStatusEnumName(status);
+
+    // Convert to uppercase snake_case for translation key
+    // e.g., "WaitingForCraftsmanResponse" -> "WAITING_FOR_CRAFTSMAN_RESPONSE"
+    const translationKey = statusName
+      .replace(/([A-Z])/g, '_$1')
+      .toUpperCase()
+      .replace(/^_/, '');
+
+    return `OFFERS.STATUS_VALUES.${translationKey}`;
   }
 }

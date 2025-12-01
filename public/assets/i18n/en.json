@@ -280,5 +280,115 @@
       "CLOSE": "Close"
     }
   },
+  "OFFERS": {
+    "TITLE": "Service Request Offer",
+    "LOADING": "Loading offer details...",
+    "ERROR_TITLE": "Oops!",
+    "GO_BACK": "Go Back",
+    "DESCRIPTION": "Description",
+    "LOCATION": "Location",
+    "SERVICE_START_TIME": "Service Start Time",
+    "STATUS": "Status",
+    "NOT_SPECIFIED": "Not specified",
+    "NOT_SCHEDULED": "Not scheduled",
+    "SUGGESTED_PRICE": "Suggested Price",
+    "ACTIONS": {
+      "ACCEPT": "Accept",
+      "REJECT": "Reject",
+      "NEW_OFFER": "New Offer"
+    },
+    "DIALOGS": {
+      "ACCEPT_TITLE": "Accept Offer?",
+      "ACCEPT_TEXT": "Are you sure you want to accept this service request?",
+      "REJECT_TITLE": "Reject Offer?",
+      "REJECT_TEXT": "Are you sure you want to reject this service request?",
+      "NEW_OFFER_TITLE": "Submit New Offer",
+      "FINAL_AMOUNT_LABEL": "Final Amount (EGP)",
+      "FINAL_AMOUNT_PLACEHOLDER": "Enter amount in EGP",
+      "DESCRIPTION_LABEL": "Description",
+      "DESCRIPTION_PLACEHOLDER": "Describe your offer details...",
+      "SUBMIT_OFFER": "Submit Offer",
+      "CANCEL": "Cancel",
+      "YES_ACCEPT": "Yes, Accept",
+      "YES_REJECT": "Yes, Reject"
+    },
+    "SUCCESS": {
+      "ACCEPTED": "Offer Accepted!",
+      "ACCEPTED_TEXT": "You have successfully accepted this service request",
+      "REJECTED": "Offer Rejected",
+      "REJECTED_TEXT": "You have rejected this service request",
+      "OFFER_SUBMITTED": "Offer Submitted!",
+      "OFFER_SUBMITTED_TEXT": "Your new offer has been sent to the client successfully."
+    },
+    "ERRORS": {
+      "FAILED_TO_ACCEPT": "Failed to Accept",
+      "FAILED_TO_REJECT": "Failed to Reject",
+      "SUBMISSION_FAILED": "Submission Failed",
+      "ERROR_TEXT": "An error occurred. Please try again.",
+      "MISSING_SERVICE_REQUEST_ID": "Service request ID not found",
+      "MISSING_CRAFTSMAN_ID": "Craftsman ID not found in service request.",
+      "AMOUNT_REQUIRED": "Please enter a valid amount greater than 0",
+      "DESCRIPTION_REQUIRED": "Please provide a description for your offer"
+    },
+    "STATUS_VALUES": {
+      "PENDING": "Pending",
+      "WAITING_FOR_CRAFTSMAN_RESPONSE": "Waiting For Craftsman Response",
+      "WAITING_FOR_CLIENT_DECISION": "Waiting For Client Decision",
+      "WAITING_FOR_CLIENT_PAYMENT": "Waiting For Client Payment",
+      "REJECTED_BY_CRAFTSMAN": "Rejected By Craftsman",
+      "REJECTED_BY_CLIENT": "Rejected By Client",
+      "IN_PROGRESS": "In Progress",
+      "COMPLETED": "Completed",
+      "APPROVED": "Approved",
+      "CANCELLED": "Cancelled",
+      "CANCELLED_DUE_TO_NON_PAYMENT": "Cancelled Due To Non Payment"
+    }
+  },
+  "OFFER_REVIEW": {
+    "TITLE": "Offer Review",
+    "LOADING": "Loading offer details...",
+    "ERROR_TITLE": "Unable to Load Offer",
+    "BACK": "Back",
+    "SERVICE_DETAILS": "Service Details",
+    "TIMELINE": "Timeline",
+    "PRICING_DETAILS": "Pricing Details",
+    "SERVICE_NAME": "Service Name",
+    "CLIENT_NAME": "Client Name",
+    "CRAFTSMAN": "Craftsman",
+    "NOT_ASSIGNED": "Not assigned",
+    "LOCATION": "Location",
+    "DESCRIPTION": "Description",
+    "NO_DESCRIPTION": "No description provided",
+    "REQUESTED_AT": "Requested At",
+    "SERVICE_START_TIME": "Service Start Time",
+    "COMPLETED_AT": "Completed At",
+    "WAITING_FOR_PAYMENT": "Waiting for Payment",
+    "NOT_SET": "Not set",
+    "SUGGESTED_PRICE": "Suggested Price",
+    "CRAFTSMAN_OFFER": "Craftsman's Offer",
+    "OFFER_DETAILS": "Offer Details",
+    "NOT_AVAILABLE": "N/A",
+    "ACTIONS": {
+      "ACCEPT_OFFER": "Accept Offer",
+      "REJECT_OFFER": "Reject Offer",
+      "NEW_OFFER": "New Offer"
+    },
+    "DIALOGS": {
+      "ACCEPT_TITLE": "Accept Offer?",
+      "ACCEPT_TEXT": "Are you sure you want to accept this offer for {amount} EGP?",
+      "REJECT_TITLE": "Reject Offer?",
+      "REJECT_TEXT": "Are you sure you want to reject this offer?"
+    },
+    "SUCCESS": {
+      "ACCEPTED": "Offer Accepted!",
+      "ACCEPTED_TEXT": "Redirecting to payment page...",
+      "DECLINED": "Offer Declined",
+      "DECLINED_TEXT": "You have declined the offer."
+    },
+    "ERRORS": {
+      "FAILED_TO_RESPOND": "Failed to Respond",
+      "ERROR_TEXT": "An error occurred. Please try again."
+    }
+  },
   "ERROR_DEFAULT": "An error occurred. Please try again."
 }

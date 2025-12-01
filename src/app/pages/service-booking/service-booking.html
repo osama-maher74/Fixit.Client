@@ -162,8 +162,8 @@
     </div>
 </div>
 
-<!-- Fallback when no service is selected -->
-<div class="service-booking-container no-service" *ngIf="!selectedService">
+<!-- Fallback when no service is selected - ONLY show if NOT loading -->
+<div class="service-booking-container no-service" *ngIf="!isLoadingService && !selectedService">
     <div class="fallback-content">
         <svg class="fallback-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round"

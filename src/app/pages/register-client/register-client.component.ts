@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 import { Gender, ClientRegisterRequest } from '../../models/auth.models';
 
 @Component({
@@ -16,6 +17,7 @@ import { Gender, ClientRegisterRequest } from '../../models/auth.models';
 export class RegisterClientComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
   private translate = inject(TranslateService);
 
@@ -117,6 +119,9 @@ export class RegisterClientComponent {
         next: (response) => {
           this.isLoading.set(false);
           this.successMessage.set(this.translate.instant('REGISTER_CLIENT.SUCCESS_MESSAGE'));
+
+          // Start SignalR connection after successful registration
+          this.notificationService.reconnectSignalR();
 
           setTimeout(() => {
             this.router.navigate(['/']);

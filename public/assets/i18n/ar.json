@@ -280,5 +280,115 @@
       "CLOSE": "إغلاق"
     }
   },
+  "OFFERS": {
+    "TITLE": "عرض طلب الخدمة",
+    "LOADING": "جاري تحميل تفاصيل العرض...",
+    "ERROR_TITLE": "عذراً!",
+    "GO_BACK": "العودة",
+    "DESCRIPTION": "الوصف",
+    "LOCATION": "الموقع",
+    "SERVICE_START_TIME": "وقت بدء الخدمة",
+    "STATUS": "الحالة",
+    "NOT_SPECIFIED": "غير محدد",
+    "NOT_SCHEDULED": "غير مجدول",
+    "SUGGESTED_PRICE": "السعر المقترح",
+    "ACTIONS": {
+      "ACCEPT": "قبول",
+      "REJECT": "رفض",
+      "NEW_OFFER": "عرض جديد"
+    },
+    "DIALOGS": {
+      "ACCEPT_TITLE": "قبول العرض؟",
+      "ACCEPT_TEXT": "هل أنت متأكد من قبول طلب الخدمة هذا؟",
+      "REJECT_TITLE": "رفض العرض؟",
+      "REJECT_TEXT": "هل أنت متأكد من رفض طلب الخدمة هذا؟",
+      "NEW_OFFER_TITLE": "تقديم عرض جديد",
+      "FINAL_AMOUNT_LABEL": "المبلغ النهائي (جنيه)",
+      "FINAL_AMOUNT_PLACEHOLDER": "أدخل المبلغ بالجنيه",
+      "DESCRIPTION_LABEL": "الوصف",
+      "DESCRIPTION_PLACEHOLDER": "اوصف تفاصيل عرضك...",
+      "SUBMIT_OFFER": "تقديم العرض",
+      "CANCEL": "إلغاء",
+      "YES_ACCEPT": "نعم، قبول",
+      "YES_REJECT": "نعم، رفض"
+    },
+    "SUCCESS": {
+      "ACCEPTED": "تم قبول العرض!",
+      "ACCEPTED_TEXT": "لقد قبلت طلب الخدمة بنجاح",
+      "REJECTED": "تم رفض العرض",
+      "REJECTED_TEXT": "لقد رفضت طلب الخدمة",
+      "OFFER_SUBMITTED": "تم تقديم العرض!",
+      "OFFER_SUBMITTED_TEXT": "تم إرسال عرضك الجديد إلى العميل بنجاح."
+    },
+    "ERRORS": {
+      "FAILED_TO_ACCEPT": "فشل القبول",
+      "FAILED_TO_REJECT": "فشل الرفض",
+      "SUBMISSION_FAILED": "فشل التقديم",
+      "ERROR_TEXT": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+      "MISSING_SERVICE_REQUEST_ID": "معرف طلب الخدمة غير موجود",
+      "MISSING_CRAFTSMAN_ID": "معرف الحرفي غير موجود في طلب الخدمة.",
+      "AMOUNT_REQUIRED": "يرجى إدخال مبلغ صحيح أكبر من 0",
+      "DESCRIPTION_REQUIRED": "يرجى تقديم وصف لعرضك"
+    },
+    "STATUS_VALUES": {
+      "PENDING": "قيد الانتظار",
+      "WAITING_FOR_CRAFTSMAN_RESPONSE": "في انتظار رد الحرفي",
+      "WAITING_FOR_CLIENT_DECISION": "في انتظار قرار العميل",
+      "WAITING_FOR_CLIENT_PAYMENT": "في انتظار دفع العميل",
+      "REJECTED_BY_CRAFTSMAN": "مرفوض من الحرفي",
+      "REJECTED_BY_CLIENT": "مرفوض من العميل",
+      "IN_PROGRESS": "قيد التنفيذ",
+      "COMPLETED": "مكتمل",
+      "APPROVED": "معتمد",
+      "CANCELLED": "ملغى",
+      "CANCELLED_DUE_TO_NON_PAYMENT": "ملغى بسبب عدم الدفع"
+    }
+  },
+  "OFFER_REVIEW": {
+    "TITLE": "مراجعة العرض",
+    "LOADING": "جاري تحميل تفاصيل العرض...",
+    "ERROR_TITLE": "تعذر تحميل العرض",
+    "BACK": "رجوع",
+    "SERVICE_DETAILS": "تفاصيل الخدمة",
+    "TIMELINE": "الجدول الزمني",
+    "PRICING_DETAILS": "تفاصيل الأسعار",
+    "SERVICE_NAME": "اسم الخدمة",
+    "CLIENT_NAME": "اسم العميل",
+    "CRAFTSMAN": "الحرفي",
+    "NOT_ASSIGNED": "غير معين",
+    "LOCATION": "الموقع",
+    "DESCRIPTION": "الوصف",
+    "NO_DESCRIPTION": "لم يتم تقديم وصف",
+    "REQUESTED_AT": "تم الطلب في",
+    "SERVICE_START_TIME": "وقت بدء الخدمة",
+    "COMPLETED_AT": "اكتمل في",
+    "WAITING_FOR_PAYMENT": "في انتظار الدفع",
+    "NOT_SET": "غير محدد",
+    "SUGGESTED_PRICE": "السعر المقترح",
+    "CRAFTSMAN_OFFER": "عرض الحرفي",
+    "OFFER_DETAILS": "تفاصيل العرض",
+    "NOT_AVAILABLE": "غير متوفر",
+    "ACTIONS": {
+      "ACCEPT_OFFER": "قبول العرض",
+      "REJECT_OFFER": "رفض العرض",
+      "NEW_OFFER": "عرض جديد"
+    },
+    "DIALOGS": {
+      "ACCEPT_TITLE": "قبول العرض؟",
+      "ACCEPT_TEXT": "هل أنت متأكد من قبول هذا العرض مقابل {amount} جنيه؟",
+      "REJECT_TITLE": "رفض العرض؟",
+      "REJECT_TEXT": "هل أنت متأكد من رفض هذا العرض؟"
+    },
+    "SUCCESS": {
+      "ACCEPTED": "تم قبول العرض!",
+      "ACCEPTED_TEXT": "جاري التوجيه إلى صفحة الدفع...",
+      "DECLINED": "تم رفض العرض",
+      "DECLINED_TEXT": "لقد رفضت العرض."
+    },
+    "ERRORS": {
+      "FAILED_TO_RESPOND": "فشل الرد",
+      "ERROR_TEXT": "حدث خطأ. يرجى المحاولة مرة أخرى."
+    }
+  },
   "ERROR_DEFAULT": "حدث خطأ. يرجى المحاولة مرة أخرى."
 }

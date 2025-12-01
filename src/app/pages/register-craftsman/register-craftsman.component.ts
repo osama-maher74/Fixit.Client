@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 import { ServiceService } from '../../services/service.service';
 import { Gender, CraftsmanRegisterRequest } from '../../models/auth.models';
 import { ServiceCard } from '../../components/service-card/service-card.component';
@@ -18,6 +19,7 @@ import { ServiceCard } from '../../components/service-card/service-card.componen
 export class RegisterCraftsmanComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private notificationService = inject(NotificationService);
   private serviceService = inject(ServiceService);
   private router = inject(Router);
   private translate = inject(TranslateService);
@@ -151,6 +153,9 @@ export class RegisterCraftsmanComponent implements OnInit {
         next: (response) => {
           this.isLoading.set(false);
           this.successMessage.set(this.translate.instant('REGISTER_CRAFTSMAN.SUCCESS_MESSAGE'));
+
+          // Start SignalR connection after successful registration
+          this.notificationService.reconnectSignalR();
 
           setTimeout(() => {
             this.router.navigate(['/craftsman-profile']);

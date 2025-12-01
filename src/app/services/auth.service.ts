@@ -10,6 +10,7 @@ import {
   AuthResponse,
   User
 } from '../models/auth.models';
+import type { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ import {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private notificationService?: NotificationService;
 
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'current_user';
@@ -96,12 +98,22 @@ export class AuthService {
   }
 
   logout(): void {
+    // Disconnect SignalR before clearing auth data
+    if (this.notificationService) {
+      this.notificationService.disconnectSignalR();
+    }
+
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
     localStorage.removeItem('email');
     this.currentUserSubject.next(null);
     this.isAuthenticated.set(false);
     this.router.navigate(['/login']);
+  }
+
+  // Called by NotificationService to set itself (avoids circular dependency)
+  setNotificationService(service: NotificationService): void {
+    this.notificationService = service;
   }
 
   getToken(): string | null {

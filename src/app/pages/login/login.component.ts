@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 import { LoginRequest } from '../../models/auth.models';
 
 @Component({
@@ -16,6 +17,7 @@ import { LoginRequest } from '../../models/auth.models';
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
@@ -63,6 +65,9 @@ export class LoginComponent {
         next: (response) => {
           console.log('========== LOGIN SUCCESS ==========');
           console.log('Login response received:', response);
+
+          // Start SignalR connection after successful login
+          this.notificationService.reconnectSignalR();
 
           // Wait a moment for auth service to finish storing data
           setTimeout(() => {

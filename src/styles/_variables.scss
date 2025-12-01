@@ -1,0 +1,168 @@
+// Maharah Project - Shared Design System Variables
+// Use these variables across all pages for consistent UI
+
+// ========== TYPOGRAPHY ==========
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap');
+$font-family: 'Cairo', sans-serif;
+
+// ========== COLOR PALETTE ==========
+// Primary Brand Colors
+$gold: #FDB813;
+$gold-light: #f5a623;
+$gold-hover: #E5A510;
+
+// Background Colors
+$dark-bg: #0A0A0A;
+$dark-bg-secondary: #1a1a1a;
+$card-bg: #1E1E1E;
+$card-bg-hover: #2A2A2A;
+
+// Text Colors
+$text-primary: #FFFFFF;
+$text-secondary: #B0B0B0;
+$text-muted: #808080;
+
+// UI Colors
+$border-color: #333333;
+$success: #10B981;
+$error: #EF4444;
+$warning: #F59E0B;
+
+// Shadows
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.35);
+$shadow-xl: 0 10px 40px rgba(0, 0, 0, 0.5);
+$shadow-gold: 0 8px 24px rgba($gold, 0.3);
+$shadow-gold-hover: 0 8px 20px rgba($gold, 0.5);
+
+// ========== SPACING ==========
+$spacing-xs: 0.5rem;
+$spacing-sm: 0.75rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-2xl: 2.5rem;
+$spacing-3xl: 3rem;
+
+// ========== BORDER RADIUS ==========
+$radius-sm: 8px;
+$radius-md: 10px;
+$radius-lg: 12px;
+$radius-xl: 14px;
+$radius-2xl: 16px;
+$radius-3xl: 20px;
+$radius-round: 50%;
+
+// ========== TRANSITIONS ==========
+$transition-fast: 0.2s ease;
+$transition-base: 0.3s ease;
+$transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+// ========== BREAKPOINTS ==========
+$breakpoint-xs: 480px;
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// ========== MIXINS ==========
+@mixin card-base {
+  background: linear-gradient(135deg, $card-bg 0%, $card-bg-hover 100%);
+  border: 1px solid $border-color;
+  border-radius: $radius-3xl;
+  box-shadow: $shadow-xl;
+}
+
+@mixin button-gold {
+  background: linear-gradient(135deg, $gold, $gold-light);
+  color: #000;
+  border: none;
+  padding: 0.875rem 1.75rem;
+  border-radius: $radius-md;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all $transition-base;
+  font-family: $font-family;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: $shadow-gold-hover;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-success {
+  background: linear-gradient(135deg, $success 0%, #059669 100%);
+  color: white;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 12px rgba($success, 0.3);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba($success, 0.5);
+  }
+}
+
+@mixin button-error {
+  background: linear-gradient(135deg, $error 0%, #B91C1C 100%);
+  color: white;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 12px rgba($error, 0.3);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #B91C1C 0%, #991B1B 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba($error, 0.5);
+  }
+}
+
+@mixin animation-slide-up {
+  animation: slideUp 0.5s ease-out;
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@mixin animation-fade-in {
+  animation: fadeIn 0.5s ease-out;
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+@mixin animation-fade-in-up {
+  animation: fadeInUp 0.5s ease-out backwards;
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

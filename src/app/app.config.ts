@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, ErrorHandler, importProvidersFrom, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withInterceptors, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 import { routes } from './app.routes';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { errorInterceptor } from './interceptors/error.interceptor';
+import { loadingInterceptor } from './interceptors/loading.interceptor';
+import { GlobalErrorHandler } from './services/global-error-handler';
 
 export class CustomTranslateLoader implements TranslateLoader {
   constructor(private http: HttpClient) {}
@@ -32,7 +34,7 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideHttpClient(
-      withInterceptors([authInterceptor, errorInterceptor])
+      withInterceptors([loadingInterceptor, authInterceptor, errorInterceptor])
     ),
     importProvidersFrom(
       TranslateModule.forRoot({
@@ -42,6 +44,11 @@ export const appConfig: ApplicationConfig = {
           deps: [HttpClient]
         }
       })
-    )
+    ),
+    // Global Error Handler - catches all errors and shows loading instead
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    }
   ]
 };

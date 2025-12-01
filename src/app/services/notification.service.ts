@@ -24,7 +24,13 @@ export class NotificationService {
     notificationReceived$ = this.notificationReceivedSubject.asObservable();
 
     constructor() {
-        this.startSignalRConnection();
+        // Register this service with AuthService to avoid circular dependency
+        this.authService.setNotificationService(this);
+
+        // Only start SignalR if user is already authenticated (e.g., page refresh with stored token)
+        if (this.authService.getToken()) {
+            this.startSignalRConnection();
+        }
     }
 
     // --- API Methods ---

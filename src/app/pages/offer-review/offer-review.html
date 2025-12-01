@@ -2,25 +2,25 @@
     <!-- Loading State -->
     <div *ngIf="loading" class="loading-state">
         <div class="spinner"></div>
-        <p>Loading offer details...</p>
+        <p>{{ 'OFFER_REVIEW.LOADING' | translate }}</p>
     </div>
 
     <!-- Error State -->
     <div *ngIf="error && !loading" class="error-state">
         <div class="error-icon">⚠️</div>
-        <h2>Unable to Load Offer</h2>
+        <h2>{{ 'OFFER_REVIEW.ERROR.TITLE' | translate }}</h2>
         <p>{{ error }}</p>
-        <button class="btn-back" (click)="goBack()">← Go Back</button>
+        <button class="btn-back" (click)="goBack()">← {{ 'OFFER_REVIEW.BACK' | translate }}</button>
     </div>
 
     <!-- Main Content -->
     <div *ngIf="serviceRequest && !loading" class="offer-content">
         <!-- Header -->
         <div class="offer-header">
-            <button class="btn-back-inline" (click)="goBack()">← Back</button>
-            <h1>Offer Review</h1>
-            <div class="status-badge" [class.active]="serviceRequest.status === 'Active'">
-                {{ serviceRequest.status }}
+            <button class="btn-back-inline" (click)="goBack()">← {{ 'OFFER_REVIEW.BACK' | translate }}</button>
+            <h1>{{ 'OFFER_REVIEW.TITLE' | translate }}</h1>
+            <div class="status-badge" [ngClass]="getStatusClass(serviceRequest.status)">
+                {{ formatStatus(serviceRequest.status) | translate }}
             </div>
         </div>
 
@@ -31,59 +31,59 @@
 
         <!-- Main Details Card -->
         <div class="details-card">
-            <h2 class="card-title">Service Details</h2>
+            <h2 class="card-title">{{ 'OFFER_REVIEW.SERVICE_DETAILS' | translate }}</h2>
 
             <div class="detail-grid">
                 <div class="detail-item">
-                    <span class="detail-label">Service Name</span>
-                    <span class="detail-value">{{ serviceRequest.serviceName || 'N/A' }}</span>
+                    <span class="detail-label">{{ 'OFFER_REVIEW.SERVICE_NAME' | translate }}</span>
+                    <span class="detail-value">{{ serviceRequest.serviceName || ('OFFER_REVIEW.NOT_AVAILABLE' | translate) }}</span>
                 </div>
 
                 <div class="detail-item">
-                    <span class="detail-label">Client Name</span>
-                    <span class="detail-value">{{ serviceRequest.clientName || 'N/A' }}</span>
+                    <span class="detail-label">{{ 'OFFER_REVIEW.CLIENT_NAME' | translate }}</span>
+                    <span class="detail-value">{{ serviceRequest.clientName || ('OFFER_REVIEW.NOT_AVAILABLE' | translate) }}</span>
                 </div>
 
                 <div class="detail-item">
-                    <span class="detail-label">Craftsman</span>
-                    <span class="detail-value">{{ offerCraftsmanName || serviceRequest.craftsManName || 'Not assigned'
+                    <span class="detail-label">{{ 'OFFER_REVIEW.CRAFTSMAN' | translate }}</span>
+                    <span class="detail-value">{{ offerCraftsmanName || serviceRequest.craftsManName || ('OFFER_REVIEW.NOT_ASSIGNED' | translate)
                         }}</span>
                 </div>
 
                 <div class="detail-item">
-                    <span class="detail-label">Location</span>
-                    <span class="detail-value">{{ serviceRequest.location || 'N/A' }}</span>
+                    <span class="detail-label">{{ 'OFFER_REVIEW.LOCATION' | translate }}</span>
+                    <span class="detail-value">{{ serviceRequest.location || ('OFFER_REVIEW.NOT_AVAILABLE' | translate) }}</span>
                 </div>
             </div>
 
             <div class="detail-item full-width">
-                <span class="detail-label">Description</span>
-                <p class="detail-description">{{ serviceRequest.description || 'No description provided' }}</p>
+                <span class="detail-label">{{ 'OFFER_REVIEW.DESCRIPTION' | translate }}</span>
+                <p class="detail-description">{{ serviceRequest.description || ('OFFER_REVIEW.NO_DESCRIPTION' | translate) }}</p>
             </div>
         </div>
 
         <!-- Dates Card -->
         <div class="details-card">
-            <h2 class="card-title">Timeline</h2>
+            <h2 class="card-title">{{ 'OFFER_REVIEW.TIMELINE' | translate }}</h2>
 
             <div class="detail-grid">
                 <div class="detail-item">
-                    <span class="detail-label">Requested At</span>
+                    <span class="detail-label">{{ 'OFFER_REVIEW.REQUESTED_AT' | translate }}</span>
                     <span class="detail-value">{{ formatDate(serviceRequest.requestAt) }}</span>
                 </div>
 
                 <div class="detail-item">
-                    <span class="detail-label">Service Start Time</span>
+                    <span class="detail-label">{{ 'OFFER_REVIEW.SERVICE_START_TIME' | translate }}</span>
                     <span class="detail-value">{{ formatDate(serviceRequest.serviceStartTime) }}</span>
                 </div>
 
                 <div class="detail-item" *ngIf="serviceRequest.completedAt">
-                    <span class="detail-label">Completed At</span>
+                    <span class="detail-label">{{ 'OFFER_REVIEW.COMPLETED_AT' | translate }}</span>
                     <span class="detail-value">{{ formatDate(serviceRequest.completedAt) }}</span>
                 </div>
 
                 <div class="detail-item" *ngIf="serviceRequest.waitingForClientPaymentAt">
-                    <span class="detail-label">Waiting for Payment</span>
+                    <span class="detail-label">{{ 'OFFER_REVIEW.WAITING_FOR_PAYMENT' | translate }}</span>
                     <span class="detail-value">{{ formatDate(serviceRequest.waitingForClientPaymentAt) }}</span>
                 </div>
             </div>
@@ -91,17 +91,17 @@
 
         <!-- Pricing Card -->
         <div class="pricing-card">
-            <h2 class="card-title">Pricing Details</h2>
+            <h2 class="card-title">{{ 'OFFER_REVIEW.PRICING_DETAILS' | translate }}</h2>
 
             <div class="price-row">
-                <span class="price-label">Suggested Price</span>
+                <span class="price-label">{{ 'OFFER_REVIEW.SUGGESTED_PRICE' | translate }}</span>
                 <span class="price-value suggested">{{ serviceRequest.suggestedPrice?.toFixed(2) || '0.00' }} EGP</span>
             </div>
 
             <div class="price-divider"></div>
 
             <div class="price-row highlight">
-                <span class="price-label">Craftsman's Offer</span>
+                <span class="price-label">{{ 'OFFER_REVIEW.CRAFTSMAN_OFFER' | translate }}</span>
                 <span class="price-value total">{{ (offerAmount || serviceRequest.totalAmount || 0).toFixed(2) }}
                     EGP</span>
             </div>
@@ -109,7 +109,7 @@
             <!-- Show offer description if available -->
             <div *ngIf="offerDescription" class="offer-description"
                 style="margin-top: 15px; padding: 15px; background: #F9FAFB; border-radius: 8px;">
-                <span class="detail-label" style="display: block; margin-bottom: 8px;">Offer Details</span>
+                <span class="detail-label" style="display: block; margin-bottom: 8px;">{{ 'OFFER_REVIEW.OFFER_DETAILS' | translate }}</span>
                 <p style="margin: 0; color: #374151; line-height: 1.6;">{{ offerDescription }}</p>
             </div>
         </div>
@@ -118,15 +118,15 @@
         <div class="action-buttons">
             <button class="btn btn-accept" (click)="onAccept()">
                 <span class="btn-icon">✓</span>
-                <span class="btn-text">Accept Offer</span>
+                <span class="btn-text">{{ 'OFFER_REVIEW.ACTIONS.ACCEPT_OFFER' | translate }}</span>
             </button>
             <button class="btn btn-reject" (click)="onReject()">
                 <span class="btn-icon">✕</span>
-                <span class="btn-text">Reject Offer</span>
+                <span class="btn-text">{{ 'OFFER_REVIEW.ACTIONS.REJECT_OFFER' | translate }}</span>
             </button>
             <button class="btn btn-new-offer" (click)="onNewOffer()" *ngIf="isCraftsman">
                 <span class="btn-icon">💰</span>
-                <span class="btn-text">New Offer</span>
+                <span class="btn-text">{{ 'OFFER_REVIEW.ACTIONS.NEW_OFFER' | translate }}</span>
             </button>
         </div>
     </div>

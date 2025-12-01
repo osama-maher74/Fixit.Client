@@ -12,51 +12,44 @@ import { ServiceCard } from '../../components/service-card/service-card.componen
 // Map service names to multiple image URLs (for gallery display)
 const SERVICE_IMAGES: { [key: string]: string[] } = {
   'Plumbing Repair': [
-    'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=800&q=80',
-    'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=800&q=80',
-    'https://images.unsplash.com/photo-1581367662962-3e77a88e6cde?w=800&q=80',
-    'https://images.unsplash.com/photo-1586864387634-8fa15e2c2d5c?w=800&q=80'
+    'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1581367662962-3e77a88e6cde?auto=format&fit=crop&w=800&q=80'
   ],
   'Electrical Maintenance': [
-    'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80',
-    'https://images.unsplash.com/photo-1621905252472-2d0f6c85f45f?w=800&q=80',
-    'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80',
-    'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80'
+    'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1621905252472-2d0f6c85f45f?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800&q=80'
   ],
   'AC Cleaning & Service': [
-    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80',
-    'https://images.unsplash.com/photo-1628744398092-430a23ee6d5f?w=800&q=80',
-    'https://images.unsplash.com/photo-1635274043923-581b98e48cc0?w=800&q=80',
-    'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80'
+    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1628744398092-430a23ee6d5f?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1635274043923-581b98e48cc0?auto=format&fit=crop&w=800&q=80'
   ],
   'Home Deep Cleaning': [
-    'https://images.unsplash.com/photo-1581578949510-fa7315c4c350?w=800&q=80',
-    'https://images.unsplash.com/photo-1585421514738-01798e348b17?w=800&q=80',
-    'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=800&q=80',
-    'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=800&q=80'
+    'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1585421514738-01798e348b17?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?auto=format&fit=crop&w=800&q=80'
   ],
   'Carpentry & Assembly': [
-    'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=80',
-    'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=800&q=80',
-    'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&q=80',
-    'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80'
+    'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=800&q=80'
   ],
   'Painting': [
-    'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&q=80',
-    'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80',
-    'https://images.unsplash.com/photo-1513467535987-fd81bc7d62f8?w=800&q=80',
-    'https://images.unsplash.com/photo-1581858822450-c2d8e0ec0606?w=800&q=80'
+    'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1513467535987-fd81bc7d62f8?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1581858822450-c2d8e0ec0606?auto=format&fit=crop&w=800&q=80'
   ],
   'Locksmith': [
-    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-    'https://images.unsplash.com/photo-1597113366969-3c9e7b3e7ad8?w=800&q=80',
-    'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80',
-    'https://images.unsplash.com/photo-1611727342183-8d3d7ec0fe28?w=800&q=80'
+    'https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1597113366969-3c9e7b3e7ad8?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80'
   ],
   'default': [
-    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80',
-    'https://images.unsplash.com/photo-1581578968225-c9d5ad6e0838?w=800&q=80',
-    'https://images.unsplash.com/photo-1581578968223-10c5b3cee5a1?w=800&q=80'
+    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1581578968225-c9d5ad6e0838?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1581578968223-10c5b3cee5a1?auto=format&fit=crop&w=800&q=80'
   ]
 };
 
@@ -84,6 +77,7 @@ export class ServiceBookingComponent implements OnInit {
   selectedImage: File | null = null;
   imagePreview: string | null = null;
   isSubmitting = false;
+  isLoadingService = false; // Track if service is currently being loaded
 
   private authService = inject(AuthService);
   private serviceService = inject(ServiceService);
@@ -114,6 +108,8 @@ export class ServiceBookingComponent implements OnInit {
   }
 
   private loadServiceById(serviceId: number): void {
+    this.isLoadingService = true; // Start loading
+
     // Fetch all services and filter by ID (more reliable since we know getAllServices works)
     this.serviceService.getAllServices().subscribe({
       next: (services: ServiceCard[]) => {
@@ -124,15 +120,19 @@ export class ServiceBookingComponent implements OnInit {
           console.error('Service not found with ID:', serviceId);
           this.selectedService = null;
         }
+        this.isLoadingService = false; // Loading complete
       },
       error: (error) => {
         console.error('Error loading services from backend:', error);
         this.selectedService = null;
+        this.isLoadingService = false; // Loading complete (with error)
       }
     });
   }
 
   private loadServiceFromBackend(serviceName: string): void {
+    this.isLoadingService = true; // Start loading
+
     // Fetch all services and filter by name
     this.serviceService.getAllServices().subscribe({
       next: (services: ServiceCard[]) => {
@@ -143,10 +143,12 @@ export class ServiceBookingComponent implements OnInit {
           console.error('Service not found with name:', serviceName);
           this.selectedService = null;
         }
+        this.isLoadingService = false; // Loading complete
       },
       error: (error) => {
         console.error('Error loading services from backend:', error);
         this.selectedService = null;
+        this.isLoadingService = false; // Loading complete (with error)
       }
     });
   }
@@ -276,12 +278,14 @@ export class ServiceBookingComponent implements OnInit {
   onSubmitBooking(): void {
     // Check if user is authenticated
     if (!this.authService.isAuthenticated()) {
+      console.error('User not authenticated');
       alert('Please log in to book a service');
       this.router.navigate(['/auth/login']);
       return;
     }
 
     if (this.bookingForm.invalid) {
+      console.warn('Form is invalid:', this.bookingForm.errors);
       Object.keys(this.bookingForm.controls).forEach(key => {
         this.bookingForm.get(key)?.markAsTouched();
       });
@@ -289,20 +293,26 @@ export class ServiceBookingComponent implements OnInit {
     }
 
     if (!this.selectedService) {
+      console.error('No service selected');
       alert('No service selected');
       return;
     }
 
     if (!this.selectedService.serviceId) {
+      console.error('Service ID missing:', this.selectedService);
       alert('Error: Service ID is missing. Please refresh the page and try again.');
       return;
     }
 
+    console.log('Starting service booking process...');
     this.isSubmitting = true;
 
     // Get client profile to retrieve client ID
+    console.log('Fetching client profile...');
     this.clientService.getCurrentUserProfile().subscribe({
       next: (clientProfile) => {
+        console.log('Client profile retrieved:', clientProfile);
+
         // Prepare service request DTO
         const serviceRequestDto: CreateServiceRequestDto = {
           clientId: clientProfile.id,
@@ -313,10 +323,12 @@ export class ServiceBookingComponent implements OnInit {
           serviceRequestImage: this.selectedImage || undefined
         };
 
+        console.log('Creating service request with data:', serviceRequestDto);
+
         // Call API using the dedicated service
         this.serviceRequestService.createServiceRequest(serviceRequestDto).subscribe({
           next: (response) => {
-            console.log('Service creation response in component:', response);
+            console.log('✅ Service request created successfully:', response);
             this.isSubmitting = false;
 
             // Navigate to craftsmen list
@@ -327,8 +339,8 @@ export class ServiceBookingComponent implements OnInit {
               const queryParams = {
                 location: navLocation,
                 serviceName: navServiceName,
-                serviceRequestId: response.servicesRequestId || response.id || 0, // Pass the service request ID from response (prefer servicesRequestId)
-                serviceId: this.selectedService!.serviceId, // Pass serviceId for appointment confirmation
+                serviceRequestId: response.servicesRequestId || response.id || 0,
+                serviceId: this.selectedService!.serviceId,
                 duration: this.selectedService!.duration
               };
               console.log('Navigating to craftsmen-list with params:', queryParams);
@@ -345,14 +357,32 @@ export class ServiceBookingComponent implements OnInit {
             this.removeImage();
           },
           error: (error) => {
+            console.error('❌ Failed to create service request:', error);
+            console.error('Error details:', {
+              status: error.status,
+              statusText: error.statusText,
+              message: error.error?.message,
+              fullError: error
+            });
             this.isSubmitting = false;
-            alert(`Failed to submit booking request. ${error.error?.message || 'Please try again later.'}`);
+
+            const errorMessage = error.error?.message || error.message || 'Unknown error occurred';
+            alert(`Failed to submit booking request.\n\nError: ${errorMessage}\n\nPlease check the console for details.`);
           }
         });
       },
       error: (error) => {
+        console.error('❌ Failed to get client profile:', error);
+        console.error('Error details:', {
+          status: error.status,
+          statusText: error.statusText,
+          message: error.error?.message,
+          fullError: error
+        });
         this.isSubmitting = false;
-        alert('Failed to get client information. Please make sure you are logged in.');
+
+        const errorMessage = error.error?.message || error.message || 'Authentication error';
+        alert(`Failed to get client information.\n\nError: ${errorMessage}\n\nPlease make sure you are logged in and try again.`);
       }
     });
   }
