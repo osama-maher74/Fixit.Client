@@ -335,6 +335,29 @@ export class OfferReviewComponent implements OnInit {
     }
 
     /**
+     * Determine if action buttons should be shown
+     * Hide buttons when service request status is in a final or non-actionable state
+     */
+    shouldShowActionButtons(): boolean {
+        if (!this.serviceRequest) return false;
+
+        const statusName = this.getStatusEnumName(this.serviceRequest.status);
+
+        // Hide buttons for these statuses
+        const hiddenStatuses = [
+            'InProgress',
+            'Completed',
+            'WaitingForClientPayment',
+            'CancelledDueToNonPayment',
+            'Cancelled',
+            'RejectedByCraftsman',
+            'RejectedByClient'
+        ];
+
+        return !hiddenStatuses.includes(statusName);
+    }
+
+    /**
      * Map numeric status values to enum names
      */
     private getStatusEnumName(status: any): string {

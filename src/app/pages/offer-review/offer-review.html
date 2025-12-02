@@ -36,29 +36,34 @@
             <div class="detail-grid">
                 <div class="detail-item">
                     <span class="detail-label">{{ 'OFFER_REVIEW.SERVICE_NAME' | translate }}</span>
-                    <span class="detail-value">{{ serviceRequest.serviceName || ('OFFER_REVIEW.NOT_AVAILABLE' | translate) }}</span>
+                    <span class="detail-value">{{ serviceRequest.serviceName || ('OFFER_REVIEW.NOT_AVAILABLE' |
+                        translate) }}</span>
                 </div>
 
                 <div class="detail-item">
                     <span class="detail-label">{{ 'OFFER_REVIEW.CLIENT_NAME' | translate }}</span>
-                    <span class="detail-value">{{ serviceRequest.clientName || ('OFFER_REVIEW.NOT_AVAILABLE' | translate) }}</span>
+                    <span class="detail-value">{{ serviceRequest.clientName || ('OFFER_REVIEW.NOT_AVAILABLE' |
+                        translate) }}</span>
                 </div>
 
                 <div class="detail-item">
                     <span class="detail-label">{{ 'OFFER_REVIEW.CRAFTSMAN' | translate }}</span>
-                    <span class="detail-value">{{ offerCraftsmanName || serviceRequest.craftsManName || ('OFFER_REVIEW.NOT_ASSIGNED' | translate)
+                    <span class="detail-value">{{ offerCraftsmanName || serviceRequest.craftsManName ||
+                        ('OFFER_REVIEW.NOT_ASSIGNED' | translate)
                         }}</span>
                 </div>
 
                 <div class="detail-item">
                     <span class="detail-label">{{ 'OFFER_REVIEW.LOCATION' | translate }}</span>
-                    <span class="detail-value">{{ serviceRequest.location || ('OFFER_REVIEW.NOT_AVAILABLE' | translate) }}</span>
+                    <span class="detail-value">{{ serviceRequest.location || ('OFFER_REVIEW.NOT_AVAILABLE' | translate)
+                        }}</span>
                 </div>
             </div>
 
             <div class="detail-item full-width">
                 <span class="detail-label">{{ 'OFFER_REVIEW.DESCRIPTION' | translate }}</span>
-                <p class="detail-description">{{ serviceRequest.description || ('OFFER_REVIEW.NO_DESCRIPTION' | translate) }}</p>
+                <p class="detail-description">{{ serviceRequest.description || ('OFFER_REVIEW.NO_DESCRIPTION' |
+                    translate) }}</p>
             </div>
         </div>
 
@@ -109,7 +114,8 @@
             <!-- Show offer description if available -->
             <div *ngIf="offerDescription" class="offer-description"
                 style="margin-top: 15px; padding: 15px; background: #F9FAFB; border-radius: 8px;">
-                <span class="detail-label" style="display: block; margin-bottom: 8px;">{{ 'OFFER_REVIEW.OFFER_DETAILS' | translate }}</span>
+                <span class="detail-label" style="display: block; margin-bottom: 8px;">{{ 'OFFER_REVIEW.OFFER_DETAILS' |
+                    translate }}</span>
                 <p style="margin: 0; color: #374151; line-height: 1.6;">{{ offerDescription }}</p>
             </div>
         </div>

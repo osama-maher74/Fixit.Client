@@ -12,24 +12,26 @@ import { ServiceCard } from '../../components/service-card/service-card.componen
 // Map service names to multiple image URLs (for gallery display)
 const SERVICE_IMAGES: { [key: string]: string[] } = {
   'Plumbing Repair': [
-    'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1581367662962-3e77a88e6cde?auto=format&fit=crop&w=800&q=80'
+    
+    'assets/pr1.jpeg',
+    'assets/pr2.jpeg',
+    'assets/pr3.jpeg'
   ],
   'Electrical Maintenance': [
     'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1621905252472-2d0f6c85f45f?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800&q=80'
+    'assets/ec.jpeg',
+    'assets/ec1.jpeg',
   ],
   'AC Cleaning & Service': [
-    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1628744398092-430a23ee6d5f?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1635274043923-581b98e48cc0?auto=format&fit=crop&w=800&q=80'
+    'assets/ac3.jpeg',
+    'assets/ac1.jpeg',
+    'assets/ac2.jpeg'
+
   ],
   'Home Deep Cleaning': [
     'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1585421514738-01798e348b17?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?auto=format&fit=crop&w=800&q=80'
+    'assets/hc.jpeg'
   ],
   'Carpentry & Assembly': [
     'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=80',

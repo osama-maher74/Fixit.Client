@@ -1,25 +1,13 @@
 // Import Cairo font (matching project style)
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap');
 
-// Color Palette (matching Maharah theme)
-$gold: #FDB813;
-$dark-bg: #0A0A0A;
-$card-bg: #1E1E1E;
-$card-bg-hover: #2A2A2A;
-$text-primary: #FFFFFF;
-$text-secondary: #B0B0B0;
-$text-muted: #808080;
-$border-color: #333333;
-$success: #10B981;
-$error: #EF4444;
-$shadow: rgba(0, 0, 0, 0.5);
-
+// Use CSS Variables for theme support - all colors now adapt to light/dark theme
 .wallet-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, $dark-bg 0%, #1a1a1a 100%);
+  background: var(--background-light);
   padding: 2rem;
   font-family: 'Cairo', sans-serif;
-  color: $text-primary;
+  color: var(--text-primary);
 
   @media (max-width: 768px) {
     padding: 1rem;
@@ -39,25 +27,34 @@ $shadow: rgba(0, 0, 0, 0.5);
 .loading-spinner {
   width: 60px;
   height: 60px;
-  border: 4px solid rgba($gold, 0.2);
-  border-top-color: $gold;
+  border: 4px solid var(--primary-gold-light);
+  border-top-color: var(--primary-gold);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-text {
   font-size: 1.125rem;
-  color: $text-secondary;
+  color: var(--text-secondary);
   animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* ========== ERROR STATE ========== */
@@ -69,8 +66,8 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .error-card {
-  background: $card-bg;
-  border: 1px solid rgba($error, 0.3);
+  background: var(--background-white);
+  border: 1px solid var(--error-light);
   border-radius: 16px;
   padding: 3rem 2rem;
   max-width: 500px;
@@ -83,6 +80,7 @@ $shadow: rgba(0, 0, 0, 0.5);
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -93,7 +91,7 @@ $shadow: rgba(0, 0, 0, 0.5);
   width: 80px;
   height: 80px;
   margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, rgba($error, 0.2), rgba($error, 0.1));
+  background: var(--error-light);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -102,7 +100,7 @@ $shadow: rgba(0, 0, 0, 0.5);
   svg {
     width: 40px;
     height: 40px;
-    color: $error;
+    color: var(--error-red);
   }
 }
 
@@ -110,11 +108,11 @@ $shadow: rgba(0, 0, 0, 0.5);
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
-  color: $text-primary;
+  color: var(--text-dark);
 }
 
 .error-message {
-  color: $text-secondary;
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
   line-height: 1.6;
 }
@@ -138,12 +136,12 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .btn-retry {
-  background: linear-gradient(135deg, $gold, #f5a623);
-  color: #000;
+  background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-hover));
+  color: var(--text-dark);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba($gold, 0.3);
+    box-shadow: 0 8px 20px var(--primary-gold-light);
   }
 
   &:active {
@@ -159,14 +157,19 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .back-button {
   background: transparent;
-  border: 1px solid $border-color;
-  color: $text-secondary;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
   padding: 0.75rem 1.25rem;
   border-radius: 10px;
   font-size: 0.95rem;
@@ -184,8 +187,8 @@ $shadow: rgba(0, 0, 0, 0.5);
   }
 
   &:hover {
-    border-color: $gold;
-    color: $gold;
+    border-color: var(--primary-gold);
+    color: var(--primary-gold);
     transform: translateX(-4px);
   }
 }
@@ -193,10 +196,7 @@ $shadow: rgba(0, 0, 0, 0.5);
 .page-title {
   font-size: 2.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, $text-primary, $text-secondary);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-dark);
   margin: 0;
 
   @media (max-width: 768px) {
@@ -208,14 +208,14 @@ $shadow: rgba(0, 0, 0, 0.5);
 .balance-card {
   max-width: 1000px;
   margin: 0 auto 3rem;
-  background: linear-gradient(135deg, $card-bg 0%, #2a2a2a 100%);
-  border: 1px solid $border-color;
+  background: var(--background-white);
+  border: 1px solid var(--border-light);
   border-radius: 20px;
   padding: 2.5rem;
   position: relative;
   overflow: hidden;
   animation: slideUp 0.6s ease-out;
-  box-shadow: 0 10px 40px $shadow;
+  box-shadow: var(--shadow-lg);
 
   &::before {
     content: '';
@@ -224,7 +224,7 @@ $shadow: rgba(0, 0, 0, 0.5);
     right: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba($gold, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--primary-gold-light) 0%, transparent 70%);
     animation: rotate 20s linear infinite;
   }
 
@@ -238,6 +238,7 @@ $shadow: rgba(0, 0, 0, 0.5);
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -245,7 +246,9 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 @keyframes rotate {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .balance-header {
@@ -267,17 +270,17 @@ $shadow: rgba(0, 0, 0, 0.5);
 .balance-icon {
   width: 70px;
   height: 70px;
-  background: linear-gradient(135deg, $gold, #f5a623);
+  background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-hover));
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba($gold, 0.3);
+  box-shadow: 0 8px 24px var(--primary-gold-light);
 
   svg {
     width: 35px;
     height: 35px;
-    color: #000;
+    color: var(--text-dark);
   }
 
   @media (max-width: 768px) {
@@ -293,7 +296,7 @@ $shadow: rgba(0, 0, 0, 0.5);
 
 .balance-label {
   font-size: 0.95rem;
-  color: $text-secondary;
+  color: var(--text-secondary);
   margin: 0 0 0.5rem 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -303,10 +306,7 @@ $shadow: rgba(0, 0, 0, 0.5);
   font-size: 3rem;
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, $gold, #f5a623);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--primary-gold);
 
   @media (max-width: 768px) {
     font-size: 2.25rem;
@@ -319,7 +319,7 @@ $shadow: rgba(0, 0, 0, 0.5);
   right: -20px;
   width: 200px;
   height: 200px;
-  background: radial-gradient(circle, rgba($gold, 0.15), transparent);
+  background: radial-gradient(circle, var(--primary-gold-light), transparent);
   border-radius: 50%;
 }
 
@@ -335,6 +335,7 @@ $shadow: rgba(0, 0, 0, 0.5);
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -358,7 +359,7 @@ $shadow: rgba(0, 0, 0, 0.5);
   font-size: 1.75rem;
   font-weight: 600;
   margin: 0;
-  color: $text-primary;
+  color: var(--text-dark);
 
   @media (max-width: 768px) {
     font-size: 1.5rem;
@@ -366,8 +367,8 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .transaction-count {
-  background: rgba($gold, 0.1);
-  color: $gold;
+  background: var(--primary-gold-light);
+  color: var(--primary-gold);
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.875rem;
@@ -376,8 +377,8 @@ $shadow: rgba(0, 0, 0, 0.5);
 
 /* ========== EMPTY STATE ========== */
 .empty-state {
-  background: $card-bg;
-  border: 1px dashed $border-color;
+  background: var(--background-white);
+  border: 1px dashed var(--border-light);
   border-radius: 16px;
   padding: 4rem 2rem;
   text-align: center;
@@ -387,7 +388,7 @@ $shadow: rgba(0, 0, 0, 0.5);
   width: 100px;
   height: 100px;
   margin: 0 auto 1.5rem;
-  background: rgba($gold, 0.1);
+  background: var(--primary-gold-light);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -396,19 +397,19 @@ $shadow: rgba(0, 0, 0, 0.5);
   svg {
     width: 50px;
     height: 50px;
-    color: $text-muted;
+    color: var(--text-muted);
   }
 }
 
 .empty-text {
   font-size: 1.25rem;
   font-weight: 600;
-  color: $text-primary;
+  color: var(--text-dark);
   margin: 0 0 0.5rem 0;
 }
 
 .empty-subtext {
-  color: $text-muted;
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -420,8 +421,8 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .transaction-card {
-  background: $card-bg;
-  border: 1px solid $border-color;
+  background: var(--background-white);
+  border: 1px solid var(--border-light);
   border-radius: 14px;
   padding: 1.5rem;
   display: flex;
@@ -437,10 +438,10 @@ $shadow: rgba(0, 0, 0, 0.5);
   }
 
   &:hover {
-    border-color: $gold;
+    border-color: var(--primary-gold);
     transform: translateX(8px);
-    background: $card-bg-hover;
-    box-shadow: 0 8px 24px rgba($gold, 0.15);
+    background: var(--background-hover);
+    box-shadow: 0 8px 24px var(--primary-gold-light);
   }
 
   @media (max-width: 768px) {
@@ -479,20 +480,20 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .transaction-positive .transaction-icon {
-  background: rgba($success, 0.15);
-  border: 1px solid rgba($success, 0.3);
+  background: var(--success-light);
+  border: 1px solid var(--success-green);
 
   svg {
-    color: $success;
+    color: var(--success-green);
   }
 }
 
 .transaction-negative .transaction-icon {
-  background: rgba($error, 0.15);
-  border: 1px solid rgba($error, 0.3);
+  background: var(--error-light);
+  border: 1px solid var(--error-red);
 
   svg {
-    color: $error;
+    color: var(--error-red);
   }
 }
 
@@ -508,13 +509,13 @@ $shadow: rgba(0, 0, 0, 0.5);
 .transaction-type {
   font-size: 1.05rem;
   font-weight: 600;
-  color: $text-primary;
+  color: var(--text-dark);
   margin: 0 0 0.25rem 0;
 }
 
 .transaction-description {
   font-size: 0.9rem;
-  color: $text-secondary;
+  color: var(--text-secondary);
   margin: 0 0 0.25rem 0;
   white-space: nowrap;
   overflow: hidden;
@@ -523,7 +524,7 @@ $shadow: rgba(0, 0, 0, 0.5);
 
 .transaction-date {
   font-size: 0.85rem;
-  color: $text-muted;
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -533,8 +534,8 @@ $shadow: rgba(0, 0, 0, 0.5);
   gap: 0.5rem;
   margin-top: 0.5rem;
   padding: 0.5rem 0.75rem;
-  background: rgba($gold, 0.05);
-  border-left: 3px solid $gold;
+  background: var(--primary-gold-light);
+  border-left: 3px solid var(--primary-gold);
   border-radius: 6px;
 
   @media (max-width: 768px) {
@@ -547,17 +548,17 @@ $shadow: rgba(0, 0, 0, 0.5);
 .withdrawal-method-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: $gold;
+  color: var(--primary-gold);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .withdrawal-method-value {
   font-size: 0.9rem;
-  color: $text-primary;
+  color: var(--text-dark);
   font-weight: 500;
   font-family: monospace;
-  background: rgba($card-bg, 0.5);
+  background: var(--background-accent);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
 
@@ -577,11 +578,11 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .amount-positive {
-  color: $success;
+  color: var(--success-green);
 }
 
 .amount-negative {
-  color: $error;
+  color: var(--error-red);
 }
 
 /* ========== PAYMENT STATUS BADGES ========== */
@@ -603,15 +604,15 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .status-paid {
-  background: rgba($success, 0.15);
-  border-color: rgba($success, 0.4);
-  color: $success;
+  background: var(--success-light);
+  border-color: var(--success-green);
+  color: var(--success-green);
 }
 
 .status-pending {
-  background: rgba($gold, 0.15);
-  border-color: rgba($gold, 0.4);
-  color: $gold;
+  background: var(--primary-gold-light);
+  border-color: var(--primary-gold);
+  color: var(--primary-gold);
 }
 
 /* ========== ADMIN TOGGLE BUTTONS ========== */
@@ -633,7 +634,7 @@ $shadow: rgba(0, 0, 0, 0.5);
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-md);
   }
 
   &:active:not(:disabled) {
@@ -653,22 +654,20 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .btn-mark-paid {
-  border-color: $success;
-  color: $success;
+  border-color: var(--success-green);
+  color: var(--success-green);
 
   &:hover:not(:disabled) {
-    background: rgba($success, 0.15);
-    box-shadow: 0 6px 16px rgba($success, 0.3);
+    background: var(--success-light);
   }
 }
 
 .btn-mark-pending {
-  border-color: $gold;
-  color: $gold;
+  border-color: var(--primary-gold);
+  color: var(--primary-gold);
 
   &:hover:not(:disabled) {
-    background: rgba($gold, 0.15);
-    box-shadow: 0 6px 16px rgba($gold, 0.3);
+    background: var(--primary-gold-light);
   }
 }
 
@@ -684,8 +683,8 @@ $shadow: rgba(0, 0, 0, 0.5);
 
 /* ========== WITHDRAWAL BUTTON ========== */
 .btn-withdraw {
-  background: linear-gradient(135deg, $gold, #f5a623);
-  color: #000;
+  background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-hover));
+  color: var(--text-dark);
   border: none;
   padding: 0.875rem 1.75rem;
   border-radius: 10px;
@@ -705,7 +704,7 @@ $shadow: rgba(0, 0, 0, 0.5);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba($gold, 0.3);
+    box-shadow: 0 8px 20px var(--primary-gold-light);
   }
 
   &:active {
@@ -736,15 +735,15 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-  background: $card-bg;
-  border: 1px solid $border-color;
+  background: var(--background-white);
+  border: 1px solid var(--border-light);
   border-radius: 20px;
   width: 100%;
   max-width: 550px;
   max-height: 90vh;
   overflow-y: auto;
   animation: slideUp 0.4s ease-out;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+  box-shadow: var(--shadow-xl);
 }
 
 .modal-header {
@@ -752,20 +751,20 @@ $shadow: rgba(0, 0, 0, 0.5);
   justify-content: space-between;
   align-items: center;
   padding: 2rem 2rem 1rem;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .modal-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: $text-primary;
+  color: var(--text-dark);
   margin: 0;
 }
 
 .modal-close {
   background: transparent;
-  border: 1px solid $border-color;
-  color: $text-secondary;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
   width: 40px;
   height: 40px;
   border-radius: 10px;
@@ -781,8 +780,8 @@ $shadow: rgba(0, 0, 0, 0.5);
   }
 
   &:hover {
-    border-color: $error;
-    color: $error;
+    border-color: var(--error-red);
+    color: var(--error-red);
     transform: rotate(90deg);
   }
 }
@@ -792,14 +791,14 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .modal-subtitle {
-  color: $text-secondary;
+  color: var(--text-secondary);
   margin: 0 0 1.5rem;
   line-height: 1.6;
 }
 
 .available-balance {
-  background: rgba($gold, 0.1);
-  border: 1px solid rgba($gold, 0.3);
+  background: var(--primary-gold-light);
+  border: 1px solid var(--primary-gold);
   border-radius: 12px;
   padding: 1rem 1.5rem;
   display: flex;
@@ -809,12 +808,12 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .available-label {
-  color: $text-secondary;
+  color: var(--text-secondary);
   font-size: 0.95rem;
 }
 
 .available-amount {
-  color: $gold;
+  color: var(--primary-gold);
   font-size: 1.5rem;
   font-weight: 700;
 }
@@ -825,7 +824,7 @@ $shadow: rgba(0, 0, 0, 0.5);
 
 .form-label {
   display: block;
-  color: $text-primary;
+  color: var(--text-dark);
   font-weight: 600;
   margin-bottom: 0.5rem;
   font-size: 0.95rem;
@@ -840,30 +839,30 @@ $shadow: rgba(0, 0, 0, 0.5);
 .input-prefix {
   position: absolute;
   left: 1rem;
-  color: $text-secondary;
+  color: var(--text-secondary);
   font-weight: 600;
   font-size: 1.1rem;
 }
 
 .form-input {
   width: 100%;
-  background: rgba($border-color, 0.3);
-  border: 1px solid $border-color;
+  background: var(--background-light);
+  border: 1px solid var(--border-light);
   border-radius: 10px;
   padding: 0.875rem 1rem;
-  color: $text-primary;
+  color: var(--text-dark);
   font-size: 1rem;
   font-family: 'Cairo', sans-serif;
   transition: all 0.3s ease;
 
   &:focus {
     outline: none;
-    border-color: $gold;
-    background: rgba($gold, 0.05);
+    border-color: var(--primary-gold);
+    background: var(--primary-gold-light);
   }
 
   &::placeholder {
-    color: $text-muted;
+    color: var(--text-muted);
   }
 
   .input-wrapper & {
@@ -873,11 +872,11 @@ $shadow: rgba(0, 0, 0, 0.5);
 
 .form-select {
   width: 100%;
-  background: rgba($border-color, 0.3);
-  border: 1px solid $border-color;
+  background: var(--background-light);
+  border: 1px solid var(--border-light);
   border-radius: 10px;
   padding: 0.875rem 1rem;
-  color: $text-primary;
+  color: var(--text-dark);
   font-size: 1rem;
   font-family: 'Cairo', sans-serif;
   cursor: pointer;
@@ -885,18 +884,18 @@ $shadow: rgba(0, 0, 0, 0.5);
 
   &:focus {
     outline: none;
-    border-color: $gold;
-    background: rgba($gold, 0.05);
+    border-color: var(--primary-gold);
+    background: var(--primary-gold-light);
   }
 
   option {
-    background: $card-bg;
-    color: $text-primary;
+    background: var(--background-white);
+    color: var(--text-dark);
   }
 }
 
 .error-text {
-  color: $error;
+  color: var(--error-red);
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }
@@ -918,14 +917,14 @@ $shadow: rgba(0, 0, 0, 0.5);
 }
 
 .alert-error {
-  background: rgba($error, 0.15);
-  border: 1px solid rgba($error, 0.3);
-  color: $error;
+  background: var(--error-light);
+  border: 1px solid var(--error-red);
+  color: var(--error-red);
 }
 
 .modal-footer {
   padding: 1.5rem 2rem 2rem;
-  border-top: 1px solid $border-color;
+  border-top: 1px solid var(--border-light);
   display: flex;
   gap: 1rem;
 
@@ -936,8 +935,8 @@ $shadow: rgba(0, 0, 0, 0.5);
 
 .btn-primary {
   flex: 1;
-  background: linear-gradient(135deg, $gold, #f5a623);
-  color: #000;
+  background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-hover));
+  color: var(--text-dark);
   border: none;
   padding: 0.875rem 1.75rem;
   border-radius: 10px;
@@ -953,7 +952,7 @@ $shadow: rgba(0, 0, 0, 0.5);
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba($gold, 0.3);
+    box-shadow: 0 8px 20px var(--primary-gold-light);
   }
 
   &:active:not(:disabled) {
@@ -969,8 +968,8 @@ $shadow: rgba(0, 0, 0, 0.5);
 .btn-secondary {
   flex: 1;
   background: transparent;
-  border: 1px solid $border-color;
-  color: $text-secondary;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
   padding: 0.875rem 1.75rem;
   border-radius: 10px;
   font-weight: 600;
@@ -980,8 +979,8 @@ $shadow: rgba(0, 0, 0, 0.5);
   font-family: 'Cairo', sans-serif;
 
   &:hover:not(:disabled) {
-    border-color: $gold;
-    color: $gold;
+    border-color: var(--primary-gold);
+    color: var(--primary-gold);
   }
 
   &:disabled {
@@ -993,8 +992,8 @@ $shadow: rgba(0, 0, 0, 0.5);
 .btn-spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(#000, 0.3);
-  border-top-color: #000;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-top-color: var(--text-dark);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -1009,7 +1008,7 @@ $shadow: rgba(0, 0, 0, 0.5);
   width: 100px;
   height: 100px;
   margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, rgba($success, 0.2), rgba($success, 0.1));
+  background: var(--success-light);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1018,19 +1017,19 @@ $shadow: rgba(0, 0, 0, 0.5);
   svg {
     width: 50px;
     height: 50px;
-    color: $success;
+    color: var(--success-green);
   }
 }
 
 .success-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: $text-primary;
+  color: var(--text-dark);
   margin: 0 0 1rem;
 }
 
 .success-message {
-  color: $text-secondary;
+  color: var(--text-secondary);
   margin: 0 0 2rem;
   line-height: 1.6;
   font-size: 1.05rem;
