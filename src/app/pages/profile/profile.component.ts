@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ClientService } from '../../services/client.service';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { ClientProfile } from '../../models/client.models';
@@ -11,7 +12,7 @@ type UserProfile = ClientProfile | CraftsmanProfile;
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -19,6 +20,7 @@ export class ProfileComponent implements OnInit {
   private clientService = inject(ClientService);
   private craftsmanService = inject(CraftsmanService);
   private router = inject(Router);
+  private translate = inject(TranslateService);
 
   // Signals for reactive state management
   profile = signal<UserProfile | null>(null);
@@ -167,7 +169,7 @@ export class ProfileComponent implements OnInit {
   getGenderText(): string {
     const p = this.getClientProfile();
     if (!p) return '';
-    return p.gender === 0 ? 'Male' : 'Female';
+    return p.gender === 0 ? this.translate.instant('PROFILE.MALE') : this.translate.instant('PROFILE.FEMALE');
   }
 
   /**
@@ -190,7 +192,7 @@ export class ProfileComponent implements OnInit {
    */
   getVerificationText(): string {
     const p = this.getCraftsmanProfile();
-    return p?.isVerified ? 'Verified' : 'Not Verified';
+    return p?.isVerified ? this.translate.instant('PROFILE.VERIFIED') : this.translate.instant('PROFILE.NOT_VERIFIED');
   }
 
 

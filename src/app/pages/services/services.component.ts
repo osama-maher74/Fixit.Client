@@ -1,17 +1,19 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ServiceCardComponent, ServiceCard } from '../../components/service-card/service-card.component';
 import { ServiceService } from '../../services/service.service';
 
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [CommonModule, ServiceCardComponent],
+  imports: [CommonModule, ServiceCardComponent, TranslateModule],
   templateUrl: './services.component.html',
   styleUrl: './services.component.scss'
 })
 export class ServicesComponent implements OnInit {
   private serviceService = inject(ServiceService);
+  private translate = inject(TranslateService);
 
   // Signals for reactive state
   services = signal<ServiceCard[]>([]);
@@ -36,7 +38,7 @@ export class ServicesComponent implements OnInit {
       },
       error: (error: any) => {
         console.error('Error loading services:', error);
-        this.errorMessage.set(error.error?.message || 'Failed to load services');
+        this.errorMessage.set(error.error?.message || this.translate.instant('SERVICES.FAILED_TO_LOAD'));
         this.isLoading.set(false);
 
         // Fallback to demo data for development

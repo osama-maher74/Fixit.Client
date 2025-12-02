@@ -2,7 +2,7 @@
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="hero-content">
-            <h1 class="hero-title">{{ selectedService.serviceName }}</h1>
+            <h1 class="hero-title">{{ getTranslatedServiceName() }}</h1>
             <p class="hero-subtitle">{{ selectedService.tagline }}</p>
         </div>
     </div>
@@ -15,22 +15,22 @@
                 <!-- Image Gallery -->
                 <div class="image-gallery" *ngIf="selectedService.images && selectedService.images.length > 0">
                     <div class="gallery-main">
-                        <img [src]="selectedService.images[0]" [alt]="selectedService.serviceName" class="main-image" />
+                        <img [src]="selectedService.images[0]" [alt]="getTranslatedServiceName()" class="main-image" />
                     </div>
                     <div class="gallery-thumbnails" *ngIf="selectedService.images.length > 1">
                         <img *ngFor="let image of selectedService.images.slice(1)" [src]="image"
-                            [alt]="selectedService.serviceName" class="thumbnail-image" />
+                            [alt]="getTranslatedServiceName()" class="thumbnail-image" />
                     </div>
                 </div>
 
                 <!-- Service Details -->
                 <div class="details-card">
-                    <h2 class="section-title">About This Service</h2>
+                    <h2 class="section-title">{{ 'SERVICE_BOOKING.ABOUT_THIS_SERVICE' | translate }}</h2>
                     <p class="service-description">{{ selectedService.description }}</p>
                 </div>
 
                 <div class="details-card" *ngIf="selectedService.features && selectedService.features.length > 0">
-                    <h2 class="section-title">What's Included</h2>
+                    <h2 class="section-title">{{ 'SERVICE_BOOKING.WHATS_INCLUDED' | translate }}</h2>
                     <ul class="features-list">
                         <li *ngFor="let feature of selectedService.features" class="feature-item">
                             <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -45,11 +45,11 @@
                 <!-- Pricing Info -->
                 <div class="pricing-info-card">
                     <div class="price-item">
-                        <span class="price-label">Starting Price</span>
+                        <span class="price-label">{{ 'SERVICE_BOOKING.STARTING_PRICE' | translate }}</span>
                         <span class="price-value">${{ selectedService.price }}</span>
                     </div>
                     <div class="price-item">
-                        <span class="price-label">Estimated Duration</span>
+                        <span class="price-label">{{ 'SERVICE_BOOKING.ESTIMATED_DURATION' | translate }}</span>
                         <span class="price-value">{{ getFormattedDuration() }}</span>
                     </div>
                 </div>
@@ -63,21 +63,21 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        Book This Service
+                        {{ 'SERVICE_BOOKING.BOOK_THIS_SERVICE' | translate }}
                     </h2>
-                    <p class="form-description">Fill out the form below to request this service</p>
+                    <p class="form-description">{{ 'SERVICE_BOOKING.FORM_DESCRIPTION' | translate }}</p>
 
                     <form [formGroup]="bookingForm" (ngSubmit)="onSubmitBooking()">
                         <!-- Description Field -->
                         <div class="form-group">
                             <label for="description" class="form-label">
-                                Service Description <span class="required">*</span>
+                                {{ 'SERVICE_BOOKING.SERVICE_DESCRIPTION' | translate }} <span class="required">{{ 'SERVICE_BOOKING.REQUIRED' | translate }}</span>
                             </label>
                             <textarea id="description" formControlName="description" class="form-control"
                                 [class.error]="isFieldInvalid('description')" rows="4"
-                                placeholder="Describe your service needs in detail (min 10 characters)..."></textarea>
+                                [placeholder]="'SERVICE_BOOKING.DESCRIPTION_PLACEHOLDER' | translate"></textarea>
                             <div class="char-counter">
-                                {{ bookingForm.get('description')?.value?.length || 0 }} characters
+                                {{ bookingForm.get('description')?.value?.length || 0 }} {{ 'SERVICE_BOOKING.CHARACTERS' | translate }}
                             </div>
                             <div class="error-message" *ngIf="isFieldInvalid('description')">
                                 {{ getFieldError('description') }}
@@ -87,16 +87,16 @@
                         <!-- Location Field -->
                         <div class="form-group">
                             <label for="location" class="form-label">
-                                Location <span class="optional">(Optional)</span>
+                                {{ 'SERVICE_BOOKING.LOCATION' | translate }} <span class="optional">{{ 'SERVICE_BOOKING.OPTIONAL' | translate }}</span>
                             </label>
                             <input type="text" id="location" formControlName="location" class="form-control"
-                                placeholder="Enter service location or leave blank for default" />
+                                [placeholder]="'SERVICE_BOOKING.LOCATION_PLACEHOLDER' | translate" />
                         </div>
 
                         <!-- Image Upload -->
                         <div class="form-group">
                             <label class="form-label">
-                                Service Image <span class="optional">(Optional)</span>
+                                {{ 'SERVICE_BOOKING.SERVICE_IMAGE' | translate }} <span class="optional">{{ 'SERVICE_BOOKING.OPTIONAL' | translate }}</span>
                             </label>
                             <div class="file-upload-area">
                                 <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png,image/webp"
@@ -107,8 +107,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
-                                    <span class="upload-text">Click to upload image</span>
-                                    <span class="upload-hint">JPG, PNG, or WebP (max 5MB)</span>
+                                    <span class="upload-text">{{ 'SERVICE_BOOKING.CLICK_TO_UPLOAD' | translate }}</span>
+                                    <span class="upload-hint">{{ 'SERVICE_BOOKING.UPLOAD_HINT' | translate }}</span>
                                 </label>
 
                                 <!-- Image Preview -->
@@ -127,7 +127,7 @@
                         <!-- Suggested Price Field -->
                         <div class="form-group">
                             <label for="suggestedPrice" class="form-label">
-                                Suggested Price <span class="optional">(Optional)</span>
+                                {{ 'SERVICE_BOOKING.SUGGESTED_PRICE' | translate }} <span class="optional">{{ 'SERVICE_BOOKING.OPTIONAL' | translate }}</span>
                             </label>
                             <div class="price-input-wrapper">
                                 <span class="currency-symbol">$</span>
@@ -144,7 +144,7 @@
                         <button type="submit" class="btn-submit" [disabled]="isSubmitting"
                             [class.loading]="isSubmitting">
                             <span *ngIf="!isSubmitting">
-                                Submit Booking Request
+                                {{ 'SERVICE_BOOKING.SUBMIT_BOOKING_REQUEST' | translate }}
                                 <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
@@ -152,7 +152,7 @@
                             </span>
                             <span *ngIf="isSubmitting" class="loading-text">
                                 <span class="spinner"></span>
-                                Processing...
+                                {{ 'SERVICE_BOOKING.SUBMITTING' | translate }}
                             </span>
                         </button>
                     </form>
@@ -169,13 +169,13 @@
             <path stroke-linecap="round" stroke-linejoin="round"
                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h1 class="fallback-title">Service Not Found</h1>
-        <p class="fallback-description">The service you're looking for doesn't exist or the link may be incorrect.</p>
+        <h1 class="fallback-title">{{ 'SERVICE_BOOKING.SERVICE_NOT_FOUND' | translate }}</h1>
+        <p class="fallback-description">{{ 'SERVICE_BOOKING.SERVICE_NOT_FOUND_DESC' | translate }}</p>
         <button class="btn-back-home" (click)="goToServices()">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Back to Services
+            {{ 'SERVICE_BOOKING.BACK_TO_SERVICES' | translate }}
         </button>
     </div>
 </div>

@@ -452,5 +452,16 @@
       "ERROR_TEXT": "An error occurred. Please try again."
     }
   },
-  "ERROR_DEFAULT": "An error occurred. Please try again."
+  "ERROR_DEFAULT": "An error occurred. Please try again.",
+  "NOTIFICATIONS": {
+    "TITLE": "Notifications",
+    "NEW": "New",
+    "EMPTY_STATE": "No notifications yet",
+    "EMPTY_DESCRIPTION": "You'll see notifications about your service requests here",
+    "JUST_NOW": "Just now",
+    "MINUTES_AGO": "{count}m ago",
+    "HOURS_AGO": "{count}h ago",
+    "MARK_ALL_READ": "Mark all as read",
+    "MARK_AS_READ": "Mark as read"
+  }
 }

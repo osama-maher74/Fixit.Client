@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { ClientService } from '../../services/client.service';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { ClientProfile, Gender } from '../../models/client.models';
@@ -12,7 +13,7 @@ type UserProfile = ClientProfile | CraftsmanProfile;
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css'
 })

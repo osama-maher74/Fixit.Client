@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ServiceRequestService, ServiceRequestResponse } from '../../services/service-request.service';
 import { ClientService } from '../../services/client.service';
 import { AuthService } from '../../services/auth.service';
@@ -9,7 +10,7 @@ import { environment } from '../../../environments/environment';
 @Component({
     selector: 'app-my-requests',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, TranslateModule],
     templateUrl: './my-requests.component.html',
     styleUrl: './my-requests.component.css'
 })
@@ -18,6 +19,7 @@ export class MyRequestsComponent implements OnInit {
     private serviceRequestService = inject(ServiceRequestService);
     private clientService = inject(ClientService);
     private authService = inject(AuthService);
+    private translate = inject(TranslateService);
 
     requests: ServiceRequestResponse[] = [];
     filteredRequests: ServiceRequestResponse[] = [];
@@ -51,14 +53,14 @@ export class MyRequestsComponent implements OnInit {
                     },
                     error: (err) => {
                         console.error('Failed to load service requests:', err);
-                        this.error = 'Failed to load your requests. Please try again.';
+                        this.error = this.translate.instant('ERROR_DEFAULT');
                         this.loading = false;
                     }
                 });
             },
             error: (err) => {
                 console.error('Failed to load client profile:', err);
-                this.error = 'Failed to load your profile. Please try again.';
+                this.error = this.translate.instant('ERROR_DEFAULT');
                 this.loading = false;
             }
         });
@@ -149,23 +151,23 @@ export class MyRequestsComponent implements OnInit {
     }
 
     getStatusText(status: string | number | undefined): string {
-        if (status === null || status === undefined) return 'Unknown';
+        if (status === null || status === undefined) return this.translate.instant('MY_REQUESTS.UNKNOWN');
         const statusNum = typeof status === 'number' ? status : parseInt(status as any);
 
-        const statusNames: { [key: number]: string } = {
-            0: 'Pending',
-            1: 'Waiting for Response',
-            2: 'Waiting for Decision',
-            3: 'Waiting for Payment',
-            4: 'Rejected',
-            5: 'Rejected',
-            6: 'In Progress',
-            7: 'Completed',
-            8: 'Approved',
-            9: 'Cancelled',
-            10: 'Cancelled'
+        const statusKeys: { [key: number]: string } = {
+            0: 'MY_REQUESTS.PENDING',
+            1: 'MY_REQUESTS.WAITING_FOR_RESPONSE',
+            2: 'MY_REQUESTS.WAITING_FOR_DECISION',
+            3: 'MY_REQUESTS.WAITING_FOR_PAYMENT',
+            4: 'MY_REQUESTS.REJECTED',
+            5: 'MY_REQUESTS.REJECTED',
+            6: 'MY_REQUESTS.IN_PROGRESS',
+            7: 'MY_REQUESTS.COMPLETED',
+            8: 'MY_REQUESTS.APPROVED',
+            9: 'MY_REQUESTS.CANCELLED',
+            10: 'MY_REQUESTS.CANCELLED'
         };
 
-        return statusNames[statusNum] || 'Unknown';
+        return this.translate.instant(statusKeys[statusNum] || 'MY_REQUESTS.UNKNOWN');
     }
 }

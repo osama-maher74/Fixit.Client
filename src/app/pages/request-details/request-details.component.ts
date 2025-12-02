@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ServiceRequestService, ServiceRequestResponse } from '../../services/service-request.service';
 import { ReviewService, CreateReviewDTO, UpdateReviewDTO } from '../../services/review.service';
 import { AuthService } from '../../services/auth.service';
@@ -11,7 +12,7 @@ import Swal from 'sweetalert2';
 @Component({
     selector: 'app-request-details',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, TranslateModule],
     templateUrl: './request-details.component.html',
     styleUrl: './request-details.component.css'
 })
@@ -21,6 +22,7 @@ export class RequestDetailsComponent implements OnInit {
     private serviceRequestService = inject(ServiceRequestService);
     private reviewService = inject(ReviewService);
     private authService = inject(AuthService);
+    private translate = inject(TranslateService);
 
     request: ServiceRequestResponse | null = null;
     loading = true;
@@ -40,7 +42,7 @@ export class RequestDetailsComponent implements OnInit {
             if (id) {
                 this.loadRequestDetails(+id);
             } else {
-                this.error = 'Invalid request ID';
+                this.error = this.translate.instant('REQUEST_DETAILS.INVALID_REQUEST_ID');
                 this.loading = false;
             }
         });
@@ -61,7 +63,7 @@ export class RequestDetailsComponent implements OnInit {
             },
             error: (err) => {
                 console.error('Failed to load request details:', err);
-                this.error = 'Failed to load request details. Please try again.';
+                this.error = this.translate.instant('ERROR_DEFAULT');
                 this.loading = false;
             }
         });
@@ -179,24 +181,24 @@ export class RequestDetailsComponent implements OnInit {
     }
 
     getStatusText(status: string | number | undefined): string {
-        if (status === null || status === undefined) return 'Unknown';
+        if (status === null || status === undefined) return this.translate.instant('MY_REQUESTS.UNKNOWN');
         const statusNum = typeof status === 'number' ? status : parseInt(status as any);
 
-        const statusNames: { [key: number]: string } = {
-            0: 'Pending',
-            1: 'Waiting for Response',
-            2: 'Waiting for Decision',
-            3: 'Waiting for Payment',
-            4: 'Rejected',
-            5: 'Rejected',
-            6: 'In Progress',
-            7: 'Completed',
-            8: 'Approved',
-            9: 'Cancelled',
-            10: 'Cancelled'
+        const statusKeys: { [key: number]: string } = {
+            0: 'MY_REQUESTS.PENDING',
+            1: 'MY_REQUESTS.WAITING_FOR_RESPONSE',
+            2: 'MY_REQUESTS.WAITING_FOR_DECISION',
+            3: 'MY_REQUESTS.WAITING_FOR_PAYMENT',
+            4: 'MY_REQUESTS.REJECTED',
+            5: 'MY_REQUESTS.REJECTED',
+            6: 'MY_REQUESTS.IN_PROGRESS',
+            7: 'MY_REQUESTS.COMPLETED',
+            8: 'MY_REQUESTS.APPROVED',
+            9: 'MY_REQUESTS.CANCELLED',
+            10: 'MY_REQUESTS.CANCELLED'
         };
 
-        return statusNames[statusNum] || 'Unknown';
+        return this.translate.instant(statusKeys[statusNum] || 'MY_REQUESTS.UNKNOWN');
     }
 
     isInProgress(): boolean {
@@ -209,14 +211,14 @@ export class RequestDetailsComponent implements OnInit {
         if (!this.request || !this.isInProgress()) return;
 
         Swal.fire({
-            title: 'Complete Service Request',
+            title: this.translate.instant('REQUEST_DETAILS.COMPLETE_SERVICE_TITLE'),
             html: `
-                <p>Did the craftsman <strong>${this.request.craftsManName}</strong> arrive on time and complete the service?</p>
+                <p>${this.translate.instant('REQUEST_DETAILS.COMPLETE_SERVICE_MESSAGE', { craftsmanName: `<strong>${this.request.craftsManName}</strong>` })}</p>
             `,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonText: 'Yes, Complete',
-            cancelButtonText: 'Cancel',
+            confirmButtonText: this.translate.instant('REQUEST_DETAILS.YES_COMPLETE'),
+            cancelButtonText: this.translate.instant('REQUEST_DETAILS.CANCEL'),
             confirmButtonColor: '#10b981',
             cancelButtonColor: '#6b7280'
         }).then((result) => {
@@ -234,7 +236,7 @@ export class RequestDetailsComponent implements OnInit {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Invalid request ID',
+                text: this.translate.instant('REQUEST_DETAILS.INVALID_REQUEST_ID'),
                 confirmButtonColor: '#d4af37'
             });
             return;
@@ -257,8 +259,8 @@ export class RequestDetailsComponent implements OnInit {
 
                 Swal.fire({
                     icon: 'error',
-                    title: 'Failed to Complete',
-                    text: err.error?.message || 'Failed to complete the service request. Please try again.',
+                    title: this.translate.instant('REQUEST_DETAILS.FAILED_TO_COMPLETE'),
+                    text: err.error?.message || this.translate.instant('ERROR_DEFAULT'),
                     confirmButtonColor: '#d4af37'
                 });
             }
@@ -269,13 +271,13 @@ export class RequestDetailsComponent implements OnInit {
         if (!this.request) return;
 
         Swal.fire({
-            title: `Rate ${this.request.craftsManName}`,
+            title: this.translate.instant('REQUEST_DETAILS.RATE_CRAFTSMAN', { craftsmanName: this.request.craftsManName }),
             html: `
-                <p style="color: #6B7280; margin-bottom: 1.5rem;">Would you like to leave a review for this craftsman? (Optional)</p>
+                <p style="color: #6B7280; margin-bottom: 1.5rem;">${this.translate.instant('REQUEST_DETAILS.REVIEW_OPTIONAL')}</p>
                 <div style="text-align: left; padding: 1rem;">
                     <div style="margin-bottom: 1.5rem;">
                         <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #374151;">
-                            Rating (1-5 stars)
+                            ${this.translate.instant('REQUEST_DETAILS.RATING_LABEL')}
                         </label>
                         <div id="star-rating" style="display: flex; gap: 0.5rem; justify-content: center; font-size: 2.5rem; margin: 1rem 0;">
                             <span class="star-btn" data-rating="1" style="cursor: pointer; color: #E5E7EB; transition: all 0.2s;">★</span>
@@ -288,12 +290,12 @@ export class RequestDetailsComponent implements OnInit {
                     </div>
                     <div style="margin-bottom: 1rem;">
                         <label for="review-comment" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #374151;">
-                            Comment
+                            ${this.translate.instant('REQUEST_DETAILS.COMMENT')}
                         </label>
                         <textarea
                             id="review-comment"
                             class="swal2-textarea"
-                            placeholder="Share your experience with this craftsman..."
+                            placeholder="${this.translate.instant('REQUEST_DETAILS.COMMENT_PLACEHOLDER')}"
                             style="width: 100%; min-height: 120px; padding: 0.75rem; border: 2px solid #E5E7EB; border-radius: 8px; font-size: 1rem; font-family: inherit; resize: vertical;"
                         ></textarea>
                     </div>
@@ -301,9 +303,9 @@ export class RequestDetailsComponent implements OnInit {
             `,
             showCancelButton: true,
             showDenyButton: true,
-            confirmButtonText: 'Submit Review',
-            denyButtonText: 'Skip Review',
-            cancelButtonText: 'Cancel',
+            confirmButtonText: this.translate.instant('REQUEST_DETAILS.SUBMIT_REVIEW'),
+            denyButtonText: this.translate.instant('REQUEST_DETAILS.SKIP_REVIEW'),
+            cancelButtonText: this.translate.instant('REQUEST_DETAILS.CANCEL'),
             confirmButtonColor: '#d4af37',
             denyButtonColor: '#6b7280',
             cancelButtonColor: '#9ca3af',
@@ -401,10 +403,10 @@ export class RequestDetailsComponent implements OnInit {
 
                 Swal.fire({
                     icon: 'success',
-                    title: 'Thank You!',
+                    title: this.translate.instant('REQUEST_DETAILS.THANK_YOU'),
                     html: `
-                        <p>Your review has been submitted successfully!</p>
-                        <p style="margin-top: 1rem; color: #6B7280;">Rating: <span style="color: #FDB813; font-weight: 600;">${rating} ★</span></p>
+                        <p>${this.translate.instant('REQUEST_DETAILS.REVIEW_SUBMITTED_SUCCESS')}</p>
+                        <p style="margin-top: 1rem; color: #6B7280;">${this.translate.instant('REQUEST_DETAILS.RATING')}: <span style="color: #FDB813; font-weight: 600;">${rating} ★</span></p>
                     `,
                     confirmButtonColor: '#d4af37'
                 }).then(() => {
@@ -417,8 +419,8 @@ export class RequestDetailsComponent implements OnInit {
 
                 Swal.fire({
                     icon: 'error',
-                    title: 'Failed to Submit Review',
-                    text: err.error?.message || 'Failed to submit your review. Please try again.',
+                    title: this.translate.instant('REQUEST_DETAILS.FAILED_TO_SUBMIT_REVIEW'),
+                    text: err.error?.message || this.translate.instant('ERROR_DEFAULT'),
                     confirmButtonColor: '#d4af37'
                 }).then(() => {
                     // Still reload to show completed status even if review failed
@@ -431,8 +433,8 @@ export class RequestDetailsComponent implements OnInit {
     private showCompletionSuccess(requestId: number) {
         Swal.fire({
             icon: 'success',
-            title: 'Request Completed!',
-            text: 'The service request has been marked as complete.',
+            title: this.translate.instant('REQUEST_DETAILS.REQUEST_COMPLETED'),
+            text: this.translate.instant('REQUEST_DETAILS.REQUEST_COMPLETED_MESSAGE'),
             confirmButtonColor: '#d4af37'
         }).then(() => {
             // Reload the request details to show updated status
@@ -451,8 +453,8 @@ export class RequestDetailsComponent implements OnInit {
         if (this.reviewRating < 1 || this.reviewRating > 5) {
             Swal.fire({
                 icon: 'warning',
-                title: 'Invalid Rating',
-                text: 'Please select a rating between 1 and 5 stars.',
+                title: this.translate.instant('REQUEST_DETAILS.INVALID_RATING'),
+                text: this.translate.instant('REQUEST_DETAILS.INVALID_RATING_MESSAGE'),
                 confirmButtonColor: '#d4af37'
             });
             return;
@@ -461,8 +463,8 @@ export class RequestDetailsComponent implements OnInit {
         if (!this.reviewComment.trim()) {
             Swal.fire({
                 icon: 'warning',
-                title: 'Comment Required',
-                text: 'Please provide a comment for your review.',
+                title: this.translate.instant('REQUEST_DETAILS.COMMENT_REQUIRED'),
+                text: this.translate.instant('REQUEST_DETAILS.COMMENT_REQUIRED_MESSAGE'),
                 confirmButtonColor: '#d4af37'
             });
             return;
@@ -475,7 +477,7 @@ export class RequestDetailsComponent implements OnInit {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Invalid request ID',
+                text: this.translate.instant('REQUEST_DETAILS.INVALID_REQUEST_ID'),
                 confirmButtonColor: '#d4af37'
             });
             this.submittingReview = false;
@@ -537,10 +539,10 @@ export class RequestDetailsComponent implements OnInit {
 
                 Swal.fire({
                     icon: 'success',
-                    title: 'Review Updated!',
+                    title: this.translate.instant('REQUEST_DETAILS.THANK_YOU'),
                     html: `
-                        <p>Your review has been updated successfully!</p>
-                        <p style="margin-top: 1rem; color: #6B7280;">Rating: <span style="color: #FDB813; font-weight: 600;">${this.reviewRating} ★</span></p>
+                        <p>${this.translate.instant('REQUEST_DETAILS.REVIEW_UPDATED_SUCCESS')}</p>
+                        <p style="margin-top: 1rem; color: #6B7280;">${this.translate.instant('REQUEST_DETAILS.RATING')}: <span style="color: #FDB813; font-weight: 600;">${this.reviewRating} ★</span></p>
                     `,
                     confirmButtonColor: '#d4af37'
                 }).then(() => {
@@ -553,8 +555,8 @@ export class RequestDetailsComponent implements OnInit {
 
                 Swal.fire({
                     icon: 'error',
-                    title: 'Failed to Update Review',
-                    text: err.error?.message || 'Failed to update your review. Please try again.',
+                    title: this.translate.instant('REQUEST_DETAILS.FAILED_TO_UPDATE_REVIEW'),
+                    text: err.error?.message || this.translate.instant('ERROR_DEFAULT'),
                     confirmButtonColor: '#d4af37'
                 });
             }
@@ -585,10 +587,10 @@ export class RequestDetailsComponent implements OnInit {
 
                 Swal.fire({
                     icon: 'success',
-                    title: 'Review Submitted!',
+                    title: this.translate.instant('REQUEST_DETAILS.THANK_YOU'),
                     html: `
-                        <p>Your review has been submitted successfully!</p>
-                        <p style="margin-top: 1rem; color: #6B7280;">Rating: <span style="color: #FDB813; font-weight: 600;">${this.reviewRating} ★</span></p>
+                        <p>${this.translate.instant('REQUEST_DETAILS.REVIEW_SUBMITTED_SUCCESS')}</p>
+                        <p style="margin-top: 1rem; color: #6B7280;">${this.translate.instant('REQUEST_DETAILS.RATING')}: <span style="color: #FDB813; font-weight: 600;">${this.reviewRating} ★</span></p>
                     `,
                     confirmButtonColor: '#d4af37'
                 }).then(() => {
@@ -601,8 +603,8 @@ export class RequestDetailsComponent implements OnInit {
 
                 Swal.fire({
                     icon: 'error',
-                    title: 'Failed to Submit Review',
-                    text: err.error?.message || 'Failed to submit your review. Please try again.',
+                    title: this.translate.instant('REQUEST_DETAILS.FAILED_TO_SUBMIT_REVIEW'),
+                    text: err.error?.message || this.translate.instant('ERROR_DEFAULT'),
                     confirmButtonColor: '#d4af37'
                 });
             }

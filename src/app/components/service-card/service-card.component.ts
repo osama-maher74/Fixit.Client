@@ -1,6 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 
 export interface ServiceCard {
@@ -29,7 +30,7 @@ const SERVICE_IMAGES: { [key: string]: string } = {
 @Component({
   selector: 'app-service-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './service-card.component.html',
   styleUrl: './service-card.component.scss'
 })
@@ -38,12 +39,23 @@ export class ServiceCardComponent {
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  private translate = inject(TranslateService);
 
   /**
    * Get image URL for the service
    */
   getServiceImage(): string {
     return SERVICE_IMAGES[this.service.serviceName] || SERVICE_IMAGES['default'];
+  }
+
+  /**
+   * Get translated service name
+   */
+  getTranslatedServiceName(): string {
+    const translationKey = `SERVICES.SERVICE_NAMES.${this.service.serviceName}`;
+    const translated = this.translate.instant(translationKey);
+    // If translation not found, return original name
+    return translated !== translationKey ? translated : this.service.serviceName;
   }
 
   /**
@@ -56,9 +68,10 @@ export class ServiceCardComponent {
     if (hours > 0 && minutes > 0) {
       return `${hours}h ${minutes}m`;
     } else if (hours > 0) {
-      return `${hours} ${hours === 1 ? 'hour' : 'hours'}`;
+      const hourLabel = hours === 1 ? this.translate.instant('SERVICE_BOOKING.HOUR') : this.translate.instant('SERVICE_BOOKING.HOURS');
+      return `${hours} ${hourLabel}`;
     } else {
-      return `${minutes} min`;
+      return `${minutes} ${this.translate.instant('SERVICE_BOOKING.MIN')}`;
     }
   }
 

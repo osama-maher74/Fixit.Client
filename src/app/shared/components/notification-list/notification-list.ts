@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../../services/notification.service';
 import { NotificationType, ReadNotificationDto } from '../../../models/notification.models';
 import { ClientService } from '../../../services/client.service';
@@ -14,7 +15,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-notification-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './notification-list.html',
   styleUrl: './notification-list.css'
 })
@@ -25,6 +26,7 @@ export class NotificationListComponent implements OnInit {
   authService = inject(AuthService);
   offerService = inject(OfferService);
   themeService = inject(ThemeService);
+  translateService = inject(TranslateService);
   router = inject(Router);
 
   ngOnInit() {
@@ -380,11 +382,11 @@ export class NotificationListComponent implements OnInit {
     const now = new Date();
     const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-    if (seconds < 60) return 'Just now';
+    if (seconds < 60) return this.translateService.instant('NOTIFICATIONS.JUST_NOW');
     const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes}m ago`;
+    if (minutes < 60) return this.translateService.instant('NOTIFICATIONS.MINUTES_AGO', { count: minutes });
     const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours}h ago`;
+    if (hours < 24) return this.translateService.instant('NOTIFICATIONS.HOURS_AGO', { count: hours });
     return date.toLocaleDateString();
   }
 }

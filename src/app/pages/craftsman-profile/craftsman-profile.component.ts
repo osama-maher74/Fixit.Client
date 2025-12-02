@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { ReviewService } from '../../services/review.service';
 import { CraftsmanProfile, Gender, Review } from '../../models/craftsman.models';
@@ -9,7 +10,7 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-craftsman-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './craftsman-profile.component.html',
   styleUrl: './craftsman-profile.component.css'
 })
@@ -17,6 +18,7 @@ export class CraftsmanProfileComponent implements OnInit {
   private craftsmanService = inject(CraftsmanService);
   private reviewService = inject(ReviewService);
   private router = inject(Router);
+  private translate = inject(TranslateService);
 
   // Signals for reactive state management
   profile = signal<CraftsmanProfile | null>(null);
@@ -152,7 +154,7 @@ export class CraftsmanProfileComponent implements OnInit {
    */
   formatReviewDate(dateString: string): string {
     if (!dateString || dateString.startsWith('0001-01-01')) {
-      return 'Recently';
+      return this.translate.instant('CRAFTSMAN_PROFILE.RECENTLY');
     }
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -230,7 +232,7 @@ export class CraftsmanProfileComponent implements OnInit {
    * Get verification badge text
    */
   getVerificationText(): string {
-    return this.profile()?.isVerified ? 'Verified' : 'Not Verified';
+    return this.profile()?.isVerified ? this.translate.instant('CRAFTSMAN_PROFILE.VERIFIED') : this.translate.instant('CRAFTSMAN_PROFILE.NOT_VERIFIED');
   }
 
   /**

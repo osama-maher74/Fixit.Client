@@ -1,9 +1,9 @@
 <div class="edit-profile-container">
-  <!-- Loading State -->
+  <!--Loading State -->
   @if (isLoading()) {
   <div class="loading-state">
     <div class="spinner"></div>
-    <p class="loading-text">Loading your profile...</p>
+    <p class="loading-text">{{ 'EDIT_PROFILE.LOADING' | translate }}</p>
   </div>
   }
 
@@ -16,7 +16,7 @@
           d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       </svg>
     </div>
-    <h3 class="error-title">Unable to Load Profile</h3>
+    <h3 class="error-title">{{ 'EDIT_PROFILE.UNABLE_TO_LOAD' | translate }}</h3>
     <p class="error-message">{{ errorMessage() }}</p>
   </div>
   }
@@ -34,8 +34,8 @@
           </svg>
         </div>
         <div>
-          <h1 class="form-title">Edit Profile</h1>
-          <p class="form-subtitle">Update your personal information</p>
+          <h1 class="form-title">{{ 'EDIT_PROFILE.EDIT_PROFILE' | translate }}</h1>
+          <p class="form-subtitle">{{ 'EDIT_PROFILE.UPDATE_PERSONAL_INFO' | translate }}</p>
         </div>
       </div>
 
@@ -63,7 +63,7 @@
       <form [formGroup]="clientForm" (ngSubmit)="onSubmitClient()">
         <!-- Profile Image Upload -->
         <div class="image-upload-section">
-          <label class="section-label">Profile Picture</label>
+          <label class="section-label">{{ 'EDIT_PROFILE.PROFILE_PICTURE' | translate }}</label>
           <div class="image-upload-container">
             <div class="image-preview">
               @if (imagePreviewUrl()) {
@@ -88,11 +88,11 @@
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                Choose Photo
+                {{ 'EDIT_PROFILE.CHOOSE_PHOTO' | translate }}
               </label>
               <input id="profileImage" type="file" accept="image/*" (change)="onImageSelected($event)"
                 class="file-input" />
-              <p class="upload-hint">JPG, PNG or GIF (max. 5MB)</p>
+              <p class="upload-hint">{{ 'EDIT_PROFILE.IMAGE_HINT_5MB' | translate }}</p>
             </div>
           </div>
         </div>
@@ -100,18 +100,18 @@
         <!-- Name Fields -->
         <div class="form-row">
           <div class="form-group">
-            <label for="fName" class="form-label">First Name</label>
+            <label for="fName" class="form-label">{{ 'EDIT_PROFILE.FIRST_NAME' | translate }}</label>
             <input id="fName" type="text" formControlName="fName" class="form-control"
-              [class.error]="hasError(clientForm, 'fName')" placeholder="Enter first name" />
+              [class.error]="hasError(clientForm, 'fName')" [placeholder]="'EDIT_PROFILE.ENTER_FIRST_NAME' | translate" />
             @if (hasError(clientForm, 'fName')) {
             <span class="error-text">{{ getErrorMessage(clientForm, 'fName') }}</span>
             }
           </div>
 
           <div class="form-group">
-            <label for="lName" class="form-label">Last Name</label>
+            <label for="lName" class="form-label">{{ 'EDIT_PROFILE.LAST_NAME' | translate }}</label>
             <input id="lName" type="text" formControlName="lName" class="form-control"
-              [class.error]="hasError(clientForm, 'lName')" placeholder="Enter last name" />
+              [class.error]="hasError(clientForm, 'lName')" [placeholder]="'EDIT_PROFILE.ENTER_LAST_NAME' | translate" />
             @if (hasError(clientForm, 'lName')) {
             <span class="error-text">{{ getErrorMessage(clientForm, 'lName') }}</span>
             }
@@ -120,9 +120,9 @@
 
         <!-- Location -->
         <div class="form-group">
-          <label for="location" class="form-label">Location</label>
+          <label for="location" class="form-label">{{ 'EDIT_PROFILE.LOCATION' | translate }}</label>
           <input id="location" type="text" formControlName="location" class="form-control"
-            [class.error]="hasError(clientForm, 'location')" placeholder="Enter your location" />
+            [class.error]="hasError(clientForm, 'location')" [placeholder]="'EDIT_PROFILE.ENTER_LOCATION' | translate" />
           @if (hasError(clientForm, 'location')) {
           <span class="error-text">{{ getErrorMessage(clientForm, 'location') }}</span>
           }
@@ -130,9 +130,9 @@
 
         <!-- Phone Number -->
         <div class="form-group">
-          <label for="phoneNumber" class="form-label">Phone Number</label>
+          <label for="phoneNumber" class="form-label">{{ 'EDIT_PROFILE.PHONE_NUMBER' | translate }}</label>
           <input id="phoneNumber" type="tel" formControlName="phoneNumber" class="form-control"
-            [class.error]="hasError(clientForm, 'phoneNumber')" placeholder="Enter phone number" />
+            [class.error]="hasError(clientForm, 'phoneNumber')" [placeholder]="'EDIT_PROFILE.ENTER_PHONE_NUMBER' | translate" />
           @if (hasError(clientForm, 'phoneNumber')) {
           <span class="error-text">{{ getErrorMessage(clientForm, 'phoneNumber') }}</span>
           }
@@ -140,17 +140,17 @@
 
         <!-- Gender -->
         <div class="form-group">
-          <label class="form-label">Gender</label>
+          <label class="form-label">{{ 'EDIT_PROFILE.GENDER' | translate }}</label>
           <div class="radio-group">
             <label class="radio-label">
               <input type="radio" formControlName="gender" [value]="Gender.Male" class="radio-input" />
               <span class="radio-custom"></span>
-              <span class="radio-text">Male</span>
+              <span class="radio-text">{{ 'EDIT_PROFILE.MALE' | translate }}</span>
             </label>
             <label class="radio-label">
               <input type="radio" formControlName="gender" [value]="Gender.Female" class="radio-input" />
               <span class="radio-custom"></span>
-              <span class="radio-text">Female</span>
+              <span class="radio-text">{{ 'EDIT_PROFILE.FEMALE' | translate }}</span>
             </label>
           </div>
         </div>
@@ -158,17 +158,17 @@
         <!-- Action Buttons -->
         <div class="form-actions">
           <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isSaving()">
-            Cancel
+            {{ 'EDIT_PROFILE.CANCEL' | translate }}
           </button>
           <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
             @if (isSaving()) {
             <div class="btn-spinner"></div>
-            <span>Saving...</span>
+            <span>{{ 'EDIT_PROFILE.SAVING' | translate }}</span>
             } @else {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
             </svg>
-            <span>Save Changes</span>
+            <span>{{ 'EDIT_PROFILE.SAVE_CHANGES' | translate }}</span>
             }
           </button>
         </div>
@@ -189,8 +189,8 @@
           </svg>
         </div>
         <div>
-          <h1 class="form-title">Edit Profile</h1>
-          <p class="form-subtitle">Update your professional information</p>
+          <h1 class="form-title">{{ 'EDIT_PROFILE.EDIT_PROFILE' | translate }}</h1>
+          <p class="form-subtitle">{{ 'EDIT_PROFILE.UPDATE_PROFESSIONAL_INFO' | translate }}</p>
         </div>
       </div>
 
@@ -216,9 +216,9 @@
 
       <!-- Form -->
       <form [formGroup]="craftsmanForm" (ngSubmit)="onSubmitCraftsman()">
-        <!-- Profile Image Upload -->
+        <!--Profile Image Upload -->
         <div class="image-upload-section">
-          <label class="section-label">Profile Picture</label>
+          <label class="section-label">{{ 'EDIT_PROFILE.PROFILE_PICTURE' | translate }}</label>
           <div class="image-upload-container">
             <div class="image-preview">
               @if (imagePreviewUrl()) {
@@ -243,18 +243,18 @@
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                Choose Photo
+                {{ 'EDIT_PROFILE.CHOOSE_PHOTO' | translate }}
               </label>
               <input id="profileImage" type="file" accept="image/*" (change)="onImageSelected($event)"
                 class="file-input" />
-              <p class="upload-hint">JPG, PNG or GIF (max. 5MB)</p>
+              <p class="upload-hint">{{ 'EDIT_PROFILE.IMAGE_HINT_5MB' | translate }}</p>
             </div>
           </div>
         </div>
 
                 <!-- National ID Picture Upload -->
         <div class="image-upload-section">
-          <label class="section-label">National ID Picture</label>
+          <label class="section-label">{{ 'EDIT_PROFILE.NATIONAL_ID_PICTURE' | translate }}</label>
           <div class="image-upload-container">
             <div class="image-preview national-id-preview">
               @if (nationalIdPreviewUrl()) {
@@ -269,7 +269,7 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
                   </svg>
-                  <p class="placeholder-text">No National ID uploaded</p>
+                  <p class="placeholder-text">{{ 'EDIT_PROFILE.NO_NATIONAL_ID' | translate }}</p>
                 </div>
               }
             </div>
@@ -278,7 +278,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                {{ nationalIdPreviewUrl() ? 'Change Photo' : 'Upload National ID' }}
+                {{ nationalIdPreviewUrl() ? ('EDIT_PROFILE.CHANGE_PHOTO' | translate) : ('EDIT_PROFILE.UPLOAD_NATIONAL_ID' | translate) }}
               </label>
               <input
                 id="nationalIdPic"
@@ -287,7 +287,7 @@
                 (change)="onNationalIdSelected($event)"
                 class="file-input"
               />
-              <p class="upload-hint">JPG, PNG or GIF (max. 3MB)</p>
+              <p class="upload-hint">{{ 'EDIT_PROFILE.IMAGE_HINT_3MB' | translate }}</p>
             </div>
           </div>
         </div>
@@ -296,18 +296,18 @@
         <!-- Name Fields -->
         <div class="form-row">
           <div class="form-group">
-            <label for="fName" class="form-label">First Name</label>
+            <label for="fName" class="form-label">{{ 'EDIT_PROFILE.FIRST_NAME' | translate }}</label>
             <input id="fName" type="text" formControlName="fName" class="form-control"
-              [class.error]="hasError(craftsmanForm, 'fName')" placeholder="Enter first name" />
+              [class.error]="hasError(craftsmanForm, 'fName')" [placeholder]="'EDIT_PROFILE.ENTER_FIRST_NAME' | translate" />
             @if (hasError(craftsmanForm, 'fName')) {
             <span class="error-text">{{ getErrorMessage(craftsmanForm, 'fName') }}</span>
             }
           </div>
 
           <div class="form-group">
-            <label for="lName" class="form-label">Last Name</label>
+            <label for="lName" class="form-label">{{ 'EDIT_PROFILE.LAST_NAME' | translate }}</label>
             <input id="lName" type="text" formControlName="lName" class="form-control"
-              [class.error]="hasError(craftsmanForm, 'lName')" placeholder="Enter last name" />
+              [class.error]="hasError(craftsmanForm, 'lName')" [placeholder]="'EDIT_PROFILE.ENTER_LAST_NAME' | translate" />
             @if (hasError(craftsmanForm, 'lName')) {
             <span class="error-text">{{ getErrorMessage(craftsmanForm, 'lName') }}</span>
             }
@@ -316,10 +316,10 @@
 
         <!-- Description -->
         <div class="form-group">
-          <label for="describtion" class="form-label">About / Description</label>
+          <label for="describtion" class="form-label">{{ 'EDIT_PROFILE.ABOUT_DESCRIPTION' | translate }}</label>
           <textarea id="describtion" formControlName="describtion" class="form-control textarea"
             [class.error]="hasError(craftsmanForm, 'describtion')"
-            placeholder="Tell us about your skills and experience..." rows="4"></textarea>
+            [placeholder]="'EDIT_PROFILE.DESCRIBE_SKILLS' | translate" rows="4"></textarea>
           @if (hasError(craftsmanForm, 'describtion')) {
           <span class="error-text">{{ getErrorMessage(craftsmanForm, 'describtion') }}</span>
           }
@@ -327,9 +327,9 @@
 
         <!-- Phone Number -->
         <div class="form-group">
-          <label for="craftsmanPhoneNumber" class="form-label">Phone Number</label>
+          <label for="craftsmanPhoneNumber" class="form-label">{{ 'EDIT_PROFILE.PHONE_NUMBER' | translate }}</label>
           <input id="craftsmanPhoneNumber" type="tel" formControlName="phoneNumber" class="form-control"
-            [class.error]="hasError(craftsmanForm, 'phoneNumber')" placeholder="Enter phone number" />
+            [class.error]="hasError(craftsmanForm, 'phoneNumber')" [placeholder]="'EDIT_PROFILE.ENTER_PHONE_NUMBER' | translate" />
           @if (hasError(craftsmanForm, 'phoneNumber')) {
           <span class="error-text">{{ getErrorMessage(craftsmanForm, 'phoneNumber') }}</span>
           }
@@ -338,7 +338,7 @@
         <!-- Experience and Rate -->
         <div class="form-row">
           <div class="form-group">
-            <label for="experienceOfYears" class="form-label">Years of Experience</label>
+            <label for="experienceOfYears" class="form-label">{{ 'EDIT_PROFILE.YEARS_OF_EXPERIENCE' | translate }}</label>
             <input id="experienceOfYears" type="number" formControlName="experienceOfYears" class="form-control"
               [class.error]="hasError(craftsmanForm, 'experienceOfYears')" placeholder="0" min="0" />
             @if (hasError(craftsmanForm, 'experienceOfYears')) {
@@ -347,7 +347,7 @@
           </div>
 
           <div class="form-group">
-            <label for="hourlyRate" class="form-label">Hourly Rate ($)</label>
+            <label for="hourlyRate" class="form-label">{{ 'EDIT_PROFILE.HOURLY_RATE' | translate }}</label>
             <input id="hourlyRate" type="number" formControlName="hourlyRate" class="form-control"
               [class.error]="hasError(craftsmanForm, 'hourlyRate')" placeholder="0.00" min="0" step="0.01" />
             @if (hasError(craftsmanForm, 'hourlyRate')) {
@@ -359,17 +359,17 @@
         <!-- Action Buttons -->
         <div class="form-actions">
           <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isSaving()">
-            Cancel
+            {{ 'EDIT_PROFILE.CANCEL' | translate }}
           </button>
           <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
             @if (isSaving()) {
             <div class="btn-spinner"></div>
-            <span>Saving...</span>
+            <span>{{ 'EDIT_PROFILE.SAVING' | translate }}</span>
             } @else {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
             </svg>
-            <span>Save Changes</span>
+            <span>{{ 'EDIT_PROFILE.SAVE_CHANGES' | translate }}</span>
             }
           </button>
         </div>

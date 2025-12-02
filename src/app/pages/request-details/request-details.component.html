@@ -3,7 +3,7 @@
     @if (loading) {
     <div class="loading-container">
         <div class="spinner"></div>
-        <p>Loading request details...</p>
+        <p>{{ 'REQUEST_DETAILS.LOADING' | translate }}</p>
     </div>
     }
 
@@ -12,7 +12,7 @@
     <div class="error-container">
         <div class="error-icon">⚠️</div>
         <p class="error-message">{{ error }}</p>
-        <button class="btn-back" (click)="goBack()">Back to My Requests</button>
+        <button class="btn-back" (click)="goBack()">{{ 'REQUEST_DETAILS.BACK_TO_MY_REQUESTS' | translate }}</button>
     </div>
     }
 
@@ -22,14 +22,14 @@
         <!-- Back Button -->
         <button class="btn-back-top" (click)="goBack()">
             <span class="back-icon">←</span>
-            Back to My Requests
+            {{ 'REQUEST_DETAILS.BACK_TO_MY_REQUESTS' | translate }}
         </button>
 
         <!-- Details Card -->
         <div class="details-card">
             <!-- Header with Status -->
             <div class="card-header">
-                <h1 class="request-title">{{ request.serviceName || 'Service Request' }}</h1>
+                <h1 class="request-title">{{ request.serviceName || ('REQUEST_DETAILS.SERVICE_REQUEST' | translate) }}</h1>
                 <div class="status-badge" [ngClass]="getStatusClass(request.status)">
                     <span class="status-icon">{{ getStatusIcon(request.status) }}</span>
                     <span class="status-text">{{ getStatusText(request.status) }}</span>
@@ -48,7 +48,7 @@
                 <div class="detail-item">
                     <div class="detail-label">
                         <span class="detail-icon">👷</span>
-                        <span>Craftsman</span>
+                        <span>{{ 'REQUEST_DETAILS.CRAFTSMAN' | translate }}</span>
                     </div>
                     <div class="detail-value">{{ request.craftsManName }}</div>
                 </div>
@@ -59,7 +59,7 @@
                 <div class="detail-item">
                     <div class="detail-label">
                         <span class="detail-icon">👤</span>
-                        <span>Client</span>
+                        <span>{{ 'REQUEST_DETAILS.CLIENT' | translate }}</span>
                     </div>
                     <div class="detail-value">{{ request.clientName }}</div>
                 </div>
@@ -69,16 +69,16 @@
                 <div class="detail-item">
                     <div class="detail-label">
                         <span class="detail-icon">📍</span>
-                        <span>Location</span>
+                        <span>{{ 'REQUEST_DETAILS.LOCATION' | translate }}</span>
                     </div>
-                    <div class="detail-value">{{ request.location || 'Not specified' }}</div>
+                    <div class="detail-value">{{ request.location || ('REQUEST_DETAILS.NOT_SPECIFIED' | translate) }}</div>
                 </div>
 
                 <!-- Request Date -->
                 <div class="detail-item">
                     <div class="detail-label">
                         <span class="detail-icon">📅</span>
-                        <span>Requested At</span>
+                        <span>{{ 'REQUEST_DETAILS.REQUESTED_AT' | translate }}</span>
                     </div>
                     <div class="detail-value">{{ formatDate(request.requestAt) }}</div>
                 </div>
@@ -88,7 +88,7 @@
                 <div class="detail-item">
                     <div class="detail-label">
                         <span class="detail-icon">🕐</span>
-                        <span>Service Start Time</span>
+                        <span>{{ 'REQUEST_DETAILS.SERVICE_START_TIME' | translate }}</span>
                     </div>
                     <div class="detail-value">{{ formatDate(request.serviceStartTime) }}</div>
                 </div>
@@ -99,7 +99,7 @@
                 <div class="detail-item highlight">
                     <div class="detail-label">
                         <span class="detail-icon">✅</span>
-                        <span>Completed At</span>
+                        <span>{{ 'REQUEST_DETAILS.COMPLETED_AT' | translate }}</span>
                     </div>
                     <div class="detail-value completed-value">{{ formatDate(request.completedAt) }}</div>
                 </div>
@@ -110,7 +110,7 @@
                 <div class="detail-item">
                     <div class="detail-label">
                         <span class="detail-icon">💵</span>
-                        <span>Suggested Price</span>
+                        <span>{{ 'REQUEST_DETAILS.SUGGESTED_PRICE' | translate }}</span>
                     </div>
                     <div class="detail-value">{{ request.suggestedPrice }} EGP</div>
                 </div>
@@ -121,7 +121,7 @@
                 <div class="detail-item highlight">
                     <div class="detail-label">
                         <span class="detail-icon">💰</span>
-                        <span>Total Amount</span>
+                        <span>{{ 'REQUEST_DETAILS.TOTAL_AMOUNT' | translate }}</span>
                     </div>
                     <div class="detail-value price-value">{{ request.totalAmount }} EGP</div>
                 </div>
@@ -129,18 +129,18 @@
             </div>
 
             <!-- In Progress Notification (Client only) -->
-            @if (isInProgress() && !isCraftsman()) {
+            <!-- @if (isInProgress() && !isCraftsman()) {
             <div class="in-progress-notification">
                 <div class="notification-icon">🚀</div>
                 <div class="notification-content">
-                    <h3 class="notification-title">Service In Progress</h3>
+                    <h3 class="notification-title">{{ 'REQUEST_DETAILS.SERVICE_IN_PROGRESS' | translate }}</h3>
                     <p class="notification-message">
-                        <strong>{{ request.craftsManName }}</strong> will arrive at your location:
+                        <strong>{{ request.craftsManName }}</strong> {{ 'REQUEST_DETAILS.SERVICE_IN_PROGRESS_MESSAGE' | translate }}
                     </p>
                     <div class="notification-details">
                         <div class="detail-row">
                             <span class="detail-icon">📍</span>
-                            <span class="detail-text">{{ request.location || 'Location not specified' }}</span>
+                            <span class="detail-text">{{ request.location || ('REQUEST_DETAILS.LOCATION_NOT_SPECIFIED' | translate) }}</span>
                         </div>
                         @if (request.serviceStartTime) {
                         <div class="detail-row">
@@ -151,15 +151,15 @@
                     </div>
                 </div>
             </div>
-            }
+            } -->
 
             <!-- Description Section -->
             <div class="description-section">
                 <h2 class="section-title">
                     <span class="section-icon">📝</span>
-                    Description
+                    {{ 'REQUEST_DETAILS.DESCRIPTION' | translate }}
                 </h2>
-                <p class="description-text">{{ request.description || 'No description provided' }}</p>
+                <p class="description-text">{{ request.description || ('REQUEST_DETAILS.NO_DESCRIPTION' | translate) }}</p>
             </div>
 
             <!-- Review Section (Display existing review) -->
@@ -167,11 +167,11 @@
             <div class="review-section">
                 <h2 class="section-title">
                     <span class="section-icon">⭐</span>
-                    Review
+                    {{ 'REQUEST_DETAILS.REVIEW' | translate }}
                 </h2>
                 @if (request.reviewRatingValue) {
                 <div class="rating-container">
-                    <span class="rating-label">Rating:</span>
+                    <span class="rating-label">{{ 'REQUEST_DETAILS.RATING' | translate }}:</span>
                     <div class="stars">
                         @for (star of [1, 2, 3, 4, 5]; track star) {
                         <span class="star" [class.filled]="star <= (request.reviewRatingValue || 0)">★</span>
@@ -191,13 +191,13 @@
             <div class="review-form-section">
                 <h2 class="section-title">
                     <span class="section-icon">{{ hasExistingReview() ? '✏️' : '➕' }}</span>
-                    {{ hasExistingReview() ? 'Edit Review' : 'Add Review' }}
+                    {{ hasExistingReview() ? ('REQUEST_DETAILS.EDIT_REVIEW' | translate) : ('REQUEST_DETAILS.ADD_REVIEW' | translate) }}
                 </h2>
 
                 <div class="review-form">
                     <!-- Star Rating Input -->
                     <div class="form-group">
-                        <label class="form-label">Rating (1-5 stars)</label>
+                        <label class="form-label">{{ 'REQUEST_DETAILS.RATING_LABEL' | translate }}</label>
                         <div class="star-rating-input">
                             @for (star of [1, 2, 3, 4, 5]; track star) {
                             <span class="star-input" [class.filled]="star <= reviewRating"
@@ -211,18 +211,18 @@
 
                     <!-- Comment Input -->
                     <div class="form-group">
-                        <label for="review-comment-input" class="form-label">Comment</label>
+                        <label for="review-comment-input" class="form-label">{{ 'REQUEST_DETAILS.COMMENT' | translate }}</label>
                         <textarea id="review-comment-input" class="form-textarea" [(ngModel)]="reviewComment"
-                            placeholder="Share your experience with this craftsman..." rows="4"></textarea>
+                            [placeholder]="'REQUEST_DETAILS.COMMENT_PLACEHOLDER' | translate" rows="4"></textarea>
                     </div>
 
                     <!-- Submit Button -->
                     <button class="btn-submit-review" (click)="submitReviewForm()" [disabled]="submittingReview">
                         @if (submittingReview) {
                         <span class="spinner-small"></span>
-                        <span>{{ hasExistingReview() ? 'Updating...' : 'Submitting...' }}</span>
+                        <span>{{ hasExistingReview() ? ('REQUEST_DETAILS.UPDATING' | translate) : ('REQUEST_DETAILS.SUBMITTING' | translate) }}</span>
                         } @else {
-                        <span>{{ hasExistingReview() ? '✓ Update Review' : '✓ Submit Review' }}</span>
+                        <span>{{ hasExistingReview() ? ('✓ ' + ('REQUEST_DETAILS.UPDATE_REVIEW' | translate)) : ('✓ ' + ('REQUEST_DETAILS.SUBMIT_REVIEW' | translate)) }}</span>
                         }
                     </button>
                 </div>
@@ -235,13 +235,13 @@
                 <button class="btn-complete" (click)="completeRequest()" [disabled]="completingRequest">
                     @if (completingRequest) {
                     <span class="spinner-small"></span>
-                    <span>Completing...</span>
+                    <span>{{ 'REQUEST_DETAILS.COMPLETING' | translate }}</span>
                     } @else {
-                    <span>✓ Complete Request</span>
+                    <span>✓ {{ 'REQUEST_DETAILS.COMPLETE_REQUEST' | translate }}</span>
                     }
                 </button>
                 }
-                <button class="btn-secondary" (click)="goBack()">Back to My Requests</button>
+                <button class="btn-secondary" (click)="goBack()">{{ 'REQUEST_DETAILS.BACK_TO_MY_REQUESTS' | translate }}</button>
             </div>
         </div>
     </div>

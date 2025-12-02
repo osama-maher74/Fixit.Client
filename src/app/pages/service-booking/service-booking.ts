@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -88,6 +88,7 @@ export class ServiceBookingComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private translate = inject(TranslateService);
 
   ngOnInit(): void {
     this.initializeForm();
@@ -156,20 +157,23 @@ export class ServiceBookingComponent implements OnInit {
   }
 
   private mapServiceToDetails(service: ServiceCard): void {
-    // Default features if not provided by API
-    const defaultFeatures = [
-      'Professional and experienced technicians',
-      'Quality service guaranteed',
-      'Affordable pricing',
-      'Quick response time'
-    ];
+    // Get translated default features
+    const defaultFeaturesTranslations = this.translate.instant('SERVICES.DEFAULT_FEATURES');
+    const defaultFeatures = Array.isArray(defaultFeaturesTranslations)
+      ? defaultFeaturesTranslations
+      : [
+          'Professional and experienced technicians',
+          'Quality service guaranteed',
+          'Affordable pricing',
+          'Quick response time'
+        ];
 
     // Map the ServiceCard from backend to our ServiceDetails
     this.selectedService = {
       serviceId: service.serviceId, // Service ID from API response
       serviceName: service.serviceName,
-      tagline: service.tagline || 'Professional service at your doorstep',
-      description: service.description || `Get professional ${service.serviceName} service from experienced technicians. We ensure high-quality work with customer satisfaction guaranteed.`,
+      tagline: service.tagline || this.getTranslatedTagline(service.serviceName),
+      description: service.description || this.getTranslatedDescription(service.serviceName),
       features: (service.features && service.features.length > 0) ? service.features : defaultFeatures,
       images: this.getServiceImages(service),
       price: service.initialPrice,
@@ -182,6 +186,50 @@ export class ServiceBookingComponent implements OnInit {
         suggestedPrice: this.selectedService.price
       });
     }
+  }
+
+  /**
+   * Get translated service name for the currently selected service (public method for template)
+   */
+  getTranslatedServiceName(): string {
+    if (!this.selectedService) return '';
+    return this.getTranslatedServiceNameByName(this.selectedService.serviceName);
+  }
+
+  /**
+   * Get translated service name by service name string
+   */
+  private getTranslatedServiceNameByName(serviceName: string): string {
+    const translationKey = `SERVICES.SERVICE_NAMES.${serviceName}`;
+    const translated = this.translate.instant(translationKey);
+    return translated !== translationKey ? translated : serviceName;
+  }
+
+  /**
+   * Get translated service tagline
+   */
+  private getTranslatedTagline(serviceName: string): string {
+    const translationKey = `SERVICES.SERVICE_TAGLINES.${serviceName}`;
+    const translated = this.translate.instant(translationKey);
+    if (translated !== translationKey) {
+      return translated;
+    }
+    // Fallback to default tagline
+    return this.translate.instant('SERVICE_BOOKING.DEFAULT_TAGLINE');
+  }
+
+  /**
+   * Get translated service description
+   */
+  private getTranslatedDescription(serviceName: string): string {
+    const translationKey = `SERVICES.SERVICE_DESCRIPTIONS.${serviceName}`;
+    const translated = this.translate.instant(translationKey);
+    if (translated !== translationKey) {
+      return translated;
+    }
+    // Fallback to template
+    const translatedServiceName = this.getTranslatedServiceNameByName(serviceName);
+    return `Get professional ${translatedServiceName} service from experienced technicians. We ensure high-quality work with customer satisfaction guaranteed.`;
   }
 
   /**
@@ -214,9 +262,10 @@ export class ServiceBookingComponent implements OnInit {
     if (hours > 0 && minutes > 0) {
       return `${hours}h ${minutes}m`;
     } else if (hours > 0) {
-      return `${hours} ${hours === 1 ? 'hour' : 'hours'}`;
+      const hourLabel = hours === 1 ? this.translate.instant('SERVICE_BOOKING.HOUR') : this.translate.instant('SERVICE_BOOKING.HOURS');
+      return `${hours} ${hourLabel}`;
     } else {
-      return `${minutes} min`;
+      return `${minutes} ${this.translate.instant('SERVICE_BOOKING.MIN')}`;
     }
   }
 
@@ -228,7 +277,7 @@ export class ServiceBookingComponent implements OnInit {
       // Validate file size (max 5MB)
       const maxSize = 5 * 1024 * 1024; // 5MB in bytes
       if (file.size > maxSize) {
-        alert('File size must be less than 5MB');
+        alert(this.translate.instant('SERVICE_BOOKING.FILE_SIZE_ERROR'));
         input.value = '';
         return;
       }
@@ -236,7 +285,7 @@ export class ServiceBookingComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
       if (!allowedTypes.includes(file.type)) {
-        alert('Only JPG, PNG, and WebP images are allowed');
+        alert(this.translate.instant('SERVICE_BOOKING.FILE_TYPE_ERROR'));
         input.value = '';
         return;
       }
@@ -265,14 +314,14 @@ export class ServiceBookingComponent implements OnInit {
   getFieldError(fieldName: string): string {
     const field = this.bookingForm.get(fieldName);
     if (field?.hasError('required')) {
-      return 'This field is required';
+      return this.translate.instant('SERVICE_BOOKING.FIELD_REQUIRED');
     }
     if (field?.hasError('minlength')) {
       const minLength = field.errors?.['minlength'].requiredLength;
-      return `Minimum ${minLength} characters required`;
+      return this.translate.instant('SERVICE_BOOKING.MIN_LENGTH_REQUIRED', { length: minLength });
     }
     if (field?.hasError('min')) {
-      return 'Price must be positive';
+      return this.translate.instant('SERVICE_BOOKING.PRICE_MUST_BE_POSITIVE');
     }
     return '';
   }
@@ -281,7 +330,7 @@ export class ServiceBookingComponent implements OnInit {
     // Check if user is authenticated
     if (!this.authService.isAuthenticated()) {
       console.error('User not authenticated');
-      alert('Please log in to book a service');
+      alert(this.translate.instant('SERVICE_BOOKING.LOGIN_REQUIRED'));
       this.router.navigate(['/auth/login']);
       return;
     }
@@ -296,13 +345,13 @@ export class ServiceBookingComponent implements OnInit {
 
     if (!this.selectedService) {
       console.error('No service selected');
-      alert('No service selected');
+      alert(this.translate.instant('SERVICE_BOOKING.NO_SERVICE_SELECTED'));
       return;
     }
 
     if (!this.selectedService.serviceId) {
       console.error('Service ID missing:', this.selectedService);
-      alert('Error: Service ID is missing. Please refresh the page and try again.');
+      alert(this.translate.instant('SERVICE_BOOKING.SERVICE_ID_MISSING'));
       return;
     }
 
@@ -351,7 +400,7 @@ export class ServiceBookingComponent implements OnInit {
                 queryParams: queryParams
               });
             } else {
-              alert('Booking submitted successfully!');
+              alert(this.translate.instant('SERVICE_BOOKING.BOOKING_SUCCESS'));
               this.router.navigate(['/']);
             }
 
@@ -369,7 +418,7 @@ export class ServiceBookingComponent implements OnInit {
             this.isSubmitting = false;
 
             const errorMessage = error.error?.message || error.message || 'Unknown error occurred';
-            alert(`Failed to submit booking request.\n\nError: ${errorMessage}\n\nPlease check the console for details.`);
+            alert(`${this.translate.instant('SERVICE_BOOKING.BOOKING_FAILED')}.\n\nError: ${errorMessage}\n\nPlease check the console for details.`);
           }
         });
       },
@@ -383,8 +432,8 @@ export class ServiceBookingComponent implements OnInit {
         });
         this.isSubmitting = false;
 
-        const errorMessage = error.error?.message || error.message || 'Authentication error';
-        alert(`Failed to get client information.\n\nError: ${errorMessage}\n\nPlease make sure you are logged in and try again.`);
+        const errorMessage = error.error?.message || error.message || this.translate.instant('SERVICE_BOOKING.AUTH_ERROR');
+        alert(`${this.translate.instant('SERVICE_BOOKING.AUTH_ERROR')}.\n\nError: ${errorMessage}\n\n${this.translate.instant('SERVICE_BOOKING.MAKE_SURE_LOGGED_IN')}`);
       }
     });
   }

@@ -452,5 +452,16 @@
       "ERROR_TEXT": "حدث خطأ. يرجى المحاولة مرة أخرى."
     }
   },
-  "ERROR_DEFAULT": "حدث خطأ. يرجى المحاولة مرة أخرى."
+  "ERROR_DEFAULT": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+  "NOTIFICATIONS": {
+    "TITLE": "الإشعارات",
+    "NEW": "جديد",
+    "EMPTY_STATE": "لا توجد إشعارات بعد",
+    "EMPTY_DESCRIPTION": "ستظهر الإشعارات حول طلبات الخدمة هنا",
+    "JUST_NOW": "الآن",
+    "MINUTES_AGO": "منذ {count} د",
+    "HOURS_AGO": "منذ {count} س",
+    "MARK_ALL_READ": "تعليم الكل كمقروء",
+    "MARK_AS_READ": "تعليم كمقروء"
+  }
 }
