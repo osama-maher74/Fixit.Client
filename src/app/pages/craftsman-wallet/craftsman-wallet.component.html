@@ -36,7 +36,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
-        {{ isAdminView() ? 'Back to Craftsman Details' : 'Back to Profile' }}
+        {{ isAdminView() ? ('WALLET.BACK_TO_CRAFTSMAN_DETAILS' | translate) : ('WALLET.BACK_TO_PROFILE' | translate) }}
       </button>
       <h1 class="page-title">{{ isAdminView() ? 'Craftsman Wallet' : 'My Wallet' }}</h1>
     </div>
@@ -114,7 +114,7 @@
                 <!-- Admin: Show withdrawal method and account info -->
                 @if (isAdminView() && !isAddTransaction(transaction) && transaction.transactiontype !== null && transaction.transactiontype !== undefined) {
                   <div class="withdrawal-info">
-                    <span class="withdrawal-method-label">Method:</span>
+                    <span class="withdrawal-method-label">{{ 'WALLET.METHOD_LABEL' | translate }}</span>
                     <span class="withdrawal-method-value">{{ getTransactionTypeText(transaction.transactiontype) }}</span>
                   </div>
                   @if (transaction.transationInfo) {
@@ -135,25 +135,25 @@
                 <!-- Payment Status Badge (visible for withdrawal transactions) -->
                 @if (!isAddTransaction(transaction)) {
                   @if (transaction.isPayed) {
-                    <span class="status-badge status-paid">Paid</span>
+                    <span class="status-badge status-paid">{{ 'WALLET.PAID' | translate }}</span>
                   } @else {
-                    <span class="status-badge status-pending">Pending Payment</span>
+                    <span class="status-badge status-pending">{{ 'WALLET.PENDING_PAYMENT' | translate }}</span>
                   }
                 }
               </div>
               
               <!-- Mark as Paid Button (Admin only, for withdrawal transactions) -->
               @if (isAdminView() && !isAddTransaction(transaction)) {
-                <button 
+                <button
                   class="btn-mark-paid"
                   [class.btn-mark-pending]="transaction.isPayed"
                   [disabled]="isUpdatingTransaction() === transaction.id"
                   (click)="togglePaymentStatus(transaction)">
                   @if (isUpdatingTransaction() === transaction.id) {
                     <span class="spinner"></span>
-                    Updating...
+                    {{ 'WALLET.UPDATING' | translate }}
                   } @else {
-                    {{ transaction.isPayed ? 'Mark Pending' : 'Mark as Paid' }}
+                    {{ transaction.isPayed ? ('WALLET.MARK_PENDING' | translate) : ('WALLET.MARK_AS_PAID' | translate) }}
                   }
                 </button>
               }

@@ -16,6 +16,9 @@ export class ThemeService {
       this.applyTheme(theme);
       this.saveThemePreference(theme);
     });
+
+    // Listen to system theme changes
+    this.listenToSystemThemeChanges();
   }
 
   /**
@@ -50,13 +53,22 @@ export class ThemeService {
       root.classList.add('light-theme');
       root.classList.remove('dark-theme');
     }
+
+    // Add data attribute for CSS selectors
+    root.setAttribute('data-theme', theme);
+
+    console.log(`✨ Theme applied: ${theme}`);
   }
 
   /**
    * Save theme preference to localStorage
    */
   private saveThemePreference(theme: Theme): void {
-    localStorage.setItem('fixit-theme', theme);
+    try {
+      localStorage.setItem('fixit-theme', theme);
+    } catch (error) {
+      console.warn('Failed to save theme preference:', error);
+    }
   }
 
   /**
@@ -78,5 +90,21 @@ export class ThemeService {
    */
   isDark(): boolean {
     return this.currentTheme() === 'dark';
+  }
+
+  /**
+   * Listen to system theme changes and auto-switch if no user preference stored
+   */
+  private listenToSystemThemeChanges(): void {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    mediaQuery.addEventListener('change', (e) => {
+      // Only auto-switch if user hasn't manually set a preference
+      const hasUserPreference = localStorage.getItem('fixit-theme') !== null;
+      if (!hasUserPreference) {
+        const systemTheme: Theme = e.matches ? 'dark' : 'light';
+        this.currentTheme.set(systemTheme);
+      }
+    });
   }
 }

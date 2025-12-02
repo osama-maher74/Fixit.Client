@@ -14,7 +14,7 @@
             <path stroke-linecap="round" stroke-linejoin="round"
               d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>Professional Home Services</span>
+          <span>{{ 'HOME.HERO_BADGE' | translate }}</span>
         </div>
 
         <!-- Main heading -->
@@ -46,15 +46,15 @@
         <div class="trust-indicators">
           <div class="trust-item">
             <span class="trust-number">500+</span>
-            <span class="trust-label">Expert Craftsmen</span>
+            <span class="trust-label">{{ 'HOME.TRUST_INDICATORS.EXPERT_CRAFTSMEN' | translate }}</span>
           </div>
           <div class="trust-item">
             <span class="trust-number">10k+</span>
-            <span class="trust-label">Happy Clients</span>
+            <span class="trust-label">{{ 'HOME.TRUST_INDICATORS.HAPPY_CLIENTS' | translate }}</span>
           </div>
           <div class="trust-item">
             <span class="trust-number">24/7</span>
-            <span class="trust-label">Support Available</span>
+            <span class="trust-label">{{ 'HOME.TRUST_INDICATORS.SUPPORT_AVAILABLE' | translate }}</span>
           </div>
         </div>
         } @else {
@@ -87,14 +87,14 @@
   <div class="services-section" id="services">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">Our Services</h2>
-        <p class="section-subtitle">Explore our most popular home services</p>
+        <h2 class="section-title">{{ 'HOME.SERVICES_SECTION.TITLE' | translate }}</h2>
+        <p class="section-subtitle">{{ 'HOME.SERVICES_SECTION.SUBTITLE' | translate }}</p>
       </div>
 
       @if (isLoadingServices()) {
       <div class="loading-container">
         <div class="loading-spinner"></div>
-        <p class="loading-text">Loading services...</p>
+        <p class="loading-text">{{ 'HOME.SERVICES_SECTION.LOADING' | translate }}</p>
       </div>
       } @else if (services().length > 0) {
       <div class="services-grid">
@@ -104,7 +104,7 @@
       </div>
       <div class="view-all-container">
         <a routerLink="/services" class="btn btn-view-all">
-          View All Services
+          {{ 'HOME.SERVICES_SECTION.VIEW_ALL' | translate }}
           <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>
@@ -115,9 +115,8 @@
         <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 class="error-title">Unable to Load Services</h3>
-        <p class="error-text">We couldn't fetch services from the server. Please check your connection or try again
-          later.</p>
+        <h3 class="error-title">{{ 'HOME.SERVICES_SECTION.ERROR_TITLE' | translate }}</h3>
+        <p class="error-text">{{ 'HOME.SERVICES_SECTION.ERROR_TEXT' | translate }}</p>
       </div>
       }
     </div>
@@ -130,65 +129,55 @@
 
       <!-- Section Header -->
       <div class="about-section-header">
-        <h2 class="about-section-title">About FixIt</h2>
+        <h2 class="about-section-title">{{ 'HOME.ABOUT_SECTION.TITLE' | translate }}</h2>
         <p class="about-section-intro">
-          FixIt is your trusted partner in connecting skilled craftsmen with clients who need quality services.
-          We've built a modern platform that makes finding, booking, and managing home services simple, transparent,
-          and
-          reliable.
+          {{ 'HOME.ABOUT_SECTION.INTRO' | translate }}
         </p>
       </div>
 
       <!-- Mission & Vision -->
       <div class="mission-vision">
         <div class="mission">
-          <h3>Our Mission</h3>
+          <h3>{{ 'HOME.ABOUT_SECTION.MISSION_TITLE' | translate }}</h3>
           <p>
-            At FixIt, we believe everyone deserves access to reliable, professional services at fair prices.
-            Our mission is to bridge the gap between talented craftsmen and clients seeking quality work,
-            creating a marketplace built on trust, transparency, and excellence.
+            {{ 'HOME.ABOUT_SECTION.MISSION_TEXT' | translate }}
           </p>
         </div>
         <div class="vision">
-          <h3>Our Vision</h3>
+          <h3>{{ 'HOME.ABOUT_SECTION.VISION_TITLE' | translate }}</h3>
           <p>
-            We envision a future where finding the right professional for any job is effortless—where quality
-            craftsmanship meets modern technology, and every service interaction is smooth, secure, and satisfying.
+            {{ 'HOME.ABOUT_SECTION.VISION_TEXT' | translate }}
           </p>
         </div>
       </div>
 
       <!-- Core Values -->
       <div class="core-values">
-        <h3 class="values-title">Our Core Values</h3>
+        <h3 class="values-title">{{ 'HOME.ABOUT_SECTION.VALUES_TITLE' | translate }}</h3>
         <div class="values-grid">
 
           <div class="value-card">
             <div class="value-icon">🎯</div>
-            <h4>Quality First</h4>
-            <p>We carefully vet our craftsmen to ensure you receive top-tier service every time. Quality isn't just a
-              promise—it's our standard.</p>
+            <h4>{{ 'HOME.ABOUT_SECTION.VALUE_1_TITLE' | translate }}</h4>
+            <p>{{ 'HOME.ABOUT_SECTION.VALUE_1_TEXT' | translate }}</p>
           </div>
 
           <div class="value-card">
             <div class="value-icon">🤝</div>
-            <h4>Trust & Transparency</h4>
-            <p>From clear pricing to verified reviews, we build trust through transparency. Every booking, every review,
-              every interaction is designed to give you confidence.</p>
+            <h4>{{ 'HOME.ABOUT_SECTION.VALUE_2_TITLE' | translate }}</h4>
+            <p>{{ 'HOME.ABOUT_SECTION.VALUE_2_TEXT' | translate }}</p>
           </div>
 
           <div class="value-card">
             <div class="value-icon">⚡</div>
-            <h4>Speed & Convenience</h4>
-            <p>Your time matters. Our platform streamlines the entire process—from browsing services to booking
-              appointments—so you can get things done faster.</p>
+            <h4>{{ 'HOME.ABOUT_SECTION.VALUE_3_TITLE' | translate }}</h4>
+            <p>{{ 'HOME.ABOUT_SECTION.VALUE_3_TEXT' | translate }}</p>
           </div>
 
           <div class="value-card">
             <div class="value-icon">💼</div>
-            <h4>Professional Excellence</h4>
-            <p>We empower craftsmen with the tools and visibility they need to grow their businesses while maintaining
-              the highest professional standards.</p>
+            <h4>{{ 'HOME.ABOUT_SECTION.VALUE_4_TITLE' | translate }}</h4>
+            <p>{{ 'HOME.ABOUT_SECTION.VALUE_4_TEXT' | translate }}</p>
           </div>
 
         </div>
@@ -196,37 +185,31 @@
 
       <!-- What We Offer -->
       <div class="what-we-offer">
-        <h3 class="offer-title">What We Offer</h3>
+        <h3 class="offer-title">{{ 'HOME.ABOUT_SECTION.WHAT_WE_OFFER_TITLE' | translate }}</h3>
 
         <div class="offer-columns">
 
           <!-- For Clients -->
           <div class="offer-column">
-            <h4>For Clients</h4>
+            <h4>{{ 'HOME.ABOUT_SECTION.FOR_CLIENTS_TITLE' | translate }}</h4>
             <ul class="offer-list">
-              <li><strong>Easy Discovery:</strong> Browse hundreds of verified craftsmen across multiple service
-                categories</li>
-              <li><strong>Transparent Pricing:</strong> See clear rates and service details before you book</li>
-              <li><strong>Secure Booking:</strong> Schedule appointments with confidence through our secure platform
-              </li>
-              <li><strong>Quality Assurance:</strong> Read genuine reviews and ratings from real customers</li>
-              <li><strong>Peace of Mind:</strong> Every service is backed by our commitment to quality and customer
-                satisfaction</li>
+              <li>{{ 'HOME.ABOUT_SECTION.CLIENT_FEATURE_1' | translate }}</li>
+              <li>{{ 'HOME.ABOUT_SECTION.CLIENT_FEATURE_2' | translate }}</li>
+              <li>{{ 'HOME.ABOUT_SECTION.CLIENT_FEATURE_3' | translate }}</li>
+              <li>{{ 'HOME.ABOUT_SECTION.CLIENT_FEATURE_4' | translate }}</li>
+              <li>{{ 'HOME.ABOUT_SECTION.CLIENT_FEATURE_5' | translate }}</li>
             </ul>
           </div>
 
           <!-- For Craftsmen -->
           <div class="offer-column">
-            <h4>For Craftsmen</h4>
+            <h4>{{ 'HOME.ABOUT_SECTION.FOR_CRAFTSMEN_TITLE' | translate }}</h4>
             <ul class="offer-list">
-              <li><strong>Grow Your Business:</strong> Reach thousands of potential clients actively seeking your
-                services</li>
-              <li><strong>Manage Everything:</strong> Handle bookings, schedules, and client communications in one place
-              </li>
-              <li><strong>Build Your Reputation:</strong> Showcase your work, collect reviews, and establish credibility
-              </li>
-              <li><strong>Fair Opportunities:</strong> Compete on quality and service, not just price</li>
-              <li><strong>Professional Tools:</strong> Access the resources you need to deliver exceptional service</li>
+              <li>{{ 'HOME.ABOUT_SECTION.CRAFTSMAN_FEATURE_1' | translate }}</li>
+              <li>{{ 'HOME.ABOUT_SECTION.CRAFTSMAN_FEATURE_2' | translate }}</li>
+              <li>{{ 'HOME.ABOUT_SECTION.CRAFTSMAN_FEATURE_3' | translate }}</li>
+              <li>{{ 'HOME.ABOUT_SECTION.CRAFTSMAN_FEATURE_4' | translate }}</li>
+              <li>{{ 'HOME.ABOUT_SECTION.CRAFTSMAN_FEATURE_5' | translate }}</li>
             </ul>
           </div>
 
@@ -236,9 +219,7 @@
       <!-- Closing Statement -->
       <div class="closing-statement">
         <p>
-          Whether you're a homeowner seeking reliable help or a skilled craftsman looking to expand your reach,
-          FixIt is here to make connections that matter. Join our growing community and experience the future of service
-          marketplaces.
+          {{ 'HOME.ABOUT_SECTION.CLOSING_TEXT' | translate }}
         </p>
       </div>
 

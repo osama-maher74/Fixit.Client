@@ -1,0 +1,349 @@
+// ============================================
+// RESPONSIVE DESIGN UTILITIES & MIXINS
+// ============================================
+// Breakpoint system matching ResponsiveService
+// Usage in SCSS files: @import '../../../styles/responsive';
+
+// Breakpoint definitions (matching Tailwind & ResponsiveService)
+$breakpoints: (
+  'xs': 0px,      // Mobile phones (0-639px)
+  'sm': 640px,    // Large phones (640-767px)
+  'md': 768px,    // Tablets (768-1023px)
+  'lg': 1024px,   // Small laptops (1024-1279px)
+  'xl': 1280px,   // Laptops/Desktops (1280-1535px)
+  '2xl': 1536px   // Large desktops (1536px+)
+);
+
+// ============================================
+// RESPONSIVE MIXINS
+// ============================================
+
+// Breakpoint mixin - min-width (mobile-first)
+// Usage: @include respond-above('md') { ... }
+@mixin respond-above($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $breakpoint-value: map-get($breakpoints, $breakpoint);
+    @if $breakpoint-value == 0 {
+      @content;
+    } @else {
+      @media (min-width: $breakpoint-value) {
+        @content;
+      }
+    }
+  } @else {
+    @warn "Invalid breakpoint: #{$breakpoint}. Available: xs, sm, md, lg, xl, 2xl";
+  }
+}
+
+// Breakpoint mixin - max-width
+// Usage: @include respond-below('md') { ... }
+@mixin respond-below($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $breakpoint-value: map-get($breakpoints, $breakpoint);
+    @if $breakpoint-value > 0 {
+      @media (max-width: #{$breakpoint-value - 1px}) {
+        @content;
+      }
+    }
+  } @else {
+    @warn "Invalid breakpoint: #{$breakpoint}";
+  }
+}
+
+// Breakpoint range mixin
+// Usage: @include respond-between('md', 'lg') { ... }
+@mixin respond-between($min-breakpoint, $max-breakpoint) {
+  @if map-has-key($breakpoints, $min-breakpoint) and map-has-key($breakpoints, $max-breakpoint) {
+    $min-value: map-get($breakpoints, $min-breakpoint);
+    $max-value: map-get($breakpoints, $max-breakpoint);
+    @media (min-width: $min-value) and (max-width: #{$max-value - 1px}) {
+      @content;
+    }
+  } @else {
+    @warn "Invalid breakpoint range";
+  }
+}
+
+// Mobile-only mixin (xs and sm)
+// Usage: @include mobile-only { ... }
+@mixin mobile-only {
+  @include respond-below('md') {
+    @content;
+  }
+}
+
+// Tablet-only mixin
+// Usage: @include tablet-only { ... }
+@mixin tablet-only {
+  @include respond-between('md', 'lg') {
+    @content;
+  }
+}
+
+// Desktop and up mixin
+// Usage: @include desktop { ... }
+@mixin desktop {
+  @include respond-above('lg') {
+    @content;
+  }
+}
+
+// ============================================
+// RESPONSIVE SPACING UTILITIES
+// ============================================
+
+// Responsive padding mixin
+// Usage: @include responsive-padding(1rem, 2rem, 3rem);
+@mixin responsive-padding($mobile, $tablet: null, $desktop: null) {
+  padding: $mobile;
+
+  @if $tablet {
+    @include respond-above('md') {
+      padding: $tablet;
+    }
+  }
+
+  @if $desktop {
+    @include respond-above('lg') {
+      padding: $desktop;
+    }
+  }
+}
+
+// Responsive margin mixin
+@mixin responsive-margin($mobile, $tablet: null, $desktop: null) {
+  margin: $mobile;
+
+  @if $tablet {
+    @include respond-above('md') {
+      margin: $tablet;
+    }
+  }
+
+  @if $desktop {
+    @include respond-above('lg') {
+      margin: $desktop;
+    }
+  }
+}
+
+// ============================================
+// RESPONSIVE TYPOGRAPHY UTILITIES
+// ============================================
+
+// Responsive font size mixin
+// Usage: @include responsive-font(14px, 16px, 18px);
+@mixin responsive-font($mobile, $tablet: null, $desktop: null) {
+  font-size: $mobile;
+
+  @if $tablet {
+    @include respond-above('md') {
+      font-size: $tablet;
+    }
+  }
+
+  @if $desktop {
+    @include respond-above('lg') {
+      font-size: $desktop;
+    }
+  }
+}
+
+// ============================================
+// RESPONSIVE GRID & FLEXBOX UTILITIES
+// ============================================
+
+// Responsive grid columns
+// Usage: @include responsive-grid(1, 2, 3);
+@mixin responsive-grid($mobile-cols, $tablet-cols: null, $desktop-cols: null) {
+  display: grid;
+  grid-template-columns: repeat($mobile-cols, 1fr);
+  gap: 1rem;
+
+  @if $tablet-cols {
+    @include respond-above('md') {
+      grid-template-columns: repeat($tablet-cols, 1fr);
+    }
+  }
+
+  @if $desktop-cols {
+    @include respond-above('lg') {
+      grid-template-columns: repeat($desktop-cols, 1fr);
+    }
+  }
+}
+
+// Responsive flex direction
+// Usage: @include responsive-flex(column, row);
+@mixin responsive-flex($mobile-direction: row, $desktop-direction: null) {
+  display: flex;
+  flex-direction: $mobile-direction;
+
+  @if $desktop-direction {
+    @include respond-above('md') {
+      flex-direction: $desktop-direction;
+    }
+  }
+}
+
+// ============================================
+// CONTAINER & LAYOUT UTILITIES
+// ============================================
+
+// Responsive container with max-width
+@mixin responsive-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  @include respond-above('sm') {
+    max-width: 640px;
+  }
+
+  @include respond-above('md') {
+    max-width: 768px;
+  }
+
+  @include respond-above('lg') {
+    max-width: 1024px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @include respond-above('xl') {
+    max-width: 1280px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  @include respond-above('2xl') {
+    max-width: 1536px;
+  }
+}
+
+// Full-width on mobile, contained on desktop
+@mixin mobile-full-desktop-contained {
+  width: 100%;
+
+  @include respond-above('md') {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// ============================================
+// RESPONSIVE VISIBILITY UTILITIES
+// ============================================
+
+// Hide on mobile
+@mixin hide-mobile {
+  @include respond-below('md') {
+    display: none !important;
+  }
+}
+
+// Show only on mobile
+@mixin show-mobile-only {
+  @include respond-above('md') {
+    display: none !important;
+  }
+}
+
+// Hide on tablet
+@mixin hide-tablet {
+  @include respond-between('md', 'lg') {
+    display: none !important;
+  }
+}
+
+// Hide on desktop
+@mixin hide-desktop {
+  @include respond-above('lg') {
+    display: none !important;
+  }
+}
+
+// ============================================
+// UTILITY CLASSES (optional - use in components)
+// ============================================
+
+// Generate responsive utility classes
+@mixin generate-responsive-utilities {
+  // Responsive text alignment
+  .text-center-mobile {
+    @include mobile-only {
+      text-align: center;
+    }
+  }
+
+  .text-left-desktop {
+    @include desktop {
+      text-align: left;
+    }
+  }
+
+  // Responsive display utilities
+  .mobile-only {
+    @include show-mobile-only;
+  }
+
+  .tablet-up {
+    @include respond-below('md') {
+      display: none !important;
+    }
+  }
+
+  .desktop-only {
+    @include respond-below('lg') {
+      display: none !important;
+    }
+  }
+
+  // Responsive spacing
+  .stack-mobile {
+    @include mobile-only {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+}
+
+// ============================================
+// EXAMPLES & USAGE PATTERNS
+// ============================================
+
+// Example 1: Responsive padding
+// .my-component {
+//   @include responsive-padding(1rem, 2rem, 3rem);
+// }
+
+// Example 2: Responsive grid
+// .my-grid {
+//   @include responsive-grid(1, 2, 4);
+// }
+
+// Example 3: Mobile-first styling
+// .my-card {
+//   width: 100%;
+//
+//   @include respond-above('md') {
+//     width: 50%;
+//   }
+//
+//   @include respond-above('lg') {
+//     width: 33.333%;
+//   }
+// }
+
+// Example 4: Hide on mobile
+// .desktop-sidebar {
+//   @include hide-mobile;
+// }
+
+// Example 5: Responsive typography
+// .my-heading {
+//   @include responsive-font(1.5rem, 2rem, 2.5rem);
+// }

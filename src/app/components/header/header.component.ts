@@ -7,11 +7,21 @@ import { TranslationService } from '../../services/translation.service';
 import { ThemeService } from '../../services/theme.service';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationListComponent } from '../../shared/components/notification-list/notification-list';
+import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher.component';
+import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, NgOptimizedImage, NotificationListComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    TranslateModule,
+    NgOptimizedImage,
+    NotificationListComponent,
+    ThemeSwitcherComponent,
+    LanguageSwitcherComponent
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

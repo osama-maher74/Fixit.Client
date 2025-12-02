@@ -8,7 +8,12 @@
     "LOGOUT": "Logout",
     "WELCOME": "Welcome back",
     "MENU": "Menu",
-    "PROFILE": "Profile"
+    "PROFILE": "Profile",
+    "SERVICES": "Services",
+    "ABOUT_US": "About Us",
+    "MY_REQUESTS": "My Requests",
+    "EDIT_PROFILE": "Edit Profile",
+    "DASHBOARD": "Dashboard"
   },
   "FOOTER": {
     "COPYRIGHT": "All rights reserved"
@@ -28,7 +33,52 @@
     "FEATURE_3_TITLE": "Transparent Pricing",
     "FEATURE_3_DESC": "Clear hourly rates with no hidden fees",
     "FEATURE_4_TITLE": "Secure Platform",
-    "FEATURE_4_DESC": "Your data and transactions are protected"
+    "FEATURE_4_DESC": "Your data and transactions are protected",
+    "HERO_BADGE": "Professional Home Services",
+    "TRUST_INDICATORS": {
+      "EXPERT_CRAFTSMEN": "Expert Craftsmen",
+      "HAPPY_CLIENTS": "Happy Clients",
+      "SUPPORT_AVAILABLE": "Support Available"
+    },
+    "SERVICES_SECTION": {
+      "TITLE": "Our Services",
+      "SUBTITLE": "Explore our most popular home services",
+      "LOADING": "Loading services...",
+      "VIEW_ALL": "View All Services",
+      "ERROR_TITLE": "Unable to Load Services",
+      "ERROR_TEXT": "We couldn't fetch services from the server. Please check your connection or try again later."
+    },
+    "ABOUT_SECTION": {
+      "TITLE": "About FixIt",
+      "INTRO": "FixIt is your trusted partner in connecting skilled craftsmen with clients who need quality services. We've built a modern platform that makes finding, booking, and managing home services simple, transparent, and reliable.",
+      "MISSION_TITLE": "Our Mission",
+      "MISSION_TEXT": "At FixIt, we believe everyone deserves access to reliable, professional services at fair prices. Our mission is to bridge the gap between talented craftsmen and clients seeking quality work, creating a marketplace built on trust, transparency, and excellence.",
+      "VISION_TITLE": "Our Vision",
+      "VISION_TEXT": "We envision a future where finding the right professional for any job is effortless—where quality craftsmanship meets modern technology, and every service interaction is smooth, secure, and satisfying.",
+      "VALUES_TITLE": "Our Core Values",
+      "VALUE_1_TITLE": "Quality First",
+      "VALUE_1_TEXT": "We carefully vet our craftsmen to ensure you receive top-tier service every time. Quality isn't just a promise—it's our standard.",
+      "VALUE_2_TITLE": "Trust & Transparency",
+      "VALUE_2_TEXT": "From clear pricing to verified reviews, we build trust through transparency. Every booking, every review, every interaction is designed to give you confidence.",
+      "VALUE_3_TITLE": "Speed & Convenience",
+      "VALUE_3_TEXT": "Your time matters. Our platform streamlines the entire process—from browsing services to booking appointments—so you can get things done faster.",
+      "VALUE_4_TITLE": "Professional Excellence",
+      "VALUE_4_TEXT": "We empower craftsmen with the tools and visibility they need to grow their businesses while maintaining the highest professional standards.",
+      "WHAT_WE_OFFER_TITLE": "What We Offer",
+      "FOR_CLIENTS_TITLE": "For Clients",
+      "CLIENT_FEATURE_1": "Easy Discovery: Browse hundreds of verified craftsmen across multiple service categories",
+      "CLIENT_FEATURE_2": "Transparent Pricing: See clear rates and service details before you book",
+      "CLIENT_FEATURE_3": "Secure Booking: Schedule appointments with confidence through our secure platform",
+      "CLIENT_FEATURE_4": "Quality Assurance: Read genuine reviews and ratings from real customers",
+      "CLIENT_FEATURE_5": "Peace of Mind: Every service is backed by our commitment to quality and customer satisfaction",
+      "FOR_CRAFTSMEN_TITLE": "For Craftsmen",
+      "CRAFTSMAN_FEATURE_1": "Grow Your Business: Reach thousands of potential clients actively seeking your services",
+      "CRAFTSMAN_FEATURE_2": "Manage Everything: Handle bookings, schedules, and client communications in one place",
+      "CRAFTSMAN_FEATURE_3": "Build Your Reputation: Showcase your work, collect reviews, and establish credibility",
+      "CRAFTSMAN_FEATURE_4": "Fair Opportunities: Compete on quality and service, not just price",
+      "CRAFTSMAN_FEATURE_5": "Professional Tools: Access the resources you need to deliver exceptional service",
+      "CLOSING_TEXT": "Whether you're a homeowner seeking reliable help or a skilled craftsman looking to expand your reach, FixIt is here to make connections that matter. Join our growing community and experience the future of service marketplaces."
+    }
   },
   "LOGIN": {
     "TITLE": "Login to FixIt",
@@ -251,6 +301,18 @@
     "NO_TRANSACTIONS_SUBTEXT": "Your transaction history will appear here",
     "DEPOSIT": "Deposit",
     "WITHDRAW": "Withdrawal",
+    "BACK_TO_CRAFTSMAN_DETAILS": "Back to Craftsman Details",
+    "BACK_TO_PROFILE": "Back to Profile",
+    "METHOD_LABEL": "Method:",
+    "PAID": "Paid",
+    "PENDING_PAYMENT": "Pending Payment",
+    "MARK_AS_PAID": "Mark as Paid",
+    "MARK_PENDING": "Mark Pending",
+    "UPDATING": "Updating...",
+    "ACCOUNT_INFO": "Account Info",
+    "INSTAPAY_EMAIL": "Instapay Email",
+    "WALLET_NUMBER": "Wallet Number",
+    "CREDIT_CARD_INFO": "Credit Card Info",
     "WITHDRAWAL_FORM": {
       "TITLE": "Withdraw Funds",
       "SUBTITLE": "Withdraw money from your wallet to your preferred payment method",
