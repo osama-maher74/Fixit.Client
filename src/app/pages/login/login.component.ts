@@ -5,6 +5,7 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
+import { ToastService } from '../../services/toast.service';
 import { LoginRequest } from '../../models/auth.models';
 
 @Component({
@@ -18,13 +19,13 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private notificationService = inject(NotificationService);
+  private toastService = inject(ToastService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
 
   loginForm: FormGroup;
   isLoading = signal(false);
-  errorMessage = signal<string | null>(null);
   showPassword = signal(false);
 
   constructor() {
@@ -49,7 +50,6 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading.set(true);
-      this.errorMessage.set(null);
 
       const loginData: LoginRequest = {
         Email: this.loginForm.value.email,
@@ -105,7 +105,7 @@ export class LoginComponent {
           console.error('Error message:', error.message);
           console.error('Error status:', error.status);
           this.isLoading.set(false);
-          this.errorMessage.set(error.message || this.translate.instant('LOGIN.ERROR_DEFAULT'));
+          this.toastService.error(error.message || this.translate.instant('LOGIN.ERROR_DEFAULT'));
         }
       });
     } else {
