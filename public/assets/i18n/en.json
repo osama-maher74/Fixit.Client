@@ -13,6 +13,7 @@
     "ABOUT_US": "About Us",
     "MY_REQUESTS": "My Requests",
     "EDIT_PROFILE": "Edit Profile",
+    "VERIFY_ID": "Verify ID",
     "DASHBOARD": "Dashboard"
   },
   "FOOTER": {
@@ -700,5 +701,56 @@
     "HOURS_AGO": "{count}h ago",
     "MARK_ALL_READ": "Mark all as read",
     "MARK_AS_READ": "Mark as read"
+  },
+  "ID_VERIFICATION": {
+    "TITLE": "National ID Verification",
+    "SUBTITLE": "Upload your Egyptian National ID to get verified",
+    "INSTRUCTIONS_TITLE": "Upload Requirements",
+    "INSTRUCTION_1": "Upload TWO clear photos: front and back of your Egyptian National ID",
+    "INSTRUCTION_2": "Ensure all text is readable and the card edges are visible",
+    "INSTRUCTION_3": "Photos must be well-lit with no glare or shadows",
+    "INSTRUCTION_4": "ID must be valid and not expired",
+    "INSTRUCTION_5": "Information on both sides must match",
+    "INSTRUCTION_6": "Do not cover any part of the ID or rotate it",
+    "WHY_VERIFY_TITLE": "Why Get Verified?",
+    "WHY_VERIFY_1": "Build trust with clients",
+    "WHY_VERIFY_2": "Get priority in search results",
+    "WHY_VERIFY_3": "Access premium features",
+    "WHY_VERIFY_4": "Increase your booking rate",
+    "UPLOAD_FRONT": "Upload Front Photo",
+    "UPLOAD_BACK": "Upload Back Photo",
+    "FRONT_PHOTO": "Front Photo",
+    "BACK_PHOTO": "Back Photo",
+    "CHOOSE_PHOTO": "Choose Photo",
+    "CHANGE_PHOTO": "Change Photo",
+    "IMAGE_HINT": "PNG or JPG (MAX. 5MB)",
+    "VERIFY_BUTTON": "Verify My ID",
+    "VERIFYING": "Verifying your ID...",
+    "VERIFICATION_IN_PROGRESS": "Please wait while we verify your identity",
+    "VERIFICATION_SUCCESS": "ID Verified Successfully!",
+    "VERIFICATION_SUCCESS_MESSAGE": "Your account is now verified. You'll see increased visibility to clients.",
+    "VERIFICATION_FAILED": "Verification Failed",
+    "VERIFICATION_FAILED_MESSAGE": "We couldn't verify your ID. Please review the errors below and try again.",
+    "ALREADY_VERIFIED": "Your account is already verified",
+    "ERRORS": {
+      "BOTH_PHOTOS_REQUIRED": "Please upload both front and back photos of your ID",
+      "IMAGE_TOO_LARGE": "Image size must be less than 5MB",
+      "INVALID_IMAGE_TYPE": "Only JPG and PNG images are allowed",
+      "BLURRY_IMAGE": "Image is too blurry. Please take a clearer photo",
+      "INCOMPLETE_ID": "ID card is cut off or incomplete. Ensure all edges are visible",
+      "NOT_EGYPTIAN_ID": "This is not a valid Egyptian National ID card",
+      "EXPIRED_ID": "Your ID has expired. Please renew it before verification",
+      "UNREADABLE_TEXT": "Text on the ID is not readable. Please retake the photo with better lighting",
+      "MISMATCH_FRONT_BACK": "Front and back photos don't match. They must be from the same ID",
+      "COVERED_OR_DAMAGED": "ID appears to be covered, damaged, or tampered with",
+      "POOR_LIGHTING": "Image has glare or poor lighting. Please retake in better conditions",
+      "MISSING_REQUIRED_FIELDS": "Required information is missing or not visible",
+      "VERIFICATION_ERROR": "Verification service error. Please try again later",
+      "NETWORK_ERROR": "Network error. Please check your connection and try again",
+      "UNKNOWN_ERROR": "An unexpected error occurred. Please try again"
+    },
+    "WARNINGS": {
+      "EXPIRING_SOON": "Your ID expires soon. Consider renewing it."
+    }
   }
 }

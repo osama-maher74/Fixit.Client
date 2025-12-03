@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { TranslationService } from '../../services/translation.service';
 import { ThemeService } from '../../services/theme.service';
 import { NotificationService } from '../../services/notification.service';
+import { CraftsmanService } from '../../services/craftsman.service';
 import { NotificationListComponent } from '../../shared/components/notification-list/notification-list';
 import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher.component';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
@@ -31,6 +32,7 @@ export class HeaderComponent {
   public translationService = inject(TranslationService);
   public themeService = inject(ThemeService);
   public notificationService = inject(NotificationService);
+  private craftsmanService = inject(CraftsmanService);
   private elementRef = inject(ElementRef);
 
   // UI state signals
@@ -38,6 +40,7 @@ export class HeaderComponent {
   public registerDropdownOpen = signal(false);
   public userDropdownOpen = signal(false);
   public notificationDropdownOpen = signal(false);
+  public craftsmanIsVerified = signal<boolean | null>(null);
 
   onLogout(): void {
     this.authService.logout();
@@ -93,5 +96,31 @@ export class HeaderComponent {
 
   getProfileRoute(): string {
     return this.isAdmin() ? '/admin/dashboard' : '/profile';
+  }
+
+  isCraftsman(): boolean {
+    const user = this.authService.getCurrentUser();
+    return user?.role?.toLowerCase() === 'craftsman';
+  }
+
+  shouldShowVerifyId(): boolean {
+    if (!this.isCraftsman()) {
+      return false;
+    }
+
+    // Load craftsman profile to check verification status
+    if (this.craftsmanIsVerified() === null) {
+      this.craftsmanService.getCurrentUserProfile().subscribe({
+        next: (profile) => {
+          this.craftsmanIsVerified.set(profile.isVerified);
+        },
+        error: () => {
+          this.craftsmanIsVerified.set(false);
+        }
+      });
+      return false; // Don't show until we know the status
+    }
+
+    return this.craftsmanIsVerified() === false;
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ClientService } from '../../services/client.service';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { ClientProfile, Gender } from '../../models/client.models';
@@ -21,6 +21,7 @@ export class EditProfileComponent implements OnInit {
   private fb = inject(FormBuilder);
   private clientService = inject(ClientService);
   private craftsmanService = inject(CraftsmanService);
+  private translate = inject(TranslateService);
   private router = inject(Router);
 
   // Signals for reactive state management

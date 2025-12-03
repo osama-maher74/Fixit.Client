@@ -46,6 +46,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'verify-id',
+    loadComponent: () => import('./pages/verify-id/verify-id.component').then(m => m.VerifyIdComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'craftsman-wallet/:id',
     loadComponent: () => import('./pages/craftsman-wallet/craftsman-wallet.component').then(m => m.CraftsmanWalletComponent),
     canActivate: [authGuard]
