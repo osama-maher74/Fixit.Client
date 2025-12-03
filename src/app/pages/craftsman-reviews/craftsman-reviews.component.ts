@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ReviewService, ReviewResponse, AverageRatingResponse } from '../../services/review.service';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { AuthService } from '../../services/auth.service';
@@ -8,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
     selector: 'app-craftsman-reviews',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, TranslateModule],
     templateUrl: './craftsman-reviews.component.html',
     styleUrl: './craftsman-reviews.component.css'
 })
@@ -17,6 +18,7 @@ export class CraftsmanReviewsComponent implements OnInit {
     private reviewService = inject(ReviewService);
     private craftsmanService = inject(CraftsmanService);
     private authService = inject(AuthService);
+    private translate = inject(TranslateService);
 
     reviews: ReviewResponse[] = [];
     averageRating: AverageRatingResponse | null = null;
@@ -50,7 +52,7 @@ export class CraftsmanReviewsComponent implements OnInit {
                     },
                     error: (err) => {
                         console.error('Failed to load reviews:', err);
-                        this.error = 'Failed to load reviews. Please try again.';
+                        this.error = this.translate.instant('MY_REVIEWS.ERROR_LOAD');
                         this.loading = false;
                     }
                 });
@@ -68,7 +70,7 @@ export class CraftsmanReviewsComponent implements OnInit {
             },
             error: (err) => {
                 console.error('Failed to load craftsman profile:', err);
-                this.error = 'Failed to load your profile. Please try again.';
+                this.error = this.translate.instant('MY_REVIEWS.ERROR_PROFILE');
                 this.loading = false;
             }
         });

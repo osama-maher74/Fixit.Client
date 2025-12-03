@@ -1,0 +1,236 @@
+/* Medium Screens (Tablets 769px-1024px) - Fix header overlap */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .header .nav {
+        flex-wrap: nowrap;
+        gap: 0.4rem;
+        justify-content: flex-end;
+    }
+
+    .header .lang-switcher {
+        font-size: 0.8rem !important;
+        padding: 0.5rem 0.85rem !important;
+    }
+
+    .header .nav-link {
+        font-size: 0.85rem !important;
+        padding: 0.5rem 0.85rem !important;
+        gap: 0.3rem !important;
+    }
+
+    .header .services-icon {
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .header .theme-toggle {
+        width: 34px !important;
+        height: 34px !important;
+        padding: 0.45rem !important;
+    }
+
+    .header .theme-icon {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .header .user-profile-trigger {
+        padding: 0.35rem 0.55rem !important;
+        gap: 0.35rem !important;
+    }
+
+    .header .profile-icon {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .header .user-name {
+        max-width: 90px !important;
+        font-size: 0.8rem !important;
+    }
+
+    .header .dropdown-arrow {
+        width: 12px !important;
+        height: 12px !important;
+    }
+
+    .header .notification-trigger {
+        padding: 0.4rem !important;
+    }
+
+    .header .notification-icon {
+        width: 22px !important;
+        height: 22px !important;
+    }
+
+    .header .notification-badge {
+        min-width: 16px !important;
+        height: 16px !important;
+        font-size: 9px !important;
+    }
+
+    .header .btn-logout {
+        padding: 0.5rem 0.9rem !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+/* Small Screens (Mobile 481px-768px) - Better button layout */
+@media (min-width: 481px) and (max-width: 768px) {
+    .header .nav {
+        gap: 0.5rem;
+    }
+
+    .header .theme-toggle {
+        width: 36px !important;
+        height: 36px !important;
+        padding: 0.5rem !important;
+    }
+
+    .header .theme-icon {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .header .lang-switcher {
+        font-size: 0.85rem !important;
+        padding: 0.55rem 1rem !important;
+    }
+
+    .header .notification-trigger {
+        padding: 0.45rem !important;
+    }
+
+    .header .notification-icon {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .header .user-profile-trigger {
+        padding: 0.4rem 0.65rem !important;
+        gap: 0.4rem !important;
+    }
+
+    .header .user-name {
+        font-size: 0.85rem !important;
+        max-width: 100px !important;
+    }
+
+    .header .profile-icon {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .header .dropdown-arrow {
+        width: 12px !important;
+        height: 12px !important;
+    }
+}
+
+/* Extra Small Screens (Mobile < 480px) - Compact buttons */
+@media (max-width: 480px) {
+    .header .nav {
+        gap: 0.4rem;
+    }
+
+    .header .theme-toggle {
+        width: 34px !important;
+        height: 34px !important;
+        padding: 0.45rem !important;
+    }
+
+    .header .theme-icon {
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .header .lang-switcher {
+        font-size: 0.8rem !important;
+        padding: 0.5rem 0.85rem !important;
+        white-space: nowrap;
+    }
+
+    .header .notification-trigger {
+        padding: 0.4rem !important;
+    }
+
+    .header .notification-icon {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .header .notification-badge {
+        min-width: 14px !important;
+        height: 14px !important;
+        font-size: 8px !important;
+        top: -2px !important;
+        right: -2px !important;
+    }
+
+    .header .user-profile-trigger {
+        padding: 0.35rem 0.5rem !important;
+        gap: 0.3rem !important;
+    }
+
+    .header .user-name {
+        font-size: 0.8rem !important;
+        max-width: 80px !important;
+    }
+
+    .header .profile-icon {
+        width: 26px !important;
+        height: 26px !important;
+    }
+
+    .header .dropdown-arrow {
+        width: 10px !important;
+        height: 10px !important;
+    }
+
+    /* Ensure proper spacing in header content */
+    .header .header-content {
+        padding: 0 0.5rem;
+    }
+
+    /* Adjust logo for very small screens */
+    .header .logo img {
+        height: 32px !important;
+    }
+
+    .header .logo-text {
+        font-size: 1.1rem !important;
+    }
+}
+
+/* Very Small Screens (< 360px) - Ultra compact */
+@media (max-width: 360px) {
+    .header .lang-switcher {
+        font-size: 0.75rem !important;
+        padding: 0.45rem 0.7rem !important;
+    }
+
+    .header .user-name {
+        max-width: 60px !important;
+        font-size: 0.75rem !important;
+    }
+
+    .header .theme-toggle {
+        width: 30px !important;
+        height: 30px !important;
+        padding: 0.4rem !important;
+    }
+
+    .header .theme-icon {
+        width: 14px !important;
+        height: 14px !important;
+    }
+
+    .header .profile-icon {
+        width: 24px !important;
+        height: 24px !important;
+    }
+
+    .header .notification-icon {
+        width: 16px !important;
+        height: 16px !important;
+    }
+}

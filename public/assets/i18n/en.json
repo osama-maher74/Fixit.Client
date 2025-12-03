@@ -520,7 +520,27 @@
     "UPDATE_REVIEW": "Update Review",
     "SUBMIT_REVIEW": "Submit Review",
     "COMPLETING": "Completing...",
-    "COMPLETE_REQUEST": "Complete Request"
+    "COMPLETE_REQUEST": "Complete Request",
+    "COMPLETE_SERVICE_TITLE": "Complete Service?",
+    "COMPLETE_SERVICE_MESSAGE": "Are you sure you want to mark this service as completed?",
+    "YES_COMPLETE": "Yes, Complete",
+    "RATE_CRAFTSMAN": "Rate Craftsman",
+    "REVIEW_OPTIONAL": "Review (Optional)",
+    "SKIP_REVIEW": "Skip Review",
+    "THANK_YOU": "Thank You!",
+    "REVIEW_SUBMITTED_SUCCESS": "Your review has been submitted successfully",
+    "CANCEL": "Cancel",
+    "FAILED_TO_COMPLETE": "Failed to Complete",
+    "FAILED_TO_SUBMIT_REVIEW": "Failed to Submit Review",
+    "FAILED_TO_UPDATE_REVIEW": "Failed to Update Review",
+    "REQUEST_COMPLETED": "Request Completed",
+    "REQUEST_COMPLETED_MESSAGE": "The service request has been marked as completed",
+    "REVIEW_UPDATED_SUCCESS": "Your review has been updated successfully",
+    "INVALID_RATING": "Invalid Rating",
+    "INVALID_RATING_MESSAGE": "Please select a rating between 1 and 5 stars",
+    "COMMENT_REQUIRED": "Comment Required",
+    "COMMENT_REQUIRED_MESSAGE": "Please provide a comment for your review",
+    "INVALID_REQUEST_ID": "Invalid request ID"
   },
   "SERVICES": {
     "SERVICE_NAMES": {
@@ -706,6 +726,23 @@
     "HOURS_AGO": "{count}h ago",
     "MARK_ALL_READ": "Mark all as read",
     "MARK_AS_READ": "Mark as read"
+  },
+  "MY_REVIEWS": {
+    "TITLE": "My Reviews",
+    "SUBTITLE": "See what clients are saying about your work",
+    "BACK_TO_PROFILE": "Back to Profile",
+    "LOADING": "Loading reviews...",
+    "ERROR_LOAD": "Failed to load reviews. Please try again.",
+    "ERROR_PROFILE": "Failed to load your profile. Please try again.",
+    "TRY_AGAIN": "Try Again",
+    "AVERAGE_RATING": "Average Rating",
+    "BASED_ON": "Based on",
+    "REVIEW": "review",
+    "REVIEWS": "reviews",
+    "NO_REVIEWS_TITLE": "No Reviews Yet",
+    "NO_REVIEWS_MESSAGE": "You haven't received any reviews from clients yet. Keep up the great work!",
+    "ANONYMOUS_CLIENT": "Anonymous Client",
+    "RATING_OUT_OF": "/5"
   },
   "ID_VERIFICATION": {
     "TITLE": "National ID Verification",

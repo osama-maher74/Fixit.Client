@@ -3,90 +3,97 @@
     <div class="page-header">
         <button class="btn-back" (click)="goBack()">
             <span class="back-icon">←</span>
-            Back to Profile
+            {{ 'MY_REVIEWS.BACK_TO_PROFILE' | translate }}
         </button>
-        <h1 class="page-title">My Reviews</h1>
-        <p class="page-subtitle">See what clients are saying about your work</p>
+        <h1 class="page-title">{{ 'MY_REVIEWS.TITLE' | translate }}</h1>
+        <p class="page-subtitle">{{ 'MY_REVIEWS.SUBTITLE' | translate }}</p>
     </div>
 
     <!-- Loading State -->
     @if (loading) {
-        <div class="loading-container">
-            <div class="spinner"></div>
-            <p>Loading reviews...</p>
-        </div>
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <p>{{ 'MY_REVIEWS.LOADING' | translate }}</p>
+    </div>
     }
 
     <!-- Error State -->
     @if (error && !loading) {
-        <div class="error-container">
-            <div class="error-icon">⚠️</div>
-            <p class="error-message">{{ error }}</p>
-            <button class="btn-retry" (click)="loadReviews()">Try Again</button>
-        </div>
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <p class="error-message">{{ error }}</p>
+        <button class="btn-retry" (click)="loadReviews()">{{ 'MY_REVIEWS.TRY_AGAIN' | translate }}</button>
+    </div>
     }
 
     <!-- Reviews Content -->
     @if (!loading && !error) {
-        <div class="content-wrapper">
-            <!-- Summary Card -->
-            @if (averageRating) {
-                <div class="summary-card">
-                    <div class="summary-content">
-                        <div class="rating-display">
-                            <div class="rating-number">{{ averageRating.averageRating.toFixed(1) }}</div>
-                            <div class="rating-stars">
-                                @for (star of getStarsArray(Math.round(averageRating.averageRating)); track $index) {
-                                    <span class="star" [class.filled]="star">★</span>
-                                }
-                            </div>
-                            <div class="rating-text">Based on {{ averageRating.totalReviews }} review{{ averageRating.totalReviews !== 1 ? 's' : '' }}</div>
-                        </div>
+    <div class="content-wrapper">
+        <!-- Summary Card -->
+        @if (averageRating) {
+        <div class="summary-card">
+            <div class="summary-content">
+                <div class="rating-display">
+                    <div class="rating-number">{{ averageRating.averageRating.toFixed(1) }}</div>
+                    <div class="rating-stars">
+                        @for (star of getStarsArray(Math.round(averageRating.averageRating)); track $index) {
+                        <span class="star" [class.filled]="star">★</span>
+                        }
+                    </div>
+                    <div class="rating-text">
+                        {{ 'MY_REVIEWS.BASED_ON' | translate }}
+                        {{ averageRating.totalReviews }}
+                        {{ averageRating.totalReviews !== 1 ? ('MY_REVIEWS.REVIEWS' | translate) : ('MY_REVIEWS.REVIEW'
+                        | translate) }}
                     </div>
                 </div>
-            }
+            </div>
+        </div>
+        }
 
-            <!-- Empty State -->
-            @if (reviews.length === 0) {
-                <div class="empty-container">
-                    <div class="empty-icon">📝</div>
-                    <h2 class="empty-title">No Reviews Yet</h2>
-                    <p class="empty-message">You haven't received any reviews from clients yet. Keep up the great work!</p>
-                </div>
-            }
+        <!-- Empty State -->
+        @if (reviews.length === 0) {
+        <div class="empty-container">
+            <div class="empty-icon">📝</div>
+            <h2 class="empty-title">{{ 'MY_REVIEWS.NO_REVIEWS_TITLE' | translate }}</h2>
+            <p class="empty-message">{{ 'MY_REVIEWS.NO_REVIEWS_MESSAGE' | translate }}</p>
+        </div>
+        }
 
-            <!-- Reviews List -->
-            @if (reviews.length > 0) {
-                <div class="reviews-list">
-                    @for (review of reviews; track review.id) {
-                        <div class="review-card">
-                            <!-- Review Header -->
-                            <div class="review-header">
-                                <div class="client-info">
-                                    <div class="client-avatar">
-                                        {{ review.clientName?.charAt(0)?.toUpperCase() || '?' }}
-                                    </div>
-                                    <div class="client-details">
-                                        <h3 class="client-name">{{ review.clientName || 'Anonymous Client' }}</h3>
-                                        <p class="review-date">{{ formatDate(review.createdAt || review.reviewDate) }}</p>
-                                    </div>
-                                </div>
-                                <div class="review-rating">
-                                    @for (star of getStarsArray(review.ratingValue); track $index) {
-                                        <span class="star" [class.filled]="star">★</span>
-                                    }
-                                    <span class="rating-value">({{ review.ratingValue }}/5)</span>
-                                </div>
-                            </div>
-
-                            <!-- Review Comment -->
-                            <div class="review-body">
-                                <p class="review-comment">{{ review.comment }}</p>
-                            </div>
+        <!-- Reviews List -->
+        @if (reviews.length > 0) {
+        <div class="reviews-list">
+            @for (review of reviews; track review.id) {
+            <div class="review-card">
+                <!-- Review Header -->
+                <div class="review-header">
+                    <div class="client-info">
+                        <div class="client-avatar">
+                            {{ review.clientName?.charAt(0)?.toUpperCase() || '?' }}
                         </div>
-                    }
+                        <div class="client-details">
+                            <h3 class="client-name">{{ review.clientName || ('MY_REVIEWS.ANONYMOUS_CLIENT' | translate)
+                                }}</h3>
+                            <p class="review-date">{{ formatDate(review.createdAt || review.reviewDate) }}</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        @for (star of getStarsArray(review.ratingValue); track $index) {
+                        <span class="star" [class.filled]="star">★</span>
+                        }
+                        <span class="rating-value">({{ review.ratingValue }}{{ 'MY_REVIEWS.RATING_OUT_OF' | translate
+                            }})</span>
+                    </div>
                 </div>
+
+                <!-- Review Comment -->
+                <div class="review-body">
+                    <p class="review-comment">{{ review.comment }}</p>
+                </div>
+            </div>
             }
         </div>
+        }
+    </div>
     }
 </div>

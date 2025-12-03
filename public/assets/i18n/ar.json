@@ -520,7 +520,27 @@
     "UPDATE_REVIEW": "تحديث التقييم",
     "SUBMIT_REVIEW": "إرسال التقييم",
     "COMPLETING": "جاري الإكمال...",
-    "COMPLETE_REQUEST": "إكمال الطلب"
+    "COMPLETE_REQUEST": "إكمال الطلب",
+    "COMPLETE_SERVICE_TITLE": "إكمال الخدمة؟",
+    "COMPLETE_SERVICE_MESSAGE": "هل أنت متأكد من رغبتك في تحديد هذه الخدمة على أنها مكتملة؟",
+    "YES_COMPLETE": "نعم، إكمال",
+    "RATE_CRAFTSMAN": "قيّم الحرفي",
+    "REVIEW_OPTIONAL": "التقييم (اختياري)",
+    "SKIP_REVIEW": "تخطي التقييم",
+    "THANK_YOU": "شكراً لك!",
+    "REVIEW_SUBMITTED_SUCCESS": "تم إرسال تقييمك بنجاح",
+    "CANCEL": "إلغاء",
+    "FAILED_TO_COMPLETE": "فشل الإكمال",
+    "FAILED_TO_SUBMIT_REVIEW": "فشل إرسال التقييم",
+    "FAILED_TO_UPDATE_REVIEW": "فشل تحديث التقييم",
+    "REQUEST_COMPLETED": "تم إكمال الطلب",
+    "REQUEST_COMPLETED_MESSAGE": "تم تحديد طلب الخدمة علو أنه مكتمل",
+    "REVIEW_UPDATED_SUCCESS": "تم تحديث تقييمك بنجاح",
+    "INVALID_RATING": "تقييم غير صحيح",
+    "INVALID_RATING_MESSAGE": "يرجى اختيار تقييم بين 1 و5 نجوم",
+    "COMMENT_REQUIRED": "التعليق مطلوب",
+    "COMMENT_REQUIRED_MESSAGE": "يرجى إضافة تعليق لتقييمك",
+    "INVALID_REQUEST_ID": "معرف الطلب غير صحيح"
   },
   "SERVICES": {
     "SERVICE_NAMES": {
@@ -706,6 +726,23 @@
     "HOURS_AGO": "منذ {count} س",
     "MARK_ALL_READ": "تعليم الكل كمقروء",
     "MARK_AS_READ": "تعليم كمقروء"
+  },
+  "MY_REVIEWS": {
+    "TITLE": "تقييماتي",
+    "SUBTITLE": "شاهد ما يقوله العملاء عن عملك",
+    "BACK_TO_PROFILE": "العودة للملف الشخصي",
+    "LOADING": "جاري تحميل التقييمات...",
+    "ERROR_LOAD": "فشل تحميل التقييمات. يرجى المحاولة مرة أخرى.",
+    "ERROR_PROFILE": "فشل تحميل ملفك الشخصي. يرجى المحاولة مرة أخرى.",
+    "TRY_AGAIN": "حاول مرة أخرى",
+    "AVERAGE_RATING": "متوسط التقييم",
+    "BASED_ON": "بناءً على",
+    "REVIEW": "تقييم",
+    "REVIEWS": "تقييم",
+    "NO_REVIEWS_TITLE": "لا توجد تقييمات بعد",
+    "NO_REVIEWS_MESSAGE": "لم تتلقَ أي تقييمات من العملاء حتى الآن. استمر في عملك الرائع!",
+    "ANONYMOUS_CLIENT": "عميل مجهول",
+    "RATING_OUT_OF": "/5"
   },
   "ID_VERIFICATION": {
     "TITLE": "التحقق من الهوية الوطنية",

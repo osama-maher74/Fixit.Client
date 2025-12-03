@@ -241,4 +241,12 @@ export class CraftsmanProfileComponent implements OnInit {
   retryLoad(): void {
     this.loadProfile();
   }
+
+  /**
+   * Get rating value formatted to 1 decimal place
+   */
+  getRatingDisplay(): string {
+    const rating = this.profile()?.rating || 0;
+    return rating.toFixed(1);
+  }
 }
