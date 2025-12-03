@@ -65,7 +65,8 @@ export const routes: Routes = [
   },
   {
     path: 'appointment-scheduling',
-    loadComponent: () => import('./pages/appointment-scheduling/appointment-scheduling').then(m => m.AppointmentSchedulingComponent)
+    loadComponent: () => import('./pages/appointment-scheduling/appointment-scheduling').then(m => m.AppointmentSchedulingComponent),
+    canActivate: [authGuard]
   },
   {
     path: 'craftsman/:id/availability',

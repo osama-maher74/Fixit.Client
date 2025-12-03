@@ -12,6 +12,7 @@ export interface CraftsmanProfile {
   profileImage?: string | null;
   nationalIdPic?: string | null;
   rating: number;
+  averageRating?: number;
   location: string;
   isVerified: boolean;
   normalizedEmail: string;
@@ -56,6 +57,7 @@ export interface Craftsman {
   describtion: string;
   profileImage: string;
   rating: number;
+  averageRating?: number;
   location: string;
   isVerified: boolean;
   normalizedEmail: string;

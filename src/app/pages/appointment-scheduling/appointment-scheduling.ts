@@ -1,12 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { AvailabilityService } from '../../services/availability.service';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { ServiceRequestService, ConfirmStartAtTimeDto } from '../../services/service-request.service';
 import { OfferService } from '../../services/offer.service';
 import { ClientService } from '../../services/client.service';
 import { ThemeService } from '../../services/theme.service';
+import { ReviewService, ReviewResponse, AverageRatingResponse } from '../../services/review.service';
+import { AuthService } from '../../services/auth.service';
 import { getSwalThemeConfig } from '../../helpers/swal-theme.helper';
 import { TimeSlotDto, WeekDayView, DAYS_OF_WEEK } from '../../models/availability.models';
 import { CraftsmanProfile } from '../../models/craftsman.models';
@@ -16,7 +19,7 @@ import Swal from 'sweetalert2';
 @Component({
     selector: 'app-appointment-scheduling',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, TranslateModule],
     templateUrl: './appointment-scheduling.html',
     styleUrl: './appointment-scheduling.scss'
 })
@@ -26,6 +29,8 @@ export class AppointmentSchedulingComponent implements OnInit {
     serviceDuration: number = 60;
     serviceId: number = 0;
     clientId: number = 0;
+    location: string = '';
+    serviceName: string = '';
 
     craftsman: CraftsmanProfile | null = null;
     weekDays: WeekDayView[] = [];
@@ -38,40 +43,102 @@ export class AppointmentSchedulingComponent implements OnInit {
     loadingCraftsman = false;
     loadingWeek = false;
 
+    // Reviews
+    reviews: ReviewResponse[] = [];
+    averageRating: AverageRatingResponse | null = null;
+    loadingReviews = false;
+    reviewsError: string | null = null;
+    Math = Math;
+
     private availabilityService = inject(AvailabilityService);
     private craftsmanService = inject(CraftsmanService);
     private serviceRequestService = inject(ServiceRequestService);
     private offerService = inject(OfferService);
     private clientService = inject(ClientService);
     private themeService = inject(ThemeService);
+    private reviewService = inject(ReviewService);
+    private authService = inject(AuthService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
 
     ngOnInit(): void {
+        console.log('🚀 AppointmentScheduling Component Initialized');
+        console.log('🔐 Auth Status:', localStorage.getItem('auth_token') ? 'AUTHENTICATED' : 'NOT AUTHENTICATED');
+
+        // Check authentication
+        if (!this.authService.isAuthenticated()) {
+            console.error('❌ User not authenticated, redirecting to login');
+            Swal.fire({
+                ...getSwalThemeConfig(this.themeService.isDark()),
+                icon: 'warning',
+                title: 'تسجيل الدخول مطلوب',
+                text: 'يجب تسجيل الدخول أولاً لحجز موعد',
+                confirmButtonText: 'حسناً'
+            }).then(() => {
+                this.router.navigate(['/login'], {
+                    queryParams: { returnUrl: this.router.url }
+                });
+            });
+            return;
+        }
+
         this.route.queryParams.subscribe(params => {
+            console.log('📋 Query Params:', params);
+
             this.craftsmanId = +params['craftsmanId'] || 0;
             this.serviceRequestId = +params['serviceRequestId'] || 0;
             this.serviceDuration = +params['duration'] || 60;
             this.serviceId = +params['serviceId'] || 0;
+            this.location = params['location'] || '';
+            this.serviceName = params['serviceName'] || '';
+
+            console.log('✅ Parsed Params:', {
+                craftsmanId: this.craftsmanId,
+                serviceRequestId: this.serviceRequestId,
+                serviceId: this.serviceId,
+                location: this.location,
+                serviceName: this.serviceName
+            });
 
             // Get client profile to ensure we have the correct ID
             this.fetchClientProfile();
 
             if (this.craftsmanId) {
+                console.log('📞 Loading craftsman info, week view, and reviews...');
                 this.loadCraftsmanInfo();
                 this.generateWeekView();
+                this.loadCraftsmanReviews();
+            } else {
+                console.error('❌ No craftsman ID provided!');
             }
         });
     }
 
     private fetchClientProfile(): void {
+        console.log('🔍 Fetching client profile...');
+        console.log('🔑 Current token:', localStorage.getItem('auth_token') ? 'EXISTS' : 'MISSING');
+        console.log('👤 Current user:', localStorage.getItem('current_user'));
+
         this.clientService.getCurrentUserProfile().subscribe({
             next: (profile: ClientProfile) => {
-                console.log('Client profile loaded:', profile);
+                console.log('✅ Client profile loaded successfully:', profile);
                 this.clientId = profile.id;
             },
             error: (error) => {
-                console.error('Error loading client profile:', error);
+                console.error('❌ ERROR loading client profile:', error);
+                console.error('❌ Error status:', error?.status);
+                console.error('❌ Error message:', error?.message);
+
+                // Show error to user instead of silent fail
+                Swal.fire({
+                    ...getSwalThemeConfig(this.themeService.isDark()),
+                    icon: 'error',
+                    title: 'خطأ',
+                    text: 'فشل تحميل بيانات الحساب. سيتم إعادة توجيهك للصفحة الرئيسية.',
+                    confirmButtonText: 'حسناً'
+                }).then(() => {
+                    this.router.navigate(['/']);
+                });
             }
         });
     }
@@ -81,6 +148,14 @@ export class AppointmentSchedulingComponent implements OnInit {
         this.craftsmanService.getCraftsmanById(this.craftsmanId)
             .subscribe({
                 next: (craftsman: CraftsmanProfile) => {
+                    // Format rating to 1 decimal place
+                    if (craftsman.rating) {
+                        craftsman.rating = parseFloat(craftsman.rating.toFixed(1));
+                    }
+                    if (craftsman.averageRating) {
+                        craftsman.averageRating = parseFloat(craftsman.averageRating.toFixed(1));
+                    }
+
                     this.craftsman = craftsman;
                     this.loadingCraftsman = false;
                 },
@@ -299,7 +374,82 @@ export class AppointmentSchedulingComponent implements OnInit {
             });
     }
 
+    private loadCraftsmanReviews(): void {
+        this.loadingReviews = true;
+        this.reviewsError = null;
+
+        // Load reviews
+        this.reviewService.getReviewsForCraftsman(this.craftsmanId).subscribe({
+            next: (reviews: ReviewResponse[]) => {
+                console.log('Reviews loaded:', reviews);
+                this.reviews = reviews;
+                this.loadingReviews = false;
+            },
+            error: (error: any) => {
+                console.error('Error loading reviews:', error);
+                this.reviewsError = 'Failed to load reviews';
+                this.loadingReviews = false;
+            }
+        });
+
+        // Load average rating
+        this.reviewService.getCraftsmanAverageRating(this.craftsmanId).subscribe({
+            next: (response: any) => {
+                console.log('Average rating response:', response);
+                console.log('Response type:', typeof response);
+
+                // Handle different response formats
+                if (typeof response === 'number') {
+                    // API returned just the rating number
+                    this.averageRating = {
+                        averageRating: response,
+                        totalReviews: this.reviews.length,
+                        craftsmanId: this.craftsmanId
+                    };
+                    console.log('✅ Created averageRating from number:', this.averageRating);
+                } else if (response && typeof response === 'object') {
+                    // API returned an object
+                    this.averageRating = {
+                        averageRating: response.averageRating || response.AverageRating || 0,
+                        totalReviews: response.totalReviews || response.TotalReviews || this.reviews.length,
+                        craftsmanId: response.craftsmanId || response.CraftsmanId || this.craftsmanId
+                    };
+                    console.log('✅ Created averageRating from object:', this.averageRating);
+                } else {
+                    console.warn('⚠️ Unexpected response format:', response);
+                    this.averageRating = null;
+                }
+            },
+            error: (error: any) => {
+                console.error('Error loading average rating:', error);
+                this.averageRating = null;
+            }
+        });
+    }
+
+    getStarsArray(rating: number): boolean[] {
+        return Array.from({ length: 5 }, (_, i) => i < rating);
+    }
+
+    formatDate(dateString: string | undefined): string {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
     goBack(): void {
-        this.router.navigate(['/craftsmen-list']);
+        this.router.navigate(['/craftsmen-list'], {
+            queryParams: {
+                location: this.location,
+                serviceName: this.serviceName,
+                serviceRequestId: this.serviceRequestId,
+                serviceId: this.serviceId,
+                duration: this.serviceDuration
+            }
+        });
     }
 }

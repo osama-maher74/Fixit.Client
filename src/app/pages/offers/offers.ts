@@ -331,6 +331,24 @@ export class OffersComponent implements OnInit {
     return result;
   }
 
+  /**
+   * Check if service request is in InProgress or Completed status
+   * If true, hide all action buttons
+   */
+  get shouldHideButtons(): boolean {
+    if (!this.serviceRequest) return false;
+
+    const statusName = this.getStatusEnumName(this.serviceRequest.status);
+    const isInProgressOrCompleted = statusName === 'InProgress' || statusName === 'Completed';
+
+    console.log('🔍 Should Hide Buttons Check:');
+    console.log('  - Status:', this.serviceRequest.status);
+    console.log('  - Status Name:', statusName);
+    console.log('  - Should Hide:', isInProgressOrCompleted);
+
+    return isInProgressOrCompleted;
+  }
+
   getImageUrl(): string {
     // Check for serviceRequestImage first (the image uploaded by the client)
     if (this.serviceRequest?.serviceRequestImage) {

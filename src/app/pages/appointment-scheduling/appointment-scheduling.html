@@ -17,8 +17,17 @@
             <p class="specialization">{{ craftsman.describtion }}</p>
             <div class="info-row">
                 <div class="rating" *ngIf="craftsman.rating">
-                    <span class="stars">★</span>
-                    <span>{{ craftsman.rating }}</span>
+                    <span class="stars">
+                        @for (filled of getStarsArray(Math.round(craftsman.rating)); track filled) {
+                        <svg [class.filled]="filled"
+                             class="star-icon"
+                             viewBox="0 0 24 24"
+                             fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                        }
+                    </span>
+                    <span class="rating-value">{{ craftsman.rating }}/5.0</span>
                 </div>
                 <div class="rate">
                     <span class="label">Rate:</span>
@@ -83,6 +92,60 @@
                 <span class="slot-time">{{ slot.time }}</span>
                 <span *ngIf="slot.status === 'Booked'" class="booked-label">Booked</span>
             </button>
+        </div>
+    </div>
+
+    <!-- Craftsman Reviews -->
+    <div class="reviews-section" *ngIf="!loadingReviews && reviews.length > 0">
+        <div class="reviews-header">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <h3>{{ 'APPOINTMENT_SCHEDULING.REVIEWS_TITLE' | translate }}</h3>
+            <div class="reviews-stats" *ngIf="averageRating && averageRating.averageRating != null">
+                <span class="avg-rating">{{ averageRating.averageRating?.toFixed(1) || '0.0' }}</span>
+                <div class="stars">
+                    <span *ngFor="let filled of getStarsArray(Math.round(averageRating.averageRating || 0))"
+                          class="star" [class.filled]="filled">★</span>
+                </div>
+                <span class="total-reviews">({{ averageRating.totalReviews || 0 }} {{ 'APPOINTMENT_SCHEDULING.REVIEWS_COUNT' | translate }})</span>
+            </div>
+        </div>
+
+        <div class="reviews-list">
+            <div class="review-card" *ngFor="let review of reviews.slice(0, 3)">
+                <div class="review-header">
+                    <div class="review-user">
+                        <div class="user-avatar">
+                            <span>{{ review.clientName ? review.clientName.charAt(0).toUpperCase() : 'C' }}</span>
+                        </div>
+                        <div class="user-info">
+                            <h4>{{ review.clientName || ('APPOINTMENT_SCHEDULING.ANONYMOUS' | translate) }}</h4>
+                            <span class="review-date">{{ formatDate(review.reviewDate) }}</span>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span *ngFor="let filled of getStarsArray(review.ratingValue)"
+                              class="star" [class.filled]="filled">★</span>
+                    </div>
+                </div>
+                <p class="review-comment">{{ review.comment }}</p>
+            </div>
+
+            <div class="no-more-reviews" *ngIf="reviews.length === 0">
+                <p>{{ 'APPOINTMENT_SCHEDULING.NO_REVIEWS' | translate }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Reviews -->
+    <div class="reviews-section" *ngIf="loadingReviews">
+        <div class="reviews-header">
+            <h3>{{ 'APPOINTMENT_SCHEDULING.REVIEWS_TITLE' | translate }}</h3>
+        </div>
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>{{ 'APPOINTMENT_SCHEDULING.LOADING_REVIEWS' | translate }}</p>
         </div>
     </div>
 

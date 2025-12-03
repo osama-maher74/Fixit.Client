@@ -233,6 +233,15 @@ export class ProfileComponent implements OnInit {
 
 
   /**
+   * Get formatted rating (rounded to 1 decimal place)
+   */
+  getFormattedRating(): string {
+    const p = this.getCraftsmanProfile();
+    const rating = p?.rating || 0;
+    return rating.toFixed(1);
+  }
+
+  /**
    * Navigate to craftsman reviews page
    */
   goToReviews(): void {

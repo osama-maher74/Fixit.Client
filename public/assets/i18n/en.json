@@ -794,5 +794,12 @@
     "WARNINGS": {
       "EXPIRING_SOON": "Your ID expires soon. Consider renewing it."
     }
+  },
+  "APPOINTMENT_SCHEDULING": {
+    "REVIEWS_TITLE": "Customer Reviews",
+    "REVIEWS_COUNT": "reviews",
+    "ANONYMOUS": "Anonymous Client",
+    "NO_REVIEWS": "No reviews yet",
+    "LOADING_REVIEWS": "Loading reviews..."
   }
 }

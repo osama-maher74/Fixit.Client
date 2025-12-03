@@ -51,6 +51,12 @@ export class CraftsmanProfileComponent implements OnInit {
     this.craftsmanService.getCurrentUserProfile().subscribe({
       next: (data) => {
         console.log('Craftsman Profile Component - Profile data received:', data);
+
+        // Format the rating to 1 decimal place before setting it
+        if (data.rating) {
+          data.rating = parseFloat(data.rating.toFixed(1));
+        }
+
         this.profile.set(data);
         this.isLoading.set(false);
 
@@ -95,8 +101,12 @@ export class CraftsmanProfileComponent implements OnInit {
         console.log('✅ Average rating data received:', data);
         console.log('📊 Average Rating:', data.averageRating);
         console.log('📝 Total Reviews:', data.totalReviews);
-        this.averageRating.set(data.averageRating);
+
+        // Format average rating to 1 decimal place
+        const formattedRating = data.averageRating ? parseFloat(data.averageRating.toFixed(1)) : 0;
+        this.averageRating.set(formattedRating);
         this.totalReviews.set(data.totalReviews);
+
         console.log('✅ Signals updated - averageRating:', this.averageRating(), 'totalReviews:', this.totalReviews());
       },
       error: (error) => {

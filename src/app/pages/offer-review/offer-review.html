@@ -121,6 +121,7 @@
         </div>
 
         <!-- Action Buttons -->
+        @if (shouldShowActionButtons()) {
         <div class="action-buttons">
             <button class="btn btn-accept" (click)="onAccept()">
                 <span class="btn-icon">✓</span>
@@ -130,10 +131,13 @@
                 <span class="btn-icon">✕</span>
                 <span class="btn-text">{{ 'OFFER_REVIEW.ACTIONS.REJECT_OFFER' | translate }}</span>
             </button>
-            <button class="btn btn-new-offer" (click)="onNewOffer()" *ngIf="isCraftsman">
+            @if (isCraftsman) {
+            <button class="btn btn-new-offer" (click)="onNewOffer()">
                 <span class="btn-icon">💰</span>
                 <span class="btn-text">{{ 'OFFER_REVIEW.ACTIONS.NEW_OFFER' | translate }}</span>
             </button>
+            }
         </div>
+        }
     </div>
 </div>

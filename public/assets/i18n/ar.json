@@ -794,5 +794,12 @@
     "WARNINGS": {
       "EXPIRING_SOON": "صلاحية بطاقتك تنتهي قريباً. فكر في تجديدها."
     }
+  },
+  "APPOINTMENT_SCHEDULING": {
+    "REVIEWS_TITLE": "تقييمات العملاء",
+    "REVIEWS_COUNT": "تقييم",
+    "ANONYMOUS": "عميل مجهول",
+    "NO_REVIEWS": "لا توجد تقييمات بعد",
+    "LOADING_REVIEWS": "جاري تحميل التقييمات..."
   }
 }

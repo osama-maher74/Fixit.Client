@@ -59,12 +59,35 @@ export class CraftsmanReviewsComponent implements OnInit {
 
                 // Load average rating
                 this.reviewService.getCraftsmanAverageRating(craftsman.id).subscribe({
-                    next: (avgRating) => {
-                        console.log('Average rating loaded:', avgRating);
-                        this.averageRating = avgRating;
+                    next: (response: any) => {
+                        console.log('Average rating response:', response);
+                        console.log('Response type:', typeof response);
+
+                        // Handle different response formats
+                        if (typeof response === 'number') {
+                            // API returned just the rating number
+                            this.averageRating = {
+                                averageRating: response,
+                                totalReviews: this.reviews.length,
+                                craftsmanId: craftsman.id
+                            };
+                            console.log('✅ Created averageRating from number:', this.averageRating);
+                        } else if (response && typeof response === 'object') {
+                            // API returned an object
+                            this.averageRating = {
+                                averageRating: response.averageRating || response.AverageRating || 0,
+                                totalReviews: response.totalReviews || response.TotalReviews || this.reviews.length,
+                                craftsmanId: response.craftsmanId || response.CraftsmanId || craftsman.id
+                            };
+                            console.log('✅ Created averageRating from object:', this.averageRating);
+                        } else {
+                            console.warn('⚠️ Unexpected response format:', response);
+                            this.averageRating = null;
+                        }
                     },
                     error: (err) => {
                         console.error('Failed to load average rating:', err);
+                        this.averageRating = null;
                     }
                 });
             },
