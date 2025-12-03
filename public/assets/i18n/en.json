@@ -138,6 +138,8 @@
       "PHONE_REQUIRED": "Phone number is required",
       "PHONE_INVALID": "Enter a valid phone number (10-15 digits)",
       "LOCATION_REQUIRED": "Location is required",
+      "LOCATION_MIN_LENGTH": "Address must be at least 10 characters",
+      "LOCATION_INVALID": "Enter a valid address (letters, numbers, spaces, and ,.-#/ allowed)",
       "DOB_REQUIRED": "Date of birth is required",
       "UNDER_AGE": "You must be at least 18 years old"
     }
@@ -188,8 +190,10 @@
       "PHONE_REQUIRED": "Phone number is required",
       "PHONE_INVALID": "Enter a valid phone number (10-15 digits)",
       "NATIONAL_ID_REQUIRED": "National ID is required",
-      "NATIONAL_ID_INVALID": "Enter a valid national ID (5-20 characters)",
+      "NATIONAL_ID_INVALID": "Enter a valid national ID (14 digits)",
       "LOCATION_REQUIRED": "Location is required",
+      "LOCATION_MIN_LENGTH": "Address must be at least 10 characters",
+      "LOCATION_INVALID": "Enter a valid address (letters, numbers, spaces, and ,.-#/ allowed)",
       "DOB_REQUIRED": "Date of birth is required",
       "UNDER_AGE": "You must be at least 18 years old",
       "DESCRIPTION_REQUIRED": "Description is required",
@@ -199,6 +203,7 @@
       "EXPERIENCE_REQUIRED": "Years of experience is required",
       "EXPERIENCE_MIN": "Experience cannot be negative",
       "EXPERIENCE_MAX": "Experience cannot exceed 50 years",
+      "SERVICE_REQUIRED": "Please select a service",
       "PROFILE_IMAGE_REQUIRED": "Profile image is required"
     },
     "ERROR_DEFAULT": "Registration failed. Please try again."

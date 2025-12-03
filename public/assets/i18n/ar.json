@@ -138,6 +138,8 @@
       "PHONE_REQUIRED": "رقم الهاتف مطلوب",
       "PHONE_INVALID": "أدخل رقم هاتف صحيح (10-15 رقم)",
       "LOCATION_REQUIRED": "الموقع مطلوب",
+      "LOCATION_MIN_LENGTH": "يجب أن يكون العنوان 10 أحرف على الأقل",
+      "LOCATION_INVALID": "أدخل عنواناً صحيحاً (يُسمح بالأحرف والأرقام والمسافات و ,.-#/)",
       "DOB_REQUIRED": "تاريخ الميلاد مطلوب",
       "UNDER_AGE": "يجب أن يكون عمرك 18 عاماً على الأقل"
     }
@@ -188,8 +190,10 @@
       "PHONE_REQUIRED": "رقم الهاتف مطلوب",
       "PHONE_INVALID": "أدخل رقم هاتف صحيح (10-15 رقم)",
       "NATIONAL_ID_REQUIRED": "رقم الهوية الوطنية مطلوب",
-      "NATIONAL_ID_INVALID": "أدخل رقم هوية صحيح (5-20 حرف)",
+      "NATIONAL_ID_INVALID": "أدخل رقم هوية صحيح (14 رقم)",
       "LOCATION_REQUIRED": "الموقع مطلوب",
+      "LOCATION_MIN_LENGTH": "يجب أن يكون العنوان 10 أحرف على الأقل",
+      "LOCATION_INVALID": "أدخل عنواناً صحيحاً (يُسمح بالأحرف والأرقام والمسافات و ,.-#/)",
       "DOB_REQUIRED": "تاريخ الميلاد مطلوب",
       "UNDER_AGE": "يجب أن يكون عمرك 18 عاماً على الأقل",
       "DESCRIPTION_REQUIRED": "الوصف مطلوب",
@@ -199,6 +203,7 @@
       "EXPERIENCE_REQUIRED": "سنوات الخبرة مطلوبة",
       "EXPERIENCE_MIN": "الخبرة لا يمكن أن تكون سالبة",
       "EXPERIENCE_MAX": "الخبرة لا يمكن أن تتجاوز 50 عاماً",
+      "SERVICE_REQUIRED": "يرجى اختيار خدمة",
       "PROFILE_IMAGE_REQUIRED": "صورة الملف الشخصي مطلوبة"
     },
     "ERROR_DEFAULT": "فشل التسجيل. يرجى المحاولة مرة أخرى."

@@ -1,0 +1,25 @@
+{
+    "REGISTER_CRAFTSMAN": {
+        "TITLE": "تسجيل الحرفي",
+        "SUBTITLE": "انضم إلى شبكتنا من الحرفيين المحترفين",
+        "PERSONAL_INFO": "المعلومات الشخصية",
+        "PROFESSIONAL_INFO": "المعلومات المهنية",
+        "FIRST_NAME": "الاسم الأول",
+        "LAST_NAME": "اسم العائلة",
+        "EMAIL": "البريد الإلكتروني",
+        "PASSWORD": "كلمة المرور",
+        "CONFIRM_PASSWORD": "تأكيد كلمة المرور",
+        "PHONE_NUMBER": "رقم الهاتف",
+        "LOCATION": "الموقع",
+        "SERVICE": "الخدمة",
+        "SELECT_SERVICE": "اختر تخصصك",
+        "YEARS_OF_EXPERIENCE": "سنوات الخبرة",
+        "HOURLY_RATE": "الأجر بالساعة ($)",
+        "ABOUT": "عنك",
+        "NATIONAL_ID": "صورة الهوية الوطنية",
+        "UPLOAD_NATIONAL_ID": "تحميل الهوية الوطنية",
+        "REGISTER": "تسجيل",
+        "ALREADY_HAVE_ACCOUNT": "لديك حساب بالفعل؟",
+        "LOGIN": "تسجيل الدخول"
+    }
+}

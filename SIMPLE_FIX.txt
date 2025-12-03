@@ -1,0 +1,72 @@
+==================================================
+ملف 1: public/assets/i18n/ar.json
+==================================================
+ابحث عن السطر الذي يحتوي على:
+  },
+  "SERVICES": {
+
+وأضف قبله مباشرة (قبل "SERVICES"):
+
+  },
+  "REGISTER_CRAFTSMAN": {
+    "SERVICE": "الخدمة",
+    "SELECT_SERVICE": "اختر تخصصك",
+    "VALIDATION": {
+      "SERVICE_REQUIRED": "يرجى اختيار خدمة"
+    }
+  },
+  "SERVICES": {
+
+
+==================================================
+ملف 2: public/assets/i18n/en.json
+==================================================
+ابحث عن السطر الذي يحتوي على:
+  },
+  "SERVICES": {
+
+وأضف قبله مباشرة (قبل "SERVICES"):
+
+  },
+  "REGISTER_CRAFTSMAN": {
+    "SERVICE": "Service",
+    "SELECT_SERVICE": "Select your service specialty",
+    "VALIDATION": {
+      "SERVICE_REQUIRED": "Please select a service"
+    }
+  },
+  "SERVICES": {
+
+
+==================================================
+ملف 3: src/app/pages/register-craftsman/register-craftsman.component.ts
+==================================================
+ابحث عن السطر 72 (نهاية دالة loadServices):
+    });
+  }
+
+وأضف بعدها مباشرة:
+
+  translateServiceName(serviceName: string): string {
+    const translationKey = `SERVICES.SERVICE_NAMES.${serviceName}`;
+    const translated = this.translate.instant(translationKey);
+    return translated !== translationKey ? translated : serviceName;
+  }
+
+
+==================================================
+ملف 4: src/app/pages/register-craftsman/register-craftsman.component.html
+==================================================
+ابحث عن السطر 203:
+<option [ngValue]="service.serviceId">{{ service.serviceName }}</option>
+
+واستبدلها بـ:
+<option [ngValue]="service.serviceId">{{ translateServiceName(service.serviceName) }}</option>
+
+
+==================================================
+الخطوة الأخيرة:
+==================================================
+بعد كل التعديلات اعمل Hard Refresh: Ctrl + Shift + R
+
+وكل شيء سيعمل! 🎉

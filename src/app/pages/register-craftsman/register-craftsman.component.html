@@ -159,7 +159,15 @@
           [placeholder]="'REGISTER_CRAFTSMAN.LOCATION_PLACEHOLDER' | translate" />
         @if (location?.invalid && location?.touched) {
         <div class="error-message">
+          @if (location?.errors?.['required']) {
           <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.LOCATION_REQUIRED' | translate }}</span>
+          }
+          @if (location?.errors?.['minlength']) {
+          <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.LOCATION_MIN_LENGTH' | translate }}</span>
+          }
+          @if (location?.errors?.['pattern']) {
+          <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.LOCATION_INVALID' | translate }}</span>
+          }
         </div>
         }
       </div>
