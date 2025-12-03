@@ -456,6 +456,19 @@
     "ERRORS": {
       "FAILED_TO_RESPOND": "فشل الرد",
       "ERROR_TEXT": "حدث خطأ. يرجى المحاولة مرة أخرى."
+    },
+    "STATUS_VALUES": {
+      "PENDING": "قيد الانتظار",
+      "WAITING_FOR_CRAFTSMAN_RESPONSE": "في انتظار رد الحرفي",
+      "WAITING_FOR_CLIENT_DECISION": "في انتظار قرار العميل",
+      "WAITING_FOR_CLIENT_PAYMENT": "في انتظار دفع العميل",
+      "REJECTED_BY_CRAFTSMAN": "مرفوض من الحرفي",
+      "REJECTED_BY_CLIENT": "مرفوض من العميل",
+      "IN_PROGRESS": "قيد التنفيذ",
+      "COMPLETED": "مكتمل",
+      "APPROVED": "معتمد",
+      "CANCELLED": "ملغى",
+      "CANCELLED_DUE_TO_NON_PAYMENT": "ملغى بسبب عدم الدفع"
     }
   },
   "MY_REQUESTS": {
