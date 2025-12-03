@@ -40,7 +40,7 @@ export class RegisterClientComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8), this.passwordStrengthValidator]],
       confirmPassword: ['', [Validators.required]],
-      location: ['', [Validators.required]],
+      location: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^[a-zA-Z0-9\s,.\-#\/]+$/)]],
       phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]],
       gender: [Gender.Male, [Validators.required]],
       dateOfBirth: ['', [Validators.required, this.ageValidator]]
