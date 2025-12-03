@@ -456,6 +456,19 @@
     "ERRORS": {
       "FAILED_TO_RESPOND": "Failed to Respond",
       "ERROR_TEXT": "An error occurred. Please try again."
+    },
+    "STATUS_VALUES": {
+      "PENDING": "Pending",
+      "WAITING_FOR_CRAFTSMAN_RESPONSE": "Waiting For Craftsman Response",
+      "WAITING_FOR_CLIENT_DECISION": "Waiting For Client Decision",
+      "WAITING_FOR_CLIENT_PAYMENT": "Waiting For Client Payment",
+      "REJECTED_BY_CRAFTSMAN": "Rejected By Craftsman",
+      "REJECTED_BY_CLIENT": "Rejected By Client",
+      "IN_PROGRESS": "In Progress",
+      "COMPLETED": "Completed",
+      "APPROVED": "Approved",
+      "CANCELLED": "Cancelled",
+      "CANCELLED_DUE_TO_NON_PAYMENT": "Cancelled Due To Non Payment"
     }
   },
   "MY_REQUESTS": {
