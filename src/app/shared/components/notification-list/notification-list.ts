@@ -360,6 +360,36 @@ export class NotificationListComponent implements OnInit {
   }
 
 
+  getTranslatedTitle(notification: ReadNotificationDto): string {
+    let key = '';
+    switch (notification.type) {
+      case NotificationType.CraftsmanAccepted:
+        key = 'NOTIFICATIONS.TYPE_CRAFTSMAN_ACCEPTED';
+        break;
+      case NotificationType.ClientAcceptedOffer:
+        key = 'NOTIFICATIONS.TYPE_CLIENT_ACCEPTED';
+        break;
+      case NotificationType.CraftsmanRejected:
+        key = 'NOTIFICATIONS.TYPE_CRAFTSMAN_REJECTED';
+        break;
+      case NotificationType.ClientRejectedOffer:
+        key = 'NOTIFICATIONS.TYPE_CLIENT_REJECTED';
+        break;
+      case NotificationType.NewOfferFromCraftsman:
+        key = 'NOTIFICATIONS.TYPE_NEW_OFFER';
+        break;
+      case NotificationType.PaymentRequested:
+        key = 'NOTIFICATIONS.TYPE_PAYMENT_REQUESTED';
+        break;
+      case NotificationType.ServiceRequestScheduled:
+        key = 'NOTIFICATIONS.TYPE_SERVICE_SCHEDULED';
+        break;
+      default:
+        return notification.title;
+    }
+    return key;
+  }
+
   getIconForType(type: NotificationType): string {
     switch (type) {
       case NotificationType.CraftsmanAccepted:

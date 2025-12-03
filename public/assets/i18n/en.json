@@ -725,7 +725,14 @@
     "MINUTES_AGO": "{count}m ago",
     "HOURS_AGO": "{count}h ago",
     "MARK_ALL_READ": "Mark all as read",
-    "MARK_AS_READ": "Mark as read"
+    "MARK_AS_READ": "Mark as read",
+    "TYPE_CRAFTSMAN_ACCEPTED": "Request Accepted",
+    "TYPE_CLIENT_ACCEPTED": "Offer Accepted",
+    "TYPE_CRAFTSMAN_REJECTED": "Request Rejected",
+    "TYPE_CLIENT_REJECTED": "Offer Rejected",
+    "TYPE_NEW_OFFER": "New Offer Received",
+    "TYPE_PAYMENT_REQUESTED": "Payment Requested",
+    "TYPE_SERVICE_SCHEDULED": "Service Scheduled"
   },
   "MY_REVIEWS": {
     "TITLE": "My Reviews",

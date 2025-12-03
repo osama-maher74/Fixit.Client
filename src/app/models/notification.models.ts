@@ -5,7 +5,8 @@ export enum NotificationType {
     NewOfferFromCraftsman = 'NewOfferFromCraftsman',
     ClientAcceptedOffer = 'ClientAcceptedOffer',
     ClientRejectedOffer = 'ClientRejectedOffer',
-    PaymentRequested = 'PaymentRequested'
+    PaymentRequested = 'PaymentRequested',
+    ServiceRequestScheduled = 'ServiceRequestScheduled'
 }
 
 export interface ReadNotificationDto {

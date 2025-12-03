@@ -725,7 +725,14 @@
     "MINUTES_AGO": "منذ {count} د",
     "HOURS_AGO": "منذ {count} س",
     "MARK_ALL_READ": "تعليم الكل كمقروء",
-    "MARK_AS_READ": "تعليم كمقروء"
+    "MARK_AS_READ": "تعليم كمقروء",
+    "TYPE_CRAFTSMAN_ACCEPTED": "تم قبول الطلب",
+    "TYPE_CLIENT_ACCEPTED": "تم قبول العرض",
+    "TYPE_CRAFTSMAN_REJECTED": "تم رفض الطلب",
+    "TYPE_CLIENT_REJECTED": "تم رفض العرض",
+    "TYPE_NEW_OFFER": "تم استلام عرض جديد",
+    "TYPE_PAYMENT_REQUESTED": "تم طلب الدفع",
+    "TYPE_SERVICE_SCHEDULED": "تم جدولة الخدمة"
   },
   "MY_REVIEWS": {
     "TITLE": "تقييماتي",
