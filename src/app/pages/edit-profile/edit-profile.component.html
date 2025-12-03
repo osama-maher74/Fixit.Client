@@ -68,11 +68,6 @@
             <div class="image-preview">
               @if (imagePreviewUrl()) {
               <img [src]="imagePreviewUrl()" alt="Profile preview" class="preview-image" />
-              <button type="button" class="remove-image-btn" (click)="removeImage()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
               } @else {
               <div class="preview-placeholder">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -102,7 +97,8 @@
           <div class="form-group">
             <label for="fName" class="form-label">{{ 'EDIT_PROFILE.FIRST_NAME' | translate }}</label>
             <input id="fName" type="text" formControlName="fName" class="form-control"
-              [class.error]="hasError(clientForm, 'fName')" [placeholder]="'EDIT_PROFILE.ENTER_FIRST_NAME' | translate" />
+              [class.error]="hasError(clientForm, 'fName')"
+              [placeholder]="'EDIT_PROFILE.ENTER_FIRST_NAME' | translate" />
             @if (hasError(clientForm, 'fName')) {
             <span class="error-text">{{ getErrorMessage(clientForm, 'fName') }}</span>
             }
@@ -111,7 +107,8 @@
           <div class="form-group">
             <label for="lName" class="form-label">{{ 'EDIT_PROFILE.LAST_NAME' | translate }}</label>
             <input id="lName" type="text" formControlName="lName" class="form-control"
-              [class.error]="hasError(clientForm, 'lName')" [placeholder]="'EDIT_PROFILE.ENTER_LAST_NAME' | translate" />
+              [class.error]="hasError(clientForm, 'lName')"
+              [placeholder]="'EDIT_PROFILE.ENTER_LAST_NAME' | translate" />
             @if (hasError(clientForm, 'lName')) {
             <span class="error-text">{{ getErrorMessage(clientForm, 'lName') }}</span>
             }
@@ -122,7 +119,8 @@
         <div class="form-group">
           <label for="location" class="form-label">{{ 'EDIT_PROFILE.LOCATION' | translate }}</label>
           <input id="location" type="text" formControlName="location" class="form-control"
-            [class.error]="hasError(clientForm, 'location')" [placeholder]="'EDIT_PROFILE.ENTER_LOCATION' | translate" />
+            [class.error]="hasError(clientForm, 'location')"
+            [placeholder]="'EDIT_PROFILE.ENTER_LOCATION' | translate" />
           @if (hasError(clientForm, 'location')) {
           <span class="error-text">{{ getErrorMessage(clientForm, 'location') }}</span>
           }
@@ -132,7 +130,8 @@
         <div class="form-group">
           <label for="phoneNumber" class="form-label">{{ 'EDIT_PROFILE.PHONE_NUMBER' | translate }}</label>
           <input id="phoneNumber" type="tel" formControlName="phoneNumber" class="form-control"
-            [class.error]="hasError(clientForm, 'phoneNumber')" [placeholder]="'EDIT_PROFILE.ENTER_PHONE_NUMBER' | translate" />
+            [class.error]="hasError(clientForm, 'phoneNumber')"
+            [placeholder]="'EDIT_PROFILE.ENTER_PHONE_NUMBER' | translate" />
           @if (hasError(clientForm, 'phoneNumber')) {
           <span class="error-text">{{ getErrorMessage(clientForm, 'phoneNumber') }}</span>
           }
@@ -223,11 +222,6 @@
             <div class="image-preview">
               @if (imagePreviewUrl()) {
               <img [src]="imagePreviewUrl()" alt="Profile preview" class="preview-image" />
-              <button type="button" class="remove-image-btn" (click)="removeImage()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
               } @else {
               <div class="preview-placeholder">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -252,41 +246,35 @@
           </div>
         </div>
 
-                <!-- National ID Picture Upload -->
+        <!-- National ID Picture Upload -->
         <div class="image-upload-section">
           <label class="section-label">{{ 'EDIT_PROFILE.NATIONAL_ID_PICTURE' | translate }}</label>
           <div class="image-upload-container">
             <div class="image-preview national-id-preview">
               @if (nationalIdPreviewUrl()) {
-                <img [src]="nationalIdPreviewUrl()" alt="National ID" class="preview-image" />
-                <button type="button" class="remove-image-btn" (click)="removeNationalId()" title="Remove">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+              <img [src]="nationalIdPreviewUrl()" alt="National ID" class="preview-image" />
+             
               } @else {
-                <div class="preview-placeholder">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
-                  </svg>
-                  <p class="placeholder-text">{{ 'EDIT_PROFILE.NO_NATIONAL_ID' | translate }}</p>
-                </div>
+              <div class="preview-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                </svg>
+                <p class="placeholder-text">{{ 'EDIT_PROFILE.NO_NATIONAL_ID' | translate }}</p>
+              </div>
               }
             </div>
             <div class="image-upload-controls">
               <label for="nationalIdPic" class="upload-btn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                {{ nationalIdPreviewUrl() ? ('EDIT_PROFILE.CHANGE_PHOTO' | translate) : ('EDIT_PROFILE.UPLOAD_NATIONAL_ID' | translate) }}
+                {{ nationalIdPreviewUrl() ? ('EDIT_PROFILE.CHANGE_PHOTO' | translate) :
+                ('EDIT_PROFILE.UPLOAD_NATIONAL_ID' | translate) }}
               </label>
-              <input
-                id="nationalIdPic"
-                type="file"
-                accept="image/*"
-                (change)="onNationalIdSelected($event)"
-                class="file-input"
-              />
+              <input id="nationalIdPic" type="file" accept="image/*" (change)="onNationalIdSelected($event)"
+                class="file-input" />
               <p class="upload-hint">{{ 'EDIT_PROFILE.IMAGE_HINT_3MB' | translate }}</p>
             </div>
           </div>
@@ -298,7 +286,8 @@
           <div class="form-group">
             <label for="fName" class="form-label">{{ 'EDIT_PROFILE.FIRST_NAME' | translate }}</label>
             <input id="fName" type="text" formControlName="fName" class="form-control"
-              [class.error]="hasError(craftsmanForm, 'fName')" [placeholder]="'EDIT_PROFILE.ENTER_FIRST_NAME' | translate" />
+              [class.error]="hasError(craftsmanForm, 'fName')"
+              [placeholder]="'EDIT_PROFILE.ENTER_FIRST_NAME' | translate" />
             @if (hasError(craftsmanForm, 'fName')) {
             <span class="error-text">{{ getErrorMessage(craftsmanForm, 'fName') }}</span>
             }
@@ -307,7 +296,8 @@
           <div class="form-group">
             <label for="lName" class="form-label">{{ 'EDIT_PROFILE.LAST_NAME' | translate }}</label>
             <input id="lName" type="text" formControlName="lName" class="form-control"
-              [class.error]="hasError(craftsmanForm, 'lName')" [placeholder]="'EDIT_PROFILE.ENTER_LAST_NAME' | translate" />
+              [class.error]="hasError(craftsmanForm, 'lName')"
+              [placeholder]="'EDIT_PROFILE.ENTER_LAST_NAME' | translate" />
             @if (hasError(craftsmanForm, 'lName')) {
             <span class="error-text">{{ getErrorMessage(craftsmanForm, 'lName') }}</span>
             }
@@ -329,7 +319,8 @@
         <div class="form-group">
           <label for="craftsmanPhoneNumber" class="form-label">{{ 'EDIT_PROFILE.PHONE_NUMBER' | translate }}</label>
           <input id="craftsmanPhoneNumber" type="tel" formControlName="phoneNumber" class="form-control"
-            [class.error]="hasError(craftsmanForm, 'phoneNumber')" [placeholder]="'EDIT_PROFILE.ENTER_PHONE_NUMBER' | translate" />
+            [class.error]="hasError(craftsmanForm, 'phoneNumber')"
+            [placeholder]="'EDIT_PROFILE.ENTER_PHONE_NUMBER' | translate" />
           @if (hasError(craftsmanForm, 'phoneNumber')) {
           <span class="error-text">{{ getErrorMessage(craftsmanForm, 'phoneNumber') }}</span>
           }
@@ -338,7 +329,8 @@
         <!-- Experience and Rate -->
         <div class="form-row">
           <div class="form-group">
-            <label for="experienceOfYears" class="form-label">{{ 'EDIT_PROFILE.YEARS_OF_EXPERIENCE' | translate }}</label>
+            <label for="experienceOfYears" class="form-label">{{ 'EDIT_PROFILE.YEARS_OF_EXPERIENCE' | translate
+              }}</label>
             <input id="experienceOfYears" type="number" formControlName="experienceOfYears" class="form-control"
               [class.error]="hasError(craftsmanForm, 'experienceOfYears')" placeholder="0" min="0" />
             @if (hasError(craftsmanForm, 'experienceOfYears')) {
