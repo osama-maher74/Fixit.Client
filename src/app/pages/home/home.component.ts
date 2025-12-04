@@ -8,6 +8,9 @@ import { AuthService } from '../../services/auth.service';
 import { ServiceService } from '../../services/service.service';
 import { ServiceCardComponent, ServiceCard } from '../../components/service-card/service-card.component';
 import { ChatWidgetComponent } from '../../components/chat-widget/chat-widget.component';
+import { ContactService } from '../../services/contact.service';
+import { ToastService } from '../../services/toast.service';
+import { ContactFormDto } from '../../models/contact.models';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +22,8 @@ import { ChatWidgetComponent } from '../../components/chat-widget/chat-widget.co
 export class HomeComponent implements OnInit {
   authService = inject(AuthService);
   private serviceService = inject(ServiceService);
+  private contactService = inject(ContactService);
+  private toastService = inject(ToastService);
   private route = inject(ActivatedRoute);
   private viewportScroller = inject(ViewportScroller);
   private fb = inject(FormBuilder);
@@ -57,16 +62,20 @@ export class HomeComponent implements OnInit {
   onContactSubmit(): void {
     if (this.contactForm.valid) {
       this.isSubmittingContact = true;
+      const contactData: ContactFormDto = this.contactForm.value;
 
-      // Log form data to console (as no backend integration yet)
-      console.log('Contact Form Submitted:', this.contactForm.value);
-
-      // Simulate form submission
-      setTimeout(() => {
-        this.isSubmittingContact = false;
-        alert('Thank you for contacting us! Your message has been received.');
-        this.contactForm.reset();
-      }, 1000);
+      this.contactService.sendContactMessage(contactData).subscribe({
+        next: () => {
+          this.isSubmittingContact = false;
+          this.toastService.success('Your message has been sent successfully!');
+          this.contactForm.reset();
+        },
+        error: (error) => {
+          console.error('Error sending contact message:', error);
+          this.isSubmittingContact = false;
+          this.toastService.error('Failed to send message. Please try again later.');
+        }
+      });
     } else {
       // Mark all fields as touched to show validation errors
       Object.keys(this.contactForm.controls).forEach(key => {
