@@ -11,10 +11,32 @@
     "PROFILE": "Profile",
     "SERVICES": "Services",
     "ABOUT_US": "About Us",
+    "CONTACT_US": "Contact Us",
     "MY_REQUESTS": "My Requests",
     "EDIT_PROFILE": "Edit Profile",
     "VERIFY_ID": "Verify ID",
     "DASHBOARD": "Dashboard"
+  },
+  "CONTACT_US": {
+    "TITLE": "Contact Us",
+    "SUBTITLE": "Have questions or feedback? We'd love to hear from you!",
+    "FULL_NAME": "Full Name",
+    "FULL_NAME_PLACEHOLDER": "Enter your full name",
+    "FULL_NAME_REQUIRED": "Full name is required",
+    "EMAIL": "Email Address",
+    "EMAIL_PLACEHOLDER": "Enter your email address",
+    "EMAIL_REQUIRED": "Email is required",
+    "EMAIL_INVALID": "Please enter a valid email address",
+    "PHONE": "Phone Number (Optional)",
+    "PHONE_PLACEHOLDER": "Enter your phone number",
+    "MESSAGE": "Message",
+    "MESSAGE_PLACEHOLDER": "How can we help you?",
+    "MESSAGE_REQUIRED": "Message is required",
+    "SEND_BUTTON": "Send Message",
+    "SENDING": "Sending...",
+    "EMAIL_US": "Email Us",
+    "CALL_US": "Call Us",
+    "VISIT_US": "Visit Us"
   },
   "FOOTER": {
     "COPYRIGHT": "All rights reserved"

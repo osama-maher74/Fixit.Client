@@ -11,10 +11,32 @@
     "PROFILE": "الملف الشخصي",
     "SERVICES": "الخدمات",
     "ABOUT_US": "من نحن",
+    "CONTACT_US": "اتصل بنا",
     "MY_REQUESTS": "طلباتي",
     "EDIT_PROFILE": "تعديل الملف الشخصي",
     "VERIFY_ID": "توثيق الهوية",
     "DASHBOARD": "لوحة التحكم"
+  },
+  "CONTACT_US": {
+    "TITLE": "اتصل بنا",
+    "SUBTITLE": "لديك أسئلة أو ملاحظات؟ نحن نحب أن نسمع منك!",
+    "FULL_NAME": "الاسم الكامل",
+    "FULL_NAME_PLACEHOLDER": "أدخل اسمك الكامل",
+    "FULL_NAME_REQUIRED": "الاسم الكامل مطلوب",
+    "EMAIL": "البريد الإلكتروني",
+    "EMAIL_PLACEHOLDER": "أدخل بريدك الإلكتروني",
+    "EMAIL_REQUIRED": "البريد الإلكتروني مطلوب",
+    "EMAIL_INVALID": "الرجاء إدخال بريد إلكتروني صحيح",
+    "PHONE": "رقم الهاتف (اختياري)",
+    "PHONE_PLACEHOLDER": "أدخل رقم هاتفك",
+    "MESSAGE": "الرسالة",
+    "MESSAGE_PLACEHOLDER": "كيف يمكننا مساعدتك؟",
+    "MESSAGE_REQUIRED": "الرسالة مطلوبة",
+    "SEND_BUTTON": "إرسال الرسالة",
+    "SENDING": "جاري الإرسال...",
+    "EMAIL_US": "راسلنا",
+    "CALL_US": "اتصل بنا",
+    "VISIT_US": "زرنا"
   },
   "FOOTER": {
     "COPYRIGHT": "جميع الحقوق محفوظة"
