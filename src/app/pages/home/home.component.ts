@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ViewportScroller } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
@@ -11,7 +12,7 @@ import { ChatWidgetComponent } from '../../components/chat-widget/chat-widget.co
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, ServiceCardComponent, ChatWidgetComponent],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, TranslateModule, ServiceCardComponent, ChatWidgetComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -20,16 +21,58 @@ export class HomeComponent implements OnInit {
   private serviceService = inject(ServiceService);
   private route = inject(ActivatedRoute);
   private viewportScroller = inject(ViewportScroller);
+  private fb = inject(FormBuilder);
 
   // Signals for services
   services = signal<ServiceCard[]>([]);
   isLoadingServices = signal<boolean>(true);
   isCraftsman = signal<boolean>(false);
 
+  // Contact form
+  contactForm!: FormGroup;
+  isSubmittingContact = false;
+
   ngOnInit(): void {
     this.loadServices();
     this.checkUserRole();
     this.handleFragmentScroll();
+    this.initializeContactForm();
+  }
+
+  /**
+   * Initialize contact form
+   */
+  private initializeContactForm(): void {
+    this.contactForm = this.fb.group({
+      fullName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: [''],
+      message: ['', [Validators.required]]
+    });
+  }
+
+  /**
+   * Handle contact form submission
+   */
+  onContactSubmit(): void {
+    if (this.contactForm.valid) {
+      this.isSubmittingContact = true;
+
+      // Log form data to console (as no backend integration yet)
+      console.log('Contact Form Submitted:', this.contactForm.value);
+
+      // Simulate form submission
+      setTimeout(() => {
+        this.isSubmittingContact = false;
+        alert('Thank you for contacting us! Your message has been received.');
+        this.contactForm.reset();
+      }, 1000);
+    } else {
+      // Mark all fields as touched to show validation errors
+      Object.keys(this.contactForm.controls).forEach(key => {
+        this.contactForm.get(key)?.markAsTouched();
+      });
+    }
   }
 
   /**
