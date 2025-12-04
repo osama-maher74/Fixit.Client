@@ -99,7 +99,28 @@
       "EMAIL_INVALID": "Please enter a valid email address",
       "PASSWORD_REQUIRED": "Password is required",
       "PASSWORD_MIN_LENGTH": "Password must be at least 6 characters"
-    }
+    },
+    "FORGOT_PASSWORD": "Forgot Password?"
+  },
+  "FORGOT_PASSWORD": {
+    "TITLE": "Forgot Password",
+    "SUBTITLE": "Enter your email to receive a password reset link",
+    "SEND_LINK": "Send Reset Link",
+    "SENDING": "Sending...",
+    "BACK_TO_LOGIN": "Back to Login",
+    "SUCCESS_MESSAGE": "If an account exists with this email, a password reset link has been sent.",
+    "SUCCESS_TOAST": "Reset link sent successfully"
+  },
+  "RESET_PASSWORD": {
+    "TITLE": "Reset Password",
+    "SUBTITLE": "Enter your new password below",
+    "NEW_PASSWORD": "New Password",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "RESET_BUTTON": "Reset Password",
+    "RESETTING": "Resetting...",
+    "GO_TO_LOGIN": "Go to Login",
+    "SUCCESS_MESSAGE": "Password has been reset successfully.",
+    "SUCCESS_TOAST": "Password reset successfully"
   },
   "REGISTER_CLIENT": {
     "TITLE": "Register as Client",

@@ -25,7 +25,7 @@
   z-index: 0;
 }
 
-.login-container > * {
+.login-container>* {
   position: relative;
   z-index: 1;
 }
@@ -173,7 +173,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .register-links {
@@ -208,4 +210,33 @@
   color: var(--text-dark);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(253, 184, 19, 0.3);
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+
+.forgot-password-link {
+  color: var(--primary-gold);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.forgot-password-link:hover {
+  color: var(--primary-gold-hover);
+  text-decoration: underline;
 }

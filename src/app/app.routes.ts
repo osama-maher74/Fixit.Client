@@ -18,6 +18,16 @@ export const routes: Routes = [
     canActivate: [loginGuard]
   },
   {
+    path: 'forgot-password',
+    loadComponent: () => import('./pages/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent),
+    canActivate: [loginGuard]
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./pages/reset-password/reset-password.component').then(m => m.ResetPasswordComponent),
+    canActivate: [loginGuard]
+  },
+  {
     path: 'admin/dashboard',
     loadComponent: () => import('./pages/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard),
     canActivate: [adminOnlyGuard]

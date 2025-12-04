@@ -21,7 +21,10 @@
       </div>
 
       <div class="form-group">
-        <label for="password">{{ 'LOGIN.PASSWORD' | translate }}</label>
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <label for="password">{{ 'LOGIN.PASSWORD' | translate }}</label>
+          <a routerLink="/forgot-password" class="forgot-password-link">{{ 'LOGIN.FORGOT_PASSWORD' | translate }}</a>
+        </div>
         <div class="password-wrapper">
           <input [type]="showPassword() ? 'text' : 'password'" id="password" formControlName="password"
             class="form-control" [class.error]="password?.invalid && password?.touched"

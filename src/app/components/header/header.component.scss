@@ -393,7 +393,7 @@ $hover-red: #c0392b;
 }
 
 .user-name {
-  color: $text-white;
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 1rem;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -481,7 +481,7 @@ $hover-red: #c0392b;
     left: -100%;
     width: 100%;
     height: calc(100vh - 70px);
-    background-color: $primary-dark;
+    background-color: var(--background-white);
     flex-direction: column;
     align-items: flex-start;
     padding: 2rem 1rem;

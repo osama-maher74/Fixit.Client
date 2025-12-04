@@ -8,7 +8,8 @@ import {
   ClientRegisterRequest,
   CraftsmanRegisterRequest,
   AuthResponse,
-  User
+  User,
+  ResetPasswordRequest
 } from '../models/auth.models';
 import type { NotificationService } from './notification.service';
 
@@ -94,6 +95,20 @@ export class AuthService {
       payload
     ).pipe(
       tap(response => this.handleAuthResponse(response))
+    );
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(
+      `${environment.apiUrl}/Account/forgot-password`,
+      { email }
+    );
+  }
+
+  resetPassword(data: ResetPasswordRequest): Observable<any> {
+    return this.http.post(
+      `${environment.apiUrl}/Account/reset-password`,
+      data
     );
   }
 
