@@ -7,6 +7,7 @@ export interface ClientProfile {
   id: number;
   fName: string;
   lName: string;
+  normalizedEmail: string;
   location: string;
   phoneNumber: string;
   profileImage?: string | null;
@@ -18,6 +19,7 @@ export interface ClientApiResponse {
   id: number;
   fName: string;
   lName: string;
+  normalizedEmail: string;
   location: string;
   phoneNumber: string;
   profileImage?: string | null;
