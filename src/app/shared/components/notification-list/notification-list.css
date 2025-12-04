@@ -34,12 +34,56 @@
     background: linear-gradient(135deg, var(--background-light) 0%, var(--background-white) 100%);
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .notification-header h3 {
     margin: 0;
     font-size: 18px;
     font-weight: 700;
     color: var(--text-dark);
     letter-spacing: -0.3px;
+}
+
+.view-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--primary-gold);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(253, 184, 19, 0.2);
+}
+
+.view-all-btn:hover {
+    background: #f5a623;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(253, 184, 19, 0.3);
+}
+
+.view-all-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.view-all-btn:hover svg {
+    transform: translateX(2px);
+}
+
+[dir="rtl"] .view-all-btn svg {
+    transform: rotate(180deg);
+}
+
+[dir="rtl"] .view-all-btn:hover svg {
+    transform: rotate(180deg) translateX(2px);
 }
 
 .badge {

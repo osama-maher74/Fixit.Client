@@ -133,8 +133,8 @@ export class NotificationsComponent implements OnInit {
             Swal.fire({
                 ...getSwalThemeConfig(this.themeService.isDark()),
                 icon: 'info',
-                title: 'Offer Rejected',
-                text: notification.message || 'The client has rejected your offer.'
+                title: this.translateService.instant('NOTIFICATIONS.ALERTS.OFFER_REJECTED_TITLE'),
+                text: notification.message || this.translateService.instant('NOTIFICATIONS.ALERTS.OFFER_REJECTED_TEXT')
             });
             return;
         }
@@ -182,7 +182,14 @@ export class NotificationsComponent implements OnInit {
     getTranslatedTitle(notification: ReadNotificationDto): string {
         console.log('Processing notification:', notification.id, 'Type:', notification.type);
         let key = '';
-        switch (notification.type) {
+
+        // Convert numeric type to string enum if needed
+        const type = typeof notification.type === 'number' ? this.mapNumericTypeToEnum(notification.type) : notification.type;
+
+        switch (type) {
+            case NotificationType.SelectCraftsman:
+                key = 'NOTIFICATIONS.TYPE_SELECT_CRAFTSMAN';
+                break;
             case NotificationType.CraftsmanAccepted:
                 key = 'NOTIFICATIONS.TYPE_CRAFTSMAN_ACCEPTED';
                 break;
@@ -211,8 +218,26 @@ export class NotificationsComponent implements OnInit {
         return key;
     }
 
-    getIconForType(type: NotificationType): string {
-        switch (type) {
+    private mapNumericTypeToEnum(type: number): NotificationType {
+        // Map backend numeric values to enum
+        const mapping: { [key: number]: NotificationType } = {
+            0: NotificationType.SelectCraftsman,
+            1: NotificationType.CraftsmanAccepted,
+            2: NotificationType.CraftsmanRejected,
+            3: NotificationType.NewOfferFromCraftsman,
+            4: NotificationType.ClientAcceptedOffer,
+            5: NotificationType.ClientRejectedOffer,
+            6: NotificationType.PaymentRequested,
+            7: NotificationType.ServiceRequestScheduled
+        };
+        return mapping[type] || NotificationType.SelectCraftsman;
+    }
+
+    getIconForType(type: NotificationType | number): string {
+        // Convert numeric type to string enum if needed
+        const enumType = typeof type === 'number' ? this.mapNumericTypeToEnum(type) : type;
+
+        switch (enumType) {
             case NotificationType.CraftsmanAccepted:
             case NotificationType.ClientAcceptedOffer:
                 return '✅';
@@ -223,6 +248,8 @@ export class NotificationsComponent implements OnInit {
                 return '💰';
             case NotificationType.PaymentRequested:
                 return '💳';
+            case NotificationType.ServiceRequestScheduled:
+                return '📅';
             default:
                 return 'ℹ️';
         }

@@ -729,6 +729,9 @@
     }
   },
   "ERROR_DEFAULT": "An error occurred. Please try again.",
+  "COMMON": {
+    "LOADING": "Loading"
+  },
   "NOTIFICATIONS": {
     "TITLE": "Notifications",
     "NEW": "New",
@@ -739,13 +742,35 @@
     "HOURS_AGO": "{count}h ago",
     "MARK_ALL_READ": "Mark all as read",
     "MARK_AS_READ": "Mark as read",
+    "VIEW_ALL": "View All",
+    "TYPE_SELECT_CRAFTSMAN": "Service Request Received",
     "TYPE_CRAFTSMAN_ACCEPTED": "Request Accepted",
     "TYPE_CLIENT_ACCEPTED": "Offer Accepted",
     "TYPE_CRAFTSMAN_REJECTED": "Request Rejected",
     "TYPE_CLIENT_REJECTED": "Offer Rejected",
     "TYPE_NEW_OFFER": "New Offer Received",
     "TYPE_PAYMENT_REQUESTED": "Payment Requested",
-    "TYPE_SERVICE_SCHEDULED": "Service Scheduled"
+    "TYPE_SERVICE_SCHEDULED": "Service Scheduled",
+    "ALERTS": {
+      "OFFER_REJECTED_TITLE": "Offer Rejected",
+      "OFFER_REJECTED_TEXT": "The client has rejected your offer.",
+      "NEW_OFFER_TITLE": "New Offer Received!",
+      "FROM": "From",
+      "OFFERED_PRICE": "Offered Price",
+      "CURRENCY": "EGP",
+      "DESCRIPTION": "Description",
+      "NO_DESCRIPTION": "No description provided",
+      "CRAFTSMAN": "Craftsman",
+      "ACCEPT_OR_DECLINE": "Accept or decline this offer",
+      "ACCEPT_OFFER": "Accept Offer",
+      "DECLINE_OFFER": "Decline Offer",
+      "OFFER_ACCEPTED_SUCCESS": "Offer Accepted!",
+      "REDIRECTING_TO_PAYMENT": "Redirecting to payment page...",
+      "RESPONSE_SENT": "Response Sent",
+      "OFFER_DECLINED": "You have declined the offer.",
+      "FAILED_TO_RESPOND": "Failed to Respond",
+      "ERROR_OCCURRED": "An error occurred. Please try again."
+    }
   },
   "MY_REVIEWS": {
     "TITLE": "My Reviews",

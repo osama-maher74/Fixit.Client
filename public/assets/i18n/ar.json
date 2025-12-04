@@ -729,6 +729,9 @@
     }
   },
   "ERROR_DEFAULT": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+  "COMMON": {
+    "LOADING": "جاري التحميل"
+  },
   "NOTIFICATIONS": {
     "TITLE": "الإشعارات",
     "NEW": "جديد",
@@ -739,13 +742,35 @@
     "HOURS_AGO": "منذ {count} س",
     "MARK_ALL_READ": "تعليم الكل كمقروء",
     "MARK_AS_READ": "تعليم كمقروء",
+    "VIEW_ALL": "عرض الكل",
+    "TYPE_SELECT_CRAFTSMAN": "تم استلام طلب خدمة",
     "TYPE_CRAFTSMAN_ACCEPTED": "تم قبول الطلب",
     "TYPE_CLIENT_ACCEPTED": "تم قبول العرض",
     "TYPE_CRAFTSMAN_REJECTED": "تم رفض الطلب",
     "TYPE_CLIENT_REJECTED": "تم رفض العرض",
     "TYPE_NEW_OFFER": "تم استلام عرض جديد",
     "TYPE_PAYMENT_REQUESTED": "تم طلب الدفع",
-    "TYPE_SERVICE_SCHEDULED": "تم جدولة الخدمة"
+    "TYPE_SERVICE_SCHEDULED": "تم جدولة الخدمة",
+    "ALERTS": {
+      "OFFER_REJECTED_TITLE": "تم رفض العرض",
+      "OFFER_REJECTED_TEXT": "رفض العميل عرضك.",
+      "NEW_OFFER_TITLE": "تم استلام عرض جديد!",
+      "FROM": "من",
+      "OFFERED_PRICE": "السعر المعروض",
+      "CURRENCY": "جنيه",
+      "DESCRIPTION": "الوصف",
+      "NO_DESCRIPTION": "لم يتم تقديم وصف",
+      "CRAFTSMAN": "حرفي",
+      "ACCEPT_OR_DECLINE": "قبول أو رفض هذا العرض",
+      "ACCEPT_OFFER": "قبول العرض",
+      "DECLINE_OFFER": "رفض العرض",
+      "OFFER_ACCEPTED_SUCCESS": "تم قبول العرض!",
+      "REDIRECTING_TO_PAYMENT": "جاري التوجيه إلى صفحة الدفع...",
+      "RESPONSE_SENT": "تم إرسال الرد",
+      "OFFER_DECLINED": "لقد رفضت العرض.",
+      "FAILED_TO_RESPOND": "فشل الرد",
+      "ERROR_OCCURRED": "حدث خطأ. يرجى المحاولة مرة أخرى."
+    }
   },
   "MY_REVIEWS": {
     "TITLE": "تقييماتي",

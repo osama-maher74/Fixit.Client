@@ -197,8 +197,8 @@ export class NotificationListComponent implements OnInit {
       Swal.fire({
         ...getSwalThemeConfig(this.themeService.isDark()),
         icon: 'info',
-        title: 'Offer Rejected',
-        text: notification.message || 'The client has rejected your offer.'
+        title: this.translateService.instant('NOTIFICATIONS.ALERTS.OFFER_REJECTED_TITLE'),
+        text: notification.message || this.translateService.instant('NOTIFICATIONS.ALERTS.OFFER_REJECTED_TEXT')
       });
       return;
     }
@@ -240,8 +240,8 @@ export class NotificationListComponent implements OnInit {
 
   showOfferResponseDialog(notification: ReadNotificationDto) {
     const finalAmount = notification.finalAmount || 0;
-    const description = notification.description || 'No description provided';
-    const craftsmanName = notification.craftsmanName || 'Craftsman';
+    const description = notification.description || this.translateService.instant('NOTIFICATIONS.ALERTS.NO_DESCRIPTION');
+    const craftsmanName = notification.craftsmanName || this.translateService.instant('NOTIFICATIONS.ALERTS.CRAFTSMAN');
     const offerId = notification.offerId || notification.id;
     const serviceRequestId = notification.serviceRequestId;
 
@@ -256,12 +256,12 @@ export class NotificationListComponent implements OnInit {
 
     Swal.fire({
       ...getSwalThemeConfig(isDark),
-      title: '💰 New Offer Received!',
+      title: '💰 ' + this.translateService.instant('NOTIFICATIONS.ALERTS.NEW_OFFER_TITLE'),
       html: `
         <div style="text-align: left; max-width: 450px; margin: 0 auto;">
           <div style="background: ${bgPrimary}; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
             <p style="font-size: 14px; color: ${textSecondary}; margin: 0 0 5px 0;">
-              From
+              ${this.translateService.instant('NOTIFICATIONS.ALERTS.FROM')}
             </p>
             <p style="font-size: 16px; font-weight: 600; color: ${textPrimary}; margin: 0;">
               ${craftsmanName}
@@ -270,16 +270,16 @@ export class NotificationListComponent implements OnInit {
 
           <div style="background: ${accentBg}; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #FDB813;">
             <p style="font-size: 14px; color: ${textSecondary}; margin: 0 0 5px 0;">
-              Offered Price
+              ${this.translateService.instant('NOTIFICATIONS.ALERTS.OFFERED_PRICE')}
             </p>
             <p style="font-size: 28px; font-weight: 700; color: #FDB813; margin: 0;">
-              ${finalAmount.toFixed(2)} EGP
+              ${finalAmount.toFixed(2)} ${this.translateService.instant('NOTIFICATIONS.ALERTS.CURRENCY')}
             </p>
           </div>
 
           <div style="background: ${bgPrimary}; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
             <p style="font-size: 14px; color: ${textSecondary}; margin: 0 0 8px 0; font-weight: 600;">
-              Description
+              ${this.translateService.instant('NOTIFICATIONS.ALERTS.DESCRIPTION')}
             </p>
             <p style="font-size: 14px; color: ${textPrimary}; margin: 0; line-height: 1.6;">
               ${description}
@@ -288,7 +288,7 @@ export class NotificationListComponent implements OnInit {
 
           <div style="background: ${infoBg}; padding: 12px; border-radius: 8px; border-left: 4px solid #3B82F6;">
             <p style="font-size: 13px; color: ${infoText}; margin: 0;">
-              ℹ️ Accept or decline this offer
+              ℹ️ ${this.translateService.instant('NOTIFICATIONS.ALERTS.ACCEPT_OR_DECLINE')}
             </p>
           </div>
         </div>
@@ -296,8 +296,8 @@ export class NotificationListComponent implements OnInit {
       icon: undefined,
       showDenyButton: true,
       showCancelButton: false,
-      confirmButtonText: '✅ Accept Offer',
-      denyButtonText: '❌ Decline Offer',
+      confirmButtonText: '✅ ' + this.translateService.instant('NOTIFICATIONS.ALERTS.ACCEPT_OFFER'),
+      denyButtonText: '❌ ' + this.translateService.instant('NOTIFICATIONS.ALERTS.DECLINE_OFFER'),
       confirmButtonColor: '#10B981',
       denyButtonColor: '#DC2626',
       allowOutsideClick: false,
@@ -321,8 +321,8 @@ export class NotificationListComponent implements OnInit {
           Swal.fire({
             ...getSwalThemeConfig(this.themeService.isDark()),
             icon: 'success',
-            title: 'Offer Accepted!',
-            text: 'Redirecting to payment page...',
+            title: this.translateService.instant('NOTIFICATIONS.ALERTS.OFFER_ACCEPTED_SUCCESS'),
+            text: this.translateService.instant('NOTIFICATIONS.ALERTS.REDIRECTING_TO_PAYMENT'),
             timer: 2000,
             showConfirmButton: false
           }).then(() => {
@@ -333,8 +333,8 @@ export class NotificationListComponent implements OnInit {
           Swal.fire({
             ...getSwalThemeConfig(this.themeService.isDark()),
             icon: 'success',
-            title: 'Response Sent',
-            text: 'You have declined the offer.',
+            title: this.translateService.instant('NOTIFICATIONS.ALERTS.RESPONSE_SENT'),
+            text: this.translateService.instant('NOTIFICATIONS.ALERTS.OFFER_DECLINED'),
             timer: 3000
           });
 
@@ -352,8 +352,8 @@ export class NotificationListComponent implements OnInit {
         Swal.fire({
           ...getSwalThemeConfig(this.themeService.isDark()),
           icon: 'error',
-          title: 'Failed to Respond',
-          text: 'An error occurred. Please try again.'
+          title: this.translateService.instant('NOTIFICATIONS.ALERTS.FAILED_TO_RESPOND'),
+          text: this.translateService.instant('NOTIFICATIONS.ALERTS.ERROR_OCCURRED')
         });
       }
     });
@@ -362,7 +362,14 @@ export class NotificationListComponent implements OnInit {
 
   getTranslatedTitle(notification: ReadNotificationDto): string {
     let key = '';
-    switch (notification.type) {
+
+    // Convert numeric type to string enum if needed
+    const type = typeof notification.type === 'number' ? this.mapNumericTypeToEnum(notification.type) : notification.type;
+
+    switch (type) {
+      case NotificationType.SelectCraftsman:
+        key = 'NOTIFICATIONS.TYPE_SELECT_CRAFTSMAN';
+        break;
       case NotificationType.CraftsmanAccepted:
         key = 'NOTIFICATIONS.TYPE_CRAFTSMAN_ACCEPTED';
         break;
@@ -390,8 +397,26 @@ export class NotificationListComponent implements OnInit {
     return key;
   }
 
-  getIconForType(type: NotificationType): string {
-    switch (type) {
+  private mapNumericTypeToEnum(type: number): NotificationType {
+    // Map backend numeric values to enum
+    const mapping: { [key: number]: NotificationType } = {
+      0: NotificationType.SelectCraftsman,
+      1: NotificationType.CraftsmanAccepted,
+      2: NotificationType.CraftsmanRejected,
+      3: NotificationType.NewOfferFromCraftsman,
+      4: NotificationType.ClientAcceptedOffer,
+      5: NotificationType.ClientRejectedOffer,
+      6: NotificationType.PaymentRequested,
+      7: NotificationType.ServiceRequestScheduled
+    };
+    return mapping[type] || NotificationType.SelectCraftsman;
+  }
+
+  getIconForType(type: NotificationType | number): string {
+    // Convert numeric type to string enum if needed
+    const enumType = typeof type === 'number' ? this.mapNumericTypeToEnum(type) : type;
+
+    switch (enumType) {
       case NotificationType.CraftsmanAccepted:
       case NotificationType.ClientAcceptedOffer:
         return '✅';
@@ -402,6 +427,8 @@ export class NotificationListComponent implements OnInit {
         return '💰';
       case NotificationType.PaymentRequested:
         return '💳';
+      case NotificationType.ServiceRequestScheduled:
+        return '📅';
       default:
         return 'ℹ️';
     }
@@ -418,5 +445,9 @@ export class NotificationListComponent implements OnInit {
     const hours = Math.floor(minutes / 60);
     if (hours < 24) return this.translateService.instant('NOTIFICATIONS.HOURS_AGO', { count: hours });
     return date.toLocaleDateString();
+  }
+
+  goToNotificationsPage(): void {
+    this.router.navigate(['/notifications']);
   }
 }
