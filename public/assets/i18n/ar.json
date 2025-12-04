@@ -751,6 +751,8 @@
     "TYPE_NEW_OFFER": "تم استلام عرض جديد",
     "TYPE_PAYMENT_REQUESTED": "تم طلب الدفع",
     "TYPE_SERVICE_SCHEDULED": "تم جدولة الخدمة",
+    "TYPE_WITHDRAWAL_REQUESTED": "طلب سحب",
+    "TYPE_WITHDRAWAL_APPROVED": "تمت الموافقة على السحب",
     "ALERTS": {
       "OFFER_REJECTED_TITLE": "تم رفض العرض",
       "OFFER_REJECTED_TEXT": "رفض العميل عرضك.",

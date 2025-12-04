@@ -43,6 +43,10 @@ export class NotificationService {
         return this.http.get<ReadNotificationDto[]>(`${this.API_URL}/craftsman/${craftsmanId}`);
     }
 
+    getNotificationsForAdmin(): Observable<ReadNotificationDto[]> {
+        return this.http.get<ReadNotificationDto[]>(`${this.API_URL}/admin`);
+    }
+
     createNotification(notification: CreateNotificationDto): Observable<ReadNotificationDto> {
         return this.http.post<ReadNotificationDto>(this.API_URL, notification);
     }

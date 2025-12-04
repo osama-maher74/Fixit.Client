@@ -751,6 +751,8 @@
     "TYPE_NEW_OFFER": "New Offer Received",
     "TYPE_PAYMENT_REQUESTED": "Payment Requested",
     "TYPE_SERVICE_SCHEDULED": "Service Scheduled",
+    "TYPE_WITHDRAWAL_REQUESTED": "Withdrawal Requested",
+    "TYPE_WITHDRAWAL_APPROVED": "Withdrawal Approved",
     "ALERTS": {
       "OFFER_REJECTED_TITLE": "Offer Rejected",
       "OFFER_REJECTED_TEXT": "The client has rejected your offer.",

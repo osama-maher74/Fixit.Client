@@ -42,7 +42,11 @@ export class NotificationListComponent implements OnInit {
     console.log('NotificationList - User role:', currentUser.role);
 
     // Check user role and fetch appropriate notifications
-    if (currentUser.role?.toLowerCase() === 'craftsman') {
+    if (currentUser.role?.toLowerCase() === 'admin') {
+      // User is an admin
+      console.log('NotificationList - Fetching notifications for Admin');
+      this.loadAdminNotifications();
+    } else if (currentUser.role?.toLowerCase() === 'craftsman') {
       // User is a craftsman
       console.log('NotificationList - Fetching notifications for Craftsman');
       this.craftsmanService.getCurrentUserProfile().subscribe({
@@ -105,14 +109,38 @@ export class NotificationListComponent implements OnInit {
     });
   }
 
+  loadAdminNotifications() {
+    console.log('NotificationList - Loading notifications for Admin');
+    this.notificationService.getNotificationsForAdmin().subscribe({
+      next: (data) => {
+        console.log('NotificationList - Admin notifications loaded:', data);
+        console.log('🔍 DEBUG - Backend Response Analysis:');
+        data.forEach((notif, index) => {
+          console.log(`  Notification #${index + 1}:`, {
+            id: notif.id,
+            title: notif.title,
+            isRead: notif.isRead,
+            createdAt: notif.createdAt
+          });
+        });
+        this.notificationService.updateNotificationsList(data);
+      },
+      error: (err) => console.error('NotificationList - Failed to load admin notifications', err)
+    });
+  }
+
   onNotificationClick(notification: ReadNotificationDto) {
     // DEBUG: Log the notification
     console.log('🔔 Notification clicked:', notification);
     console.log('Notification ID:', notification.id);
     console.log('Notification type:', notification.type);
+    console.log('Notification type (string):', typeof notification.type, notification.type);
+    console.log('NotificationType.WithdrawalRequested:', NotificationType.WithdrawalRequested);
+    console.log('Type match?', notification.type === NotificationType.WithdrawalRequested);
     console.log('Notification isRead:', notification.isRead);  // ✅ Check isRead status
     console.log('Notification finalAmount:', notification.finalAmount);
     console.log('Notification offerId:', notification.offerId);
+    console.log('Notification craftsManId:', notification.craftsManId);
 
     // Mark as read optimistically (update UI immediately)
     if (!notification.isRead && notification.id) {
@@ -153,12 +181,71 @@ export class NotificationListComponent implements OnInit {
     // Get current user role
     const currentUser = this.authService.getCurrentUser();
     const isClient = currentUser?.role?.toLowerCase() !== 'craftsman';
+    const isAdmin = currentUser?.role?.toLowerCase() === 'admin';
     const title = notification.title?.toLowerCase() || '';
+    const message = notification.message?.toLowerCase() || '';
 
-    console.log('🔍 User role:', isClient ? 'Client' : 'Craftsman');
+    console.log('🔍 User role:', isAdmin ? 'Admin' : (isClient ? 'Client' : 'Craftsman'));
+    console.log('🔍 Current user full object:', currentUser);
+    console.log('🔍 isAdmin value:', isAdmin);
     console.log('🔍 Notification title (lowercase):', title);
 
     // Handle different notification types based on title
+
+    // 0. Admin - Withdrawal Requested (navigate to craftsman wallet)
+    console.log('🔍 Checking withdrawal condition...');
+    console.log('   isAdmin:', isAdmin);
+    console.log('   notification.type:', notification.type);
+    console.log('   NotificationType.WithdrawalRequested:', NotificationType.WithdrawalRequested);
+
+    // Convert numeric type to string enum for comparison
+    const notificationTypeEnum = typeof notification.type === 'number'
+      ? this.mapNumericTypeToEnum(notification.type)
+      : notification.type;
+
+    console.log('   Converted type:', notificationTypeEnum);
+    console.log('   Types match:', notificationTypeEnum === NotificationType.WithdrawalRequested);
+
+    if (isAdmin && notificationTypeEnum === NotificationType.WithdrawalRequested) {
+      console.log('✅ MATCHED: Admin + WithdrawalRequested');
+      const craftsmanId = notification.craftsManId || notification.clientId;
+      console.log('   craftsManId from notification:', craftsmanId);
+      if (craftsmanId) {
+        console.log('✅ Withdrawal Request → Redirecting to craftsman wallet:', craftsmanId);
+        this.router.navigate(['/craftsman-wallet', craftsmanId]);
+      } else {
+        console.error('❌ No craftsmanId found in notification!');
+        console.error('Full notification object:', notification);
+        // Show error to user
+        Swal.fire({
+          ...getSwalThemeConfig(this.themeService.isDark()),
+          icon: 'error',
+          title: 'Cannot View Wallet',
+          text: 'Craftsman information is missing from this notification. Please contact support.'
+        });
+      }
+      return;
+    } else {
+      console.log('❌ Did NOT match withdrawal condition');
+    }
+
+    // 0.5. Fallback: Check if message contains "withdrawal" (temporary fix for backend issue)
+    if (isAdmin && (message.includes('withdrawal') || message.includes('withdraw'))) {
+      const craftsmanId = notification.craftsManId || notification.clientId;
+      if (craftsmanId) {
+        console.log('✅ Withdrawal detected in message → Redirecting to craftsman wallet');
+        this.router.navigate(['/craftsman-wallet', craftsmanId]);
+      } else {
+        console.error('❌ No craftsmanId in withdrawal notification');
+        Swal.fire({
+          ...getSwalThemeConfig(this.themeService.isDark()),
+          icon: 'error',
+          title: 'Cannot View Wallet',
+          text: 'Craftsman information is missing from this notification. Please contact support.'
+        });
+      }
+      return;
+    }
 
     // 1. Craftsman Accepted - Client side (redirect to payment)
     if (isClient && title.includes('craftsman accepted')) {
@@ -391,6 +478,12 @@ export class NotificationListComponent implements OnInit {
       case NotificationType.ServiceRequestScheduled:
         key = 'NOTIFICATIONS.TYPE_SERVICE_SCHEDULED';
         break;
+      case NotificationType.WithdrawalRequested:
+        key = 'NOTIFICATIONS.TYPE_WITHDRAWAL_REQUESTED';
+        break;
+      case NotificationType.WithdrawalApproved:
+        key = 'NOTIFICATIONS.TYPE_WITHDRAWAL_APPROVED';
+        break;
       default:
         return notification.title;
     }
@@ -399,6 +492,7 @@ export class NotificationListComponent implements OnInit {
 
   private mapNumericTypeToEnum(type: number): NotificationType {
     // Map backend numeric values to enum
+    // IMPORTANT: This mapping must match the backend enum order exactly
     const mapping: { [key: number]: NotificationType } = {
       0: NotificationType.SelectCraftsman,
       1: NotificationType.CraftsmanAccepted,
@@ -407,8 +501,11 @@ export class NotificationListComponent implements OnInit {
       4: NotificationType.ClientAcceptedOffer,
       5: NotificationType.ClientRejectedOffer,
       6: NotificationType.PaymentRequested,
-      7: NotificationType.ServiceRequestScheduled
+      7: NotificationType.WithdrawalRequested,     // Admin: Withdrawal request notification
+      8: NotificationType.WithdrawalApproved,      // Craftsman: Withdrawal approved notification
+      9: NotificationType.ServiceRequestScheduled  // Service scheduled notification
     };
+    console.log(`🔄 Mapping type ${type} to ${mapping[type] || 'Unknown'}`);
     return mapping[type] || NotificationType.SelectCraftsman;
   }
 
@@ -429,6 +526,10 @@ export class NotificationListComponent implements OnInit {
         return '💳';
       case NotificationType.ServiceRequestScheduled:
         return '📅';
+      case NotificationType.WithdrawalRequested:
+        return '💸';
+      case NotificationType.WithdrawalApproved:
+        return '✅';
       default:
         return 'ℹ️';
     }

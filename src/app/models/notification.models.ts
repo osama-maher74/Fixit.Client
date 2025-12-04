@@ -6,7 +6,9 @@ export enum NotificationType {
     ClientAcceptedOffer = 'ClientAcceptedOffer',
     ClientRejectedOffer = 'ClientRejectedOffer',
     PaymentRequested = 'PaymentRequested',
-    ServiceRequestScheduled = 'ServiceRequestScheduled'
+    ServiceRequestScheduled = 'ServiceRequestScheduled',
+    WithdrawalRequested = 'WithdrawalRequested',
+    WithdrawalApproved = 'WithdrawalApproved'
 }
 
 export interface ReadNotificationDto {
@@ -23,12 +25,19 @@ export interface ReadNotificationDto {
     description?: string | null;
     craftsmanName?: string;
     craftsManName?: string; // Backend uses this capitalization
+    craftsManId?: number; // Craftsman ID for admin notifications
     clientName?: string; // Added to match backend
+    clientId?: number; // Client ID for notifications
 }
 
 export interface CreateNotificationDto {
     serviceRequestId: number;
     message: string;
     type: NotificationType;
-    recipientType: 'Client' | 'Craftsman';
+    recipientType: 'Client' | 'Craftsman' | 'Admin';
+    title?: string;
+    finalAmount?: number;
+    description?: string;
+    craftsManId?: number;
+    clientId?: number;
 }

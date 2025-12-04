@@ -36,6 +36,24 @@ export class NotificationsComponent implements OnInit {
 
     ngOnInit() {
         this.loadNotifications();
+
+        // Subscribe to real-time notifications from SignalR
+        this.notificationService.notificationReceived$.subscribe({
+            next: (newNotification) => {
+                console.log('📨 Real-time notification received in notifications page:', newNotification);
+                // Add the new notification to the top of the list
+                this.notifications.update(current => {
+                    // Check if notification already exists to avoid duplicates
+                    const exists = current.some(n => n.id === newNotification.id);
+                    if (exists) {
+                        return current;
+                    }
+                    // Add new notification and re-sort
+                    return this.sortNotifications([newNotification, ...current]);
+                });
+            },
+            error: (err) => console.error('Error receiving real-time notification:', err)
+        });
     }
 
     loadNotifications() {
@@ -45,7 +63,15 @@ export class NotificationsComponent implements OnInit {
             return;
         }
 
-        if (currentUser.role?.toLowerCase() === 'craftsman') {
+        if (currentUser.role?.toLowerCase() === 'admin') {
+            this.notificationService.getNotificationsForAdmin().subscribe({
+                next: (data) => {
+                    this.notifications.set(this.sortNotifications(data));
+                    this.isLoading.set(false);
+                },
+                error: () => this.isLoading.set(false)
+            });
+        } else if (currentUser.role?.toLowerCase() === 'craftsman') {
             this.craftsmanService.getCurrentUserProfile().subscribe({
                 next: (craftsman) => {
                     this.notificationService.getNotificationsForCraftsman(craftsman.id).subscribe({
@@ -103,7 +129,39 @@ export class NotificationsComponent implements OnInit {
         // Routing Logic
         const currentUser = this.authService.getCurrentUser();
         const isClient = currentUser?.role?.toLowerCase() !== 'craftsman';
+        const isAdmin = currentUser?.role?.toLowerCase() === 'admin';
         const title = notification.title?.toLowerCase() || '';
+
+        // Convert numeric type to string enum for comparison
+        const notificationTypeEnum = typeof notification.type === 'number'
+            ? this.mapNumericTypeToEnum(notification.type)
+            : notification.type;
+
+        // 0. Admin - Withdrawal Requested (navigate to craftsman wallet)
+        if (isAdmin && notificationTypeEnum === NotificationType.WithdrawalRequested) {
+            const craftsmanId = notification.craftsManId;
+            if (craftsmanId) {
+                this.router.navigate(['/craftsman-wallet', craftsmanId]);
+            } else {
+                Swal.fire({
+                    ...getSwalThemeConfig(this.themeService.isDark()),
+                    icon: 'error',
+                    title: 'Cannot View Wallet',
+                    text: 'Craftsman information is missing from this notification.'
+                });
+            }
+            return;
+        }
+
+        // 0.5. Fallback: Check if message contains "withdrawal" (temporary fix for backend issue)
+        const message = notification.message?.toLowerCase() || '';
+        if (isAdmin && (message.includes('withdrawal') || message.includes('withdraw'))) {
+            const craftsmanId = notification.craftsManId;
+            if (craftsmanId) {
+                this.router.navigate(['/craftsman-wallet', craftsmanId]);
+            }
+            return;
+        }
 
         // 1. Craftsman Accepted - Client side (redirect to payment)
         if (isClient && title.includes('craftsman accepted')) {
@@ -114,7 +172,7 @@ export class NotificationsComponent implements OnInit {
         }
 
         // 2. New Offer - Client side
-        if (notification.type === NotificationType.NewOfferFromCraftsman) {
+        if (notificationTypeEnum === NotificationType.NewOfferFromCraftsman) {
             const offerId = notification.offerId || notification.id;
             if (notification.serviceRequestId) {
                 this.router.navigate(['/offer-review', notification.serviceRequestId, offerId], {
@@ -181,6 +239,13 @@ export class NotificationsComponent implements OnInit {
 
     getTranslatedTitle(notification: ReadNotificationDto): string {
         console.log('Processing notification:', notification.id, 'Type:', notification.type);
+
+        // Fallback: Check if message contains "withdrawal" (temporary fix for backend issue)
+        const message = notification.message?.toLowerCase() || '';
+        if (message.includes('withdrawal') || message.includes('withdraw')) {
+            return 'NOTIFICATIONS.TYPE_WITHDRAWAL_REQUESTED';
+        }
+
         let key = '';
 
         // Convert numeric type to string enum if needed
@@ -211,6 +276,12 @@ export class NotificationsComponent implements OnInit {
             case NotificationType.ServiceRequestScheduled:
                 key = 'NOTIFICATIONS.TYPE_SERVICE_SCHEDULED';
                 break;
+            case NotificationType.WithdrawalRequested:
+                key = 'NOTIFICATIONS.TYPE_WITHDRAWAL_REQUESTED';
+                break;
+            case NotificationType.WithdrawalApproved:
+                key = 'NOTIFICATIONS.TYPE_WITHDRAWAL_APPROVED';
+                break;
             default:
                 console.log('No translation key found for type:', notification.type);
                 return notification.title;
@@ -220,6 +291,7 @@ export class NotificationsComponent implements OnInit {
 
     private mapNumericTypeToEnum(type: number): NotificationType {
         // Map backend numeric values to enum
+        // IMPORTANT: This mapping must match the backend enum order exactly
         const mapping: { [key: number]: NotificationType } = {
             0: NotificationType.SelectCraftsman,
             1: NotificationType.CraftsmanAccepted,
@@ -228,7 +300,9 @@ export class NotificationsComponent implements OnInit {
             4: NotificationType.ClientAcceptedOffer,
             5: NotificationType.ClientRejectedOffer,
             6: NotificationType.PaymentRequested,
-            7: NotificationType.ServiceRequestScheduled
+            7: NotificationType.WithdrawalRequested,     // Admin: Withdrawal request notification
+            8: NotificationType.WithdrawalApproved,      // Craftsman: Withdrawal approved notification
+            9: NotificationType.ServiceRequestScheduled  // Service scheduled notification
         };
         return mapping[type] || NotificationType.SelectCraftsman;
     }
@@ -250,6 +324,10 @@ export class NotificationsComponent implements OnInit {
                 return '💳';
             case NotificationType.ServiceRequestScheduled:
                 return '📅';
+            case NotificationType.WithdrawalRequested:
+                return '💸';
+            case NotificationType.WithdrawalApproved:
+                return '✅';
             default:
                 return 'ℹ️';
         }
