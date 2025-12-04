@@ -1228,3 +1228,8 @@ textarea.form-control {
     text-align: left;
   }
 }
+/* Fix phone number alignment in RTL */
+input[type='tel'] {
+  text-align: start;
+  direction: inherit;
+}
