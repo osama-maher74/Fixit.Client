@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AvailabilityService } from '../../services/availability.service';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { ServiceRequestService, ConfirmStartAtTimeDto } from '../../services/service-request.service';
@@ -31,6 +31,7 @@ export class AppointmentSchedulingComponent implements OnInit {
     clientId: number = 0;
     location: string = '';
     serviceName: string = '';
+    isEditMode: boolean = false;  // True when editing existing appointment
 
     craftsman: CraftsmanProfile | null = null;
     weekDays: WeekDayView[] = [];
@@ -58,6 +59,7 @@ export class AppointmentSchedulingComponent implements OnInit {
     private themeService = inject(ThemeService);
     private reviewService = inject(ReviewService);
     private authService = inject(AuthService);
+    private translate = inject(TranslateService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
 
@@ -91,13 +93,15 @@ export class AppointmentSchedulingComponent implements OnInit {
             this.serviceId = +params['serviceId'] || 0;
             this.location = params['location'] || '';
             this.serviceName = params['serviceName'] || '';
+            this.isEditMode = params['isEdit'] === 'true';  // Check if in edit mode
 
             console.log('✅ Parsed Params:', {
                 craftsmanId: this.craftsmanId,
                 serviceRequestId: this.serviceRequestId,
                 serviceId: this.serviceId,
                 location: this.location,
-                serviceName: this.serviceName
+                serviceName: this.serviceName,
+                isEditMode: this.isEditMode
             });
 
             // Get client profile to ensure we have the correct ID
@@ -255,7 +259,77 @@ export class AppointmentSchedulingComponent implements OnInit {
 
         this.isBooking = true;
 
-        // First, create the offer by selecting the craftsman
+        // Convert time from "09:00 AM" format to ISO 8601 datetime string
+        const timeString = this.selectedTimeSlot.time; // e.g., "09:00 AM"
+        const dateString = this.selectedTimeSlot.date; // e.g., "2025-12-01"
+
+        // Parse the time
+        const timeParts = timeString.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (!timeParts) {
+            console.error('Invalid time format:', timeString);
+            this.isBooking = false;
+            Swal.fire({
+                ...getSwalThemeConfig(this.themeService.isDark()),
+                icon: 'error',
+                title: 'Error',
+                text: 'Invalid time format'
+            });
+            return;
+        }
+
+        let hours = parseInt(timeParts[1]);
+        const minutes = parseInt(timeParts[2]);
+        const period = timeParts[3].toUpperCase();
+
+        // Convert to 24-hour format
+        if (period === 'PM' && hours !== 12) {
+            hours += 12;
+        } else if (period === 'AM' && hours === 12) {
+            hours = 0;
+        }
+
+        // Create ISO 8601 datetime string
+        const serviceStartTime = `${dateString}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
+
+        // Prepare request data
+        const requestData: ConfirmStartAtTimeDto = {
+            serviceId: this.serviceId,
+            clientId: this.clientId,
+            craftsManId: this.craftsmanId,
+            serviceStartTime: serviceStartTime
+        };
+
+        // ========== EDIT MODE: Skip offer creation ==========
+        if (this.isEditMode) {
+            console.log('📝 Edit Mode: Updating appointment time directly (no offer creation)');
+
+            this.serviceRequestService.updateServiceRequestStartTime(this.serviceRequestId, requestData)
+                .subscribe({
+                    next: (response: string) => {
+                        console.log('✅ Appointment time updated successfully:', response);
+                        this.isBooking = false;
+
+                        // Show edit success message
+                        this.showEditSuccessMessage();
+                    },
+                    error: (error: any) => {
+                        console.error('❌ Error updating appointment time:', error);
+                        this.isBooking = false;
+
+                        Swal.fire({
+                            ...getSwalThemeConfig(this.themeService.isDark()),
+                            icon: 'error',
+                            title: this.translate.instant('APPOINTMENT_SCHEDULING.UPDATE_FAILED'),
+                            text: error.error || this.translate.instant('APPOINTMENT_SCHEDULING.UPDATE_FAILED_MESSAGE')
+                        });
+                    }
+                });
+            return;
+        }
+
+        // ========== NEW BOOKING MODE: Create offer first ==========
+        console.log('🆕 New Booking Mode: Creating offer then setting time');
+
         const selectCraftsmanData = {
             serviceRequestId: this.serviceRequestId,
             craftsmanId: this.craftsmanId
@@ -266,86 +340,14 @@ export class AppointmentSchedulingComponent implements OnInit {
                 next: () => {
                     console.log('Craftsman selected and offer created');
 
-                    // Convert time from "09:00 AM" format to ISO 8601 datetime string
-                    const timeString = this.selectedTimeSlot!.time; // e.g., "09:00 AM"
-                    const dateString = this.selectedTimeSlot!.date; // e.g., "2025-12-01"
-
-                    // Parse the time
-                    const timeParts = timeString.match(/(\d+):(\d+)\s*(AM|PM)/i);
-                    if (!timeParts) {
-                        console.error('Invalid time format:', timeString);
-                        this.isBooking = false;
-                        return;
-                    }
-
-                    let hours = parseInt(timeParts[1]);
-                    const minutes = parseInt(timeParts[2]);
-                    const period = timeParts[3].toUpperCase();
-
-                    // Convert to 24-hour format
-                    if (period === 'PM' && hours !== 12) {
-                        hours += 12;
-                    } else if (period === 'AM' && hours === 12) {
-                        hours = 0;
-                    }
-
-                    // Create ISO 8601 datetime string
-                    const serviceStartTime = `${dateString}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
-
-                    // Then update the service request start time
-                    const requestData: ConfirmStartAtTimeDto = {
-                        serviceId: this.serviceId,
-                        clientId: this.clientId,
-                        craftsManId: this.craftsmanId,
-                        serviceStartTime: serviceStartTime
-                    };
-
                     this.serviceRequestService.updateServiceRequestStartTime(this.serviceRequestId, requestData)
                         .subscribe({
                             next: (response: string) => {
                                 console.log('Appointment confirmed successfully:', response);
                                 this.isBooking = false;
 
-                                // ✅ Backend automatically creates SelectCraftsman notification
-                                // No need to manually create notification here
-
-                                const isDark = this.themeService.isDark();
-                                const textPrimary = isDark ? '#F0F0F0' : '#555';
-                                const textSecondary = isDark ? '#B8B8B8' : '#666';
-                                const infoBg = isDark ? 'rgba(253, 184, 19, 0.15)' : '#FEF3E2';
-
-                                Swal.fire({
-                                    ...getSwalThemeConfig(isDark),
-                                    icon: 'success',
-                                    title: 'Request Sent Successfully!',
-                                    html: `
-                                        <div style="text-align: center;">
-                                            <p style="font-size: 16px; color: ${textPrimary}; margin-bottom: 15px;">
-                                                Your appointment request has been sent to<br/>
-                                                <strong style="color: #FDB813;">${this.craftsman?.fName} ${this.craftsman?.lName}</strong>
-                                            </p>
-                                            <p style="font-size: 15px; color: ${textSecondary};">
-                                                📅 <strong>${this.selectedDay?.fullDayName}</strong><br/>
-                                                🕐 <strong>${this.selectedTimeSlot?.time}</strong>
-                                            </p>
-                                            <div style="background: ${infoBg}; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                                                <p style="font-size: 14px; color: ${textSecondary}; margin: 0;">
-                                                    Please wait for craftsman confirmation.<br/>
-                                                    You will be notified once confirmed.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    `,
-                                    confirmButtonText: 'Got it!',
-                                    showClass: {
-                                        popup: 'animate__animated animate__fadeInDown'
-                                    },
-                                    hideClass: {
-                                        popup: 'animate__animated animate__fadeOutUp'
-                                    }
-                                }).then(() => {
-                                    this.router.navigate(['/']);
-                                });
+                                // Show new booking success message
+                                this.showNewBookingSuccessMessage();
                             },
                             error: (error: any) => {
                                 console.error('Error updating appointment time:', error);
@@ -372,6 +374,84 @@ export class AppointmentSchedulingComponent implements OnInit {
                     });
                 }
             });
+    }
+
+    private showEditSuccessMessage(): void {
+        const isDark = this.themeService.isDark();
+        const textPrimary = isDark ? '#F0F0F0' : '#555';
+        const textSecondary = isDark ? '#B8B8B8' : '#666';
+        const infoBg = isDark ? 'rgba(253, 184, 19, 0.15)' : '#FEF3E2';
+
+        Swal.fire({
+            ...getSwalThemeConfig(isDark),
+            icon: 'success',
+            title: this.translate.instant('APPOINTMENT_SCHEDULING.UPDATE_SUCCESS_TITLE'),
+            html: `
+                <div style="text-align: center;">
+                    <p style="font-size: 16px; color: ${textPrimary}; margin-bottom: 15px;">
+                        ${this.translate.instant('APPOINTMENT_SCHEDULING.UPDATE_SUCCESS_MESSAGE')}<br/>
+                        <strong style="color: #FDB813;">${this.craftsman?.fName} ${this.craftsman?.lName}</strong>
+                    </p>
+                    <p style="font-size: 15px; color: ${textSecondary};">
+                        📅 <strong>${this.selectedDay?.fullDayName}</strong><br/>
+                        🕐 <strong>${this.selectedTimeSlot?.time}</strong>
+                    </p>
+                    <div style="background: ${infoBg}; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="font-size: 14px; color: ${textSecondary}; margin: 0;">
+                            ${this.translate.instant('APPOINTMENT_SCHEDULING.NOTIFICATION_SENT')}
+                        </p>
+                    </div>
+                </div>
+            `,
+            confirmButtonText: this.translate.instant('APPOINTMENT_SCHEDULING.OK_BUTTON'),
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        }).then(() => {
+            this.router.navigate(['/my-requests']);
+        });
+    }
+
+    private showNewBookingSuccessMessage(): void {
+        const isDark = this.themeService.isDark();
+        const textPrimary = isDark ? '#F0F0F0' : '#555';
+        const textSecondary = isDark ? '#B8B8B8' : '#666';
+        const infoBg = isDark ? 'rgba(253, 184, 19, 0.15)' : '#FEF3E2';
+
+        Swal.fire({
+            ...getSwalThemeConfig(isDark),
+            icon: 'success',
+            title: this.translate.instant('APPOINTMENT_SCHEDULING.REQUEST_SENT_SUCCESS'),
+            html: `
+                <div style="text-align: center;">
+                    <p style="font-size: 16px; color: ${textPrimary}; margin-bottom: 15px;">
+                        ${this.translate.instant('APPOINTMENT_SCHEDULING.REQUEST_SENT_MESSAGE')}<br/>
+                        <strong style="color: #FDB813;">${this.craftsman?.fName} ${this.craftsman?.lName}</strong>
+                    </p>
+                    <p style="font-size: 15px; color: ${textSecondary};">
+                        📅 <strong>${this.selectedDay?.fullDayName}</strong><br/>
+                        🕐 <strong>${this.selectedTimeSlot?.time}</strong>
+                    </p>
+                    <div style="background: ${infoBg}; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="font-size: 14px; color: ${textSecondary}; margin: 0;">
+                            ${this.translate.instant('APPOINTMENT_SCHEDULING.WAIT_CONFIRMATION')}
+                        </p>
+                    </div>
+                </div>
+            `,
+            confirmButtonText: this.translate.instant('APPOINTMENT_SCHEDULING.GOT_IT'),
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        }).then(() => {
+            this.router.navigate(['/']);
+        });
     }
 
     private loadCraftsmanReviews(): void {

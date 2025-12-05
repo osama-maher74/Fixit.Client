@@ -231,6 +231,11 @@
 
             <!-- Action Buttons -->
             <div class="action-buttons">
+                @if (canEditStartTime()) {
+                <button class="btn-edit-time" (click)="editStartTime()">
+                    <span>🕐 {{ 'REQUEST_DETAILS.EDIT_START_TIME' | translate }}</span>
+                </button>
+                }
                 @if (isInProgress() && !isCraftsman()) {
                 <button class="btn-complete" (click)="completeRequest()" [disabled]="completingRequest">
                     @if (completingRequest) {

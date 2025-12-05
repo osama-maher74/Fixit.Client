@@ -1,104 +1,31 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { ViewportScroller } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ServiceService } from '../../services/service.service';
 import { ServiceCardComponent, ServiceCard } from '../../components/service-card/service-card.component';
 import { ChatWidgetComponent } from '../../components/chat-widget/chat-widget.component';
-import { ContactService } from '../../services/contact.service';
-import { ToastService } from '../../services/toast.service';
-import { ContactFormDto } from '../../models/contact.models';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, TranslateModule, ServiceCardComponent, ChatWidgetComponent],
+  imports: [CommonModule, RouterModule, TranslateModule, ServiceCardComponent, ChatWidgetComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
   authService = inject(AuthService);
   private serviceService = inject(ServiceService);
-  private contactService = inject(ContactService);
-  private toastService = inject(ToastService);
-  private route = inject(ActivatedRoute);
-  private viewportScroller = inject(ViewportScroller);
-  private fb = inject(FormBuilder);
 
   // Signals for services
   services = signal<ServiceCard[]>([]);
   isLoadingServices = signal<boolean>(true);
   isCraftsman = signal<boolean>(false);
 
-  // Contact form
-  contactForm!: FormGroup;
-  isSubmittingContact = false;
-
   ngOnInit(): void {
     this.loadServices();
     this.checkUserRole();
-    this.handleFragmentScroll();
-    this.initializeContactForm();
-  }
-
-  /**
-   * Initialize contact form
-   */
-  private initializeContactForm(): void {
-    this.contactForm = this.fb.group({
-      fullName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: [''],
-      message: ['', [Validators.required]]
-    });
-  }
-
-  /**
-   * Handle contact form submission
-   */
-  onContactSubmit(): void {
-    if (this.contactForm.valid) {
-      this.isSubmittingContact = true;
-      const contactData: ContactFormDto = this.contactForm.value;
-
-      this.contactService.sendContactMessage(contactData).subscribe({
-        next: () => {
-          this.isSubmittingContact = false;
-          this.toastService.success('Your message has been sent successfully!');
-          this.contactForm.reset();
-        },
-        error: (error) => {
-          console.error('Error sending contact message:', error);
-          this.isSubmittingContact = false;
-          this.toastService.error('Failed to send message. Please try again later.');
-        }
-      });
-    } else {
-      // Mark all fields as touched to show validation errors
-      Object.keys(this.contactForm.controls).forEach(key => {
-        this.contactForm.get(key)?.markAsTouched();
-      });
-    }
-  }
-
-  /**
-   * Handle scroll to section based on URL fragment
-   */
-  private handleFragmentScroll(): void {
-    this.route.fragment.subscribe(fragment => {
-      if (fragment) {
-        // Wait for the view to fully render before scrolling
-        setTimeout(() => {
-          const element = document.getElementById(fragment);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }, 300);
-      }
-    });
   }
 
   /**
