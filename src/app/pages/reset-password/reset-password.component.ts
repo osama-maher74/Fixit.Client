@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
@@ -8,10 +8,10 @@ import { ToastService } from '../../services/toast.service';
 import { ResetPasswordRequest } from '../../models/auth.models';
 
 @Component({
-    selector: 'app-reset-password',
-    standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
-    template: `
+  selector: 'app-reset-password',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
+  template: `
     <div class="login-container">
       <div class="login-card">
         <h2>{{ 'RESET_PASSWORD.TITLE' | translate }}</h2>
@@ -26,6 +26,8 @@ import { ResetPasswordRequest } from '../../models/auth.models';
           </button>
         } @else {
           <form [formGroup]="resetPasswordForm" (ngSubmit)="onSubmit()">
+            
+            <!-- New Password Field -->
             <div class="form-group">
               <label for="newPassword">{{ 'RESET_PASSWORD.NEW_PASSWORD' | translate }}</label>
               <div class="password-wrapper">
@@ -44,10 +46,14 @@ import { ResetPasswordRequest } from '../../models/auth.models';
                   @if (newPassword?.errors?.['minlength']) {
                     <span>{{ 'LOGIN.VALIDATION.PASSWORD_MIN_LENGTH' | translate }}</span>
                   }
+                  @if (newPassword?.errors?.['pattern']) {
+                    <span>Password must include uppercase, lowercase, number, and special char.</span>
+                  }
                 </div>
               }
             </div>
 
+            <!-- Confirm Password Field -->
             <div class="form-group">
               <label for="confirmPassword">{{ 'RESET_PASSWORD.CONFIRM_PASSWORD' | translate }}</label>
               <input [type]="showPassword() ? 'text' : 'password'" id="confirmPassword" formControlName="confirmPassword"
@@ -65,7 +71,7 @@ import { ResetPasswordRequest } from '../../models/auth.models';
               }
             </div>
 
-            <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+            <button type="submit" class="btn btn-primary" [disabled]="resetPasswordForm.invalid || isLoading()">
               @if (isLoading()) {
                 <span class="spinner"></span>
                 <span>{{ 'RESET_PASSWORD.RESETTING' | translate }}</span>
@@ -78,7 +84,7 @@ import { ResetPasswordRequest } from '../../models/auth.models';
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     .login-container {
       display: flex;
       justify-content: center;
@@ -141,6 +147,22 @@ import { ResetPasswordRequest } from '../../models/auth.models';
     .btn-primary {
       width: 100%;
       margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      background-color: var(--primary-gold);
+      color: white;
+      border: none;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--primary-gold-hover);
+    }
+
+    .btn-primary:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
     }
     
     .w-100 {
@@ -150,84 +172,125 @@ import { ResetPasswordRequest } from '../../models/auth.models';
     .mt-3 {
       margin-top: 1rem;
     }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+    }
+
+    .form-control.error {
+        border-color: #dc3545;
+    }
+
+    .alert {
+      padding: 1rem;
+      background-color: #d4edda;
+      color: #155724;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
   `]
 })
 export class ResetPasswordComponent implements OnInit {
-    private fb = inject(FormBuilder);
-    private authService = inject(AuthService);
-    private toastService = inject(ToastService);
-    private route = inject(ActivatedRoute);
-    private router = inject(Router);
-    private translate = inject(TranslateService);
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private toastService = inject(ToastService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private translate = inject(TranslateService);
 
-    resetPasswordForm: FormGroup;
-    isLoading = signal(false);
-    successMessage = signal<string | null>(null);
-    showPassword = signal(false);
+  resetPasswordForm: FormGroup;
+  isLoading = signal(false);
+  successMessage = signal<string | null>(null);
+  showPassword = signal(false);
 
-    email: string = '';
-    token: string = '';
+  email: string = '';
+  token: string = '';
 
-    constructor() {
-        this.resetPasswordForm = this.fb.group({
-            newPassword: ['', [Validators.required, Validators.minLength(6)]],
-            confirmPassword: ['', [Validators.required]]
-        }, { validators: this.passwordMatchValidator });
-    }
+  constructor() {
+    // Strong password regex: 8+ chars, 1 uppercase, 1 lowercase, 1 number, 1 special char
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    ngOnInit(): void {
-        this.route.queryParams.subscribe(params => {
-            this.email = params['email'];
-            this.token = params['token'];
+    this.resetPasswordForm = this.fb.group({
+      newPassword: ['', [Validators.required, Validators.pattern(strongPasswordRegex)]],
+      confirmPassword: ['', [Validators.required]]
+    }, { validators: this.passwordMatchValidator });
+  }
 
-            if (!this.email || !this.token) {
-                this.toastService.error('Invalid password reset link.');
-                this.router.navigate(['/login']);
-            }
-        });
-    }
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.email = params['email'];
+      this.token = params['token'];
 
-    passwordMatchValidator(g: FormGroup) {
-        return g.get('newPassword')?.value === g.get('confirmPassword')?.value
-            ? null : { mismatch: true };
-    }
+      if (!this.email || !this.token) {
+        // If parameters are missing, redirect to login or show error
+        this.toastService.error('Invalid link parameters. Please try again.');
+        this.router.navigate(['/login']);
+      } else {
+        console.log('Reset Password Params Loaded:', { email: this.email, tokenLength: this.token?.length });
+      }
+    });
+  }
 
-    get newPassword() {
-        return this.resetPasswordForm.get('newPassword');
-    }
+  passwordMatchValidator(g: AbstractControl) {
+    return g.get('newPassword')?.value === g.get('confirmPassword')?.value
+      ? null : { mismatch: true };
+  }
 
-    get confirmPassword() {
-        return this.resetPasswordForm.get('confirmPassword');
-    }
+  get newPassword() {
+    return this.resetPasswordForm.get('newPassword');
+  }
 
-    togglePasswordVisibility(): void {
-        this.showPassword.set(!this.showPassword());
-    }
+  get confirmPassword() {
+    return this.resetPasswordForm.get('confirmPassword');
+  }
 
-    onSubmit(): void {
-        if (this.resetPasswordForm.valid) {
-            this.isLoading.set(true);
+  togglePasswordVisibility(): void {
+    this.showPassword.set(!this.showPassword());
+  }
 
-            const request: ResetPasswordRequest = {
-                email: this.email,
-                token: this.token,
-                newPassword: this.resetPasswordForm.value.newPassword,
-                confirmPassword: this.resetPasswordForm.value.confirmPassword
-            };
+  onSubmit(): void {
+    if (this.resetPasswordForm.valid && this.email && this.token) {
+      this.isLoading.set(true);
 
-            this.authService.resetPassword(request).subscribe({
-                next: (response) => {
-                    this.isLoading.set(false);
-                    this.successMessage.set(response.message || this.translate.instant('RESET_PASSWORD.SUCCESS_MESSAGE'));
-                    this.toastService.success(this.translate.instant('RESET_PASSWORD.SUCCESS_TOAST'));
-                },
-                error: (error) => {
-                    this.isLoading.set(false);
-                    this.toastService.error(error.error?.message || this.translate.instant('ERROR_DEFAULT'));
-                }
-            });
-        } else {
-            this.resetPasswordForm.markAllAsTouched();
+      // DTO matching backend exactly
+      const request: ResetPasswordRequest = {
+        email: this.email,
+        token: this.token,
+        newPassword: this.resetPasswordForm.value.newPassword,
+        confirmPassword: this.resetPasswordForm.value.confirmPassword
+      };
+
+      this.authService.resetPassword(request).subscribe({
+        next: (response) => {
+          this.isLoading.set(false);
+          this.successMessage.set(response.message || 'Password reset successfully.');
+          this.toastService.success(this.translate.instant('RESET_PASSWORD.SUCCESS_TOAST'));
+
+          // Redirect after 2 seconds
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 2000);
+        },
+        error: (error) => {
+          this.isLoading.set(false);
+          this.toastService.error(error.error?.message || this.translate.instant('ERROR_DEFAULT'));
         }
+      });
+    } else {
+      this.resetPasswordForm.markAllAsTouched();
+      if (!this.email || !this.token) {
+        this.toastService.error('Missing email or token. Please click the link in your email again.');
+      }
     }
+  }
 }
