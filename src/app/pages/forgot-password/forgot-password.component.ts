@@ -7,10 +7,10 @@ import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
-    selector: 'app-forgot-password',
-    standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
-    template: `
+  selector: 'app-forgot-password',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
+  template: `
     <div class="login-container">
       <div class="login-card">
         <h2>{{ 'FORGOT_PASSWORD.TITLE' | translate }}</h2>
@@ -30,6 +30,10 @@ import { ToastService } from '../../services/toast.service';
               <input type="email" id="email" formControlName="email" class="form-control"
                 [class.error]="email?.invalid && email?.touched" 
                 [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate" />
+              
+              <!-- UX Note as requested -->
+              <p class="ux-note">Please make sure you enter a valid Gmail address.</p>
+
               @if (email?.invalid && email?.touched) {
                 <div class="error-message">
                   @if (email?.errors?.['required']) {
@@ -42,7 +46,7 @@ import { ToastService } from '../../services/toast.service';
               }
             </div>
 
-            <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+            <button type="submit" class="btn btn-primary" [disabled]="forgotPasswordForm.invalid || isLoading()">
               @if (isLoading()) {
                 <span class="spinner"></span>
                 <span>{{ 'FORGOT_PASSWORD.SENDING' | translate }}</span>
@@ -59,7 +63,7 @@ import { ToastService } from '../../services/toast.service';
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     .login-container {
       display: flex;
       justify-content: center;
@@ -101,11 +105,51 @@ import { ToastService } from '../../services/toast.service';
       margin-bottom: 0.5rem;
       color: var(--text-primary);
       font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .ux-note {
+      font-size: 0.8rem;
+      color: #6c757d;
+      margin-top: 0.25rem;
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      transition: all 0.2s;
+      font-size: 1rem;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-gold);
+      box-shadow: 0 0 0 3px rgba(var(--primary-gold-rgb), 0.1);
     }
 
     .btn-primary {
       width: 100%;
       margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      background-color: var(--primary-gold);
+      color: white;
+      border: none;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--primary-gold-hover);
+    }
+
+    .btn-primary:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
     }
     
     .link-btn {
@@ -129,48 +173,70 @@ import { ToastService } from '../../services/toast.service';
     .text-center {
       text-align: center;
     }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-control.error {
+        border-color: #dc3545;
+        background-color: #fff8f8;
+    }
+
+    .alert {
+      padding: 1rem;
+      background-color: #d4edda;
+      color: #155724;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
   `]
 })
 export class ForgotPasswordComponent {
-    private fb = inject(FormBuilder);
-    private authService = inject(AuthService);
-    private toastService = inject(ToastService);
-    private translate = inject(TranslateService);
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private toastService = inject(ToastService);
+  private translate = inject(TranslateService);
 
-    forgotPasswordForm: FormGroup;
-    isLoading = signal(false);
-    successMessage = signal<string | null>(null);
+  forgotPasswordForm: FormGroup;
+  isLoading = signal(false);
+  successMessage = signal<string | null>(null);
 
-    constructor() {
-        this.forgotPasswordForm = this.fb.group({
-            email: ['', [Validators.required, Validators.email]]
-        });
-    }
+  constructor() {
+    this.forgotPasswordForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
+  }
 
-    get email() {
-        return this.forgotPasswordForm.get('email');
-    }
+  get email() {
+    return this.forgotPasswordForm.get('email');
+  }
 
-    onSubmit(): void {
-        if (this.forgotPasswordForm.valid) {
-            this.isLoading.set(true);
-            const email = this.forgotPasswordForm.value.email;
+  onSubmit(): void {
+    if (this.forgotPasswordForm.valid) {
+      this.isLoading.set(true);
+      const email = this.forgotPasswordForm.value.email;
 
-            this.authService.forgotPassword(email).subscribe({
-                next: (response) => {
-                    this.isLoading.set(false);
-                    this.successMessage.set(response.message || this.translate.instant('FORGOT_PASSWORD.SUCCESS_MESSAGE'));
-                    this.toastService.success(this.translate.instant('FORGOT_PASSWORD.SUCCESS_TOAST'));
-                },
-                error: (error) => {
-                    this.isLoading.set(false);
-                    // Even on error, we might want to show success to prevent enumeration, 
-                    // but usually the backend handles that. If backend returns error, show generic message.
-                    this.toastService.error(this.translate.instant('ERROR_DEFAULT'));
-                }
-            });
-        } else {
-            this.forgotPasswordForm.markAllAsTouched();
+      this.authService.forgotPassword(email).subscribe({
+        next: (response) => {
+          this.isLoading.set(false);
+          // Check if response has a success message or just strictly success boolean
+          // Usually backend returns { success: true, message: "..." }
+          this.successMessage.set(response.message || 'Reset link sent successfully to your email.');
+          this.toastService.success(this.translate.instant('FORGOT_PASSWORD.SUCCESS_TOAST'));
+        },
+        error: (error) => {
+          this.isLoading.set(false);
+          console.error('Forgot password error:', error);
+          // Pass specific error message if available
+          this.toastService.error(error.error?.message || this.translate.instant('ERROR_DEFAULT'));
         }
+      });
+    } else {
+      this.forgotPasswordForm.markAllAsTouched();
     }
+  }
 }
