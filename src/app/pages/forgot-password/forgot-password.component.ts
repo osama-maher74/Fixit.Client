@@ -20,26 +20,27 @@ import { ToastService } from '../../services/toast.service';
           <div class="alert alert-success">
             {{ successMessage() }}
           </div>
+          <p class="text-center mt-3">Check your inbox for a reset link.</p>
           <button class="btn btn-secondary w-100 mt-3" routerLink="/login">
             {{ 'FORGOT_PASSWORD.BACK_TO_LOGIN' | translate }}
           </button>
         } @else {
           <form [formGroup]="forgotPasswordForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
-              <label for="email">{{ 'LOGIN.EMAIL' | translate }}</label>
-              <input type="email" id="email" formControlName="email" class="form-control"
-                [class.error]="email?.invalid && email?.touched" 
+              <label for="gemail">{{ 'LOGIN.EMAIL' | translate }}</label>
+              <input type="email" id="gemail" formControlName="gemail" class="form-control"
+                [class.error]="gemail?.invalid && gemail?.touched" 
                 [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate" />
               
-              <!-- UX Note as requested -->
+              <!-- UX Note -->
               <p class="ux-note">Please make sure you enter a valid Gmail address.</p>
 
-              @if (email?.invalid && email?.touched) {
+              @if (gemail?.invalid && gemail?.touched) {
                 <div class="error-message">
-                  @if (email?.errors?.['required']) {
+                  @if (gemail?.errors?.['required']) {
                     <span>{{ 'LOGIN.VALIDATION.EMAIL_REQUIRED' | translate }}</span>
                   }
-                  @if (email?.errors?.['email']) {
+                  @if (gemail?.errors?.['email']) {
                     <span>{{ 'LOGIN.VALIDATION.EMAIL_INVALID' | translate }}</span>
                   }
                 </div>
@@ -173,6 +174,10 @@ import { ToastService } from '../../services/toast.service';
     .text-center {
       text-align: center;
     }
+    
+    .mt-3 {
+        margin-top: 1rem;
+    }
 
     .error-message {
         color: #dc3545;
@@ -207,25 +212,24 @@ export class ForgotPasswordComponent {
 
   constructor() {
     this.forgotPasswordForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+      gemail: ['', [Validators.required, Validators.email]]
     });
   }
 
-  get email() {
-    return this.forgotPasswordForm.get('email');
+  get gemail() {
+    return this.forgotPasswordForm.get('gemail');
   }
 
   onSubmit(): void {
     if (this.forgotPasswordForm.valid) {
       this.isLoading.set(true);
-      const email = this.forgotPasswordForm.value.email;
+      // Use 'gemail' from form but send as 'email' argument
+      const emailValue = this.forgotPasswordForm.value.gemail;
 
-      this.authService.forgotPassword(email).subscribe({
+      this.authService.forgotPassword(emailValue).subscribe({
         next: (response) => {
           this.isLoading.set(false);
-          // Check if response has a success message or just strictly success boolean
-          // Usually backend returns { success: true, message: "..." }
-          this.successMessage.set(response.message || 'Reset link sent successfully to your email.');
+          this.successMessage.set(response.message || 'Reset link sent successfully.');
           this.toastService.success(this.translate.instant('FORGOT_PASSWORD.SUCCESS_TOAST'));
         },
         error: (error) => {
