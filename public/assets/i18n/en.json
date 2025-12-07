@@ -101,6 +101,38 @@
       "CRAFTSMAN_FEATURE_4": "Fair Opportunities: Compete on quality and service, not just price",
       "CRAFTSMAN_FEATURE_5": "Professional Tools: Access the resources you need to deliver exceptional service",
       "CLOSING_TEXT": "Whether you're a homeowner seeking reliable help or a skilled craftsman looking to expand your reach, FixIt is here to make connections that matter. Join our growing community and experience the future of service marketplaces."
+    },
+    "HOW_IT_WORKS": {
+      "TITLE": "How It Works",
+      "SUBTITLE": "Get started in just 3 simple steps",
+      "CLIENT": {
+        "STEP1": {
+          "TITLE": "Choose a Service",
+          "DESCRIPTION": "After logging in, browse and select the service you need from our wide range of professional home services."
+        },
+        "STEP2": {
+          "TITLE": "Provide Details or Ask Our Chatbot",
+          "DESCRIPTION": "Enter your service description, location, and suggested price. Not sure what service you need? Use our intelligent chatbot to help you find the perfect service and get pricing guidance."
+        },
+        "STEP3": {
+          "TITLE": "Select Craftsman & Schedule",
+          "DESCRIPTION": "Choose your preferred craftsman, pick an available appointment time, and wait for the craftsman to accept your booking."
+        }
+      },
+      "CRAFTSMAN": {
+        "STEP1": {
+          "TITLE": "Get Verified",
+          "DESCRIPTION": "After registering with accurate information, upload your national ID to get verified. Verification helps you build trust and attract more clients."
+        },
+        "STEP2": {
+          "TITLE": "Complete Your Profile",
+          "DESCRIPTION": "Update your profile with detailed information, add a professional profile picture, and showcase your skills to attract more clients."
+        },
+        "STEP3": {
+          "TITLE": "Manage Your Availability",
+          "DESCRIPTION": "Add your available time slots in the 'Manage Availability' section so clients can easily book appointments with you."
+        }
+      }
     }
   },
   "LOGIN": {
