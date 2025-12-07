@@ -329,16 +329,16 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Format amount for display (amount is in cents)
+   * Format amount for display in EGP
    */
-  formatAmount(amountInCents: number): string {
-    return (amountInCents / 100).toFixed(2);
+  formatAmount(amount: number): string {
+    return amount.toFixed(2);
   }
 
   /**
-   * Format amount for display in EGP
+   * Format Stripe amount for display (Stripe returns amount in cents)
    */
-  formatAmountEGP(amount: number): string {
-    return amount.toFixed(2);
+  formatStripeAmount(amountInCents: number): string {
+    return (amountInCents / 100).toFixed(2);
   }
 }
