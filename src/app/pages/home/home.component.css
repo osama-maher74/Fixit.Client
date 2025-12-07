@@ -907,3 +907,237 @@
   }
 }
 
+/* ===== How It Works Section ===== */
+.how-it-works-section {
+  padding: 80px 20px;
+  background: linear-gradient(180deg, var(--background-light) 0%, var(--background-white) 100%);
+  border-top: 4px solid transparent;
+  border-image: linear-gradient(90deg, transparent 0%, var(--primary-gold) 20%, var(--primary-gold) 80%, transparent 100%);
+  border-image-slice: 1;
+  position: relative;
+}
+
+.how-it-works-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(253, 184, 19, 0.3) 50%, transparent 100%);
+  box-shadow: 0 2px 8px rgba(253, 184, 19, 0.2);
+}
+
+.how-it-works-section .section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.how-it-works-section .section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 15px;
+  background: linear-gradient(135deg, #E5A510 0%, var(--primary-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.how-it-works-section .section-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin: 0;
+  opacity: 0.85;
+  font-weight: 500;
+}
+
+.how-it-works-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.how-it-works-card {
+  background: var(--background-white);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+}
+
+.how-it-works-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-gold) 0%, #FFCD3C 100%);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.how-it-works-card:hover::before {
+  transform: scaleX(1);
+}
+
+.how-it-works-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 35px rgba(253, 184, 19, 0.25);
+  border-color: rgba(253, 184, 19, 0.3);
+}
+
+.step-number {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-gold) 0%, #FFCD3C 100%);
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(253, 184, 19, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.how-it-works-card:hover .step-number {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.step-image {
+  width: 100%;
+  height: 220px;
+  margin-bottom: 25px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(253, 184, 19, 0.05) 0%, rgba(253, 184, 19, 0.02) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.step-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.how-it-works-card:hover .step-image img {
+  transform: scale(1.05);
+}
+
+.step-content {
+  padding-top: 10px;
+}
+
+.step-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 15px;
+  line-height: 1.3;
+}
+
+.step-description {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Responsive Design for How It Works */
+@media (max-width: 1200px) {
+  .how-it-works-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .how-it-works-card:nth-child(3) {
+    grid-column: 1 / -1;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .how-it-works-section {
+    padding: 60px 20px;
+  }
+
+  .how-it-works-section .section-title {
+    font-size: 2rem;
+  }
+
+  .how-it-works-section .section-subtitle {
+    font-size: 1rem;
+  }
+
+  .how-it-works-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .how-it-works-card:nth-child(3) {
+    grid-column: auto;
+    max-width: none;
+  }
+
+  .how-it-works-card {
+    padding: 25px;
+  }
+
+  .step-number {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+  }
+
+  .step-image {
+    height: 200px;
+    margin-bottom: 20px;
+  }
+
+  .step-title {
+    font-size: 1.2rem;
+  }
+
+  .step-description {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .how-it-works-section {
+    padding: 40px 15px;
+  }
+
+  .step-image {
+    height: 180px;
+  }
+
+  .step-number {
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .step-title {
+    font-size: 1.1rem;
+  }
+}
+

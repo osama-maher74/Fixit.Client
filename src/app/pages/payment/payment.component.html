@@ -21,7 +21,7 @@
         <div class="payment-details">
           <div class="detail-row">
             <span class="detail-label">{{ 'PAYMENT.AMOUNT' | translate }}:</span>
-            <span class="detail-value">{{ formatAmount(completedPaymentAmount() || 0) }} EGP</span>
+            <span class="detail-value">{{ formatStripeAmount(completedPaymentAmount() || 0) }} EGP</span>
           </div>
           <div class="detail-row">
             <span class="detail-label">{{ 'PAYMENT.TRANSACTION_ID' | translate }}:</span>
