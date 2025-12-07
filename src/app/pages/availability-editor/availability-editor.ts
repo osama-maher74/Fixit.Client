@@ -5,6 +5,9 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AvailabilityService } from '../../services/availability.service';
 import { CraftsmanService } from '../../services/craftsman.service';
+import { ThemeService } from '../../services/theme.service';
+import { getSwalThemeConfig } from '../../helpers/swal-theme.helper';
+import Swal from 'sweetalert2';
 import {
   AvailabilityDto,
   CreateAvailabilityDto,
@@ -25,6 +28,7 @@ export class AvailabilityEditorComponent implements OnInit {
   private router = inject(Router);
   private availabilityService = inject(AvailabilityService);
   private craftsmanService = inject(CraftsmanService);
+  private themeService = inject(ThemeService);
 
   // Signals
   craftsmanId = signal<number>(0);
@@ -145,18 +149,44 @@ export class AvailabilityEditorComponent implements OnInit {
   }
 
   deleteAvailability(id: number, dayName: string): void {
-    if (!confirm(`Delete availability for ${dayName}?`)) {
-      return;
-    }
+    const isDark = this.themeService.isDark();
 
-    this.availabilityService.deleteAvailability(id).subscribe({
-      next: () => {
-        this.successMessage.set('Availability deleted successfully!');
-        this.loadAvailability(); // Refresh list
-      },
-      error: (error: any) => {
-        console.error('Error deleting availability:', error);
-        this.errorMessage.set(error.error?.message || 'Failed to delete availability');
+    Swal.fire({
+      ...getSwalThemeConfig(isDark),
+      title: 'Are you sure?',
+      text: `Do you really want to remove this slot for ${dayName}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it',
+      confirmButtonColor: '#ef4444', // Red for delete action
+      cancelButtonColor: '#3085d6'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.availabilityService.deleteAvailability(id).subscribe({
+          next: () => {
+            Swal.fire({
+              ...getSwalThemeConfig(isDark),
+              title: 'Deleted!',
+              text: 'Your availability slot has been removed.',
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false
+            });
+            this.successMessage.set('Availability deleted successfully!');
+            this.loadAvailability(); // Refresh list
+          },
+          error: (error: any) => {
+            console.error('Error deleting availability:', error);
+            Swal.fire({
+              ...getSwalThemeConfig(isDark),
+              title: 'Error!',
+              text: error.error?.message || 'Failed to delete availability.',
+              icon: 'error'
+            });
+            this.errorMessage.set(error.error?.message || 'Failed to delete availability');
+          }
+        });
       }
     });
   }
