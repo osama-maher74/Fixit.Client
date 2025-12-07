@@ -4,7 +4,7 @@
         <button class="back-button" (click)="goBack()">
             <span>←</span> Back
         </button>
-        <h1>Schedule Appointment</h1>
+        <h1>{{ (isEditMode ? 'APPOINTMENT_SCHEDULING.TITLE_EDIT' : 'APPOINTMENT_SCHEDULING.TITLE_NEW') | translate }}</h1>
     </div>
 
     <!-- Craftsman Info -->
@@ -181,8 +181,8 @@
 
         <div class="booking-actions">
             <button class="confirm-button" (click)="confirmBooking()" [disabled]="isBooking">
-                <span *ngIf="!isBooking">Confirm Appointment</span>
-                <span *ngIf="isBooking">Booking...</span>
+                <span *ngIf="!isBooking">{{ (isEditMode ? 'APPOINTMENT_SCHEDULING.CONFIRM_NEW_APPOINTMENT' : 'APPOINTMENT_SCHEDULING.CONFIRM_APPOINTMENT') | translate }}</span>
+                <span *ngIf="isBooking">{{ (isEditMode ? 'APPOINTMENT_SCHEDULING.UPDATING' : 'APPOINTMENT_SCHEDULING.BOOKING') | translate }}</span>
             </button>
         </div>
     </div>

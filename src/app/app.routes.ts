@@ -121,7 +121,7 @@ export const routes: Routes = [
   },
   {
     path: 'contact-us',
-    loadComponent: () => import('./pages/contact-us/contact-us').then(m => m.ContactUsComponent)
+    loadComponent: () => import('./pages/contact-us/contact-us.component').then(m => m.ContactUsComponent)
   },
   {
     path: 'notifications',
