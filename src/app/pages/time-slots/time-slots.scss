@@ -1,6 +1,6 @@
 /* ========================================
    MANAGE AVAILABILITY - PREMIUM SCSS STYLES
-   Modern UI with Manual Blocking System
+   Modern UI with Manual Blocking System + Week View
    ======================================== */
 
 // Color Variables
@@ -47,7 +47,7 @@ $gold-hover: var(--primary-gold-hover);
   }
 
   50% {
-    opacity: 0.5;
+    opacity: 0.6;
   }
 }
 
@@ -135,8 +135,8 @@ $gold-hover: var(--primary-gold-hover);
   }
 }
 
-// Date Picker Section
-.date-picker-section {
+// Week Selector Section
+.week-selector-section {
   max-width: 80rem;
   margin: 0 auto 2.5rem;
   background: var(--background-white);
@@ -146,48 +146,166 @@ $gold-hover: var(--primary-gold-hover);
   box-shadow: var(--shadow-lg);
   animation: slide-up 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  .date-picker-wrapper {
+  .week-header {
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 2rem;
 
-    label {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin: 0;
+    }
+
+    .week-nav-button {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--background-light);
+      border: 2px solid var(--border-light);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
 
       svg {
         width: 20px;
         height: 20px;
-        color: $gold;
+        color: var(--text-dark);
       }
-    }
-
-    .date-input {
-      padding: 1rem 1.25rem;
-      background: var(--background-light);
-      border: 2px solid var(--border-light);
-      border-radius: 0.75rem;
-      color: var(--text-dark);
-      font-weight: 600;
-      font-size: 1.125rem;
-      transition: all 0.3s ease;
-      cursor: pointer;
 
       &:hover {
-        border-color: rgba($gold, 0.4);
+        background: $gold;
+        border-color: $gold;
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba($gold, 0.3);
+
+        svg {
+          color: white;
+        }
       }
 
-      &:focus {
-        outline: none;
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+
+  .week-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+
+    .day-card {
+      background: var(--background-light);
+      border: 2px solid var(--border-light);
+      border-radius: 1rem;
+      padding: 1rem 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: transparent;
+        transition: all 0.3s ease;
+      }
+
+      .day-name {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+      }
+
+      .day-number {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        line-height: 1;
+        margin-bottom: 0.25rem;
+      }
+
+      .month-name {
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        text-transform: uppercase;
+      }
+
+      .today-indicator {
+        position: absolute;
+        bottom: 0.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: $gold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      &:hover {
+        border-color: rgba($gold, 0.5);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba($gold, 0.2);
+
+        &::before {
+          background: linear-gradient(90deg, transparent, $gold, transparent);
+        }
+      }
+
+      &.today {
+        background: rgba($gold, 0.1);
+        border-color: rgba($gold, 0.3);
+
+        .day-number {
+          color: $gold;
+        }
+      }
+
+      &.selected {
+        background: linear-gradient(135deg, $gold 0%, $gold-hover 100%);
         border-color: $gold;
-        box-shadow: 0 0 0 3px rgba($gold, 0.15);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba($gold, 0.4);
+
+        &::before {
+          background: white;
+        }
+
+        .day-name,
+        .day-number,
+        .month-name {
+          color: white !important;
+        }
+
+        .today-indicator {
+          color: white;
+        }
+      }
+
+      &:active {
+        transform: translateY(-2px);
       }
     }
   }
@@ -197,6 +315,8 @@ $gold-hover: var(--primary-gold-hover);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-light);
 
     .stat-card {
       background: var(--background-light);
@@ -675,8 +795,14 @@ $gold-hover: var(--primary-gold-hover);
     }
   }
 
-  .date-picker-section {
+  .week-selector-section {
     padding: 1.5rem;
+
+    .week-header {
+      h2 {
+        font-size: 1.25rem;
+      }
+    }
 
     .stats-summary {
       grid-template-columns: 1fr;

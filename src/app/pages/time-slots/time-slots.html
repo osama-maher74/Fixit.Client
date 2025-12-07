@@ -21,22 +21,39 @@
         </button>
     </header>
 
-    <!-- Date Picker Section -->
-    <section class="date-picker-section">
-        <form [formGroup]="dateForm">
-            <div class="date-picker-wrapper">
-                <label>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                    {{ 'MANAGE_AVAILABILITY.SELECT_DATE' | translate }}
-                </label>
-                <input type="date" formControlName="date" class="date-input" />
+    <!-- Week Days Selector -->
+    <section class="week-selector-section">
+        <div class="week-header">
+            <button class="week-nav-button" (click)="navigateWeek('prev')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+
+            <h2>{{ 'MANAGE_AVAILABILITY.SELECT_DAY' | translate }}</h2>
+
+            <button class="week-nav-button" (click)="navigateWeek('next')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <div class="week-days-grid">
+            @for (day of weekDays(); track day.date) {
+            <div class="day-card" [class.today]="day.isToday" [class.selected]="day.isSelected"
+                (click)="selectDay(day)">
+
+                <div class="day-name">{{ day.dayShort }}</div>
+                <div class="day-number">{{ day.dayNumber }}</div>
+                <div class="month-name">{{ day.monthName }}</div>
+
+                @if (day.isToday) {
+                <div class="today-indicator">{{ 'MANAGE_AVAILABILITY.TODAY' | translate }}</div>
+                }
             </div>
-        </form>
+            }
+        </div>
 
         <!-- Stats Summary -->
         <div class="stats-summary">

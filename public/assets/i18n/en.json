@@ -308,6 +308,8 @@
     "SUBTITLE": "Control your time slots - Block or activate availability for specific times",
     "BACK_TO_PROFILE": "Back to Profile",
     "SELECT_DATE": "Select Date",
+    "SELECT_DAY": "Select a Day",
+    "TODAY": "Today",
     "TIME_SLOTS": "Time Slots",
     "CLICK_TO_TOGGLE": "Click on any slot to toggle its availability",
     "AVAILABLE": "Available",

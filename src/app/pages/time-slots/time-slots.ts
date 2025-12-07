@@ -1,6 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
@@ -10,12 +9,11 @@ import { TimeSlotDto, TimeSlotStatus, canToggleSlot, isSlotBooked } from '../../
 @Component({
   selector: 'app-time-slots',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatSnackBarModule, RouterLink, TranslateModule],
+  imports: [CommonModule, MatSnackBarModule, RouterLink, TranslateModule],
   templateUrl: './time-slots.html',
   styleUrl: './time-slots.scss'
 })
 export class TimeSlotsComponent implements OnInit {
-  private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private availabilityService = inject(AvailabilityService);
   private snackBar = inject(MatSnackBar);
@@ -25,29 +23,17 @@ export class TimeSlotsComponent implements OnInit {
   timeSlots = signal<TimeSlotDto[]>([]);
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
-  togglingSlotId = signal<number | null>(null); // Track which slot is being toggled
-
-  // Form
-  dateForm!: FormGroup;
+  togglingSlotId = signal<number | null>(null);
+  weekDays = signal<any[]>([]);
+  selectedDate = signal<Date>(new Date());
+  currentWeekStart = signal<Date>(new Date());
 
   // Expose status enum to template
   TimeSlotStatus = TimeSlotStatus;
 
   ngOnInit(): void {
-    this.initForm();
     this.loadCraftsmanId();
-  }
-
-  private initForm(): void {
-    const today = new Date().toISOString().split('T')[0];
-    this.dateForm = this.fb.group({
-      date: [today, Validators.required]
-    });
-
-    // Auto-load slots when date changes
-    this.dateForm.get('date')?.valueChanges.subscribe(() => {
-      this.loadSlots();
-    });
+    this.generateWeekDays();
   }
 
   private loadCraftsmanId(): void {
@@ -58,17 +44,84 @@ export class TimeSlotsComponent implements OnInit {
     }
   }
 
-  loadSlots(): void {
-    if (this.dateForm.invalid) {
-      return;
+  generateWeekDays(): void {
+    const today = new Date();
+    const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+    // Calculate the start of the week (Sunday)
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - currentDay);
+    this.currentWeekStart.set(weekStart);
+
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(weekStart);
+      date.setDate(weekStart.getDate() + i);
+
+      days.push({
+        date: date,
+        dayName: this.getDayName(i),
+        dayShort: this.getDayShort(i),
+        dayNumber: date.getDate(),
+        monthName: this.getMonthName(date.getMonth()),
+        isToday: this.isSameDay(date, today),
+        isSelected: this.isSameDay(date, this.selectedDate())
+      });
     }
 
+    this.weekDays.set(days);
+  }
+
+  selectDay(day: any): void {
+    this.selectedDate.set(day.date);
+    this.generateWeekDays(); // Refresh to update selected state
+    this.loadSlots();
+  }
+
+  navigateWeek(direction: 'prev' | 'next'): void {
+    const currentStart = this.currentWeekStart();
+    const newStart = new Date(currentStart);
+    newStart.setDate(currentStart.getDate() + (direction === 'next' ? 7 : -7));
+
+    this.currentWeekStart.set(newStart);
+
+    // Update selected date to the same day of week in the new week
+    const selectedDay = this.selectedDate().getDay();
+    const newSelected = new Date(newStart);
+    newSelected.setDate(newStart.getDate() + selectedDay);
+    this.selectedDate.set(newSelected);
+
+    this.generateWeekDays();
+    this.loadSlots();
+  }
+
+  private getDayName(index: number): string {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[index];
+  }
+
+  private getDayShort(index: number): string {
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return days[index];
+  }
+
+  private getMonthName(index: number): string {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[index];
+  }
+
+  private isSameDay(date1: Date, date2: Date): boolean {
+    return date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate();
+  }
+
+  loadSlots(): void {
     this.isLoading.set(true);
     this.errorMessage.set(null);
     this.timeSlots.set([]);
 
-    const { date } = this.dateForm.value;
-    const dateObj = new Date(date);
+    const dateObj = this.selectedDate();
 
     this.availabilityService.getTimeSlots(
       this.craftsmanId(),

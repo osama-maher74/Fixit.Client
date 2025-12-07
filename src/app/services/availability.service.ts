@@ -51,11 +51,11 @@ export class AvailabilityService {
      * GET /api/TimeSlots/schedule?craftsmanId={id}&date={date}
      */
     getTimeSlots(craftsmanId: number, date: Date): Observable<TimeSlotDto[]> {
-        // Format date as yyyy-MM-dd
-        const dateObj = new Date(date);
-        const year = dateObj.getFullYear();
-        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-        const day = String(dateObj.getDate()).padStart(2, '0');
+        // Format date as yyyy-MM-dd using LOCAL date components (not UTC)
+        // This prevents timezone conversion from shifting the date
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
         const dateString = `${year}-${month}-${day}`;
 
         const url = `${this.TIMESLOTS_API}/schedule?craftsmanId=${craftsmanId}&date=${dateString}`;
