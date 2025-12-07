@@ -246,7 +246,11 @@
                     }
                 </button>
                 }
-                <button class="btn-secondary" (click)="goBack()">{{ 'REQUEST_DETAILS.BACK_TO_MY_REQUESTS' | translate }}</button>
+                @if (isInProgress() || isCompleted()) {
+                <button class="btn-problem" (click)="goToContactUs()">
+                    <span>⚠️ {{ 'REQUEST_DETAILS.HAVING_PROBLEM' | translate }}</span>
+                </button>
+                }
             </div>
         </div>
     </div>

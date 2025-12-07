@@ -532,10 +532,18 @@ textarea.form-control {
     width: 20px;
     height: 20px;
     transition: transform 0.3s ease;
+    flex-shrink: 0;
   }
 
   &:hover .btn-icon {
     transform: translateX(3px);
+  }
+
+  > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
   }
 }
 
