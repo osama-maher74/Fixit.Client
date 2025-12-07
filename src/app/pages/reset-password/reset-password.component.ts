@@ -5,7 +5,6 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
-import { ResetPasswordRequest } from '../../models/auth.models';
 
 @Component({
   selector: 'app-reset-password',
@@ -27,6 +26,12 @@ import { ResetPasswordRequest } from '../../models/auth.models';
         } @else {
           <form [formGroup]="resetPasswordForm" (ngSubmit)="onSubmit()">
             
+            <!-- Email Field (Readonly) -->
+            <div class="form-group">
+              <label for="email">{{ 'LOGIN.EMAIL' | translate }}</label>
+              <input type="email" id="email" formControlName="email" class="form-control" readonly />
+            </div>
+
             <!-- New Password Field -->
             <div class="form-group">
               <label for="newPassword">{{ 'RESET_PASSWORD.NEW_PASSWORD' | translate }}</label>
@@ -45,9 +50,6 @@ import { ResetPasswordRequest } from '../../models/auth.models';
                   }
                   @if (newPassword?.errors?.['minlength']) {
                     <span>{{ 'LOGIN.VALIDATION.PASSWORD_MIN_LENGTH' | translate }}</span>
-                  }
-                  @if (newPassword?.errors?.['pattern']) {
-                    <span>Password must include uppercase, lowercase, number, and special char.</span>
                   }
                 </div>
               }
@@ -217,11 +219,9 @@ export class ResetPasswordComponent implements OnInit {
   token: string = '';
 
   constructor() {
-    // Strong password regex: 8+ chars, 1 uppercase, 1 lowercase, 1 number, 1 special char
-    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
     this.resetPasswordForm = this.fb.group({
-      newPassword: ['', [Validators.required, Validators.pattern(strongPasswordRegex)]],
+      email: [{ value: '', disabled: true }],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
   }
@@ -232,11 +232,12 @@ export class ResetPasswordComponent implements OnInit {
       this.token = params['token'];
 
       if (!this.email || !this.token) {
-        // If parameters are missing, redirect to login or show error
-        this.toastService.error('Invalid link parameters. Please try again.');
+        this.toastService.error('Invalid reset password link. Please try again.');
         this.router.navigate(['/login']);
       } else {
-        console.log('Reset Password Params Loaded:', { email: this.email, tokenLength: this.token?.length });
+        // Set email in form
+        this.resetPasswordForm.patchValue({ email: this.email });
+        console.log('Reset Password page loaded with email:', this.email);
       }
     });
   }
@@ -262,24 +263,37 @@ export class ResetPasswordComponent implements OnInit {
     if (this.resetPasswordForm.valid && this.email && this.token) {
       this.isLoading.set(true);
 
-      // DTO matching backend exactly
-      const request: ResetPasswordRequest = {
+      // Payload matching requirements: {email, token, newPassword}
+      const request: any = {
         email: this.email,
         token: this.token,
-        newPassword: this.resetPasswordForm.value.newPassword,
-        confirmPassword: this.resetPasswordForm.value.confirmPassword
+        newPassword: this.resetPasswordForm.value.newPassword
       };
 
       this.authService.resetPassword(request).subscribe({
         next: (response) => {
           this.isLoading.set(false);
-          this.successMessage.set(response.message || 'Password reset successfully.');
+          this.successMessage.set(response.message || 'Password reset successfully. Logging you in...');
           this.toastService.success(this.translate.instant('RESET_PASSWORD.SUCCESS_TOAST'));
 
-          // Redirect after 2 seconds
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 2000);
+          // Auto-login
+          this.isLoading.set(true);
+          this.authService.login({
+            email: this.email,
+            password: this.resetPasswordForm.value.newPassword
+          }).subscribe({
+            next: () => {
+              this.isLoading.set(false);
+              this.toastService.success('Logged in successfully');
+              this.router.navigate(['/profile']);
+            },
+            error: (loginError) => {
+              this.isLoading.set(false);
+              console.error('Auto-login failed', loginError);
+              this.toastService.warning('Password reset successful, but auto-login failed. Please login manually.');
+              this.router.navigate(['/login']);
+            }
+          });
         },
         error: (error) => {
           this.isLoading.set(false);

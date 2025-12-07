@@ -112,6 +112,13 @@ export class AuthService {
     );
   }
 
+  validateResetToken(email: string, token: string): Observable<any> {
+    return this.http.get(
+      `${environment.apiUrl}/Account/reset-password/validate`,
+      { params: { email, token } }
+    );
+  }
+
   logout(): void {
     // Disconnect SignalR before clearing auth data
     if (this.notificationService) {

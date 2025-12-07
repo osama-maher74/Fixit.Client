@@ -23,6 +23,10 @@ export const routes: Routes = [
     canActivate: [loginGuard]
   },
   {
+    path: 'email-reset-landing',
+    loadComponent: () => import('./pages/email-reset-landing/email-reset-landing.component').then(m => m.EmailResetLandingComponent)
+  },
+  {
     path: 'reset-password',
     loadComponent: () => import('./pages/reset-password/reset-password.component').then(m => m.ResetPasswordComponent),
     canActivate: [loginGuard]
