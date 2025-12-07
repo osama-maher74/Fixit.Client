@@ -632,7 +632,8 @@
     "INVALID_RATING_MESSAGE": "Please select a rating between 1 and 5 stars",
     "COMMENT_REQUIRED": "Comment Required",
     "COMMENT_REQUIRED_MESSAGE": "Please provide a comment for your review",
-    "INVALID_REQUEST_ID": "Invalid request ID"
+    "INVALID_REQUEST_ID": "Invalid request ID",
+    "HAVING_PROBLEM": "Having a problem?"
   },
   "SERVICES": {
     "SERVICE_NAMES": {

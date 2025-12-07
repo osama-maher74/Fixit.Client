@@ -632,7 +632,8 @@
     "INVALID_RATING_MESSAGE": "يرجى اختيار تقييم بين 1 و5 نجوم",
     "COMMENT_REQUIRED": "التعليق مطلوب",
     "COMMENT_REQUIRED_MESSAGE": "يرجى إضافة تعليق لتقييمك",
-    "INVALID_REQUEST_ID": "معرف الطلب غير صحيح"
+    "INVALID_REQUEST_ID": "معرف الطلب غير صحيح",
+    "HAVING_PROBLEM": "هل تواجه مشكلة؟"
   },
   "SERVICES": {
     "SERVICE_NAMES": {

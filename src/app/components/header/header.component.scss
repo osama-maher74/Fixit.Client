@@ -288,13 +288,17 @@ $hover-red: #c0392b;
 
 
 .dropdown-item {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
   padding: 0.85rem 1.2rem;
   color: var(--text-dark);
   text-decoration: none;
   transition: all 0.3s;
   font-family: 'Cairo', sans-serif;
   border-bottom: 1px solid var(--border-light);
+  gap: 0.5rem;
+  white-space: nowrap;
 
   &:last-child {
     border-bottom: none;

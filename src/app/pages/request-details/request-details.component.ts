@@ -702,4 +702,8 @@ export class RequestDetailsComponent implements OnInit {
             this.router.navigate(['/my-requests']);
         }
     }
+
+    goToContactUs() {
+        this.router.navigate(['/contact-us']);
+    }
 }
