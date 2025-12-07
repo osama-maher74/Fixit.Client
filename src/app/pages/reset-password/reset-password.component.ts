@@ -279,8 +279,8 @@ export class ResetPasswordComponent implements OnInit {
           // Auto-login
           this.isLoading.set(true);
           this.authService.login({
-            email: this.email,
-            password: this.resetPasswordForm.value.newPassword
+            Email: this.email,
+            Password: this.resetPasswordForm.value.newPassword
           }).subscribe({
             next: () => {
               this.isLoading.set(false);
