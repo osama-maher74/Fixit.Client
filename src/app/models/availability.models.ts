@@ -36,12 +36,41 @@ export interface ApiResponse<T> {
     message: string;
 }
 
+// Time Slot Status Enum (matches backend logic values)
+export enum TimeSlotStatus {
+    Available = 'Available',  // Logic: 0 - Can be clicked to Disable
+    Booked = 'Booked',        // Logic: 2 - Read-only (Cannot be changed)
+    Disabled = 'Disabled'     // Logic: 4 - Can be clicked to Make Available
+}
+
 export interface TimeSlotDto {
     id: number;
     date: string; // "2025-12-01" format
     time: string; // "09:00 AM" format
-    status: string; // "Available" or "Booked"
+    status: string; // "Available", "Booked", or "Disabled"
     priceMultiplier: number;
+}
+
+// Helper functions for time slot status
+export function canToggleSlot(status: string): boolean {
+    return status === TimeSlotStatus.Available || status === TimeSlotStatus.Disabled;
+}
+
+export function isSlotBooked(status: string): boolean {
+    return status === TimeSlotStatus.Booked;
+}
+
+export function getSlotStatusDisplayName(status: string): string {
+    switch (status) {
+        case TimeSlotStatus.Available:
+            return 'Available';
+        case TimeSlotStatus.Booked:
+            return 'Booked';
+        case TimeSlotStatus.Disabled:
+            return 'Blocked';
+        default:
+            return status;
+    }
 }
 
 export interface TimeOffDto {

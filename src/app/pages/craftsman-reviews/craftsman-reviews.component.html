@@ -34,7 +34,7 @@
         <div class="summary-card">
             <div class="summary-content">
                 <div class="rating-display">
-                    <div class="rating-number">{{ averageRating.averageRating?.toFixed(1) || '0.0' }}</div>
+                    <div class="rating-number">{{ averageRating.averageRating.toFixed(1) || '0.0' }}</div>
                     <div class="rating-stars">
                         @for (star of getStarsArray(Math.round(averageRating.averageRating || 0)); track $index) {
                         <span class="star" [class.filled]="star">★</span>
@@ -43,7 +43,8 @@
                     <div class="rating-text">
                         {{ 'MY_REVIEWS.BASED_ON' | translate }}
                         {{ averageRating.totalReviews || 0 }}
-                        {{ (averageRating.totalReviews || 0) !== 1 ? ('MY_REVIEWS.REVIEWS' | translate) : ('MY_REVIEWS.REVIEW'
+                        {{ (averageRating.totalReviews || 0) !== 1 ? ('MY_REVIEWS.REVIEWS' | translate) :
+                        ('MY_REVIEWS.REVIEW'
                         | translate) }}
                     </div>
                 </div>

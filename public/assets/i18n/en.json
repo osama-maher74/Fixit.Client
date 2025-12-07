@@ -303,6 +303,26 @@
     "NO_SLOTS_DESC": "There are no time slots available for the selected date and duration.",
     "NO_SLOTS_HINT": "💡 Try selecting a different date or duration."
   },
+  "MANAGE_AVAILABILITY": {
+    "TITLE": "Manage Availability",
+    "SUBTITLE": "Control your time slots - Block or activate availability for specific times",
+    "BACK_TO_PROFILE": "Back to Profile",
+    "SELECT_DATE": "Select Date",
+    "TIME_SLOTS": "Time Slots",
+    "CLICK_TO_TOGGLE": "Click on any slot to toggle its availability",
+    "AVAILABLE": "Available",
+    "BLOCKED": "Blocked",
+    "BOOKED": "Booked by Client",
+    "STATUS_AVAILABLE": "Available",
+    "STATUS_BLOCKED": "Blocked",
+    "STATUS_BOOKED": "Booked",
+    "BLOCK_SLOT": "Block this slot",
+    "ACTIVATE_SLOT": "Activate this slot",
+    "CLIENT_RESERVATION": "Client Reservation",
+    "TRY_AGAIN": "Try Again",
+    "NO_SLOTS": "No Time Slots",
+    "NO_SLOTS_DESC": "No time slots are available for the selected date."
+  },
   "AVAILABILITY": {
     "TITLE": "Manage Availability",
     "SUBTITLE": "Set your weekly schedule",

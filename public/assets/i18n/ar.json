@@ -303,6 +303,26 @@
     "NO_SLOTS_DESC": "لا توجد فترات زمنية متاحة للتاريخ والمدة المحددة.",
     "NO_SLOTS_HINT": "💡 جرب تحديد تاريخ أو مدة مختلفة."
   },
+  "MANAGE_AVAILABILITY": {
+    "TITLE": "إدارة التوفر",
+    "SUBTITLE": "تحكم في فتراتك الزمنية - احجب أو فعّل التوفر لأوقات محددة",
+    "BACK_TO_PROFILE": "العودة إلى الملف الشخصي",
+    "SELECT_DATE": "اختر التاريخ",
+    "TIME_SLOTS": "الفترات الزمنية",
+    "CLICK_TO_TOGGLE": "اضغط على أي فترة لتبديل توفرها",
+    "AVAILABLE": "متاح",
+    "BLOCKED": "محجوب",
+    "BOOKED": "محجوز من العميل",
+    "STATUS_AVAILABLE": "متاح",
+    "STATUS_BLOCKED": "محجوب",
+    "STATUS_BOOKED": "محجوز",
+    "BLOCK_SLOT": "حجب هذه الفترة",
+    "ACTIVATE_SLOT": "تفعيل هذه الفترة",
+    "CLIENT_RESERVATION": "حجز العميل",
+    "TRY_AGAIN": "حاول مرة أخرى",
+    "NO_SLOTS": "لا توجد فترات زمنية",
+    "NO_SLOTS_DESC": "لا توجد فترات زمنية متاحة للتاريخ المحدد."
+  },
   "AVAILABILITY": {
     "TITLE": "إدارة التوفر",
     "SUBTITLE": "ضع جدولك الأسبوعي",
