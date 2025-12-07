@@ -33,6 +33,7 @@ export class TimeSlotsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCraftsmanId();
+    this.initCurrentWeek();
     this.generateWeekDays();
   }
 
@@ -40,18 +41,21 @@ export class TimeSlotsComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.craftsmanId.set(+id);
-      this.loadSlots(); // Load immediately
+      this.loadSlots();
     }
   }
 
-  generateWeekDays(): void {
+  initCurrentWeek(): void {
     const today = new Date();
     const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
-
-    // Calculate the start of the week (Sunday)
     const weekStart = new Date(today);
     weekStart.setDate(today.getDate() - currentDay);
     this.currentWeekStart.set(weekStart);
+  }
+
+  generateWeekDays(): void {
+    const weekStart = this.currentWeekStart();
+    const today = new Date();
 
     const days = [];
     for (let i = 0; i < 7; i++) {
