@@ -17,11 +17,14 @@ import { ToastService } from '../../services/toast.service';
         <p class="subtitle">{{ 'FORGOT_PASSWORD.SUBTITLE' | translate }}</p>
 
         @if (successMessage()) {
-          <div class="alert alert-success">
-            {{ successMessage() }}
+          <div class="text-center mb-4">
+            <img src="assets/images/email-sent.png" alt="Email Sent" class="floating-icon" />
           </div>
-          <p class="text-center mt-3">Check your inbox for a reset link.</p>
-          <button class="btn btn-secondary w-100 mt-3" routerLink="/login">
+          <h3 class="text-center" style="color: var(--text-dark);">Check your inbox</h3>
+          <p class="text-center mt-2" style="color: var(--text-secondary);">
+            We have sent a password reset link to your email.
+          </p>
+          <button class="btn btn-secondary w-100 mt-4" routerLink="/login">
             {{ 'FORGOT_PASSWORD.BACK_TO_LOGIN' | translate }}
           </button>
         } @else {
@@ -189,14 +192,24 @@ import { ToastService } from '../../services/toast.service';
         border-color: #dc3545;
         background-color: #fff8f8;
     }
+    
+    /* Animation for floating icon */
+    .floating-icon {
+      width: 120px;
+      height: auto;
+      animation: float 3s ease-in-out infinite;
+    }
 
-    .alert {
-      padding: 1rem;
-      background-color: #d4edda;
-      color: #155724;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      text-align: center;
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
     }
   `]
 })
