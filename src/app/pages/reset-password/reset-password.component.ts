@@ -228,6 +228,8 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
+      // Angular Router automatically decodes URL-encoded parameters (e.g., %2B becomes +)
+      // This matches the backend's Uri.EscapeDataString encoding
       this.email = params['email'];
       this.token = params['token'];
 
