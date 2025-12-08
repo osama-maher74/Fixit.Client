@@ -1,6 +1,6 @@
 import { Component, inject, signal, HostListener, ElementRef } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { TranslationService } from '../../services/translation.service';
@@ -66,7 +66,15 @@ export class HeaderComponent {
     this.userDropdownOpen.set(!this.userDropdownOpen());
   }
 
+  private router = inject(Router);
+
   toggleNotificationDropdown(): void {
+    if (window.innerWidth <= 768) {
+      this.router.navigate(['/notifications']);
+      this.closeMenus();
+      return;
+    }
+
     this.notificationDropdownOpen.set(!this.notificationDropdownOpen());
     if (this.notificationDropdownOpen()) {
       // Close other dropdowns

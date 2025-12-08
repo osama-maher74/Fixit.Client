@@ -79,7 +79,8 @@ export const routes: Routes = [
   },
   {
     path: 'appointment-scheduling',
-    loadComponent: () => import('./pages/appointment-scheduling/appointment-scheduling').then(m => m.AppointmentSchedulingComponent)
+    loadComponent: () => import('./pages/appointment-scheduling/appointment-scheduling').then(m => m.AppointmentSchedulingComponent),
+    canActivate: [authGuard]
   },
   {
     path: 'craftsman/:id/availability',
@@ -131,6 +132,15 @@ export const routes: Routes = [
   {
     path: 'about-us',
     loadComponent: () => import('./pages/about-us/about-us.component').then(m => m.AboutUsComponent)
+  },
+  {
+    path: 'contact-us',
+    loadComponent: () => import('./pages/contact-us/contact-us.component').then(m => m.ContactUsComponent)
+  },
+  {
+    path: 'notifications',
+    loadComponent: () => import('./pages/notifications/notifications.component').then(m => m.NotificationsComponent),
+    canActivate: [authGuard]
   },
 
   {

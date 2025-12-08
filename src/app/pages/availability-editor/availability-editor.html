@@ -1,144 +1,253 @@
 <div class="availability-container">
     <!-- Page Header -->
-    <div class="page-header">
-        <h1>{{ 'AVAILABILITY.TITLE' | translate }}</h1>
-        <p>{{ 'AVAILABILITY.SUBTITLE' | translate }}</p>
+    <header class="page-header">
+        <div class="header-content">
+            <h1>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                {{ 'AVAILABILITY.TITLE' | translate }}
+            </h1>
+            <p>{{ 'AVAILABILITY.SUBTITLE' | translate }}</p>
+        </div>
         <button type="button" routerLink="/profile" class="back-button">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
             {{ 'AVAILABILITY.BACK_TO_PROFILE' | translate }}
         </button>
-    </div>
+    </header>
 
     <!-- Loading State -->
     @if (isLoading()) {
     <div class="loading-state">
-        <div class="spinner"></div>
-        <p>{{ 'AVAILABILITY.LOADING' | translate }}</p>
+        <div class="spinner-wrapper">
+            <div class="spinner"></div>
+            <p>{{ 'AVAILABILITY.LOADING' | translate }}</p>
+        </div>
     </div>
     }
 
-    <!-- Error Message -->
-    @if (errorMessage()) {
-    <div class="alert-message error">
-        {{ errorMessage() }}
-    </div>
-    }
+    @if (!isLoading()) {
+    <!-- Quick Add Form -->
+    <div class="quick-add-section">
+        <div class="section-header">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                {{ 'AVAILABILITY.ADD_TITLE' | translate }}
+            </h2>
+        </div>
 
-    <!-- Success Message -->
-    @if (successMessage()) {
-    <div class="alert-message success">
-        {{ successMessage() }}
-    </div>
-    }
+        <!-- Error/Success Messages -->
+        @if (errorMessage()) {
+        <div class="alert-message error">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+            {{ errorMessage() }}
+        </div>
+        }
 
-    <!-- Add Availability Form -->
-    <div class="form-card">
-        <h2>
-            <span>📅</span>
-            {{ 'AVAILABILITY.ADD_TITLE' | translate }}
-        </h2>
+        @if (successMessage()) {
+        <div class="alert-message success">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            {{ successMessage() }}
+        </div>
+        }
 
-        <form [formGroup]="availabilityForm" (ngSubmit)="onSubmit()">
-            <div class="form-grid">
-                <!-- Day of Week -->
-                <div class="form-group">
-                    <label for="dayOfWeek">{{ 'AVAILABILITY.DAY_OF_WEEK' | translate }}</label>
-                    <select id="dayOfWeek" formControlName="dayOfWeek">
+        <form [formGroup]="availabilityForm" (ngSubmit)="onSubmit()" class="quick-add-form">
+            <div class="form-row">
+                <div class="form-field">
+                    <label>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        {{ 'AVAILABILITY.DAY_OF_WEEK' | translate }}
+                    </label>
+                    <select formControlName="dayOfWeek" [class.error]="hasError('dayOfWeek')">
                         @for (day of daysOfWeek; track day.value) {
                         <option [ngValue]="day.value">{{ day.name }}</option>
                         }
                     </select>
                 </div>
 
-                <!-- Start Time -->
-                <div class="form-group">
-                    <label for="startTime">{{ 'AVAILABILITY.START_TIME' | translate }}</label>
-                    <input id="startTime" type="time" formControlName="startTime"
-                        [class.error]="hasError('startTime')" />
+                <div class="form-field">
+                    <label>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        {{ 'AVAILABILITY.START_TIME' | translate }}
+                    </label>
+                    <input type="time" formControlName="startTime" [class.error]="hasError('startTime')">
                     @if (hasError('startTime')) {
                     <span class="error-text">{{ getErrorMessage('startTime') }}</span>
                     }
                 </div>
 
-                <!-- End Time -->
-                <div class="form-group">
-                    <label for="endTime">{{ 'AVAILABILITY.END_TIME' | translate }}</label>
-                    <input id="endTime" type="time" formControlName="endTime"
-                        [class.error]="hasError('endTime')" />
+                <div class="form-field">
+                    <label>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        {{ 'AVAILABILITY.END_TIME' | translate }}
+                    </label>
+                    <input type="time" formControlName="endTime" [class.error]="hasError('endTime')">
                     @if (hasError('endTime')) {
                     <span class="error-text">{{ getErrorMessage('endTime') }}</span>
                     }
                 </div>
 
-                <!-- Available Checkbox -->
-                <div class="checkbox-group">
-                    <label>
-                        <input type="checkbox" formControlName="isAvailable" />
-                        <span>{{ 'AVAILABILITY.AVAILABLE' | translate }}</span>
+                <div class="form-field checkbox-field">
+                    <label class="checkbox-label">
+                        <input type="checkbox" formControlName="isAvailable">
+                        <span class="checkmark"></span>
+                        <span class="label-text">{{ 'AVAILABILITY.AVAILABLE' | translate }}</span>
                     </label>
                 </div>
-            </div>
 
-            <!-- Submit Button -->
-            <button type="submit" [disabled]="isSaving()" class="submit-button">
-                @if (isSaving()) {
-                <span>{{ 'AVAILABILITY.ADDING' | translate }}</span>
-                } @else {
-                <span>{{ 'AVAILABILITY.ADD_BUTTON' | translate }}</span>
-                }
-            </button>
+                <button type="submit" [disabled]="isSaving()" class="add-button">
+                    @if (isSaving()) {
+                    <div class="button-spinner"></div>
+                    <span>{{ 'AVAILABILITY.ADDING' | translate }}</span>
+                    } @else {
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>{{ 'AVAILABILITY.ADD_BUTTON' | translate }}</span>
+                    }
+                </button>
+            </div>
         </form>
     </div>
 
-    <!-- Weekly Schedule Grid -->
-    <div class="schedule-grid">
-        <h2>
-            <span>📆</span>
-            {{ 'AVAILABILITY.WEEKLY_SCHEDULE' | translate }}
-        </h2>
+    <!-- Interactive Weekly Timeline -->
+    <div class="weekly-timeline-section">
+        <div class="section-header">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                {{ 'AVAILABILITY.WEEKLY_SCHEDULE' | translate }}
+            </h2>
+            <div class="legend">
+                <div class="legend-item available">
+                    <span class="dot"></span>
+                    <span>{{ 'AVAILABILITY.AVAILABLE' | translate }}</span>
+                </div>
+                <div class="legend-item unavailable">
+                    <span class="dot"></span>
+                    <span>{{ 'AVAILABILITY.UNAVAILABLE' | translate }}</span>
+                </div>
+            </div>
+        </div>
 
-        <div class="days-container">
+        <div class="timeline-grid">
             @for (day of daysOfWeek; track day.value) {
-            <div class="day-card">
+            <div class="day-column" [class.has-availability]="getAvailabilityByDay(day.value).length > 0">
                 <!-- Day Header -->
                 <div class="day-header">
+                    <div class="day-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
                     <h3>{{ day.name }}</h3>
+                    <span class="slot-count">{{ getAvailabilityByDay(day.value).length }}</span>
                 </div>
 
-                <!-- Day Content -->
-                <div class="day-content">
+                <!-- Time Slots Container -->
+                <div class="time-slots-container">
                     @if (getAvailabilityByDay(day.value).length === 0) {
-                    <p class="empty-state">
-                        {{ 'AVAILABILITY.NO_AVAILABILITY' | translate }}
-                    </p>
-                    } @else {
-                    <div class="slots-container">
-                        @for (av of getAvailabilityByDay(day.value); track av.id) {
-                        <div class="slot-item">
-                            <!-- Time Info -->
-                            <div class="slot-info">
-                                <span class="icon">🕐</span>
-                                <span class="time-text">
-                                    {{ formatTime(av.startTimeFormatted || av.startTime) }} - {{ formatTime(av.endTimeFormatted || av.endTime) }}
-                                </span>
-                                <span class="status-badge" [class.available]="av.isAvailable" [class.unavailable]="!av.isAvailable">
-                                    {{ av.isAvailable ? ('AVAILABILITY.AVAILABLE' | translate) : ('AVAILABILITY.UNAVAILABLE' | translate) }}
-                                </span>
-                            </div>
-
-                            <!-- Delete Button -->
-                            <button type="button" (click)="deleteAvailability(av.id, day.name)" title="Delete" class="delete-button">
-                                ×
-                            </button>
-                        </div>
-                        }
+                    <div class="empty-day">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <p>{{ 'AVAILABILITY.NO_AVAILABILITY' | translate }}</p>
                     </div>
+                    } @else {
+                    @for (av of getAvailabilityByDay(day.value); track av.id) {
+                    <div class="time-slot-card" [class.available]="av.isAvailable"
+                        [class.unavailable]="!av.isAvailable">
+                        <div class="slot-time">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <div class="time-range">
+                                <span class="start-time">{{ formatTime(av.startTimeFormatted || av.startTime) }}</span>
+                                <span class="separator">-</span>
+                                <span class="end-time">{{ formatTime(av.endTimeFormatted || av.endTime) }}</span>
+                            </div>
+                        </div>
+
+                        <div class="slot-status">
+                            <span class="status-badge" [class.available]="av.isAvailable">
+                                @if (av.isAvailable) {
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                } @else {
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                                }
+                                {{ av.isAvailable ? ('AVAILABILITY.AVAILABLE' | translate) : ('AVAILABILITY.UNAVAILABLE'
+                                | translate) }}
+                            </span>
+                        </div>
+
+                        <button type="button" class="delete-btn" (click)="deleteAvailability(av.id, day.name)"
+                            title="Delete">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                </path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    }
                     }
                 </div>
             </div>
             }
         </div>
     </div>
+    }
 </div>

@@ -1,90 +1,129 @@
-<div class="time-slots-container">
+<div class="manage-availability-container">
     <!-- Page Header -->
     <header class="page-header">
-        <h1>
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-            {{ 'TIME_SLOTS.TITLE' | translate }}
-        </h1>
-        <p>{{ 'TIME_SLOTS.SUBTITLE' | translate }}</p>
+        <div class="header-content">
+            <h1>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                {{ 'MANAGE_AVAILABILITY.TITLE' | translate }}
+            </h1>
+            <p>{{ 'MANAGE_AVAILABILITY.SUBTITLE' | translate }}</p>
+        </div>
         <button type="button" routerLink="/profile" class="back-button">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
-            {{ 'TIME_SLOTS.BACK_TO_PROFILE' | translate }}
+            {{ 'MANAGE_AVAILABILITY.BACK_TO_PROFILE' | translate }}
         </button>
     </header>
 
-    <!-- Filter Section -->
-    <section class="filter-section">
-        <h2>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-            </svg>
-            {{ 'TIME_SLOTS.FILTER_TITLE' | translate }}
-        </h2>
+    <!-- Week Days Selector -->
+    <section class="week-selector-section">
+        <div class="week-header">
+            <button class="week-nav-button" (click)="navigateWeek('prev')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
 
-        <form [formGroup]="selectionForm" (ngSubmit)="searchSlots()">
-            <div class="filter-grid">
-                <!-- Date Input -->
-                <div class="form-group">
-                    <label>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                        </svg>
-                        {{ 'TIME_SLOTS.SELECT_DATE' | translate }}
-                    </label>
-                    <input type="date" formControlName="date" />
-                </div>
+            <h2>{{ 'MANAGE_AVAILABILITY.SELECT_DAY' | translate }}</h2>
 
-                <!-- Duration Select -->
-                <div class="form-group">
-                    <label>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        {{ 'TIME_SLOTS.DURATION' | translate }}
-                    </label>
-                    <select formControlName="duration">
-                        @for (duration of durationOptions; track duration) {
-                        <option [value]="duration">{{ duration }} {{ 'TIME_SLOTS.MINUTES' | translate }}</option>
-                        }
-                    </select>
-                </div>
+            <button class="week-nav-button" (click)="navigateWeek('next')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
 
-                <!-- Search Button -->
-                <button type="submit" [disabled]="isLoading()" class="search-button">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                    </svg>
-                    <span>{{ 'TIME_SLOTS.SEARCH_BUTTON' | translate }}</span>
-                </button>
+        <div class="week-days-grid">
+            @for (day of weekDays(); track day.date) {
+            <div class="day-card" [class.today]="day.isToday" [class.selected]="day.isSelected"
+                (click)="selectDay(day)">
+
+                <div class="day-name">{{ day.dayShort }}</div>
+                <div class="day-number">{{ day.dayNumber }}</div>
+                <div class="month-name">{{ day.monthName }}</div>
+
+                @if (day.isToday) {
+                <div class="today-indicator">{{ 'MANAGE_AVAILABILITY.TODAY' | translate }}</div>
+                }
             </div>
-        </form>
+            }
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-summary">
+            <div class="stat-card available">
+                <div class="stat-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">{{ availableSlotsCount() }}</span>
+                    <span class="stat-label">{{ 'MANAGE_AVAILABILITY.AVAILABLE' | translate }}</span>
+                </div>
+            </div>
+
+            <div class="stat-card blocked">
+                <div class="stat-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">{{ disabledSlotsCount() }}</span>
+                    <span class="stat-label">{{ 'MANAGE_AVAILABILITY.BLOCKED' | translate }}</span>
+                </div>
+            </div>
+
+            <div class="stat-card booked">
+                <div class="stat-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">{{ bookedSlotsCount() }}</span>
+                    <span class="stat-label">{{ 'MANAGE_AVAILABILITY.BOOKED' | translate }}</span>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- Loading State -->
+    <!-- Loading Skeleton -->
     @if (isLoading()) {
-    <div class="loading-state">
-        <div class="spinner"></div>
-        <p>{{ 'TIME_SLOTS.LOADING' | translate }}</p>
+    <div class="loading-skeleton">
+        @for (i of [1,2,3,4,5,6,7,8]; track i) {
+        <div class="skeleton-card"></div>
+        }
     </div>
     }
 
     <!-- Error State -->
     @if (errorMessage()) {
     <div class="error-state">
-        <div class="error-icon">⚠️</div>
+        <div class="error-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+        </div>
         <p>{{ errorMessage() }}</p>
-        <button (click)="searchSlots()" class="retry-button">
-            {{ 'TIME_SLOTS.TRY_AGAIN' | translate }}
+        <button (click)="loadSlots()" class="retry-button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            {{ 'MANAGE_AVAILABILITY.TRY_AGAIN' | translate }}
         </button>
     </div>
     }
@@ -92,52 +131,83 @@
     <!-- Time Slots Grid -->
     @if (!isLoading() && timeSlots().length > 0) {
     <section class="slots-section">
-        <!-- Section Header -->
-        <div class="section-header">
-            <h3>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                </svg>
-                {{ 'TIME_SLOTS.AVAILABLE_SLOTS' | translate }}
-            </h3>
-            <div class="count-badge">
-                <span class="count">{{ availableSlotsCount() }}</span>
-                <span>{{ 'TIME_SLOTS.AVAILABLE' | translate }}</span>
-            </div>
+        <div class="slots-header">
+            <h2>{{ 'MANAGE_AVAILABILITY.TIME_SLOTS' | translate }}</h2>
+            <p>{{ 'MANAGE_AVAILABILITY.CLICK_TO_TOGGLE' | translate }}</p>
         </div>
 
-        <!-- Slots Grid -->
         <div class="slots-grid">
             @for (slot of timeSlots(); track slot.id) {
-            <div (click)="slot.status === 'Available' && selectSlot(slot)"
-                [class]="'slot-card ' + (slot.status === 'Available' ? 'available' : 'unavailable')">
+            <div class="slot-card" [class.available]="slot.status === TimeSlotStatus.Available"
+                [class.disabled]="slot.status === TimeSlotStatus.Disabled"
+                [class.booked]="slot.status === TimeSlotStatus.Booked" [class.toggling]="isToggling(slot.id)"
+                (click)="toggleSlot(slot)">
 
-                <!-- Icon -->
-                <div [class]="'icon-wrapper ' + (slot.status === 'Available' ? 'available' : 'unavailable')">
-                    @if (slot.status === 'Available') {
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="available">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
+                <!-- Slot Time -->
+                <div class="slot-time">{{ slot.time }}</div>
+
+                <!-- Status Badge -->
+                <div class="slot-status">
+                    @if (slot.status === TimeSlotStatus.Available) {
+                    <span class="status-badge available">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        {{ 'MANAGE_AVAILABILITY.STATUS_AVAILABLE' | translate }}
+                    </span>
+                    } @else if (slot.status === TimeSlotStatus.Disabled) {
+                    <span class="status-badge disabled">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                        </svg>
+                        {{ 'MANAGE_AVAILABILITY.STATUS_BLOCKED' | translate }}
+                    </span>
                     } @else {
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="unavailable">
+                    <span class="status-badge booked">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        {{ 'MANAGE_AVAILABILITY.STATUS_BOOKED' | translate }}
+                    </span>
+                    }
+                </div>
+
+                <!-- Hover Action Icon -->
+                <div class="hover-action">
+                    @if (slot.status === TimeSlotStatus.Available) {
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                    </svg>
+                    <span>{{ 'MANAGE_AVAILABILITY.BLOCK_SLOT' | translate }}</span>
+                    } @else if (slot.status === TimeSlotStatus.Disabled) {
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span>{{ 'MANAGE_AVAILABILITY.ACTIVATE_SLOT' | translate }}</span>
+                    } @else {
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="15" y1="9" x2="9" y2="15"></line>
                         <line x1="9" y1="9" x2="15" y2="15"></line>
                     </svg>
+                    <span>{{ 'MANAGE_AVAILABILITY.CLIENT_RESERVATION' | translate }}</span>
                     }
                 </div>
 
-                <!-- Time -->
-                <div [class]="'slot-time ' + (slot.status === 'Available' ? 'available' : 'unavailable')">
-                    {{ slot.time }}
+                <!-- Loading Spinner for this slot -->
+                @if (isToggling(slot.id)) {
+                <div class="slot-loading">
+                    <div class="spinner"></div>
                 </div>
-
-                <!-- Status Badge -->
-                <span [class]="'status-badge ' + (slot.status === 'Available' ? 'available' : 'unavailable')">
-                    {{ slot.status }}
-                </span>
+                }
             </div>
             }
         </div>
@@ -147,10 +217,16 @@
     <!-- No Slots State -->
     @if (!isLoading() && timeSlots().length === 0 && !errorMessage()) {
     <div class="no-slots-state">
-        <div class="empty-icon">📅</div>
-        <h3>{{ 'TIME_SLOTS.NO_SLOTS' | translate }}</h3>
-        <p>{{ 'TIME_SLOTS.NO_SLOTS_DESC' | translate }}</p>
-        <p class="hint">{{ 'TIME_SLOTS.NO_SLOTS_HINT' | translate }}</p>
+        <div class="empty-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+        </div>
+        <h3>{{ 'MANAGE_AVAILABILITY.NO_SLOTS' | translate }}</h3>
+        <p>{{ 'MANAGE_AVAILABILITY.NO_SLOTS_DESC' | translate }}</p>
     </div>
     }
 </div>

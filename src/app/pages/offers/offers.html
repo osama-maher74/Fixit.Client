@@ -73,7 +73,7 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="offer-actions" *ngIf="!actionTaken">
+        <div class="offer-actions" *ngIf="!actionTaken && !shouldHideButtons">
             <button class="btn btn-accept" (click)="onAccept()">
                 <span class="btn-icon">✓</span>
                 <span class="btn-text">{{ 'OFFERS.ACTIONS.ACCEPT' | translate }}</span>

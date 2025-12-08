@@ -47,21 +47,32 @@ export class AvailabilityService {
     }
 
     /**
-     * Get available time slots for a craftsman on a specific date
-     * GET /api/TimeSlots/available?craftsmanId={id}&date={date}
+     * Get all time slots for a craftsman on a specific date (includes Available, Booked, and Disabled)
+     * GET /api/TimeSlots/schedule?craftsmanId={id}&date={date}
      */
     getTimeSlots(craftsmanId: number, date: Date): Observable<TimeSlotDto[]> {
-        // Format date as yyyy-MM-dd
-        const dateObj = new Date(date);
-        const year = dateObj.getFullYear();
-        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-        const day = String(dateObj.getDate()).padStart(2, '0');
+        // Format date as yyyy-MM-dd using LOCAL date components (not UTC)
+        // This prevents timezone conversion from shifting the date
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
         const dateString = `${year}-${month}-${day}`;
 
-        const url = `${this.TIMESLOTS_API}/available?craftsmanId=${craftsmanId}&date=${dateString}`;
-        console.log('AvailabilityService - Getting time slots URL:', url);
+        const url = `${this.TIMESLOTS_API}/schedule?craftsmanId=${craftsmanId}&date=${dateString}`;
+        console.log('AvailabilityService - Getting schedule URL:', url);
 
         return this.http.get<TimeSlotDto[]>(url);
+    }
+
+    /**
+     * Toggle time slot status between Available <-> Disabled
+     * PUT /api/TimeSlots/toggle/{id}?craftsmanId={craftsmanId}
+     */
+    toggleSlotStatus(slotId: number, craftsmanId: number): Observable<TimeSlotDto> {
+        const url = `${this.TIMESLOTS_API}/toggle/${slotId}`;
+        const params = new HttpParams().set('craftsmanId', craftsmanId.toString());
+        console.log('AvailabilityService - Toggling slot status:', slotId, 'for craftsman:', craftsmanId);
+        return this.http.put<TimeSlotDto>(url, {}, { params });
     }
 
     /**

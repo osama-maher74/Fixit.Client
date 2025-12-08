@@ -1,12 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AvailabilityService } from '../../services/availability.service';
 import { CraftsmanService } from '../../services/craftsman.service';
 import { ServiceRequestService, ConfirmStartAtTimeDto } from '../../services/service-request.service';
 import { OfferService } from '../../services/offer.service';
 import { ClientService } from '../../services/client.service';
 import { ThemeService } from '../../services/theme.service';
+import { ReviewService, ReviewResponse, AverageRatingResponse } from '../../services/review.service';
+import { AuthService } from '../../services/auth.service';
 import { getSwalThemeConfig } from '../../helpers/swal-theme.helper';
 import { TimeSlotDto, WeekDayView, DAYS_OF_WEEK } from '../../models/availability.models';
 import { CraftsmanProfile } from '../../models/craftsman.models';
@@ -16,7 +19,7 @@ import Swal from 'sweetalert2';
 @Component({
     selector: 'app-appointment-scheduling',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, TranslateModule],
     templateUrl: './appointment-scheduling.html',
     styleUrl: './appointment-scheduling.scss'
 })
@@ -26,6 +29,9 @@ export class AppointmentSchedulingComponent implements OnInit {
     serviceDuration: number = 60;
     serviceId: number = 0;
     clientId: number = 0;
+    location: string = '';
+    serviceName: string = '';
+    isEditMode: boolean = false;  // True when editing existing appointment
 
     craftsman: CraftsmanProfile | null = null;
     weekDays: WeekDayView[] = [];
@@ -38,40 +44,105 @@ export class AppointmentSchedulingComponent implements OnInit {
     loadingCraftsman = false;
     loadingWeek = false;
 
+    // Reviews
+    reviews: ReviewResponse[] = [];
+    averageRating: AverageRatingResponse | null = null;
+    loadingReviews = false;
+    reviewsError: string | null = null;
+    Math = Math;
+
     private availabilityService = inject(AvailabilityService);
     private craftsmanService = inject(CraftsmanService);
     private serviceRequestService = inject(ServiceRequestService);
     private offerService = inject(OfferService);
     private clientService = inject(ClientService);
     private themeService = inject(ThemeService);
+    private reviewService = inject(ReviewService);
+    private authService = inject(AuthService);
+    private translate = inject(TranslateService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
 
     ngOnInit(): void {
+        console.log('🚀 AppointmentScheduling Component Initialized');
+        console.log('🔐 Auth Status:', localStorage.getItem('auth_token') ? 'AUTHENTICATED' : 'NOT AUTHENTICATED');
+
+        // Check authentication
+        if (!this.authService.isAuthenticated()) {
+            console.error('❌ User not authenticated, redirecting to login');
+            Swal.fire({
+                ...getSwalThemeConfig(this.themeService.isDark()),
+                icon: 'warning',
+                title: 'تسجيل الدخول مطلوب',
+                text: 'يجب تسجيل الدخول أولاً لحجز موعد',
+                confirmButtonText: 'حسناً'
+            }).then(() => {
+                this.router.navigate(['/login'], {
+                    queryParams: { returnUrl: this.router.url }
+                });
+            });
+            return;
+        }
+
         this.route.queryParams.subscribe(params => {
+            console.log('📋 Query Params:', params);
+
             this.craftsmanId = +params['craftsmanId'] || 0;
             this.serviceRequestId = +params['serviceRequestId'] || 0;
             this.serviceDuration = +params['duration'] || 60;
             this.serviceId = +params['serviceId'] || 0;
+            this.location = params['location'] || '';
+            this.serviceName = params['serviceName'] || '';
+            this.isEditMode = params['isEdit'] === 'true';  // Check if in edit mode
+
+            console.log('✅ Parsed Params:', {
+                craftsmanId: this.craftsmanId,
+                serviceRequestId: this.serviceRequestId,
+                serviceId: this.serviceId,
+                location: this.location,
+                serviceName: this.serviceName,
+                isEditMode: this.isEditMode
+            });
 
             // Get client profile to ensure we have the correct ID
             this.fetchClientProfile();
 
             if (this.craftsmanId) {
+                console.log('📞 Loading craftsman info, week view, and reviews...');
                 this.loadCraftsmanInfo();
                 this.generateWeekView();
+                this.loadCraftsmanReviews();
+            } else {
+                console.error('❌ No craftsman ID provided!');
             }
         });
     }
 
     private fetchClientProfile(): void {
+        console.log('🔍 Fetching client profile...');
+        console.log('🔑 Current token:', localStorage.getItem('auth_token') ? 'EXISTS' : 'MISSING');
+        console.log('👤 Current user:', localStorage.getItem('current_user'));
+
         this.clientService.getCurrentUserProfile().subscribe({
             next: (profile: ClientProfile) => {
-                console.log('Client profile loaded:', profile);
+                console.log('✅ Client profile loaded successfully:', profile);
                 this.clientId = profile.id;
             },
             error: (error) => {
-                console.error('Error loading client profile:', error);
+                console.error('❌ ERROR loading client profile:', error);
+                console.error('❌ Error status:', error?.status);
+                console.error('❌ Error message:', error?.message);
+
+                // Show error to user instead of silent fail
+                Swal.fire({
+                    ...getSwalThemeConfig(this.themeService.isDark()),
+                    icon: 'error',
+                    title: 'خطأ',
+                    text: 'فشل تحميل بيانات الحساب. سيتم إعادة توجيهك للصفحة الرئيسية.',
+                    confirmButtonText: 'حسناً'
+                }).then(() => {
+                    this.router.navigate(['/']);
+                });
             }
         });
     }
@@ -81,6 +152,14 @@ export class AppointmentSchedulingComponent implements OnInit {
         this.craftsmanService.getCraftsmanById(this.craftsmanId)
             .subscribe({
                 next: (craftsman: CraftsmanProfile) => {
+                    // Format rating to 1 decimal place
+                    if (craftsman.rating) {
+                        craftsman.rating = parseFloat(craftsman.rating.toFixed(1));
+                    }
+                    if (craftsman.averageRating) {
+                        craftsman.averageRating = parseFloat(craftsman.averageRating.toFixed(1));
+                    }
+
                     this.craftsman = craftsman;
                     this.loadingCraftsman = false;
                 },
@@ -180,7 +259,77 @@ export class AppointmentSchedulingComponent implements OnInit {
 
         this.isBooking = true;
 
-        // First, create the offer by selecting the craftsman
+        // Convert time from "09:00 AM" format to ISO 8601 datetime string
+        const timeString = this.selectedTimeSlot.time; // e.g., "09:00 AM"
+        const dateString = this.selectedTimeSlot.date; // e.g., "2025-12-01"
+
+        // Parse the time
+        const timeParts = timeString.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (!timeParts) {
+            console.error('Invalid time format:', timeString);
+            this.isBooking = false;
+            Swal.fire({
+                ...getSwalThemeConfig(this.themeService.isDark()),
+                icon: 'error',
+                title: 'Error',
+                text: 'Invalid time format'
+            });
+            return;
+        }
+
+        let hours = parseInt(timeParts[1]);
+        const minutes = parseInt(timeParts[2]);
+        const period = timeParts[3].toUpperCase();
+
+        // Convert to 24-hour format
+        if (period === 'PM' && hours !== 12) {
+            hours += 12;
+        } else if (period === 'AM' && hours === 12) {
+            hours = 0;
+        }
+
+        // Create ISO 8601 datetime string
+        const serviceStartTime = `${dateString}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
+
+        // Prepare request data
+        const requestData: ConfirmStartAtTimeDto = {
+            serviceId: this.serviceId,
+            clientId: this.clientId,
+            craftsManId: this.craftsmanId,
+            serviceStartTime: serviceStartTime
+        };
+
+        // ========== EDIT MODE: Skip offer creation ==========
+        if (this.isEditMode) {
+            console.log('📝 Edit Mode: Updating appointment time directly (no offer creation)');
+
+            this.serviceRequestService.updateServiceRequestStartTime(this.serviceRequestId, requestData)
+                .subscribe({
+                    next: (response: string) => {
+                        console.log('✅ Appointment time updated successfully:', response);
+                        this.isBooking = false;
+
+                        // Show edit success message
+                        this.showEditSuccessMessage();
+                    },
+                    error: (error: any) => {
+                        console.error('❌ Error updating appointment time:', error);
+                        this.isBooking = false;
+
+                        Swal.fire({
+                            ...getSwalThemeConfig(this.themeService.isDark()),
+                            icon: 'error',
+                            title: this.translate.instant('APPOINTMENT_SCHEDULING.UPDATE_FAILED'),
+                            text: error.error || this.translate.instant('APPOINTMENT_SCHEDULING.UPDATE_FAILED_MESSAGE')
+                        });
+                    }
+                });
+            return;
+        }
+
+        // ========== NEW BOOKING MODE: Create offer first ==========
+        console.log('🆕 New Booking Mode: Creating offer then setting time');
+
         const selectCraftsmanData = {
             serviceRequestId: this.serviceRequestId,
             craftsmanId: this.craftsmanId
@@ -191,86 +340,14 @@ export class AppointmentSchedulingComponent implements OnInit {
                 next: () => {
                     console.log('Craftsman selected and offer created');
 
-                    // Convert time from "09:00 AM" format to ISO 8601 datetime string
-                    const timeString = this.selectedTimeSlot!.time; // e.g., "09:00 AM"
-                    const dateString = this.selectedTimeSlot!.date; // e.g., "2025-12-01"
-
-                    // Parse the time
-                    const timeParts = timeString.match(/(\d+):(\d+)\s*(AM|PM)/i);
-                    if (!timeParts) {
-                        console.error('Invalid time format:', timeString);
-                        this.isBooking = false;
-                        return;
-                    }
-
-                    let hours = parseInt(timeParts[1]);
-                    const minutes = parseInt(timeParts[2]);
-                    const period = timeParts[3].toUpperCase();
-
-                    // Convert to 24-hour format
-                    if (period === 'PM' && hours !== 12) {
-                        hours += 12;
-                    } else if (period === 'AM' && hours === 12) {
-                        hours = 0;
-                    }
-
-                    // Create ISO 8601 datetime string
-                    const serviceStartTime = `${dateString}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
-
-                    // Then update the service request start time
-                    const requestData: ConfirmStartAtTimeDto = {
-                        serviceId: this.serviceId,
-                        clientId: this.clientId,
-                        craftsManId: this.craftsmanId,
-                        serviceStartTime: serviceStartTime
-                    };
-
                     this.serviceRequestService.updateServiceRequestStartTime(this.serviceRequestId, requestData)
                         .subscribe({
                             next: (response: string) => {
                                 console.log('Appointment confirmed successfully:', response);
                                 this.isBooking = false;
 
-                                // ✅ Backend automatically creates SelectCraftsman notification
-                                // No need to manually create notification here
-
-                                const isDark = this.themeService.isDark();
-                                const textPrimary = isDark ? '#F0F0F0' : '#555';
-                                const textSecondary = isDark ? '#B8B8B8' : '#666';
-                                const infoBg = isDark ? 'rgba(253, 184, 19, 0.15)' : '#FEF3E2';
-
-                                Swal.fire({
-                                    ...getSwalThemeConfig(isDark),
-                                    icon: 'success',
-                                    title: 'Request Sent Successfully!',
-                                    html: `
-                                        <div style="text-align: center;">
-                                            <p style="font-size: 16px; color: ${textPrimary}; margin-bottom: 15px;">
-                                                Your appointment request has been sent to<br/>
-                                                <strong style="color: #FDB813;">${this.craftsman?.fName} ${this.craftsman?.lName}</strong>
-                                            </p>
-                                            <p style="font-size: 15px; color: ${textSecondary};">
-                                                📅 <strong>${this.selectedDay?.fullDayName}</strong><br/>
-                                                🕐 <strong>${this.selectedTimeSlot?.time}</strong>
-                                            </p>
-                                            <div style="background: ${infoBg}; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                                                <p style="font-size: 14px; color: ${textSecondary}; margin: 0;">
-                                                    Please wait for craftsman confirmation.<br/>
-                                                    You will be notified once confirmed.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    `,
-                                    confirmButtonText: 'Got it!',
-                                    showClass: {
-                                        popup: 'animate__animated animate__fadeInDown'
-                                    },
-                                    hideClass: {
-                                        popup: 'animate__animated animate__fadeOutUp'
-                                    }
-                                }).then(() => {
-                                    this.router.navigate(['/']);
-                                });
+                                // Show new booking success message
+                                this.showNewBookingSuccessMessage();
                             },
                             error: (error: any) => {
                                 console.error('Error updating appointment time:', error);
@@ -299,7 +376,160 @@ export class AppointmentSchedulingComponent implements OnInit {
             });
     }
 
+    private showEditSuccessMessage(): void {
+        const isDark = this.themeService.isDark();
+        const textPrimary = isDark ? '#F0F0F0' : '#555';
+        const textSecondary = isDark ? '#B8B8B8' : '#666';
+        const infoBg = isDark ? 'rgba(253, 184, 19, 0.15)' : '#FEF3E2';
+
+        Swal.fire({
+            ...getSwalThemeConfig(isDark),
+            icon: 'success',
+            title: this.translate.instant('APPOINTMENT_SCHEDULING.UPDATE_SUCCESS_TITLE'),
+            html: `
+                <div style="text-align: center;">
+                    <p style="font-size: 16px; color: ${textPrimary}; margin-bottom: 15px;">
+                        ${this.translate.instant('APPOINTMENT_SCHEDULING.UPDATE_SUCCESS_MESSAGE')}<br/>
+                        <strong style="color: #FDB813;">${this.craftsman?.fName} ${this.craftsman?.lName}</strong>
+                    </p>
+                    <p style="font-size: 15px; color: ${textSecondary};">
+                        📅 <strong>${this.selectedDay?.fullDayName}</strong><br/>
+                        🕐 <strong>${this.selectedTimeSlot?.time}</strong>
+                    </p>
+                    <div style="background: ${infoBg}; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="font-size: 14px; color: ${textSecondary}; margin: 0;">
+                            ${this.translate.instant('APPOINTMENT_SCHEDULING.NOTIFICATION_SENT')}
+                        </p>
+                    </div>
+                </div>
+            `,
+            confirmButtonText: this.translate.instant('APPOINTMENT_SCHEDULING.OK_BUTTON'),
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        }).then(() => {
+            this.router.navigate(['/my-requests']);
+        });
+    }
+
+    private showNewBookingSuccessMessage(): void {
+        const isDark = this.themeService.isDark();
+        const textPrimary = isDark ? '#F0F0F0' : '#555';
+        const textSecondary = isDark ? '#B8B8B8' : '#666';
+        const infoBg = isDark ? 'rgba(253, 184, 19, 0.15)' : '#FEF3E2';
+
+        Swal.fire({
+            ...getSwalThemeConfig(isDark),
+            icon: 'success',
+            title: this.translate.instant('APPOINTMENT_SCHEDULING.REQUEST_SENT_SUCCESS'),
+            html: `
+                <div style="text-align: center;">
+                    <p style="font-size: 16px; color: ${textPrimary}; margin-bottom: 15px;">
+                        ${this.translate.instant('APPOINTMENT_SCHEDULING.REQUEST_SENT_MESSAGE')}<br/>
+                        <strong style="color: #FDB813;">${this.craftsman?.fName} ${this.craftsman?.lName}</strong>
+                    </p>
+                    <p style="font-size: 15px; color: ${textSecondary};">
+                        📅 <strong>${this.selectedDay?.fullDayName}</strong><br/>
+                        🕐 <strong>${this.selectedTimeSlot?.time}</strong>
+                    </p>
+                    <div style="background: ${infoBg}; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="font-size: 14px; color: ${textSecondary}; margin: 0;">
+                            ${this.translate.instant('APPOINTMENT_SCHEDULING.WAIT_CONFIRMATION')}
+                        </p>
+                    </div>
+                </div>
+            `,
+            confirmButtonText: this.translate.instant('APPOINTMENT_SCHEDULING.GOT_IT'),
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        }).then(() => {
+            this.router.navigate(['/']);
+        });
+    }
+
+    private loadCraftsmanReviews(): void {
+        this.loadingReviews = true;
+        this.reviewsError = null;
+
+        // Load reviews
+        this.reviewService.getReviewsForCraftsman(this.craftsmanId).subscribe({
+            next: (reviews: ReviewResponse[]) => {
+                console.log('Reviews loaded:', reviews);
+                this.reviews = reviews;
+                this.loadingReviews = false;
+            },
+            error: (error: any) => {
+                console.error('Error loading reviews:', error);
+                this.reviewsError = 'Failed to load reviews';
+                this.loadingReviews = false;
+            }
+        });
+
+        // Load average rating
+        this.reviewService.getCraftsmanAverageRating(this.craftsmanId).subscribe({
+            next: (response: any) => {
+                console.log('Average rating response:', response);
+                console.log('Response type:', typeof response);
+
+                // Handle different response formats
+                if (typeof response === 'number') {
+                    // API returned just the rating number
+                    this.averageRating = {
+                        averageRating: response,
+                        totalReviews: this.reviews.length,
+                        craftsmanId: this.craftsmanId
+                    };
+                    console.log('✅ Created averageRating from number:', this.averageRating);
+                } else if (response && typeof response === 'object') {
+                    // API returned an object
+                    this.averageRating = {
+                        averageRating: response.averageRating || response.AverageRating || 0,
+                        totalReviews: response.totalReviews || response.TotalReviews || this.reviews.length,
+                        craftsmanId: response.craftsmanId || response.CraftsmanId || this.craftsmanId
+                    };
+                    console.log('✅ Created averageRating from object:', this.averageRating);
+                } else {
+                    console.warn('⚠️ Unexpected response format:', response);
+                    this.averageRating = null;
+                }
+            },
+            error: (error: any) => {
+                console.error('Error loading average rating:', error);
+                this.averageRating = null;
+            }
+        });
+    }
+
+    getStarsArray(rating: number): boolean[] {
+        return Array.from({ length: 5 }, (_, i) => i < rating);
+    }
+
+    formatDate(dateString: string | undefined): string {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
     goBack(): void {
-        this.router.navigate(['/craftsmen-list']);
+        this.router.navigate(['/craftsmen-list'], {
+            queryParams: {
+                location: this.location,
+                serviceName: this.serviceName,
+                serviceRequestId: this.serviceRequestId,
+                serviceId: this.serviceId,
+                duration: this.serviceDuration
+            }
+        });
     }
 }

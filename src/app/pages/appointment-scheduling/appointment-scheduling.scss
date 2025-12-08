@@ -1,28 +1,28 @@
 /* ============================================
-   APPOINTMENT SCHEDULING - DARK THEME
+   APPOINTMENT SCHEDULING - DUAL THEME SUPPORT
    ============================================ */
 
-// Variables - Dark Theme Palette
-$primary-gold: #FDB813;
-$gold-light: rgba(253, 184, 19, 0.15);
-$gold-dark: #FFCD3C; // Lighter gold for hover in dark mode
+// Using CSS Variables for automatic theme switching
+$primary-gold: var(--primary-gold);
+$gold-light: var(--primary-gold-light);
+$gold-dark: var(--primary-gold-hover);
 
-// Dark Backgrounds
-$background-page: #1E1E1E; // Dark gray for main background
-$background-card: #2A2A2A; // Slightly lighter for cards
-$background-hover: #333333; // Hover state
+// Backgrounds
+$background-page: var(--background-white);
+$background-card: var(--background-light);
+$background-hover: var(--background-hover);
 
-// Dark Text
-$text-main: #FFFFFF;
-$text-secondary: #B8B8B8;
-$text-muted: #808080;
+// Text
+$text-main: var(--text-dark);
+$text-secondary: var(--text-secondary);
+$text-muted: var(--text-muted);
 
-// Dark Borders
-$border-color: #444444;
+// Borders
+$border-color: var(--border-light);
 
 // Status
-$success-green: #10B981;
-$error-red: #EF4444;
+$success-green: var(--success-green);
+$error-red: var(--error-red);
 
 /* Main Container */
 .appointment-container {
@@ -90,7 +90,7 @@ $error-red: #EF4444;
     display: flex;
     align-items: center;
     gap: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); // Darker shadow
+    box-shadow: var(--shadow-md);
 }
 
 .profile-image {
@@ -140,8 +140,29 @@ $error-red: #EF4444;
     color: $text-main;
 
     .stars {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
         color: $primary-gold;
         font-size: 1.25rem;
+    }
+
+    .star-icon {
+        width: 18px;
+        height: 18px;
+        color: #d1d5db;
+        transition: color 0.2s ease;
+
+        &.filled {
+            color: $primary-gold;
+        }
+    }
+
+    .rating-value {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: $text-main;
+        margin-left: 0.25rem;
     }
 }
 
@@ -170,7 +191,7 @@ $error-red: #EF4444;
     border-radius: 12px;
     padding: 2rem;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-md);
 
     h3 {
         font-size: 1.25rem;
@@ -272,7 +293,7 @@ $error-red: #EF4444;
 
         .day-name,
         .day-date {
-            color: #000; // Keep black text on gold background for contrast
+            color: var(--primary-dark); // Dark text on gold background for contrast
         }
 
         .availability-badge {
@@ -284,7 +305,7 @@ $error-red: #EF4444;
     &.unavailable {
         opacity: 0.5;
         cursor: not-allowed;
-        background: rgba(255, 255, 255, 0.05); // Subtle light overlay
+        background: $background-hover;
 
         &:hover {
             transform: none;
@@ -300,7 +321,7 @@ $error-red: #EF4444;
     border-radius: 12px;
     padding: 2rem;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-md);
 }
 
 .slots-header {
@@ -347,8 +368,8 @@ $error-red: #EF4444;
 .error-message {
     text-align: center;
     padding: 1.5rem;
-    background: rgba(239, 68, 68, 0.1); // Darker error bg
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: var(--error-light);
+    border: 1px solid $error-red;
     border-radius: 8px;
     color: $error-red;
     font-size: 0.875rem;
@@ -392,13 +413,176 @@ $error-red: #EF4444;
 
     &.selected {
         background: $primary-gold;
-        color: #000; // Black text on gold
+        color: var(--primary-dark);
         border-color: $primary-gold;
-        box-shadow: 0 4px 12px rgba($primary-gold, 0.2);
+        box-shadow: var(--shadow-lg);
 
         svg {
-            stroke: #000;
+            stroke: var(--primary-dark);
         }
+    }
+}
+
+/* Reviews Section */
+.reviews-section {
+    background: $background-card;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.reviews-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid $border-color;
+
+    svg {
+        stroke: $primary-gold;
+        fill: $primary-gold;
+        flex-shrink: 0;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: $text-main;
+        margin: 0;
+        flex: 1;
+    }
+
+    .reviews-stats {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-left: auto;
+
+        .avg-rating {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: $primary-gold;
+        }
+
+        .stars {
+            display: flex;
+            gap: 0.125rem;
+
+            .star {
+                color: $border-color;
+                font-size: 1rem;
+
+                &.filled {
+                    color: $primary-gold;
+                }
+            }
+        }
+
+        .total-reviews {
+            font-size: 0.875rem;
+            color: $text-secondary;
+            margin-left: 0.25rem;
+        }
+    }
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.review-card {
+    background: $background-page;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: rgba($primary-gold, 0.3);
+        box-shadow: 0 2px 8px rgba($primary-gold, 0.1);
+    }
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.review-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: $primary-gold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--primary-dark);
+    flex-shrink: 0;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: $text-main;
+        margin: 0;
+    }
+
+    .review-date {
+        font-size: 0.75rem;
+        color: $text-muted;
+    }
+}
+
+.review-rating {
+    display: flex;
+    gap: 0.125rem;
+
+    .star {
+        color: $border-color;
+        font-size: 1rem;
+
+        &.filled {
+            color: $primary-gold;
+        }
+    }
+}
+
+.review-comment {
+    color: $text-secondary;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0;
+    word-wrap: break-word;
+}
+
+.no-more-reviews {
+    text-align: center;
+    padding: 2rem;
+
+    p {
+        color: $text-muted;
+        font-size: 0.875rem;
+        margin: 0;
     }
 }
 
@@ -409,7 +593,7 @@ $error-red: #EF4444;
     border-radius: 12px;
     padding: 2rem;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 12px rgba($primary-gold, 0.15);
+    box-shadow: var(--shadow-lg);
 
     h3 {
         font-size: 1.5rem;
@@ -423,7 +607,7 @@ $error-red: #EF4444;
 }
 
 .summary-card {
-    background: $background-page; // Darker inner card
+    background: $background-page;
     border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
@@ -466,7 +650,7 @@ $error-red: #EF4444;
 
 .confirm-button {
     background: $primary-gold;
-    color: #000;
+    color: var(--primary-dark);
     border: none;
     border-radius: 8px;
     padding: 1rem 3rem;
@@ -476,11 +660,11 @@ $error-red: #EF4444;
     transition: all 0.2s ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    box-shadow: 0 4px 12px rgba($primary-gold, 0.3);
+    box-shadow: var(--shadow-lg);
 
     &:hover:not(:disabled) {
         background: $gold-dark;
-        box-shadow: 0 6px 16px rgba($primary-gold, 0.4);
+        box-shadow: var(--shadow-xl);
         transform: translateY(-2px);
     }
 
@@ -556,6 +740,27 @@ $error-red: #EF4444;
         width: 100%;
         padding: 1rem 2rem;
     }
+
+    .reviews-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+
+        .reviews-stats {
+            margin-left: 0;
+            width: 100%;
+            justify-content: flex-start;
+        }
+    }
+
+    .review-header {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .review-rating {
+        align-self: flex-start;
+    }
 }
 
 @media (max-width: 480px) {
@@ -570,26 +775,28 @@ $error-red: #EF4444;
         min-width: 60px;
         flex-shrink: 0;
     }
-}/* Booked Slot Styling */
+}
+
+/* Booked Slot Styling */
 .slot-button.booked {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(239, 68, 68, 0.3);
-    color: #808080;
+    background: $background-hover;
+    border-color: $error-red;
+    color: $text-muted;
     cursor: not-allowed;
     opacity: 0.5;
     position: relative;
 
     svg {
-        stroke: #808080;
+        stroke: $text-muted;
     }
 
     &:hover {
-        border-color: rgba(239, 68, 68, 0.3);
+        border-color: $error-red;
         box-shadow: none;
         transform: none;
 
         svg {
-            stroke: #808080;
+            stroke: $text-muted;
         }
     }
 
@@ -599,8 +806,8 @@ $error-red: #EF4444;
         right: 0.25rem;
         font-size: 0.625rem;
         font-weight: 600;
-        color: #EF4444;
-        background: rgba(239, 68, 68, 0.15);
+        color: $error-red;
+        background: var(--error-light);
         padding: 0.125rem 0.375rem;
         border-radius: 4px;
         text-transform: uppercase;
@@ -610,4 +817,94 @@ $error-red: #EF4444;
 
 .slot-button .slot-time {
     flex: 1;
+}
+
+/* Disabled Slot Styling (Craftsman Blocked) */
+.slot-button.disabled {
+    background: $background-hover;
+    border-color: var(--border-light);
+    color: $text-muted;
+    cursor: not-allowed;
+    opacity: 0.45;
+    position: relative;
+    flex-direction: column;
+    padding: 0.4rem 0.5rem;
+    min-height: 50px;
+    max-height: 70px;
+    font-size: 0.75rem;
+
+    svg {
+        stroke: $text-muted;
+        width: 12px;
+        height: 12px;
+    }
+
+    .slot-time {
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .status-label {
+        font-size: 0.625rem;
+        padding: 0.125rem 0.375rem;
+        margin-top: 0.25rem;
+    }
+
+    &:hover {
+        border-color: var(--border-light);
+        box-shadow: none;
+        transform: none;
+
+        svg {
+            stroke: $text-muted;
+        }
+    }
+}
+
+/* Status Labels */
+.status-label {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+
+    svg {
+        width: 12px;
+        height: 12px;
+        stroke-width: 2.5;
+    }
+
+    &.booked {
+        background: rgba($error-red, 0.15);
+        color: $error-red;
+
+        svg {
+            stroke: $error-red;
+        }
+    }
+
+    &.disabled {
+        background: rgba($text-muted, 0.1);
+        color: $text-secondary;
+
+        svg {
+            stroke: $text-secondary;
+        }
+    }
+
+    &.selected-check {
+        background: transparent;
+        color: var(--primary-dark);
+        padding: 0;
+
+        svg {
+            stroke: var(--primary-dark);
+            width: 14px;
+            height: 14px;
+        }
+    }
 }

@@ -123,11 +123,103 @@
   </div>
   }
 
+  <!-- How It Works Section -->
+  <div class="how-it-works-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">{{ 'HOME.HOW_IT_WORKS.TITLE' | translate }}</h2>
+        <p class="section-subtitle">{{ 'HOME.HOW_IT_WORKS.SUBTITLE' | translate }}</p>
+      </div>
+
+      <!-- Client Flow -->
+      @if (!isCraftsman()) {
+      <div class="how-it-works-grid">
+        <!-- Step 1: Choose Service -->
+        <div class="how-it-works-card">
+          <div class="step-number">1</div>
+          <div class="step-image">
+            <img src="assets/client1.png" alt="{{ 'HOME.HOW_IT_WORKS.CLIENT.STEP1.TITLE' | translate }}">
+          </div>
+          <div class="step-content">
+            <h3 class="step-title">{{ 'HOME.HOW_IT_WORKS.CLIENT.STEP1.TITLE' | translate }}</h3>
+            <p class="step-description">{{ 'HOME.HOW_IT_WORKS.CLIENT.STEP1.DESCRIPTION' | translate }}</p>
+          </div>
+        </div>
+
+        <!-- Step 2: Enter Details or Use Chatbot -->
+        <div class="how-it-works-card">
+          <div class="step-number">2</div>
+          <div class="step-image">
+            <img src="assets/client2.png" alt="{{ 'HOME.HOW_IT_WORKS.CLIENT.STEP2.TITLE' | translate }}">
+          </div>
+          <div class="step-content">
+            <h3 class="step-title">{{ 'HOME.HOW_IT_WORKS.CLIENT.STEP2.TITLE' | translate }}</h3>
+            <p class="step-description">{{ 'HOME.HOW_IT_WORKS.CLIENT.STEP2.DESCRIPTION' | translate }}</p>
+          </div>
+        </div>
+
+        <!-- Step 3: Choose Craftsman & Schedule -->
+        <div class="how-it-works-card">
+          <div class="step-number">3</div>
+          <div class="step-image">
+            <img src="assets/client3.png" alt="{{ 'HOME.HOW_IT_WORKS.CLIENT.STEP3.TITLE' | translate }}">
+          </div>
+          <div class="step-content">
+            <h3 class="step-title">{{ 'HOME.HOW_IT_WORKS.CLIENT.STEP3.TITLE' | translate }}</h3>
+            <p class="step-description">{{ 'HOME.HOW_IT_WORKS.CLIENT.STEP3.DESCRIPTION' | translate }}</p>
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- Craftsman Flow -->
+      @else {
+      <div class="how-it-works-grid">
+        <!-- Step 1: Upload National ID -->
+        <div class="how-it-works-card">
+          <div class="step-number">1</div>
+          <div class="step-image">
+            <img src="assets/craftsman1.png" alt="{{ 'HOME.HOW_IT_WORKS.CRAFTSMAN.STEP1.TITLE' | translate }}">
+          </div>
+          <div class="step-content">
+            <h3 class="step-title">{{ 'HOME.HOW_IT_WORKS.CRAFTSMAN.STEP1.TITLE' | translate }}</h3>
+            <p class="step-description">{{ 'HOME.HOW_IT_WORKS.CRAFTSMAN.STEP1.DESCRIPTION' | translate }}</p>
+          </div>
+        </div>
+
+        <!-- Step 2: Update Profile -->
+        <div class="how-it-works-card">
+          <div class="step-number">2</div>
+          <div class="step-image">
+            <img src="assets/craftsman2.png" alt="{{ 'HOME.HOW_IT_WORKS.CRAFTSMAN.STEP2.TITLE' | translate }}">
+          </div>
+          <div class="step-content">
+            <h3 class="step-title">{{ 'HOME.HOW_IT_WORKS.CRAFTSMAN.STEP2.TITLE' | translate }}</h3>
+            <p class="step-description">{{ 'HOME.HOW_IT_WORKS.CRAFTSMAN.STEP2.DESCRIPTION' | translate }}</p>
+          </div>
+        </div>
+
+        <!-- Step 3: Manage Availability -->
+        <div class="how-it-works-card">
+          <div class="step-number">3</div>
+          <div class="step-image">
+            <img src="assets/craftsman3.png" alt="{{ 'HOME.HOW_IT_WORKS.CRAFTSMAN.STEP3.TITLE' | translate }}">
+          </div>
+          <div class="step-content">
+            <h3 class="step-title">{{ 'HOME.HOW_IT_WORKS.CRAFTSMAN.STEP3.TITLE' | translate }}</h3>
+            <p class="step-description">{{ 'HOME.HOW_IT_WORKS.CRAFTSMAN.STEP3.DESCRIPTION' | translate }}</p>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+
   <!-- About Us Section -->
-  <section id="about-us" class="about-us-section">
+  <!-- <section id="about-us" class="about-us-section">
     <div class="container">
 
-      <!-- Section Header -->
+      
       <div class="about-section-header">
         <h2 class="about-section-title">{{ 'HOME.ABOUT_SECTION.TITLE' | translate }}</h2>
         <p class="about-section-intro">
@@ -135,7 +227,7 @@
         </p>
       </div>
 
-      <!-- Mission & Vision -->
+  
       <div class="mission-vision">
         <div class="mission">
           <h3>{{ 'HOME.ABOUT_SECTION.MISSION_TITLE' | translate }}</h3>
@@ -149,47 +241,47 @@
             {{ 'HOME.ABOUT_SECTION.VISION_TEXT' | translate }}
           </p>
         </div>
-      </div>
+      </div> -->
 
       <!-- Core Values -->
-      <div class="core-values">
+      <!-- <div class="core-values">
         <h3 class="values-title">{{ 'HOME.ABOUT_SECTION.VALUES_TITLE' | translate }}</h3>
         <div class="values-grid">
 
           <div class="value-card">
-            <div class="value-icon">🎯</div>
+            <div class="value-icon"></div>
             <h4>{{ 'HOME.ABOUT_SECTION.VALUE_1_TITLE' | translate }}</h4>
             <p>{{ 'HOME.ABOUT_SECTION.VALUE_1_TEXT' | translate }}</p>
           </div>
 
           <div class="value-card">
-            <div class="value-icon">🤝</div>
+            <div class="value-icon"></div>
             <h4>{{ 'HOME.ABOUT_SECTION.VALUE_2_TITLE' | translate }}</h4>
             <p>{{ 'HOME.ABOUT_SECTION.VALUE_2_TEXT' | translate }}</p>
           </div>
 
           <div class="value-card">
-            <div class="value-icon">⚡</div>
+            <div class="value-icon"></div>
             <h4>{{ 'HOME.ABOUT_SECTION.VALUE_3_TITLE' | translate }}</h4>
             <p>{{ 'HOME.ABOUT_SECTION.VALUE_3_TEXT' | translate }}</p>
           </div>
 
           <div class="value-card">
-            <div class="value-icon">💼</div>
+            <div class="value-icon"></div>
             <h4>{{ 'HOME.ABOUT_SECTION.VALUE_4_TITLE' | translate }}</h4>
             <p>{{ 'HOME.ABOUT_SECTION.VALUE_4_TEXT' | translate }}</p>
           </div>
 
         </div>
-      </div>
-
-      <!-- What We Offer -->
+      </div> -->
+<!-- 
+      
       <div class="what-we-offer">
         <h3 class="offer-title">{{ 'HOME.ABOUT_SECTION.WHAT_WE_OFFER_TITLE' | translate }}</h3>
 
         <div class="offer-columns">
 
-          <!-- For Clients -->
+         
           <div class="offer-column">
             <h4>{{ 'HOME.ABOUT_SECTION.FOR_CLIENTS_TITLE' | translate }}</h4>
             <ul class="offer-list">
@@ -201,7 +293,7 @@
             </ul>
           </div>
 
-          <!-- For Craftsmen -->
+         
           <div class="offer-column">
             <h4>{{ 'HOME.ABOUT_SECTION.FOR_CRAFTSMEN_TITLE' | translate }}</h4>
             <ul class="offer-list">
@@ -216,7 +308,7 @@
         </div>
       </div>
 
-      <!-- Closing Statement -->
+      
       <div class="closing-statement">
         <p>
           {{ 'HOME.ABOUT_SECTION.CLOSING_TEXT' | translate }}
@@ -225,7 +317,8 @@
 
     </div>
   </section>
-</div>
 
-<!-- AI Chat Widget -->
+</div> -->
+
+
 <app-chat-widget></app-chat-widget>

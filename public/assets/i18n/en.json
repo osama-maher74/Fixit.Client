@@ -11,10 +11,32 @@
     "PROFILE": "Profile",
     "SERVICES": "Services",
     "ABOUT_US": "About Us",
+    "CONTACT_US": "Contact Us",
     "MY_REQUESTS": "My Requests",
     "EDIT_PROFILE": "Edit Profile",
     "VERIFY_ID": "Verify ID",
     "DASHBOARD": "Dashboard"
+  },
+  "CONTACT_US": {
+    "TITLE": "Contact Us",
+    "SUBTITLE": "Have questions or feedback? We'd love to hear from you!",
+    "FULL_NAME": "Full Name",
+    "FULL_NAME_PLACEHOLDER": "Enter your full name",
+    "FULL_NAME_REQUIRED": "Full name is required",
+    "EMAIL": "Email Address",
+    "EMAIL_PLACEHOLDER": "Enter your email address",
+    "EMAIL_REQUIRED": "Email is required",
+    "EMAIL_INVALID": "Please enter a valid email address",
+    "PHONE": "Phone Number (Optional)",
+    "PHONE_PLACEHOLDER": "Enter your phone number",
+    "MESSAGE": "Message",
+    "MESSAGE_PLACEHOLDER": "How can we help you?",
+    "MESSAGE_REQUIRED": "Message is required",
+    "SEND_BUTTON": "Send Message",
+    "SENDING": "Sending...",
+    "EMAIL_US": "Email Us",
+    "CALL_US": "Call Us",
+    "VISIT_US": "Visit Us"
   },
   "FOOTER": {
     "COPYRIGHT": "All rights reserved"
@@ -79,6 +101,38 @@
       "CRAFTSMAN_FEATURE_4": "Fair Opportunities: Compete on quality and service, not just price",
       "CRAFTSMAN_FEATURE_5": "Professional Tools: Access the resources you need to deliver exceptional service",
       "CLOSING_TEXT": "Whether you're a homeowner seeking reliable help or a skilled craftsman looking to expand your reach, FixIt is here to make connections that matter. Join our growing community and experience the future of service marketplaces."
+    },
+    "HOW_IT_WORKS": {
+      "TITLE": "How It Works",
+      "SUBTITLE": "Get started in just 3 simple steps",
+      "CLIENT": {
+        "STEP1": {
+          "TITLE": "Choose a Service",
+          "DESCRIPTION": "After logging in, browse and select the service you need from our wide range of professional home services."
+        },
+        "STEP2": {
+          "TITLE": "Provide Details or Ask Our Chatbot",
+          "DESCRIPTION": "Enter your service description, location, and suggested price. Not sure what service you need? Use our intelligent chatbot to help you find the perfect service and get pricing guidance."
+        },
+        "STEP3": {
+          "TITLE": "Select Craftsman & Schedule",
+          "DESCRIPTION": "Choose your preferred craftsman, pick an available appointment time, and wait for the craftsman to accept your booking."
+        }
+      },
+      "CRAFTSMAN": {
+        "STEP1": {
+          "TITLE": "Get Verified",
+          "DESCRIPTION": "After registering with accurate information, upload your national ID to get verified. Verification helps you build trust and attract more clients."
+        },
+        "STEP2": {
+          "TITLE": "Complete Your Profile",
+          "DESCRIPTION": "Update your profile with detailed information, add a professional profile picture, and showcase your skills to attract more clients."
+        },
+        "STEP3": {
+          "TITLE": "Manage Your Availability",
+          "DESCRIPTION": "Add your available time slots in the 'Manage Availability' section so clients can easily book appointments with you."
+        }
+      }
     }
   },
   "LOGIN": {
@@ -302,6 +356,28 @@
     "NO_SLOTS_DESC": "There are no time slots available for the selected date and duration.",
     "NO_SLOTS_HINT": "💡 Try selecting a different date or duration."
   },
+  "MANAGE_AVAILABILITY": {
+    "TITLE": "Manage Availability",
+    "SUBTITLE": "Control your time slots - Block or activate availability for specific times",
+    "BACK_TO_PROFILE": "Back to Profile",
+    "SELECT_DATE": "Select Date",
+    "SELECT_DAY": "Select a Day",
+    "TODAY": "Today",
+    "TIME_SLOTS": "Time Slots",
+    "CLICK_TO_TOGGLE": "Click on any slot to toggle its availability",
+    "AVAILABLE": "Available",
+    "BLOCKED": "Blocked",
+    "BOOKED": "Booked by Client",
+    "STATUS_AVAILABLE": "Available",
+    "STATUS_BLOCKED": "Blocked",
+    "STATUS_BOOKED": "Booked",
+    "BLOCK_SLOT": "Block this slot",
+    "ACTIVATE_SLOT": "Activate this slot",
+    "CLIENT_RESERVATION": "Client Reservation",
+    "TRY_AGAIN": "Try Again",
+    "NO_SLOTS": "No Time Slots",
+    "NO_SLOTS_DESC": "No time slots are available for the selected date."
+  },
   "AVAILABILITY": {
     "TITLE": "Manage Availability",
     "SUBTITLE": "Set your weekly schedule",
@@ -477,6 +553,19 @@
     "ERRORS": {
       "FAILED_TO_RESPOND": "Failed to Respond",
       "ERROR_TEXT": "An error occurred. Please try again."
+    },
+    "STATUS_VALUES": {
+      "PENDING": "Pending",
+      "WAITING_FOR_CRAFTSMAN_RESPONSE": "Waiting For Craftsman Response",
+      "WAITING_FOR_CLIENT_DECISION": "Waiting For Client Decision",
+      "WAITING_FOR_CLIENT_PAYMENT": "Waiting For Client Payment",
+      "REJECTED_BY_CRAFTSMAN": "Rejected By Craftsman",
+      "REJECTED_BY_CLIENT": "Rejected By Client",
+      "IN_PROGRESS": "In Progress",
+      "COMPLETED": "Completed",
+      "APPROVED": "Approved",
+      "CANCELLED": "Cancelled",
+      "CANCELLED_DUE_TO_NON_PAYMENT": "Cancelled Due To Non Payment"
     }
   },
   "MY_REQUESTS": {
@@ -524,6 +613,9 @@
     "COMPLETED_AT": "Completed At",
     "SUGGESTED_PRICE": "Suggested Price",
     "TOTAL_AMOUNT": "Total Amount",
+    "EDIT_START_TIME": "Edit Start Time",
+    "MISSING_SERVICE_ID_TITLE": "Missing Service Information",
+    "MISSING_SERVICE_ID_MESSAGE": "Unable to edit appointment time. Service ID is missing. Please contact support.",
     "SERVICE_IN_PROGRESS": "Service in Progress",
     "SERVICE_IN_PROGRESS_MESSAGE": "is currently working on your request",
     "LOCATION_NOT_SPECIFIED": "Location not specified",
@@ -561,7 +653,8 @@
     "INVALID_RATING_MESSAGE": "Please select a rating between 1 and 5 stars",
     "COMMENT_REQUIRED": "Comment Required",
     "COMMENT_REQUIRED_MESSAGE": "Please provide a comment for your review",
-    "INVALID_REQUEST_ID": "Invalid request ID"
+    "INVALID_REQUEST_ID": "Invalid request ID",
+    "HAVING_PROBLEM": "Having a problem?"
   },
   "SERVICES": {
     "SERVICE_NAMES": {
@@ -737,6 +830,9 @@
     }
   },
   "ERROR_DEFAULT": "An error occurred. Please try again.",
+  "COMMON": {
+    "LOADING": "Loading"
+  },
   "NOTIFICATIONS": {
     "TITLE": "Notifications",
     "NEW": "New",
@@ -746,7 +842,38 @@
     "MINUTES_AGO": "{count}m ago",
     "HOURS_AGO": "{count}h ago",
     "MARK_ALL_READ": "Mark all as read",
-    "MARK_AS_READ": "Mark as read"
+    "MARK_AS_READ": "Mark as read",
+    "VIEW_ALL": "View All",
+    "TYPE_SELECT_CRAFTSMAN": "Service Request Received",
+    "TYPE_CRAFTSMAN_ACCEPTED": "Request Accepted",
+    "TYPE_CLIENT_ACCEPTED": "Offer Accepted",
+    "TYPE_CRAFTSMAN_REJECTED": "Request Rejected",
+    "TYPE_CLIENT_REJECTED": "Offer Rejected",
+    "TYPE_NEW_OFFER": "New Offer Received",
+    "TYPE_PAYMENT_REQUESTED": "Payment Requested",
+    "TYPE_SERVICE_SCHEDULED": "Service Scheduled",
+    "TYPE_WITHDRAWAL_REQUESTED": "Withdrawal Requested",
+    "TYPE_WITHDRAWAL_APPROVED": "Withdrawal Approved",
+    "ALERTS": {
+      "OFFER_REJECTED_TITLE": "Offer Rejected",
+      "OFFER_REJECTED_TEXT": "The client has rejected your offer.",
+      "NEW_OFFER_TITLE": "New Offer Received!",
+      "FROM": "From",
+      "OFFERED_PRICE": "Offered Price",
+      "CURRENCY": "EGP",
+      "DESCRIPTION": "Description",
+      "NO_DESCRIPTION": "No description provided",
+      "CRAFTSMAN": "Craftsman",
+      "ACCEPT_OR_DECLINE": "Accept or decline this offer",
+      "ACCEPT_OFFER": "Accept Offer",
+      "DECLINE_OFFER": "Decline Offer",
+      "OFFER_ACCEPTED_SUCCESS": "Offer Accepted!",
+      "REDIRECTING_TO_PAYMENT": "Redirecting to payment page...",
+      "RESPONSE_SENT": "Response Sent",
+      "OFFER_DECLINED": "You have declined the offer.",
+      "FAILED_TO_RESPOND": "Failed to Respond",
+      "ERROR_OCCURRED": "An error occurred. Please try again."
+    }
   },
   "MY_REVIEWS": {
     "TITLE": "My Reviews",
@@ -815,5 +942,29 @@
     "WARNINGS": {
       "EXPIRING_SOON": "Your ID expires soon. Consider renewing it."
     }
+  },
+  "APPOINTMENT_SCHEDULING": {
+    "TITLE_EDIT": "Edit Appointment",
+    "TITLE_NEW": "Schedule Appointment",
+    "SCHEDULE_APPOINTMENT": "Schedule Appointment",
+    "CONFIRM_APPOINTMENT": "Confirm Appointment",
+    "CONFIRM_NEW_APPOINTMENT": "Confirm New Appointment",
+    "BOOKING": "Booking...",
+    "UPDATING": "Updating...",
+    "UPDATE_SUCCESS_TITLE": "Appointment Updated Successfully!",
+    "UPDATE_SUCCESS_MESSAGE": "Your appointment has been updated with",
+    "NOTIFICATION_SENT": "The craftsman has been notified of the new appointment time",
+    "OK_BUTTON": "OK",
+    "UPDATE_FAILED": "Update Failed",
+    "UPDATE_FAILED_MESSAGE": "Failed to update appointment time. Please try again.",
+    "REQUEST_SENT_SUCCESS": "Request Sent Successfully!",
+    "REQUEST_SENT_MESSAGE": "Your appointment request has been sent to",
+    "WAIT_CONFIRMATION": "Please wait for craftsman confirmation. You will be notified once confirmed.",
+    "GOT_IT": "Got it!",
+    "REVIEWS_TITLE": "Customer Reviews",
+    "REVIEWS_COUNT": "reviews",
+    "ANONYMOUS": "Anonymous Client",
+    "NO_REVIEWS": "No reviews yet",
+    "LOADING_REVIEWS": "Loading reviews..."
   }
 }

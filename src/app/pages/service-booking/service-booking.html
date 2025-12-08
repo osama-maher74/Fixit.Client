@@ -46,7 +46,7 @@
                 <div class="pricing-info-card">
                     <div class="price-item">
                         <span class="price-label">{{ 'SERVICE_BOOKING.STARTING_PRICE' | translate }}</span>
-                        <span class="price-value">${{ selectedService.price }}</span>
+                        <span class="price-value">{{ selectedService.price }} EGP</span>
                     </div>
                     <div class="price-item">
                         <span class="price-label">{{ 'SERVICE_BOOKING.ESTIMATED_DURATION' | translate }}</span>
@@ -130,11 +130,11 @@
                                 {{ 'SERVICE_BOOKING.SUGGESTED_PRICE' | translate }} <span class="optional">{{ 'SERVICE_BOOKING.OPTIONAL' | translate }}</span>
                             </label>
                             <div class="price-input-wrapper">
-                                <span class="currency-symbol">$</span>
                                 <input type="number" id="suggestedPrice" formControlName="suggestedPrice"
-                                    class="form-control price-input" [class.error]="isFieldInvalid('suggestedPrice')"
-                                    placeholder="0.00" min="0" step="0.01" />
-                            </div>
+                                class="form-control price-input" [class.error]="isFieldInvalid('suggestedPrice')"
+                                    placeholder="0.00" min="0" step="0.01" /> 
+                                    <!-- <span class="currency-symbol">&nbsp;&nbsp;EGP</span> -->
+                                </div>
                             <div class="error-message" *ngIf="isFieldInvalid('suggestedPrice')">
                                 {{ getFieldError('suggestedPrice') }}
                             </div>

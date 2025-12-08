@@ -1,26 +1,21 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { AvailabilityService } from '../../services/availability.service';
-import { TimeSlotDto } from '../../models/availability.models';
-import { BookingModalComponent, BookingDialogData } from '../../components/booking-modal/booking-modal';
+import { TimeSlotDto, TimeSlotStatus, canToggleSlot, isSlotBooked } from '../../models/availability.models';
 
 @Component({
   selector: 'app-time-slots',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatSnackBarModule, RouterLink, TranslateModule],
+  imports: [CommonModule, MatSnackBarModule, RouterLink, TranslateModule],
   templateUrl: './time-slots.html',
   styleUrl: './time-slots.scss'
 })
 export class TimeSlotsComponent implements OnInit {
-  private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private availabilityService = inject(AvailabilityService);
-  private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
   // Signals
@@ -28,54 +23,117 @@ export class TimeSlotsComponent implements OnInit {
   timeSlots = signal<TimeSlotDto[]>([]);
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
+  togglingSlotId = signal<number | null>(null);
+  weekDays = signal<any[]>([]);
+  selectedDate = signal<Date>(new Date());
+  currentWeekStart = signal<Date>(new Date());
 
-  // Form
-  selectionForm!: FormGroup;
-
-  // Duration options
-  durationOptions = [30, 60, 90, 120];
+  // Expose status enum to template
+  TimeSlotStatus = TimeSlotStatus;
 
   ngOnInit(): void {
-    this.initForm();
     this.loadCraftsmanId();
-  }
-
-  private initForm(): void {
-    const today = new Date().toISOString().split('T')[0];
-    this.selectionForm = this.fb.group({
-      date: [today, Validators.required],
-      duration: [60, Validators.required]
-    });
+    this.initCurrentWeek();
+    this.generateWeekDays();
   }
 
   private loadCraftsmanId(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.craftsmanId.set(+id);
-      this.searchSlots(); // Load immediate
+      this.loadSlots();
     }
   }
 
-  searchSlots(): void {
-    if (this.selectionForm.invalid) {
-      return;
+  initCurrentWeek(): void {
+    const today = new Date();
+    const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - currentDay);
+    this.currentWeekStart.set(weekStart);
+  }
+
+  generateWeekDays(): void {
+    const weekStart = this.currentWeekStart();
+    const today = new Date();
+
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(weekStart);
+      date.setDate(weekStart.getDate() + i);
+
+      days.push({
+        date: date,
+        dayName: this.getDayName(i),
+        dayShort: this.getDayShort(i),
+        dayNumber: date.getDate(),
+        monthName: this.getMonthName(date.getMonth()),
+        isToday: this.isSameDay(date, today),
+        isSelected: this.isSameDay(date, this.selectedDate())
+      });
     }
 
+    this.weekDays.set(days);
+  }
+
+  selectDay(day: any): void {
+    this.selectedDate.set(day.date);
+    this.generateWeekDays(); // Refresh to update selected state
+    this.loadSlots();
+  }
+
+  navigateWeek(direction: 'prev' | 'next'): void {
+    const currentStart = this.currentWeekStart();
+    const newStart = new Date(currentStart);
+    newStart.setDate(currentStart.getDate() + (direction === 'next' ? 7 : -7));
+
+    this.currentWeekStart.set(newStart);
+
+    // Update selected date to the same day of week in the new week
+    const selectedDay = this.selectedDate().getDay();
+    const newSelected = new Date(newStart);
+    newSelected.setDate(newStart.getDate() + selectedDay);
+    this.selectedDate.set(newSelected);
+
+    this.generateWeekDays();
+    this.loadSlots();
+  }
+
+  private getDayName(index: number): string {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[index];
+  }
+
+  private getDayShort(index: number): string {
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return days[index];
+  }
+
+  private getMonthName(index: number): string {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[index];
+  }
+
+  private isSameDay(date1: Date, date2: Date): boolean {
+    return date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate();
+  }
+
+  loadSlots(): void {
     this.isLoading.set(true);
     this.errorMessage.set(null);
     this.timeSlots.set([]);
 
-    const { date } = this.selectionForm.value;
-    const dateObj = new Date(date);
+    const dateObj = this.selectedDate();
 
     this.availabilityService.getTimeSlots(
       this.craftsmanId(),
       dateObj
     ).subscribe({
       next: (slots) => {
-        // Filter only available slots
-        const availableSlots = slots.filter(slot => slot.status === 'Available');
-        this.timeSlots.set(availableSlots);
+        // Show ALL slots (Available, Booked, and Disabled)
+        this.timeSlots.set(slots);
         this.isLoading.set(false);
       },
       error: (error: any) => {
@@ -86,40 +144,88 @@ export class TimeSlotsComponent implements OnInit {
     });
   }
 
-  selectSlot(slot: TimeSlotDto): void {
-    if (slot.status !== 'Available') {
+  toggleSlot(slot: TimeSlotDto): void {
+    // Only allow toggling Available <-> Disabled (not Booked)
+    if (!canToggleSlot(slot.status)) {
       return;
     }
 
-    // Open booking modal dialog
-    const dialogData: BookingDialogData = {
-      slot: slot,
-      craftsmanId: this.craftsmanId(),
-      craftsmanName: undefined // Can be added if you have craftsman name
-    };
+    // Optimistic UI Update: Store original state
+    const originalStatus = slot.status;
+    const optimisticStatus = slot.status === TimeSlotStatus.Available
+      ? TimeSlotStatus.Disabled
+      : TimeSlotStatus.Available;
 
-    const dialogRef = this.dialog.open(BookingModalComponent, {
-      width: '600px',
-      maxWidth: '90vw',
-      data: dialogData,
-      panelClass: 'booking-modal-dialog',
-      disableClose: false
-    });
+    // Update UI immediately
+    const updatedSlots = this.timeSlots().map(s =>
+      s.id === slot.id ? { ...s, status: optimisticStatus } : s
+    );
+    this.timeSlots.set(updatedSlots);
+    this.togglingSlotId.set(slot.id);
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result?.success) {
-        this.snackBar.open('Booking created successfully!', 'Close', {
-          duration: 5000,
+    // Call API
+    this.availabilityService.toggleSlotStatus(slot.id, this.craftsmanId()).subscribe({
+      next: (updatedSlot) => {
+        // Update with actual response from backend
+        const finalSlots = this.timeSlots().map(s =>
+          s.id === updatedSlot.id ? updatedSlot : s
+        );
+        this.timeSlots.set(finalSlots);
+        this.togglingSlotId.set(null);
+
+        // Show success notification
+        const action = updatedSlot.status === TimeSlotStatus.Disabled ? 'blocked' : 'activated';
+        this.snackBar.open(`Time slot ${action} successfully!`, 'Close', {
+          duration: 3000,
           panelClass: ['success-snackbar']
         });
-        // Optionally refresh slots
-        this.searchSlots();
+      },
+      error: (error: any) => {
+        console.error('Error toggling slot:', error);
+
+        // Revert optimistic update
+        const revertedSlots = this.timeSlots().map(s =>
+          s.id === slot.id ? { ...s, status: originalStatus } : s
+        );
+        this.timeSlots.set(revertedSlots);
+        this.togglingSlotId.set(null);
+
+        // Show error notification
+        this.snackBar.open(
+          error.error?.message || 'Failed to update time slot. Please try again.',
+          'Close',
+          {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          }
+        );
       }
     });
   }
 
-  // Count available slots
+  // Helper methods for template
+  canToggle(slot: TimeSlotDto): boolean {
+    return canToggleSlot(slot.status);
+  }
+
+  isBooked(slot: TimeSlotDto): boolean {
+    return isSlotBooked(slot.status);
+  }
+
+  isToggling(slotId: number): boolean {
+    return this.togglingSlotId() === slotId;
+  }
+
+  // Slot count methods
   availableSlotsCount(): number {
-    return this.timeSlots().filter(slot => slot.status === 'Available').length;
+    return this.timeSlots().filter(slot => slot.status === TimeSlotStatus.Available).length;
+  }
+
+  disabledSlotsCount(): number {
+    return this.timeSlots().filter(slot => slot.status === TimeSlotStatus.Disabled).length;
+  }
+
+  bookedSlotsCount(): number {
+    return this.timeSlots().filter(slot => slot.status === TimeSlotStatus.Booked).length;
   }
 }

@@ -51,7 +51,7 @@
         </div>
         <div class="balance-content">
           <p class="balance-label">{{ 'WALLET.CURRENT_BALANCE' | translate }}</p>
-          <h2 class="balance-amount">${{ wallet()?.balance || 0 | number:'1.2-2' }}</h2>
+          <h2 class="balance-amount">{{ wallet()?.balance || 0 | number:'1.2-2' }} EGP</h2>
         </div>
         @if (!isAdminView()) {
         <button class="btn-withdraw" (click)="openWithdrawalModal()">
@@ -129,7 +129,7 @@
               <div class="transaction-amount">
                 <span [class.amount-positive]="isAddTransaction(transaction)"
                       [class.amount-negative]="!isAddTransaction(transaction)">
-                  {{ isAddTransaction(transaction) ? '+' : '-' }}${{ transaction.amount | number:'1.2-2' }}
+                  {{ isAddTransaction(transaction) ? '+' : '-' }}{{ transaction.amount | number:'1.2-2' }} EGP
                 </span>
                 
                 <!-- Payment Status Badge (visible for withdrawal transactions) -->
@@ -185,14 +185,14 @@
             <!-- Available Balance -->
             <div class="available-balance">
               <span class="available-label">{{ 'WALLET.WITHDRAWAL_FORM.AVAILABLE_BALANCE' | translate }}:</span>
-              <span class="available-amount">${{ wallet()?.balance || 0 | number:'1.2-2' }}</span>
+              <span class="available-amount">{{ wallet()?.balance || 0 | number:'1.2-2' }} EGP</span>
             </div>
 
             <!-- Withdrawal Amount -->
             <div class="form-group">
               <label class="form-label">{{ 'WALLET.WITHDRAWAL_FORM.AMOUNT' | translate }}</label>
               <div class="input-wrapper">
-                <span class="input-prefix">$</span>
+                <span class="input-prefix">EGP</span>
                 <input
                   type="number"
                   class="form-input"

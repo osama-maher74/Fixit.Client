@@ -8,11 +8,14 @@ import { ServiceService } from '../../services/service.service';
 import { ServiceRequestService, CreateServiceRequestDto } from '../../services/service-request.service';
 import { ClientService } from '../../services/client.service';
 import { ServiceCard } from '../../components/service-card/service-card.component';
+import { ThemeService } from '../../services/theme.service';
+import { getSwalThemeConfig } from '../../helpers/swal-theme.helper';
+import Swal from 'sweetalert2';
 
 // Map service names to multiple image URLs (for gallery display)
 const SERVICE_IMAGES: { [key: string]: string[] } = {
   'Plumbing Repair': [
-    
+
     'assets/pr1.jpeg',
     'assets/pr2.jpeg',
     'assets/pr3.jpeg'
@@ -89,6 +92,7 @@ export class ServiceBookingComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
+  private themeService = inject(ThemeService);
 
   ngOnInit(): void {
     this.initializeForm();
@@ -162,11 +166,11 @@ export class ServiceBookingComponent implements OnInit {
     const defaultFeatures = Array.isArray(defaultFeaturesTranslations)
       ? defaultFeaturesTranslations
       : [
-          'Professional and experienced technicians',
-          'Quality service guaranteed',
-          'Affordable pricing',
-          'Quick response time'
-        ];
+        'Professional and experienced technicians',
+        'Quality service guaranteed',
+        'Affordable pricing',
+        'Quick response time'
+      ];
 
     // Map the ServiceCard from backend to our ServiceDetails
     this.selectedService = {
@@ -277,7 +281,12 @@ export class ServiceBookingComponent implements OnInit {
       // Validate file size (max 5MB)
       const maxSize = 5 * 1024 * 1024; // 5MB in bytes
       if (file.size > maxSize) {
-        alert(this.translate.instant('SERVICE_BOOKING.FILE_SIZE_ERROR'));
+        Swal.fire({
+          ...getSwalThemeConfig(this.themeService.isDark()),
+          title: this.translate.instant('SERVICE_BOOKING.ERROR'),
+          text: this.translate.instant('SERVICE_BOOKING.FILE_SIZE_ERROR'),
+          icon: 'error'
+        });
         input.value = '';
         return;
       }
@@ -285,7 +294,12 @@ export class ServiceBookingComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
       if (!allowedTypes.includes(file.type)) {
-        alert(this.translate.instant('SERVICE_BOOKING.FILE_TYPE_ERROR'));
+        Swal.fire({
+          ...getSwalThemeConfig(this.themeService.isDark()),
+          title: this.translate.instant('SERVICE_BOOKING.ERROR'),
+          text: this.translate.instant('SERVICE_BOOKING.FILE_TYPE_ERROR'),
+          icon: 'error'
+        });
         input.value = '';
         return;
       }
@@ -330,8 +344,19 @@ export class ServiceBookingComponent implements OnInit {
     // Check if user is authenticated
     if (!this.authService.isAuthenticated()) {
       console.error('User not authenticated');
-      alert(this.translate.instant('SERVICE_BOOKING.LOGIN_REQUIRED'));
-      this.router.navigate(['/auth/login']);
+      Swal.fire({
+        ...getSwalThemeConfig(this.themeService.isDark()),
+        title: this.translate.instant('SERVICE_BOOKING.LOGIN_REQUIRED_TITLE') || 'Login Required',
+        text: this.translate.instant('SERVICE_BOOKING.LOGIN_REQUIRED'),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: this.translate.instant('LOGIN'),
+        cancelButtonText: this.translate.instant('CANCEL')
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigate(['/auth/login']);
+        }
+      });
       return;
     }
 
@@ -345,13 +370,23 @@ export class ServiceBookingComponent implements OnInit {
 
     if (!this.selectedService) {
       console.error('No service selected');
-      alert(this.translate.instant('SERVICE_BOOKING.NO_SERVICE_SELECTED'));
+      Swal.fire({
+        ...getSwalThemeConfig(this.themeService.isDark()),
+        title: this.translate.instant('SERVICE_BOOKING.ERROR'),
+        text: this.translate.instant('SERVICE_BOOKING.NO_SERVICE_SELECTED'),
+        icon: 'error'
+      });
       return;
     }
 
     if (!this.selectedService.serviceId) {
       console.error('Service ID missing:', this.selectedService);
-      alert(this.translate.instant('SERVICE_BOOKING.SERVICE_ID_MISSING'));
+      Swal.fire({
+        ...getSwalThemeConfig(this.themeService.isDark()),
+        title: this.translate.instant('SERVICE_BOOKING.ERROR'),
+        text: this.translate.instant('SERVICE_BOOKING.SERVICE_ID_MISSING'),
+        icon: 'error'
+      });
       return;
     }
 
@@ -400,7 +435,14 @@ export class ServiceBookingComponent implements OnInit {
                 queryParams: queryParams
               });
             } else {
-              alert(this.translate.instant('SERVICE_BOOKING.BOOKING_SUCCESS'));
+              Swal.fire({
+                ...getSwalThemeConfig(this.themeService.isDark()),
+                title: this.translate.instant('SERVICE_BOOKING.SUCCESS'),
+                text: this.translate.instant('SERVICE_BOOKING.BOOKING_SUCCESS'),
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+              });
               this.router.navigate(['/']);
             }
 
@@ -418,7 +460,12 @@ export class ServiceBookingComponent implements OnInit {
             this.isSubmitting = false;
 
             const errorMessage = error.error?.message || error.message || 'Unknown error occurred';
-            alert(`${this.translate.instant('SERVICE_BOOKING.BOOKING_FAILED')}.\n\nError: ${errorMessage}\n\nPlease check the console for details.`);
+            Swal.fire({
+              ...getSwalThemeConfig(this.themeService.isDark()),
+              title: this.translate.instant('SERVICE_BOOKING.ERROR'),
+              text: `${this.translate.instant('SERVICE_BOOKING.BOOKING_FAILED')}: ${errorMessage}`,
+              icon: 'error'
+            });
           }
         });
       },
@@ -433,7 +480,19 @@ export class ServiceBookingComponent implements OnInit {
         this.isSubmitting = false;
 
         const errorMessage = error.error?.message || error.message || this.translate.instant('SERVICE_BOOKING.AUTH_ERROR');
-        alert(`${this.translate.instant('SERVICE_BOOKING.AUTH_ERROR')}.\n\nError: ${errorMessage}\n\n${this.translate.instant('SERVICE_BOOKING.MAKE_SURE_LOGGED_IN')}`);
+        Swal.fire({
+          ...getSwalThemeConfig(this.themeService.isDark()),
+          title: this.translate.instant('SERVICE_BOOKING.ERROR'),
+          text: `${this.translate.instant('SERVICE_BOOKING.AUTH_ERROR')}: ${errorMessage}`,
+          icon: 'error',
+          showCancelButton: true,
+          confirmButtonText: this.translate.instant('LOGIN'),
+          cancelButtonText: this.translate.instant('CANCEL')
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/auth/login']);
+          }
+        });
       }
     });
   }

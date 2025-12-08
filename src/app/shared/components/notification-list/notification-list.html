@@ -1,32 +1,39 @@
 <div class="notification-container">
     <div class="notification-header">
-        <h3>{{ 'NOTIFICATIONS.TITLE' | translate }}</h3>
-        <span class="badge" *ngIf="notificationService.unreadCount() > 0">
-            {{ notificationService.unreadCount() }} {{ 'NOTIFICATIONS.NEW' | translate }}
-        </span>
+        <div class="header-left">
+            <h3>{{ 'NOTIFICATIONS.TITLE' | translate }}</h3>
+            <span class="badge" *ngIf="notificationService.unreadCount() > 0">
+                {{ notificationService.unreadCount() }} {{ 'NOTIFICATIONS.NEW' | translate }}
+            </span>
+        </div>
+        <button class="view-all-btn" (click)="goToNotificationsPage()" *ngIf="notificationService.notifications().length > 0">
+            {{ 'NOTIFICATIONS.VIEW_ALL' | translate }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </button>
     </div>
 
     <div class="notification-list">
         <div *ngIf="notificationService.notifications().length === 0" class="empty-state">
             <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
             <p class="empty-title">{{ 'NOTIFICATIONS.EMPTY_STATE' | translate }}</p>
             <p class="empty-description">{{ 'NOTIFICATIONS.EMPTY_DESCRIPTION' | translate }}</p>
         </div>
 
-        <div *ngFor="let notification of notificationService.notifications(); let i = index" 
-             class="notification-item"
-             [class.unread]="!notification.isRead" 
-             (click)="onNotificationClick(notification)"
-             [style.animation-delay]="i * 0.05 + 's'">
+        <div *ngFor="let notification of notificationService.notifications(); let i = index" class="notification-item"
+            [class.unread]="!notification.isRead" (click)="onNotificationClick(notification)"
+            [style.animation-delay]="i * 0.05 + 's'">
 
             <div class="notification-icon" [class]="'icon-' + notification.type">
                 {{ getIconForType(notification.type) }}
             </div>
 
             <div class="notification-content">
-                <p class="notification-title">{{ notification.title }}</p>
+                <p class="notification-title">{{ getTranslatedTitle(notification) | translate }}</p>
                 <p class="message" *ngIf="notification.message">{{ notification.message }}</p>
                 <span class="time">{{ getTimeAgo(notification.createdAt) }}</span>
             </div>

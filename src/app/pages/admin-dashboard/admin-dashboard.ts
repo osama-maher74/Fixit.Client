@@ -36,7 +36,15 @@ export class AdminDashboard implements OnInit {
       next: (data: CraftsmanProfile[]) => {
         console.log('Admin Dashboard - Craftsmen loaded:', data);
         console.log('Admin Dashboard - Number of craftsmen:', data.length);
-        this.craftsmen.set(data);
+
+        // Format ratings to 1 decimal place
+        const formattedData = data.map(c => ({
+          ...c,
+          rating: c.rating ? parseFloat(c.rating.toFixed(1)) : 0,
+          averageRating: c.averageRating ? parseFloat(c.averageRating.toFixed(1)) : 0
+        }));
+
+        this.craftsmen.set(formattedData);
         this.isLoading.set(false);
       },
       error: (error: any) => {

@@ -616,6 +616,84 @@ export class RequestDetailsComponent implements OnInit {
         return user?.role?.toLowerCase() === 'craftsman';
     }
 
+    canEditStartTime(): boolean {
+        if (!this.request) {
+            console.log('⚠️ canEditStartTime: no request');
+            return false;
+        }
+
+        // Only clients can edit
+        if (this.isCraftsman()) {
+            console.log('⚠️ canEditStartTime: user is craftsman');
+            return false;
+        }
+
+        // Must be in InProgress status
+        if (!this.isInProgress()) {
+            console.log('⚠️ canEditStartTime: not InProgress status, current status:', this.request.status);
+            return false;
+        }
+
+        // Must have a serviceStartTime
+        if (!this.request.serviceStartTime) {
+            console.log('⚠️ canEditStartTime: no serviceStartTime');
+            return false;
+        }
+
+        // Check if service start time is more than 2 hours away
+        const serviceStartTime = new Date(this.request.serviceStartTime);
+        const now = new Date();
+        const hoursUntilService = (serviceStartTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+
+        console.log('⏰ Hours until service:', hoursUntilService);
+
+        if (hoursUntilService < 2) {
+            console.log('⚠️ canEditStartTime: less than 2 hours until service');
+            return false;
+        }
+
+        console.log('✅ canEditStartTime: all checks passed');
+        return true;
+    }
+
+    editStartTime() {
+        console.log('🔵 editStartTime() called');
+        console.log('🔵 request:', this.request);
+        console.log('🔵 canEditStartTime:', this.canEditStartTime());
+
+        if (!this.request || !this.canEditStartTime()) {
+            console.log('❌ Blocked: request or canEditStartTime is false');
+            return;
+        }
+
+        // Check if serviceId exists
+        if (!this.request.serviceId) {
+            console.error('❌ serviceId is missing in the request!');
+            console.error('Full request object:', this.request);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Service ID is missing. Please contact support.',
+                confirmButtonColor: '#d4af37'
+            });
+            return;
+        }
+
+        const queryParams = {
+            craftsmanId: this.request.craftsManId,
+            serviceRequestId: this.request.servicesRequestId || this.request.id,
+            serviceId: this.request.serviceId,
+            duration: 120,
+            location: this.request.location,
+            serviceName: this.request.serviceName,
+            isEdit: true  // Edit mode - don't create new offer
+        };
+
+        console.log('✅ Navigating to edit appointment with params:', queryParams);
+        this.router.navigate(['/appointment-scheduling'], { queryParams });
+    }
+
     goBack() {
         // Navigate based on user role
         if (this.isCraftsman()) {
@@ -623,5 +701,9 @@ export class RequestDetailsComponent implements OnInit {
         } else {
             this.router.navigate(['/my-requests']);
         }
+    }
+
+    goToContactUs() {
+        this.router.navigate(['/contact-us']);
     }
 }

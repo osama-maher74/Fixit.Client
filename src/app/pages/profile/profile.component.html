@@ -85,6 +85,10 @@
             <span class="info-value">{{ getFullName() }}</span>
           </div>
           <div class="info-row">
+            <span class="info-label">{{ 'PROFILE.EMAIL_ADDRESS' | translate }}</span>
+            <span class="info-value info-value-email">{{ getClientProfile()?.normalizedEmail }}</span>
+          </div>
+          <div class="info-row">
             <span class="info-label">{{ 'PROFILE.GENDER' | translate }}</span>
             <span class="info-value">{{ getGenderText() }}</span>
           </div>
@@ -198,7 +202,7 @@
               </svg>
               }
             </div>
-            <span class="rating-text">{{ getCraftsmanProfile()?.rating || 0 }} {{ 'PROFILE.OUT_OF_5' | translate }}</span>
+            <span class="rating-text">{{ getFormattedRating() }} {{ 'PROFILE.OUT_OF_5' | translate }}</span>
           </div>
 
           <!-- Quick Action Buttons Grid -->
@@ -315,7 +319,7 @@
         </div>
         <div class="card-content">
           <div class="stat-display craftsman-stat">
-            <div class="stat-number craftsman-stat-number">{{ getCraftsmanProfile()?.rating || 0 }}<span
+            <div class="stat-number craftsman-stat-number">{{ getFormattedRating() }}<span
                 class="stat-unit">/5.0</span></div>
             <div class="stat-label">{{ 'PROFILE.OVERALL_RATING' | translate }}</div>
             <div class="rating-bar">

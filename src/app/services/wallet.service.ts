@@ -18,7 +18,7 @@ export class WalletService {
    * @returns Observable of WalletDto
    */
   getWalletByCraftsmanId(craftsManId: number): Observable<WalletDto> {
-    const url = `${this.WALLET_API}/${craftsManId}`;
+    const url = `${this.WALLET_API}/craftsman/${craftsManId}`;
     console.log('WalletService - Fetching wallet for craftsman ID:', craftsManId);
     console.log('WalletService - URL:', url);
     return this.http.get<WalletDto>(url);
@@ -41,7 +41,7 @@ export class WalletService {
    * @returns Observable of WalletTransactionDto array
    */
   getWalletTransactions(craftsManId: number): Observable<WalletTransactionDto[]> {
-    const url = `${this.WALLET_API}/${craftsManId}/transactions`;
+    const url = `${this.WALLET_API}/craftsman/${craftsManId}/transactions`;
     console.log('WalletService - Fetching transactions for craftsman ID:', craftsManId);
     return this.http.get<any[]>(url).pipe(
       map(transactions => transactions.map(tx => ({
@@ -57,7 +57,7 @@ export class WalletService {
    * @returns Observable of any
    */
   updateWalletTransaction(dto: UpdateWalletTransactionDto): Observable<any> {
-    const url = `${this.WALLET_API}`;
+    const url = `${this.WALLET_API}/transaction`;
     console.log('WalletService - Updating transaction:', dto);
     return this.http.put<any>(url, dto);
   }

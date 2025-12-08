@@ -48,9 +48,14 @@ export class CraftsmenListComponent implements OnInit {
 
         this.craftsmanService.getCraftsmenByLocation(this.location, this.serviceName).subscribe({
             next: (craftsmen) => {
-                this.craftsmen = craftsmen;
+                // Format ratings to 1 decimal place
+                this.craftsmen = craftsmen.map(c => ({
+                    ...c,
+                    rating: c.rating ? parseFloat(c.rating.toFixed(1)) : 0,
+                    averageRating: c.averageRating ? parseFloat(c.averageRating.toFixed(1)) : 0
+                }));
                 this.isLoading = false;
-                console.log('Craftsmen loaded:', craftsmen);
+                console.log('Craftsmen loaded:', this.craftsmen);
             },
             error: (error) => {
                 console.error('Error loading craftsmen:', error);
@@ -91,7 +96,9 @@ export class CraftsmenListComponent implements OnInit {
                 craftsmanId: craftsman.id,
                 serviceRequestId: this.serviceRequestId,
                 serviceId: this.serviceId,
-                duration: this.duration
+                duration: this.duration,
+                location: this.location,
+                serviceName: this.serviceName
             }
         });
     }

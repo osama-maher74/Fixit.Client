@@ -1,0 +1,40 @@
+<div class="notifications-page">
+    <header class="page-header">
+        <button class="back-button" (click)="goBack()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+        </button>
+        <h1 class="page-title">{{ 'NOTIFICATIONS.TITLE' | translate }}</h1>
+    </header>
+
+    <div class="notifications-list">
+        @if (isLoading()) {
+        <div class="loading-state">
+            <p>{{ 'COMMON.LOADING' | translate }}...</p>
+        </div>
+        } @else {
+        @for (notification of notifications(); track notification.id) {
+        <div class="notification-card" [class.unread]="!notification.isRead"
+            (click)="onNotificationClick(notification)">
+            <div class="notification-icon-wrapper">
+                <span class="emoji-icon">{{ getIconForType(notification.type) }}</span>
+                @if (!notification.isRead) {
+                <span class="unread-dot"></span>
+                }
+            </div>
+            <div class="notification-content">
+                <h3 class="notification-title">{{ getTranslatedTitle(notification) | translate }}</h3>
+                <p class="notification-description">{{ notification.message }}</p>
+                <span class="notification-time">{{ getTimeAgo(notification.createdAt) }}</span>
+            </div>
+        </div>
+        } @empty {
+        <div class="empty-state">
+            <p>{{ 'NOTIFICATIONS.EMPTY_STATE' | translate }}</p>
+        </div>
+        }
+        }
+    </div>
+</div>

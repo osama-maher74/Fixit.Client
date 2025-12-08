@@ -9,6 +9,9 @@ import { AuthService } from '../../services/auth.service';
 import { TranslationService } from '../../services/translation.service';
 import { WalletDto, WalletTransactionDto, TransactionType, TransactionMethod, CreateWalletTransactionDto, UpdateWalletTransactionDto } from '../../models/wallet.models';
 import { CraftsmanProfile } from '../../models/craftsman.models';
+import { ThemeService } from '../../services/theme.service';
+import { getSwalThemeConfig } from '../../helpers/swal-theme.helper';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-craftsman-wallet',
@@ -23,6 +26,7 @@ export class CraftsmanWalletComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private themeService = inject(ThemeService);
   translationService = inject(TranslationService);
 
   // Signals for reactive state
@@ -410,7 +414,12 @@ export class CraftsmanWalletComponent implements OnInit {
       error: (error) => {
         console.error('Error updating transaction:', error);
         this.isUpdatingTransaction.set(null);
-        alert('Failed to update payment status. Please try again.');
+        Swal.fire({
+          ...getSwalThemeConfig(this.themeService.isDark()),
+          title: 'Error',
+          text: 'Failed to update payment status. Please try again.',
+          icon: 'error'
+        });
       }
     });
   }
