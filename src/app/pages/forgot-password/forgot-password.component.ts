@@ -16,8 +16,10 @@ import { ToastService } from '../../services/toast.service';
         
         @if (successMessage()) {
           <!-- Success State -->
-          <div class="text-center mb-4">
-            <img src="assets/images/email-confirmed-gold.png" alt="Email Sent" class="floating-icon" />
+          <div class="gif-container">
+            <div class="gif-wrapper">
+              <img src="assets/email/sent-mail.gif" alt="Email Sent" class="success-gif" />
+            </div>
           </div>
           <h2 class="text-center" style="color: var(--text-dark);">Check your Gmail</h2>
           <p class="text-center mt-2" style="color: var(--text-secondary);">
@@ -196,26 +198,38 @@ import { ToastService } from '../../services/toast.service';
         background-color: #fff8f8;
     }
     
-    /* Animation for floating icon */
-    .floating-icon {
-      width: 120px;
-      height: auto;
-      animation: float 4s ease-in-out infinite;
-      filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.3));
+    .gif-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
     }
 
-    @keyframes float {
-      0% {
-        transform: translateY(0px) scale(1);
-      }
-      50% {
-        transform: translateY(-10px) scale(1.05);
-      }
-      100% {
-        transform: translateY(0px) scale(1);
-      }
+    .gif-wrapper {
+        /* Clean & Modern Approach */
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        /* Soft Gold Glow instead of hard border */
+        filter: drop-shadow(0 10px 25px rgba(255, 215, 0, 0.25));
+        
+        /* Gentle Floating Animation */
+        animation: smoothFloat 4s ease-in-out infinite;
+    }
+
+    .success-gif {
+      width: 160px;
+      height: auto;
+      /* Ensure image blends nicely */
+      mix-blend-mode: multiply; 
     }
     
+    @keyframes smoothFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
     .spinner {
       display: inline-block;
       width: 1rem;
