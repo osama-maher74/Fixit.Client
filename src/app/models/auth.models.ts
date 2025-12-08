@@ -53,3 +53,10 @@ export interface User {
   lName: string;
   role: string;
 }
+
+export interface ResetPasswordRequest {
+  email: string;
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}

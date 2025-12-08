@@ -397,7 +397,7 @@ $hover-red: #c0392b;
 }
 
 .user-name {
-  color: $text-white;
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 1rem;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);

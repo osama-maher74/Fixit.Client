@@ -8,7 +8,8 @@ import {
   ClientRegisterRequest,
   CraftsmanRegisterRequest,
   AuthResponse,
-  User
+  User,
+  ResetPasswordRequest
 } from '../models/auth.models';
 import type { NotificationService } from './notification.service';
 
