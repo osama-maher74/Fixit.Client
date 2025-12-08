@@ -113,6 +113,14 @@ export class ServiceRequestService {
     }
 
     /**
+     * Get all service requests (Admin only)
+     * GET /api/ServiceRequest
+     */
+    getAllServiceRequests(): Observable<ServiceRequestResponse[]> {
+        return this.http.get<ServiceRequestResponse[]>(this.API_URL);
+    }
+
+    /**
      * Update service request start time
      * PUT /api/ServiceRequest/StartAtTime/{id}
      */

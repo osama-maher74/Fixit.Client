@@ -50,3 +50,10 @@ export interface UpdateWalletTransactionDto {
   id: number;
   isPayed?: boolean;
 }
+
+export interface AddFundsResponse {
+  message: string;
+  craftsManId: number;
+  amountAdded: number;
+  date: Date;
+}

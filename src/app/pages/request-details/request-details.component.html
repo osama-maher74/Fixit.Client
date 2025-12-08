@@ -29,7 +29,10 @@
         <div class="details-card">
             <!-- Header with Status -->
             <div class="card-header">
-                <h1 class="request-title">{{ request.serviceName || ('REQUEST_DETAILS.SERVICE_REQUEST' | translate) }}</h1>
+                <div class="title-row">
+                    <h1 class="request-title">{{ request.serviceName || ('REQUEST_DETAILS.SERVICE_REQUEST' | translate) }}</h1>
+                    <span class="request-id">#{{ request.servicesRequestId || request.id }}</span>
+                </div>
                 <div class="status-badge" [ngClass]="getStatusClass(request.status)">
                     <span class="status-icon">{{ getStatusIcon(request.status) }}</span>
                     <span class="status-text">{{ getStatusText(request.status) }}</span>

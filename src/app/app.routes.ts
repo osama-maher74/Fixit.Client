@@ -42,6 +42,11 @@ export const routes: Routes = [
     canActivate: [adminOnlyGuard]
   },
   {
+    path: 'admin/service-requests',
+    loadComponent: () => import('./pages/admin-service-requests/admin-service-requests.component').then(m => m.AdminServiceRequestsComponent),
+    canActivate: [adminOnlyGuard]
+  },
+  {
     path: 'register/client',
     loadComponent: () => import('./pages/register-client/register-client.component').then(m => m.RegisterClientComponent)
   },

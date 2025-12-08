@@ -423,4 +423,84 @@ export class CraftsmanWalletComponent implements OnInit {
       }
     });
   }
+
+  /**
+   * Open Add Funds modal (Admin only)
+   */
+  openAddFundsModal(): void {
+    if (!this.isAdminView()) {
+      return;
+    }
+
+    const walletData = this.wallet();
+    const craftsmanId = this.currentCraftsmanId();
+
+    if (!walletData || !craftsmanId) {
+      Swal.fire({
+        ...getSwalThemeConfig(this.themeService.isDark()),
+        title: 'Error',
+        text: 'Wallet information not available.',
+        icon: 'error'
+      });
+      return;
+    }
+
+    Swal.fire({
+      ...getSwalThemeConfig(this.themeService.isDark()),
+      title: this.translationService.getTranslation('WALLET.ADD_FUNDS_TITLE') || 'Add Funds',
+      html: `
+        <div style="text-align: left; margin-bottom: 15px;">
+          <p style="margin: 0 0 10px 0;"><strong>${this.translationService.getTranslation('WALLET.CURRENT_BALANCE') || 'Current Balance'}:</strong> ${walletData.balance.toFixed(2)} EGP</p>
+        </div>
+        <input type="number" id="swal-amount" class="swal2-input" placeholder="${this.translationService.getTranslation('WALLET.ENTER_AMOUNT') || 'Enter amount'}" min="1" step="0.01" style="width: 80%;">
+      `,
+      showCancelButton: true,
+      confirmButtonText: this.translationService.getTranslation('WALLET.ADD_FUNDS_BUTTON') || 'Add Funds',
+      cancelButtonText: this.translationService.getTranslation('WALLET.CANCEL') || 'Cancel',
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        const amountInput = document.getElementById('swal-amount') as HTMLInputElement;
+        const amount = parseFloat(amountInput.value);
+
+        if (!amount || amount <= 0) {
+          Swal.showValidationMessage(this.translationService.getTranslation('WALLET.INVALID_AMOUNT') || 'Please enter a valid amount greater than 0');
+          return false;
+        }
+
+        const dto: CreateWalletTransactionDto = {
+          craftsManId: craftsmanId,
+          walletId: walletData.id,
+          amount: amount,
+          transactionmethod: TransactionMethod.Deposits,
+          createdAt: new Date()
+        };
+
+        return new Promise((resolve, reject) => {
+          this.walletService.addFunds(dto).subscribe({
+            next: (response) => resolve(response),
+            error: (error) => {
+              Swal.showValidationMessage(`${this.translationService.getTranslation('WALLET.ADD_FUNDS_ERROR') || 'Failed to add funds'}: ${error.error?.message || 'Unknown error'}`);
+              reject(error);
+            }
+          });
+        });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        Swal.fire({
+          ...getSwalThemeConfig(this.themeService.isDark()),
+          title: this.translationService.getTranslation('WALLET.SUCCESS') || 'Success!',
+          text: `${result.value.amountAdded} EGP ${this.translationService.getTranslation('WALLET.FUNDS_ADDED') || 'has been added to the wallet.'}`,
+          icon: 'success'
+        });
+
+        // Reload wallet and transactions
+        if (craftsmanId) {
+          this.loadWallet(craftsmanId);
+          this.loadTransactions(craftsmanId);
+        }
+      }
+    });
+  }
 }
