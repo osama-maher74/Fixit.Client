@@ -98,24 +98,17 @@ export class AuthService {
     );
   }
 
-  forgotPassword(email: string): Observable<any> {
-    return this.http.post(
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
       `${environment.apiUrl}/Account/forgot-password`,
       { email }
     );
   }
 
-  resetPassword(data: ResetPasswordRequest): Observable<any> {
-    return this.http.post(
+  resetPassword(data: any): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
       `${environment.apiUrl}/Account/reset-password`,
       data
-    );
-  }
-
-  validateResetToken(email: string, token: string): Observable<any> {
-    return this.http.get(
-      `${environment.apiUrl}/Account/reset-password/validate`,
-      { params: { email, token } }
     );
   }
 
