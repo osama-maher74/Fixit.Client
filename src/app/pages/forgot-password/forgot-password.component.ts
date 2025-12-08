@@ -13,12 +13,11 @@ import { ToastService } from '../../services/toast.service';
   template: `
     <div class="login-container">
       <div class="login-card">
-        <h2>{{ 'FORGOT_PASSWORD.TITLE' | translate }}</h2>
-        <p class="subtitle">{{ 'FORGOT_PASSWORD.SUBTITLE' | translate }}</p>
+        <!-- Title and subtitle removed as requested -->
 
         @if (successMessage()) {
-          <div class="text-center mb-4">
-            <img src="assets/images/email-confirmed-gold.png" alt="Email Sent" class="floating-icon" />
+          <div class="text-center mb-5">
+            <img src="assets/images/check-gmail.png" alt="Check Gmail" class="check-gmail-icon" />
           </div>
           <h3 class="text-center" style="color: var(--text-dark);">Check your inbox</h3>
           <p class="text-center mt-2" style="color: var(--text-secondary);">
@@ -193,22 +192,26 @@ import { ToastService } from '../../services/toast.service';
         background-color: #fff8f8;
     }
     
-    /* Animation for floating icon */
-    .floating-icon {
-      width: 120px;
+    /* Animation for Check Gmail icon */
+    .check-gmail-icon {
+      width: 140px;
       height: auto;
-      animation: float 3s ease-in-out infinite;
+      animation: floatPulse 4s ease-in-out infinite;
+      filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.3));
     }
 
-    @keyframes float {
-      0% {
-        transform: translateY(0px);
+    @keyframes floatPulse {
+      0%, 100% {
+        transform: translateY(0px) scale(1);
+      }
+      25% {
+        transform: translateY(-8px) scale(1.05);
       }
       50% {
-        transform: translateY(-10px);
+        transform: translateY(-12px) scale(1);
       }
-      100% {
-        transform: translateY(0px);
+      75% {
+        transform: translateY(-8px) scale(1.05);
       }
     }
   `]
