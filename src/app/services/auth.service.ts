@@ -97,6 +97,20 @@ export class AuthService {
     );
   }
 
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${environment.apiUrl}/Account/forgot-password`,
+      { email }
+    );
+  }
+
+  resetPassword(data: any): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${environment.apiUrl}/Account/reset-password`,
+      data
+    );
+  }
+
   logout(): void {
     // Disconnect SignalR before clearing auth data
     if (this.notificationService) {
