@@ -18,7 +18,7 @@ import { ToastService } from '../../services/toast.service';
 
         @if (successMessage()) {
           <div class="text-center mb-4">
-            <img src="assets/images/email-sent.png" alt="Email Sent" class="floating-icon" />
+            <img src="assets/images/email-confirmed-gold.png" alt="Email Sent" class="floating-icon" />
           </div>
           <h3 class="text-center" style="color: var(--text-dark);">Check your inbox</h3>
           <p class="text-center mt-2" style="color: var(--text-secondary);">
