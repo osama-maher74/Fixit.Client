@@ -39,7 +39,13 @@
     "VISIT_US": "Visit Us"
   },
   "FOOTER": {
-    "COPYRIGHT": "All rights reserved"
+    "COPYRIGHT": "All rights reserved",
+    "TAGLINE": "Your trusted partner for professional home services. Connecting skilled craftsmen with clients who need quality work.",
+    "QUICK_LINKS": "Quick Links",
+    "HOME": "Home",
+    "SERVICES": "Services",
+    "CONTACT": "Contact Us",
+    "CONTACT_US": "Contact Info"
   },
   "HOME": {
     "TITLE": "Welcome to FixIt",
@@ -246,6 +252,8 @@
     "EXPERIENCE_YEARS": "Years of Experience",
     "EXPERIENCE_PLACEHOLDER": "Enter years of experience",
     "PROFILE_IMAGE": "Profile Image (Optional)",
+    "SERVICE": "Service",
+    "SELECT_SERVICE": "Select a service",
     "REGISTER_BUTTON": "Register as Craftsman",
     "REGISTERING": "Registering...",
     "HAVE_ACCOUNT": "Already have an account?",

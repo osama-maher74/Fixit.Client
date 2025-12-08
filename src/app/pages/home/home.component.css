@@ -1008,11 +1008,11 @@
   font-size: 1.5rem;
   font-weight: 800;
   box-shadow: 0 4px 12px rgba(253, 184, 19, 0.3);
-  transition: transform 0.3s ease;
+  z-index: 10;
 }
 
 .how-it-works-card:hover .step-number {
-  transform: scale(1.1) rotate(5deg);
+  transform: none;
 }
 
 .step-image {
