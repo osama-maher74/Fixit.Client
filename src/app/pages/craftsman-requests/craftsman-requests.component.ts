@@ -127,26 +127,26 @@ export class CraftsmanRequestsComponent implements OnInit {
     }
 
     getStatusIcon(status: string | number | undefined): string {
-        if (status === null || status === undefined) return '❓';
+        if (status === null || status === undefined) return 'help_outline';
         const statusNum = typeof status === 'number' ? status : parseInt(status as any);
 
         switch (statusNum) {
             case 6: // InProgress
-                return '🔄';
+                return 'sync';
             case 7: // Completed
-                return '✅';
+                return 'check_circle';
             case 0: // Pending
             case 1: // WaitingForCraftsmanResponse
             case 2: // WaitingForClientDecision
             case 3: // WaitingForClientPayment
-                return '⏳';
+                return 'hourglass_empty';
             case 4: // RejectedByCraftsman
             case 5: // RejectedByClient
             case 9: // Cancelled
             case 10: // CancelledDueToNonPayment
-                return '❌';
+                return 'cancel';
             default:
-                return '❓';
+                return 'help_outline';
         }
     }
 
