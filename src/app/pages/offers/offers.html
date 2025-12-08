@@ -1,29 +1,33 @@
 <div class="offers-container">
     <!-- Loading State -->
-    <div *ngIf="loading" class="loading-state">
+    @if (loading) {
+    <div class="loading-state">
         <div class="spinner"></div>
         <p>{{ 'OFFERS.LOADING' | translate }}</p>
     </div>
+    }
 
     <!-- Error State -->
-    <div *ngIf="error && !loading" class="error-state">
-        <div class="error-icon">⚠️</div>
+    @if (error && !loading) {
+    <div class="error-state">
+        <span class="material-icons error-icon-symbol">error_outline</span>
         <h2>{{ 'OFFERS.ERROR.TITLE' | translate }}</h2>
         <p>{{ error }}</p>
         <button class="btn-back" (click)="goBack()">
-            <span class="icon">←</span>
-            {{ 'OFFERS.BACK' | translate }}
+            <span class="material-icons">arrow_back</span> {{ 'OFFERS.BACK' | translate }}
         </button>
     </div>
+    }
 
     <!-- Offer Details -->
-    <div *ngIf="serviceRequest && !loading && !error" class="offer-card">
+    @if (serviceRequest && !loading && !error) {
+    <div class="offer-card">
         <!-- Header -->
         <div class="offer-header">
             <button class="btn-back-icon" (click)="goBack()">
-                <span>←</span>
+                <span class="material-icons">arrow_back</span>
             </button>
-            <h1>{{ 'OFFERS.TITLE' | translate }}</h1>
+            <h1>{{ serviceRequest.serviceName || ('OFFERS.TITLE' | translate) }}</h1>
         </div>
 
         <!-- Image Section -->
@@ -31,14 +35,17 @@
             <img [src]="getImageUrl()" [alt]="serviceRequest.description" class="offer-image">
             <div class="price-badge">
                 <span class="price-label">{{ 'OFFERS.SUGGESTED_PRICE' | translate }}</span>
-                <span class="price-value">{{ serviceRequest.suggestedPrice || ('OFFERS.NOT_SPECIFIED' | translate) }} EGP</span>
+                <span class="price-value">{{ serviceRequest.suggestedPrice || ('OFFERS.NOT_SPECIFIED' | translate) }}
+                    EGP</span>
             </div>
         </div>
 
         <!-- Details Section -->
         <div class="offer-details">
-            <div class="detail-item">
-                <div class="detail-icon">📝</div>
+            <div class="detail-item description-item">
+                <div class="detail-icon">
+                    <span class="material-icons">description</span>
+                </div>
                 <div class="detail-content">
                     <h3>{{ 'OFFERS.DESCRIPTION' | translate }}</h3>
                     <p>{{ serviceRequest.description }}</p>
@@ -46,7 +53,9 @@
             </div>
 
             <div class="detail-item">
-                <div class="detail-icon">📍</div>
+                <div class="detail-icon">
+                    <span class="material-icons">location_on</span>
+                </div>
                 <div class="detail-content">
                     <h3>{{ 'OFFERS.LOCATION' | translate }}</h3>
                     <p>{{ serviceRequest.location || ('OFFERS.NOT_SPECIFIED' | translate) }}</p>
@@ -54,7 +63,9 @@
             </div>
 
             <div class="detail-item">
-                <div class="detail-icon">🕐</div>
+                <div class="detail-icon">
+                    <span class="material-icons">schedule</span>
+                </div>
                 <div class="detail-content">
                     <h3>{{ 'OFFERS.SERVICE_START_TIME' | translate }}</h3>
                     <p>{{ formatDate(serviceRequest.serviceStartTime) }}</p>
@@ -62,7 +73,9 @@
             </div>
 
             <div class="detail-item">
-                <div class="detail-icon">ℹ️</div>
+                <div class="detail-icon">
+                    <span class="material-icons">info</span>
+                </div>
                 <div class="detail-content">
                     <h3>{{ 'OFFERS.STATUS' | translate }}</h3>
                     <span class="status-badge" [ngClass]="getStatusClass(serviceRequest.status)">
@@ -73,21 +86,26 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="offer-actions" *ngIf="!actionTaken && !shouldHideButtons">
+        @if (!actionTaken && !shouldHideButtons) {
+        <div class="offer-actions">
             <button class="btn btn-accept" (click)="onAccept()">
-                <span class="btn-icon">✓</span>
+                <span class="material-icons btn-icon">check_circle</span>
                 <span class="btn-text">{{ 'OFFERS.ACTIONS.ACCEPT' | translate }}</span>
             </button>
 
             <button class="btn btn-reject" (click)="onReject()">
-                <span class="btn-icon">✕</span>
+                <span class="material-icons btn-icon">cancel</span>
                 <span class="btn-text">{{ 'OFFERS.ACTIONS.REJECT' | translate }}</span>
             </button>
 
-            <button class="btn btn-new-offer" (click)="onNewOffer()" *ngIf="isCraftsman">
-                <span class="btn-icon">💰</span>
+            @if (isCraftsman) {
+            <button class="btn btn-new-offer" (click)="onNewOffer()">
+                <span class="material-icons btn-icon">attach_money</span>
                 <span class="btn-text">{{ 'OFFERS.ACTIONS.NEW_OFFER' | translate }}</span>
             </button>
+            }
         </div>
+        }
     </div>
+    }
 </div>
