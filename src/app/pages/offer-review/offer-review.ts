@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServiceRequestService, ServiceRequestResponse } from '../../services/service-request.service';
-import { OfferService, ClientDecision } from '../../services/offer.service';
+import { OfferService, ClientDecision, OfferResponse } from '../../services/offer.service';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { getSwalThemeConfig } from '../../helpers/swal-theme.helper';
@@ -32,10 +32,11 @@ export class OfferReviewComponent implements OnInit {
     serviceRequestId: number = 0;
     offerId: number = 0;
 
-    // Offer details from notification (passed via route state)
+    // Offer details from notification (passed via route state) or loaded from API
     offerAmount: number | null = null;
     offerDescription: string | null = null;
     offerCraftsmanName: string | null = null;
+    offer: OfferResponse | null = null;
 
     ngOnInit() {
         // Get offer details from route state (passed from notification)
@@ -61,12 +62,74 @@ export class OfferReviewComponent implements OnInit {
             if (srId && offId) {
                 this.serviceRequestId = +srId;
                 this.offerId = +offId;
-                this.loadServiceRequest(this.serviceRequestId);
+                this.loadData();
             } else {
                 this.error = 'Missing required parameters';
                 this.loading = false;
             }
         });
+    }
+
+    loadData() {
+        this.loading = true;
+
+        // Load both service request and offer details
+        this.serviceRequestService.getServiceRequestById(this.serviceRequestId).subscribe({
+            next: (data) => {
+                console.log('Service request loaded:', data);
+                this.serviceRequest = data;
+
+                // Now load the offer details to get the finalAmount
+                this.loadOfferDetails();
+            },
+            error: (err) => {
+                console.error('Failed to load service request:', err);
+                this.error = 'Failed to load service request details';
+                this.loading = false;
+            }
+        });
+    }
+
+    loadOfferDetails() {
+        // Get offer by ID
+        if (this.offerId) {
+            this.offerService.getOfferById(this.offerId).subscribe({
+                next: (offerData) => {
+                    console.log('Offer details loaded by ID:', offerData);
+                    this.updateOfferData(offerData);
+                    this.loading = false;
+                },
+                error: (err) => {
+                    console.error('Failed to load offer by ID:', err);
+                    // Don't show error - just use what we have from state/service request
+                    this.loading = false;
+                }
+            });
+        } else {
+            // No offer ID available
+            console.warn('No offer ID available');
+            this.loading = false;
+        }
+    }
+
+    private updateOfferData(offerData: OfferResponse) {
+        this.offer = offerData;
+        console.log('Updating offer data:', offerData);
+
+        // Update offer details from API response (overrides state if available)
+        // Backend uses "amount" field for the offer price
+        const offerPrice = offerData.amount || offerData.finalAmount;
+        if (offerPrice) {
+            this.offerAmount = offerPrice;
+            console.log('Updated offerAmount to:', offerPrice);
+        }
+        if (offerData.description) {
+            this.offerDescription = offerData.description;
+            console.log('Updated offerDescription to:', offerData.description);
+        }
+        if (offerData.craftsManName) {
+            this.offerCraftsmanName = offerData.craftsManName;
+        }
     }
 
     loadServiceRequest(id: number) {
