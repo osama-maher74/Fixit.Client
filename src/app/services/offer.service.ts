@@ -116,15 +116,6 @@ export class OfferService {
     clientChooseNewCraftsman(dto: ClientChooseAfterApologyDto): Observable<{ success: boolean; message: string }> {
         return this.http.post<{ success: boolean; message: string }>(`${this.API_URL}/client-choose-new-craftsman`, dto);
     }
-}
-
-export interface CraftsmanApologizeDto {
-    serviceRequestId: number;
-    reason?: string;
-}
-
-export interface ClientChooseAfterApologyDto {
-    serviceRequestId: number;
 
     /**
      * Get offer by ID
@@ -134,3 +125,13 @@ export interface ClientChooseAfterApologyDto {
         return this.http.get<OfferResponse>(`${this.API_URL}/GetById/${id}`);
     }
 }
+
+export interface CraftsmanApologizeDto {
+    serviceRequestId: number;
+    reason?: string;
+}
+
+export interface ClientChooseAfterApologyDto {
+    serviceRequestId: number;
+}
+

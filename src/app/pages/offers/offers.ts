@@ -357,9 +357,7 @@ export class OffersComponent implements OnInit {
     console.log('  - Status:', this.serviceRequest.status);
     console.log('  - Status Name:', statusName);
     console.log('  - Should Hide:', shouldHide);
-    console.log('  - Should Hide:', shouldHide);
 
-    return shouldHide;
     return shouldHide;
   }
 
