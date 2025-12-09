@@ -247,6 +247,17 @@ export class NotificationListComponent implements OnInit {
       return;
     }
 
+    // 0.6. Admin - Service Cancelled or Craftsman No-Show (navigate to request-details)
+    if (isAdmin && (notificationTypeEnum === NotificationType.ServiceCancelled || notificationTypeEnum === NotificationType.CraftsmanNoShow)) {
+      console.log('✅ Service Cancelled/No-Show → Redirecting to request details');
+      if (notification.serviceRequestId) {
+        this.router.navigate(['/request-details', notification.serviceRequestId]);
+      } else {
+        console.error('❌ No serviceRequestId in cancellation notification');
+      }
+      return;
+    }
+
     // 1. Craftsman Accepted - Client side (redirect to payment)
     if (isClient && title.includes('craftsman accepted')) {
       console.log('✅ Craftsman Accepted → Redirecting to payment page');
@@ -499,6 +510,12 @@ export class NotificationListComponent implements OnInit {
       case NotificationType.WithdrawalApproved:
         key = 'NOTIFICATIONS.TYPE_WITHDRAWAL_APPROVED';
         break;
+      case NotificationType.ServiceCancelled:
+        key = 'NOTIFICATIONS.TYPE_SERVICE_CANCELLED';
+        break;
+      case NotificationType.CraftsmanNoShow:
+        key = 'NOTIFICATIONS.TYPE_CRAFTSMAN_NO_SHOW';
+        break;
       case NotificationType.CraftsmanApologized:
         key = 'NOTIFICATIONS.TYPE_CRAFTSMAN_APOLOGIZED';
         break;
@@ -522,7 +539,9 @@ export class NotificationListComponent implements OnInit {
       7: NotificationType.WithdrawalRequested,     // Admin: Withdrawal request notification
       8: NotificationType.WithdrawalApproved,      // Craftsman: Withdrawal approved notification
       9: NotificationType.ServiceRequestScheduled, // Service scheduled notification
-      10: NotificationType.CraftsmanApologized     // Craftsman apologized notification
+      10: NotificationType.ServiceCancelled,       // Service cancelled notification
+      11: NotificationType.CraftsmanNoShow,
+      12: NotificationType.CraftsmanApologized     // Craftsman apologized notification
     };
     console.log(`🔄 Mapping type ${type} to ${mapping[type] || 'Unknown'}`);
     return mapping[type] || NotificationType.SelectCraftsman;
@@ -549,6 +568,10 @@ export class NotificationListComponent implements OnInit {
         return '💸';
       case NotificationType.WithdrawalApproved:
         return '✅';
+      case NotificationType.ServiceCancelled:
+        return '❌';
+      case NotificationType.CraftsmanNoShow:
+        return '⚠️';
       case NotificationType.CraftsmanApologized:
         return '🙏';
       default:

@@ -33,6 +33,19 @@ export interface ClientRespondDto {
     decision: ClientDecision;
 }
 
+export interface OfferResponse {
+    id: number;
+    serviceRequestId: number;
+    craftsManId: number;
+    craftsManName?: string;
+    amount: number;          // Backend uses "Amount" not "FinalAmount"
+    finalAmount?: number;    // Alias for frontend compatibility
+    description?: string;
+    status?: string;
+    createdAt?: string;
+    suggestedPrice?: number;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -112,4 +125,12 @@ export interface CraftsmanApologizeDto {
 
 export interface ClientChooseAfterApologyDto {
     serviceRequestId: number;
+
+    /**
+     * Get offer by ID
+     * GET /api/Offer/GetById/{id}
+     */
+    getOfferById(id: number): Observable<OfferResponse> {
+        return this.http.get<OfferResponse>(`${this.API_URL}/GetById/${id}`);
+    }
 }

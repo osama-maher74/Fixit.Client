@@ -192,8 +192,8 @@
             </div>
             }
 
-            <!-- Review Form Section (Add/Edit Review - Client only) -->
-            @if (isCompleted() && !isCraftsman()) {
+            <!-- Review Form Section (Add/Edit Review - Client only, hidden from Admin) -->
+            @if (isCompleted() && !isCraftsman() && !isAdmin()) {
             <div class="review-form-section">
                 <h2 class="section-title">
                     <span class="section-icon">{{ hasExistingReview() ? '✏️' : '➕' }}</span>
@@ -239,7 +239,8 @@
             </div>
             }
 
-            <!-- Action Buttons -->
+            <!-- Action Buttons (hidden from Admin and when Cancelled) -->
+            @if (!isAdmin() && !isCancelled()) {
             <div class="action-buttons">
                 @if (canEditStartTime()) {
                 <button class="btn-edit-time" (click)="editStartTime()">
@@ -256,8 +257,8 @@
                     }
                 </button>
                 }
-                @if (isInProgress() || isCompleted()) {
-                <button class="btn-problem" (click)="goToContactUs()">
+                @if (isInProgress() && !isCraftsman()) {
+                <button class="btn-problem" (click)="openProblemDialog()">
                     <span>⚠️ {{ 'REQUEST_DETAILS.HAVING_PROBLEM' | translate }}</span>
                 </button>
                 }
@@ -272,6 +273,7 @@
                 </button>
                 }
             </div>
+            }
         </div>
     </div>
     }

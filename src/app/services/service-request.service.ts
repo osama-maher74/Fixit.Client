@@ -48,6 +48,14 @@ export interface ConfirmStartAtTimeDto {
     serviceStartTime: string; // ISO 8601 format
 }
 
+export interface CancelServiceRequestDto {
+    reason: string;
+    reasonType: 'craftsman_no_show' | 'cancel_request';
+    clientName: string;
+    clientEmail: string;
+    clientPhone?: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -140,6 +148,18 @@ export class ServiceRequestService {
         return this.http.post(
             `${this.API_URL}/complete/${requestId}`,
             {},
+            { responseType: 'text' }
+        );
+    }
+
+    /**
+     * Cancel service request with reason (updates status to Cancelled and sends notifications)
+     * POST /api/ServiceRequest/cancel/{requestId}
+     */
+    cancelServiceRequestWithReason(requestId: number, data: CancelServiceRequestDto): Observable<string> {
+        return this.http.post(
+            `${this.API_URL}/cancel/${requestId}`,
+            data,
             { responseType: 'text' }
         );
     }

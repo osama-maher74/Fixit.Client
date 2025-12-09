@@ -9,7 +9,9 @@ export enum NotificationType {
     ServiceRequestScheduled = 'ServiceRequestScheduled',
     WithdrawalRequested = 'WithdrawalRequested',
     WithdrawalApproved = 'WithdrawalApproved',
-    CraftsmanApologized = 'CraftsmanApologized'
+    CraftsmanApologized = 'CraftsmanApologized',
+    ServiceCancelled = 'ServiceCancelled',
+    CraftsmanNoShow = 'CraftsmanNoShow'
 }
 
 export interface ReadNotificationDto {
