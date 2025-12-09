@@ -15,7 +15,8 @@
     "MY_REQUESTS": "My Requests",
     "EDIT_PROFILE": "Edit Profile",
     "VERIFY_ID": "Verify ID",
-    "DASHBOARD": "Dashboard"
+    "DASHBOARD": "Dashboard",
+    "SERVICE_REQUESTS": "Service Requests"
   },
   "CONTACT_US": {
     "TITLE": "Contact Us",
@@ -39,7 +40,13 @@
     "VISIT_US": "Visit Us"
   },
   "FOOTER": {
-    "COPYRIGHT": "All rights reserved"
+    "COPYRIGHT": "All rights reserved",
+    "TAGLINE": "Your trusted partner for professional home services. Connecting skilled craftsmen with clients who need quality work.",
+    "QUICK_LINKS": "Quick Links",
+    "HOME": "Home",
+    "SERVICES": "Services",
+    "CONTACT": "Contact Us",
+    "CONTACT_US": "Contact Info"
   },
   "HOME": {
     "TITLE": "Welcome to FixIt",
@@ -246,6 +253,8 @@
     "EXPERIENCE_YEARS": "Years of Experience",
     "EXPERIENCE_PLACEHOLDER": "Enter years of experience",
     "PROFILE_IMAGE": "Profile Image (Optional)",
+    "SERVICE": "Service",
+    "SELECT_SERVICE": "Select a service",
     "REGISTER_BUTTON": "Register as Craftsman",
     "REGISTERING": "Registering...",
     "HAVE_ACCOUNT": "Already have an account?",
@@ -397,6 +406,14 @@
   "WALLET": {
     "CURRENT_BALANCE": "Current Balance",
     "WITHDRAW_BUTTON": "Withdraw Funds",
+    "ADD_FUNDS_BUTTON": "Add Funds",
+    "ADD_FUNDS_TITLE": "Add Funds",
+    "ENTER_AMOUNT": "Enter amount",
+    "INVALID_AMOUNT": "Please enter a valid amount greater than 0",
+    "ADD_FUNDS_ERROR": "Failed to add funds",
+    "SUCCESS": "Success!",
+    "FUNDS_ADDED": "has been added to the wallet.",
+    "CANCEL": "Cancel",
     "TRANSACTION_HISTORY": "Transaction History",
     "TRANSACTION": "Transaction",
     "TRANSACTIONS": "Transactions",
@@ -599,6 +616,37 @@
     "COMPLETED": "Completed",
     "ERROR_LOAD_REQUESTS": "Failed to load your requests. Please try again.",
     "ERROR_LOAD_PROFILE": "Failed to load your profile. Please try again."
+  },
+  "ADMIN_REQUESTS": {
+    "TITLE": "Service Requests",
+    "SUBTITLE": "View and manage all service requests in the system",
+    "LOADING": "Loading service requests...",
+    "TRY_AGAIN": "Try Again",
+    "ERROR_LOADING": "Failed to load service requests. Please try again.",
+    "NO_REQUESTS_TITLE": "No Service Requests",
+    "NO_REQUESTS_MESSAGE": "There are no service requests matching your criteria",
+    "SEARCH_PLACEHOLDER": "Search by ID, client, craftsman, service...",
+    "ALL_STATUSES": "All Statuses",
+    "STATUS_PENDING": "Pending",
+    "STATUS_WAITING_CRAFTSMAN": "Waiting for Craftsman",
+    "STATUS_WAITING_CLIENT": "Waiting for Client",
+    "STATUS_WAITING_PAYMENT": "Waiting for Payment",
+    "STATUS_IN_PROGRESS": "In Progress",
+    "STATUS_COMPLETED": "Completed",
+    "STATUS_CANCELLED": "Cancelled",
+    "REQUESTS_FOUND": "requests found",
+    "VIEW": "View",
+    "TABLE": {
+      "ID": "ID",
+      "SERVICE": "Service",
+      "CLIENT": "Client",
+      "CRAFTSMAN": "Craftsman",
+      "LOCATION": "Location",
+      "DATE": "Date",
+      "AMOUNT": "Amount",
+      "STATUS": "Status",
+      "ACTIONS": "Actions"
+    }
   },
   "REQUEST_DETAILS": {
     "LOADING": "Loading request details...",

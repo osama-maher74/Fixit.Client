@@ -15,7 +15,8 @@
     "MY_REQUESTS": "طلباتي",
     "EDIT_PROFILE": "تعديل الملف الشخصي",
     "VERIFY_ID": "توثيق الهوية",
-    "DASHBOARD": "لوحة التحكم"
+    "DASHBOARD": "لوحة التحكم",
+    "SERVICE_REQUESTS": "طلبات الخدمة"
   },
   "CONTACT_US": {
     "TITLE": "اتصل بنا",
@@ -39,7 +40,13 @@
     "VISIT_US": "زرنا"
   },
   "FOOTER": {
-    "COPYRIGHT": "جميع الحقوق محفوظة"
+    "COPYRIGHT": "جميع الحقوق محفوظة",
+    "TAGLINE": "شريكك الموثوق للخدمات المنزلية الاحترافية. نربط الحرفيين المهرة بالعملاء الذين يحتاجون إلى عمل عالي الجودة.",
+    "QUICK_LINKS": "روابط سريعة",
+    "HOME": "الرئيسية",
+    "SERVICES": "الخدمات",
+    "CONTACT": "اتصل بنا",
+    "CONTACT_US": "معلومات الاتصال"
   },
   "HOME": {
     "TITLE": "مرحباً بك في فكست",
@@ -225,6 +232,8 @@
     "EXPERIENCE_YEARS": "سنوات الخبرة",
     "EXPERIENCE_PLACEHOLDER": "أدخل سنوات الخبرة",
     "PROFILE_IMAGE": "صورة الملف الشخصي (اختياري)",
+    "SERVICE": "الخدمة",
+    "SELECT_SERVICE": "اختر خدمة",
     "REGISTER_BUTTON": "التسجيل كحرفي",
     "REGISTERING": "جاري التسجيل...",
     "HAVE_ACCOUNT": "هل لديك حساب بالفعل؟",
@@ -376,6 +385,14 @@
   "WALLET": {
     "CURRENT_BALANCE": "الرصيد الحالي",
     "WITHDRAW_BUTTON": "سحب الأموال",
+    "ADD_FUNDS_BUTTON": "إضافة رصيد",
+    "ADD_FUNDS_TITLE": "إضافة رصيد",
+    "ENTER_AMOUNT": "أدخل المبلغ",
+    "INVALID_AMOUNT": "يرجى إدخال مبلغ صحيح أكبر من 0",
+    "ADD_FUNDS_ERROR": "فشل في إضافة الرصيد",
+    "SUCCESS": "تم بنجاح!",
+    "FUNDS_ADDED": "تمت إضافته إلى المحفظة.",
+    "CANCEL": "إلغاء",
     "TRANSACTION_HISTORY": "سجل المعاملات",
     "TRANSACTION": "معاملة",
     "TRANSACTIONS": "معاملات",
@@ -578,6 +595,37 @@
     "COMPLETED": "مكتمل",
     "ERROR_LOAD_REQUESTS": "فشل تحميل طلباتك. يرجى المحاولة مرة أخرى.",
     "ERROR_LOAD_PROFILE": "فشل تحميل ملفك الشخصي. يرجى المحاولة مرة أخرى."
+  },
+  "ADMIN_REQUESTS": {
+    "TITLE": "طلبات الخدمة",
+    "SUBTITLE": "عرض وإدارة جميع طلبات الخدمة في النظام",
+    "LOADING": "جاري تحميل طلبات الخدمة...",
+    "TRY_AGAIN": "حاول مرة أخرى",
+    "ERROR_LOADING": "فشل تحميل طلبات الخدمة. يرجى المحاولة مرة أخرى.",
+    "NO_REQUESTS_TITLE": "لا توجد طلبات خدمة",
+    "NO_REQUESTS_MESSAGE": "لا توجد طلبات خدمة تطابق معاييرك",
+    "SEARCH_PLACEHOLDER": "بحث بالمعرف، العميل، الحرفي، الخدمة...",
+    "ALL_STATUSES": "جميع الحالات",
+    "STATUS_PENDING": "قيد الانتظار",
+    "STATUS_WAITING_CRAFTSMAN": "في انتظار الحرفي",
+    "STATUS_WAITING_CLIENT": "في انتظار العميل",
+    "STATUS_WAITING_PAYMENT": "في انتظار الدفع",
+    "STATUS_IN_PROGRESS": "قيد التنفيذ",
+    "STATUS_COMPLETED": "مكتمل",
+    "STATUS_CANCELLED": "ملغى",
+    "REQUESTS_FOUND": "طلب موجود",
+    "VIEW": "عرض",
+    "TABLE": {
+      "ID": "المعرف",
+      "SERVICE": "الخدمة",
+      "CLIENT": "العميل",
+      "CRAFTSMAN": "الحرفي",
+      "LOCATION": "الموقع",
+      "DATE": "التاريخ",
+      "AMOUNT": "المبلغ",
+      "STATUS": "الحالة",
+      "ACTIONS": "الإجراءات"
+    }
   },
   "REQUEST_DETAILS": {
     "LOADING": "جاري تحميل تفاصيل الطلب...",

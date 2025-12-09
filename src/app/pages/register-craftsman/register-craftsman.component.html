@@ -208,7 +208,8 @@
           [class.error]="serviceId?.invalid && serviceId?.touched">
           <option [ngValue]="null" disabled>{{ 'REGISTER_CRAFTSMAN.SELECT_SERVICE' | translate }}</option>
           @for (service of services(); track service.serviceId) {
-          <option [ngValue]="service.serviceId">{{ service.serviceName }}</option>
+          <option [ngValue]="service.serviceId">{{ 'SERVICES.SERVICE_NAMES.' + service.serviceName | translate }}
+          </option>
           }
         </select>
         @if (serviceId?.invalid && serviceId?.touched) {

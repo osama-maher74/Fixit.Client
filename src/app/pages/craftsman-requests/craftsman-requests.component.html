@@ -15,7 +15,7 @@
     <!-- Error State -->
     @if (error && !loading) {
     <div class="error-container">
-        <div class="error-icon">⚠️</div>
+        <span class="material-icons error-icon">error_outline</span>
         <p class="error-message">{{ error }}</p>
         <button class="btn-retry" (click)="loadCraftsmanRequests()">{{ 'CRAFTSMAN_REQUESTS.TRY_AGAIN' | translate
             }}</button>
@@ -25,7 +25,7 @@
     <!-- Empty State -->
     @if (!loading && !error && filteredRequests.length === 0) {
     <div class="empty-container">
-        <div class="empty-icon">📋</div>
+        <span class="material-icons empty-icon-symbol">assignment</span>
         <h2 class="empty-title">{{ 'CRAFTSMAN_REQUESTS.NO_REQUESTS_TITLE' | translate }}</h2>
         <p class="empty-message">{{ 'CRAFTSMAN_REQUESTS.NO_REQUESTS_MESSAGE' | translate }}</p>
     </div>
@@ -40,7 +40,8 @@
             <div class="request-image-container">
                 <img [src]="getImageUrl(request)" [alt]="request.serviceName || 'Service'" class="request-image" />
                 <div class="status-badge" [ngClass]="getStatusClass(request.status)">
-                    <span class="status-icon">{{ getStatusIcon(request.status) }}</span>
+                    <span class="status-icon"><span class="material-icons">{{ getStatusIcon(request.status)
+                            }}</span></span>
                     <span class="status-text">{{ getStatusText(request.status) }}</span>
                 </div>
             </div>
@@ -52,32 +53,32 @@
 
                 @if (request.clientName) {
                 <div class="info-row">
-                    <span class="info-icon">👤</span>
+                    <span class="info-icon"><span class="material-icons">person</span></span>
                     <span class="info-text">{{ request.clientName }}</span>
                 </div>
                 }
 
                 <div class="info-row">
-                    <span class="info-icon">📍</span>
+                    <span class="info-icon"><span class="material-icons">location_on</span></span>
                     <span class="info-text">{{ request.location || ('CRAFTSMAN_REQUESTS.NO_LOCATION' | translate)
                         }}</span>
                 </div>
 
                 <div class="info-row">
-                    <span class="info-icon">📅</span>
+                    <span class="info-icon"><span class="material-icons">event</span></span>
                     <span class="info-text">{{ formatDate(request.requestAt) }}</span>
                 </div>
 
                 @if (request.totalAmount) {
                 <div class="info-row price-row">
-                    <span class="info-icon">💰</span>
+                    <span class="info-icon"><span class="material-icons">payments</span></span>
                     <span class="price-text">{{ request.totalAmount }} EGP</span>
                 </div>
                 }
 
                 @if (request.completedAt) {
                 <div class="info-row">
-                    <span class="info-icon">✓</span>
+                    <span class="info-icon"><span class="material-icons">check_circle</span></span>
                     <span class="info-text completed-text">{{ 'CRAFTSMAN_REQUESTS.COMPLETED' | translate }}: {{
                         formatDate(request.completedAt) }}</span>
                 </div>
@@ -86,7 +87,7 @@
 
             <!-- Action Arrow -->
             <div class="action-arrow">
-                <span>→</span>
+                <span class="material-icons">arrow_forward</span>
             </div>
         </div>
         }

@@ -696,7 +696,10 @@ export class RequestDetailsComponent implements OnInit {
 
     goBack() {
         // Navigate based on user role
-        if (this.isCraftsman()) {
+        const user = this.authService.getCurrentUser();
+        if (user?.role?.toLowerCase() === 'admin') {
+            this.router.navigate(['/admin/service-requests']);
+        } else if (this.isCraftsman()) {
             this.router.navigate(['/craftsman-requests']);
         } else {
             this.router.navigate(['/my-requests']);

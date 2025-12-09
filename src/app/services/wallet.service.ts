@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { WalletDto, CreateWalletTransactionDto, WithdrawalResponse, WalletTransactionDto, UpdateWalletTransactionDto } from '../models/wallet.models';
+import { WalletDto, CreateWalletTransactionDto, WithdrawalResponse, WalletTransactionDto, UpdateWalletTransactionDto, AddFundsResponse } from '../models/wallet.models';
 
 @Injectable({
   providedIn: 'root'
@@ -60,5 +60,16 @@ export class WalletService {
     const url = `${this.WALLET_API}/transaction`;
     console.log('WalletService - Updating transaction:', dto);
     return this.http.put<any>(url, dto);
+  }
+
+  /**
+   * Add funds to craftsman wallet (admin only)
+   * @param dto - CreateWalletTransactionDto
+   * @returns Observable of AddFundsResponse
+   */
+  addFunds(dto: CreateWalletTransactionDto): Observable<AddFundsResponse> {
+    const url = `${this.WALLET_API}/add`;
+    console.log('WalletService - Adding funds:', dto);
+    return this.http.post<AddFundsResponse>(url, dto);
   }
 }
