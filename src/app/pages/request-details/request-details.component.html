@@ -30,7 +30,8 @@
             <!-- Header with Status -->
             <div class="card-header">
                 <div class="title-row">
-                    <h1 class="request-title">{{ request.serviceName || ('REQUEST_DETAILS.SERVICE_REQUEST' | translate) }}</h1>
+                    <h1 class="request-title">{{ request.serviceName || ('REQUEST_DETAILS.SERVICE_REQUEST' | translate)
+                        }}</h1>
                     <span class="request-id">#{{ request.servicesRequestId || request.id }}</span>
                 </div>
                 <div class="status-badge" [ngClass]="getStatusClass(request.status)">
@@ -74,7 +75,8 @@
                         <span class="detail-icon">📍</span>
                         <span>{{ 'REQUEST_DETAILS.LOCATION' | translate }}</span>
                     </div>
-                    <div class="detail-value">{{ request.location || ('REQUEST_DETAILS.NOT_SPECIFIED' | translate) }}</div>
+                    <div class="detail-value">{{ request.location || ('REQUEST_DETAILS.NOT_SPECIFIED' | translate) }}
+                    </div>
                 </div>
 
                 <!-- Request Date -->
@@ -162,7 +164,8 @@
                     <span class="section-icon">📝</span>
                     {{ 'REQUEST_DETAILS.DESCRIPTION' | translate }}
                 </h2>
-                <p class="description-text">{{ request.description || ('REQUEST_DETAILS.NO_DESCRIPTION' | translate) }}</p>
+                <p class="description-text">{{ request.description || ('REQUEST_DETAILS.NO_DESCRIPTION' | translate) }}
+                </p>
             </div>
 
             <!-- Review Section (Display existing review) -->
@@ -194,7 +197,8 @@
             <div class="review-form-section">
                 <h2 class="section-title">
                     <span class="section-icon">{{ hasExistingReview() ? '✏️' : '➕' }}</span>
-                    {{ hasExistingReview() ? ('REQUEST_DETAILS.EDIT_REVIEW' | translate) : ('REQUEST_DETAILS.ADD_REVIEW' | translate) }}
+                    {{ hasExistingReview() ? ('REQUEST_DETAILS.EDIT_REVIEW' | translate) : ('REQUEST_DETAILS.ADD_REVIEW'
+                    | translate) }}
                 </h2>
 
                 <div class="review-form">
@@ -214,7 +218,8 @@
 
                     <!-- Comment Input -->
                     <div class="form-group">
-                        <label for="review-comment-input" class="form-label">{{ 'REQUEST_DETAILS.COMMENT' | translate }}</label>
+                        <label for="review-comment-input" class="form-label">{{ 'REQUEST_DETAILS.COMMENT' | translate
+                            }}</label>
                         <textarea id="review-comment-input" class="form-textarea" [(ngModel)]="reviewComment"
                             [placeholder]="'REQUEST_DETAILS.COMMENT_PLACEHOLDER' | translate" rows="4"></textarea>
                     </div>
@@ -223,9 +228,11 @@
                     <button class="btn-submit-review" (click)="submitReviewForm()" [disabled]="submittingReview">
                         @if (submittingReview) {
                         <span class="spinner-small"></span>
-                        <span>{{ hasExistingReview() ? ('REQUEST_DETAILS.UPDATING' | translate) : ('REQUEST_DETAILS.SUBMITTING' | translate) }}</span>
+                        <span>{{ hasExistingReview() ? ('REQUEST_DETAILS.UPDATING' | translate) :
+                            ('REQUEST_DETAILS.SUBMITTING' | translate) }}</span>
                         } @else {
-                        <span>{{ hasExistingReview() ? ('✓ ' + ('REQUEST_DETAILS.UPDATE_REVIEW' | translate)) : ('✓ ' + ('REQUEST_DETAILS.SUBMIT_REVIEW' | translate)) }}</span>
+                        <span>{{ hasExistingReview() ? ('✓ ' + ('REQUEST_DETAILS.UPDATE_REVIEW' | translate)) : ('✓ ' +
+                            ('REQUEST_DETAILS.SUBMIT_REVIEW' | translate)) }}</span>
                         }
                     </button>
                 </div>
@@ -252,6 +259,16 @@
                 @if (isInProgress() || isCompleted()) {
                 <button class="btn-problem" (click)="goToContactUs()">
                     <span>⚠️ {{ 'REQUEST_DETAILS.HAVING_PROBLEM' | translate }}</span>
+                </button>
+                }
+                @if (canApologize()) {
+                <button class="btn-apologize" (click)="apologize()" [disabled]="apologizing">
+                    @if (apologizing) {
+                    <span class="spinner-small"></span>
+                    <span>{{ 'REQUEST_DETAILS.APOLOGIZING' | translate }}</span>
+                    } @else {
+                    <span>🙏 {{ 'REQUEST_DETAILS.APOLOGIZE' | translate }}</span>
+                    }
                 </button>
                 }
             </div>

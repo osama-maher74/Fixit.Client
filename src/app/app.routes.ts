@@ -147,6 +147,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/notifications/notifications.component').then(m => m.NotificationsComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'client-choice/:id',
+    loadComponent: () => import('./pages/client-choice/client-choice.component').then(m => m.ClientChoiceComponent),
+    canActivate: [authGuard]
+  },
 
   {
     path: '**',

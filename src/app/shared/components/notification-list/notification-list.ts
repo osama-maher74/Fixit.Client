@@ -256,6 +256,21 @@ export class NotificationListComponent implements OnInit {
       return;
     }
 
+    // 1.5. Craftsman Apologized - Client side (redirect to client-choice page)
+    // Check by type OR by title (fallback for type number mismatch)
+    const isCraftsmanApologized = notificationTypeEnum === NotificationType.CraftsmanApologized ||
+      title.includes('cancelled') ||
+      title.includes('apologized') ||
+      title.includes('apology');
+
+    if (isClient && isCraftsmanApologized) {
+      console.log('🙏 Craftsman Apologized → Redirecting to client-choice page');
+      if (notification.serviceRequestId) {
+        this.router.navigate(['/client-choice', notification.serviceRequestId]);
+      }
+      return;
+    }
+
     // Check if this is a new offer notification for client
     if (notification.type === NotificationType.NewOfferFromCraftsman) {
       // Navigate to offer review page with offer details in route state
@@ -484,6 +499,9 @@ export class NotificationListComponent implements OnInit {
       case NotificationType.WithdrawalApproved:
         key = 'NOTIFICATIONS.TYPE_WITHDRAWAL_APPROVED';
         break;
+      case NotificationType.CraftsmanApologized:
+        key = 'NOTIFICATIONS.TYPE_CRAFTSMAN_APOLOGIZED';
+        break;
       default:
         return notification.title;
     }
@@ -503,7 +521,8 @@ export class NotificationListComponent implements OnInit {
       6: NotificationType.PaymentRequested,
       7: NotificationType.WithdrawalRequested,     // Admin: Withdrawal request notification
       8: NotificationType.WithdrawalApproved,      // Craftsman: Withdrawal approved notification
-      9: NotificationType.ServiceRequestScheduled  // Service scheduled notification
+      9: NotificationType.ServiceRequestScheduled, // Service scheduled notification
+      10: NotificationType.CraftsmanApologized     // Craftsman apologized notification
     };
     console.log(`🔄 Mapping type ${type} to ${mapping[type] || 'Unknown'}`);
     return mapping[type] || NotificationType.SelectCraftsman;
@@ -530,6 +549,8 @@ export class NotificationListComponent implements OnInit {
         return '💸';
       case NotificationType.WithdrawalApproved:
         return '✅';
+      case NotificationType.CraftsmanApologized:
+        return '🙏';
       default:
         return 'ℹ️';
     }

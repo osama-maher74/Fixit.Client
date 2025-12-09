@@ -581,7 +581,8 @@
     "IN_PROGRESS": "قيد التنفيذ",
     "COMPLETED": "مكتمل",
     "APPROVED": "معتمد",
-    "CANCELLED": "ملغى"
+    "CANCELLED": "ملغى",
+    "CANCELLED_BY_CRAFTSMAN": "ملغى من الحرفي"
   },
   "CRAFTSMAN_REQUESTS": {
     "TITLE": "طلبات الخدمة الخاصة بي",
@@ -681,7 +682,15 @@
     "COMMENT_REQUIRED": "التعليق مطلوب",
     "COMMENT_REQUIRED_MESSAGE": "يرجى إضافة تعليق لتقييمك",
     "INVALID_REQUEST_ID": "معرف الطلب غير صحيح",
-    "HAVING_PROBLEM": "هل تواجه مشكلة؟"
+    "HAVING_PROBLEM": "هل تواجه مشكلة؟",
+    "APOLOGIZE": "اعتذار وإلغاء",
+    "APOLOGIZING": "جاري الاعتذار...",
+    "APOLOGIZE_TITLE": "الاعتذار عن الخدمة؟",
+    "APOLOGIZE_REASON_LABEL": "السبب (اختياري)",
+    "APOLOGIZE_REASON_PLACEHOLDER": "لماذا تقوم بإلغاء هذه الخدمة؟",
+    "CONFIRM_APOLOGIZE": "نعم، إلغاء الخدمة",
+    "APOLOGIZE_SUCCESS": "تم إلغاء الخدمة. تم إخطار العميل.",
+    "APOLOGIZE_FAILED": "فشل في إلغاء الخدمة"
   },
   "SERVICES": {
     "SERVICE_NAMES": {
@@ -881,6 +890,7 @@
     "TYPE_SERVICE_SCHEDULED": "تم جدولة الخدمة",
     "TYPE_WITHDRAWAL_REQUESTED": "طلب سحب",
     "TYPE_WITHDRAWAL_APPROVED": "تمت الموافقة على السحب",
+    "TYPE_CRAFTSMAN_APOLOGIZED": "الحرفي ألغى الخدمة",
     "ALERTS": {
       "OFFER_REJECTED_TITLE": "تم رفض العرض",
       "OFFER_REJECTED_TEXT": "رفض العميل عرضك.",
@@ -993,5 +1003,43 @@
     "ANONYMOUS": "عميل مجهول",
     "NO_REVIEWS": "لا توجد تقييمات بعد",
     "LOADING_REVIEWS": "جاري تحميل التقييمات..."
+  },
+  "CLIENT_CHOICE": {
+    "LOADING": "جاري تحميل تفاصيل الخدمة...",
+    "INVALID_REQUEST_ID": "معرف الطلب غير صحيح",
+    "INVALID_STATUS": "هذا الطلب لا يتطلب قراراً",
+    "LOAD_ERROR": "فشل تحميل طلب الخدمة",
+    "BACK": "رجوع",
+    "BACK_TO_REQUESTS": "العودة إلى طلباتي",
+    "ALERT_TITLE": "الحرفي ألغى خدمتك",
+    "ALERT_MESSAGE": "اعتذر الحرفي وألغى الخدمة. يرجى اختيار ما تريد فعله بدفعتك.",
+    "SERVICE_REQUEST": "طلب خدمة",
+    "CANCELLED_BY_CRAFTSMAN": "ملغى من الحرفي",
+    "SERVICE": "الخدمة",
+    "CRAFTSMAN": "الحرفي",
+    "LOCATION": "الموقع",
+    "REQUESTED_AT": "طلب في",
+    "TOTAL_AMOUNT": "المبلغ الإجمالي",
+    "SERVICE_START_TIME": "وقت بدء الخدمة",
+    "DESCRIPTION": "الوصف",
+    "NOT_SPECIFIED": "غير محدد",
+    "WHAT_WOULD_YOU_LIKE": "ماذا تريد أن تفعل؟",
+    "GET_REFUND": "استرداد المبلغ",
+    "REFUND_SUBTITLE": "استرجع أموالك",
+    "NEW_CRAFTSMAN": "اختيار حرفي جديد",
+    "NEW_CRAFTSMAN_SUBTITLE": "ابحث عن حرفي آخر لخدمتك",
+    "REFUND_CONFIRM_TITLE": "تأكيد الاسترداد",
+    "REFUND_CONFIRM_TEXT": "هل أنت متأكد من رغبتك في استرداد المبلغ؟ سيتم إرجاع المبلغ إلى طريقة الدفع الأصلية.",
+    "YES_REFUND": "نعم، استرداد المبلغ",
+    "CANCEL": "إلغاء",
+    "REFUND_SUCCESS_TITLE": "تمت معالجة الاسترداد!",
+    "REFUND_SUCCESS_TEXT": "تمت معالجة استردادك. سيظهر في حسابك خلال 5-10 أيام عمل.",
+    "REFUND_FAILED": "فشل الاسترداد",
+    "NEW_CRAFTSMAN_CONFIRM_TITLE": "اختيار حرفي جديد",
+    "NEW_CRAFTSMAN_CONFIRM_TEXT": "هل ترغب في الاحتفاظ بدفعتك واختيار حرفي جديد لهذه الخدمة؟",
+    "YES_NEW_CRAFTSMAN": "نعم، ابحث عن حرفي جديد",
+    "NEW_CRAFTSMAN_SUCCESS_TITLE": "تم تحديث الطلب!",
+    "NEW_CRAFTSMAN_SUCCESS_TEXT": "يمكنك الآن اختيار حرفي جديد لخدمتك.",
+    "NEW_CRAFTSMAN_FAILED": "فشل تحديث الطلب"
   }
 }

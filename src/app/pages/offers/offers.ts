@@ -332,21 +332,33 @@ export class OffersComponent implements OnInit {
   }
 
   /**
-   * Check if service request is in InProgress or Completed status
+   * Check if service request is in a terminal or non-actionable status
    * If true, hide all action buttons
    */
   get shouldHideButtons(): boolean {
     if (!this.serviceRequest) return false;
 
     const statusName = this.getStatusEnumName(this.serviceRequest.status);
-    const isInProgressOrCompleted = statusName === 'InProgress' || statusName === 'Completed';
+
+    // Hide buttons for these statuses
+    const hiddenStatuses = [
+      'InProgress',
+      'Completed',
+      'WaitingForClientPayment',
+      'CancelledDueToNonPayment',
+      'Cancelled',
+      'RejectedByCraftsman',
+      'RejectedByClient'
+    ];
+
+    const shouldHide = hiddenStatuses.includes(statusName);
 
     console.log('🔍 Should Hide Buttons Check:');
     console.log('  - Status:', this.serviceRequest.status);
     console.log('  - Status Name:', statusName);
-    console.log('  - Should Hide:', isInProgressOrCompleted);
+    console.log('  - Should Hide:', shouldHide);
 
-    return isInProgressOrCompleted;
+    return shouldHide;
   }
 
   getImageUrl(): string {

@@ -967,7 +967,57 @@
     .btn-submit-review,
     .btn-edit-time,
     .btn-problem,
-    .btn-back {
+    .btn-back,
+    .btn-apologize {
         width: 100%;
     }
+}
+
+/* Apologize Button for Craftsman */
+.btn-apologize {
+    padding: 0.85rem 2rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    min-width: 160px;
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    color: white;
+}
+
+.btn-apologize::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: skewX(-20deg) translateX(-150%);
+    transition: transform 0.6s ease;
+}
+
+.btn-apologize:hover::after {
+    transform: skewX(-20deg) translateX(150%);
+}
+
+.btn-apologize:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(245, 158, 11, 0.35);
+}
+
+.btn-apologize:disabled {
+    background: linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ServiceRequestService, ServiceRequestResponse } from '../../services/service-request.service';
 import { ReviewService, CreateReviewDTO, UpdateReviewDTO } from '../../services/review.service';
+import { OfferService } from '../../services/offer.service';
 import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
 import Swal from 'sweetalert2';
@@ -21,6 +22,7 @@ export class RequestDetailsComponent implements OnInit {
     private router = inject(Router);
     private serviceRequestService = inject(ServiceRequestService);
     private reviewService = inject(ReviewService);
+    private offerService = inject(OfferService);
     private authService = inject(AuthService);
     private translate = inject(TranslateService);
 
@@ -29,6 +31,7 @@ export class RequestDetailsComponent implements OnInit {
     error: string | null = null;
     apiUrl = environment.apiUrl;
     completingRequest = false;
+    apologizing = false;
 
     // Review form properties
     reviewRating = 0;
@@ -150,6 +153,7 @@ export class RequestDetailsComponent implements OnInit {
             case 5: // RejectedByClient
             case 9: // Cancelled
             case 10: // CancelledDueToNonPayment
+            case 11: // CancelledByCraftsman
                 return 'status-cancelled';
             default:
                 return 'status-unknown';
@@ -174,6 +178,7 @@ export class RequestDetailsComponent implements OnInit {
             case 5: // RejectedByClient
             case 9: // Cancelled
             case 10: // CancelledDueToNonPayment
+            case 11: // CancelledByCraftsman
                 return '❌';
             default:
                 return '❓';
@@ -195,7 +200,8 @@ export class RequestDetailsComponent implements OnInit {
             7: 'MY_REQUESTS.COMPLETED',
             8: 'MY_REQUESTS.APPROVED',
             9: 'MY_REQUESTS.CANCELLED',
-            10: 'MY_REQUESTS.CANCELLED'
+            10: 'MY_REQUESTS.CANCELLED',
+            11: 'MY_REQUESTS.CANCELLED_BY_CRAFTSMAN'
         };
 
         return this.translate.instant(statusKeys[statusNum] || 'MY_REQUESTS.UNKNOWN');
@@ -708,5 +714,64 @@ export class RequestDetailsComponent implements OnInit {
 
     goToContactUs() {
         this.router.navigate(['/contact-us']);
+    }
+
+    /**
+     * Check if craftsman can apologize for this service request
+     * Craftsman can only apologize when status is InProgress
+     */
+    canApologize(): boolean {
+        return this.isCraftsman() && this.isInProgress();
+    }
+
+    /**
+     * Craftsman apologizes and cancels the service request
+     * Client will be notified to choose: Refund or New Craftsman
+     */
+    apologize() {
+        if (!this.request || !this.canApologize()) return;
+
+        Swal.fire({
+            title: this.translate.instant('REQUEST_DETAILS.APOLOGIZE_TITLE'),
+            input: 'textarea',
+            inputLabel: this.translate.instant('REQUEST_DETAILS.APOLOGIZE_REASON_LABEL'),
+            inputPlaceholder: this.translate.instant('REQUEST_DETAILS.APOLOGIZE_REASON_PLACEHOLDER'),
+            showCancelButton: true,
+            confirmButtonText: this.translate.instant('REQUEST_DETAILS.CONFIRM_APOLOGIZE'),
+            cancelButtonText: this.translate.instant('REQUEST_DETAILS.CANCEL'),
+            confirmButtonColor: '#DC2626',
+            cancelButtonColor: '#6b7280',
+            icon: 'warning'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.apologizing = true;
+                const requestId = this.request!.servicesRequestId || this.request!.id;
+
+                this.offerService.craftsmanApologize({
+                    serviceRequestId: requestId!,
+                    reason: result.value || undefined
+                }).subscribe({
+                    next: (response) => {
+                        this.apologizing = false;
+                        Swal.fire({
+                            icon: 'success',
+                            title: this.translate.instant('REQUEST_DETAILS.APOLOGIZE_SUCCESS'),
+                            text: response.message,
+                            confirmButtonColor: '#d4af37'
+                        });
+                        this.loadRequestDetails(requestId!);
+                    },
+                    error: (err) => {
+                        this.apologizing = false;
+                        Swal.fire({
+                            icon: 'error',
+                            title: this.translate.instant('REQUEST_DETAILS.APOLOGIZE_FAILED'),
+                            text: err.error?.message || this.translate.instant('ERROR_DEFAULT'),
+                            confirmButtonColor: '#d4af37'
+                        });
+                    }
+                });
+            }
+        });
     }
 }
