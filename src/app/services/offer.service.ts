@@ -33,6 +33,19 @@ export interface ClientRespondDto {
     decision: ClientDecision;
 }
 
+export interface OfferResponse {
+    id: number;
+    serviceRequestId: number;
+    craftsManId: number;
+    craftsManName?: string;
+    amount: number;          // Backend uses "Amount" not "FinalAmount"
+    finalAmount?: number;    // Alias for frontend compatibility
+    description?: string;
+    status?: string;
+    createdAt?: string;
+    suggestedPrice?: number;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -79,4 +92,46 @@ export class OfferService {
     clientRespond(dto: ClientRespondDto): Observable<void> {
         return this.http.post<void>(`${this.API_URL}/client-respond`, dto);
     }
+
+    /**
+     * Craftsman apologizes and cancels an InProgress service request
+     * POST /api/Offer/craftsman-apologize
+     */
+    craftsmanApologize(dto: CraftsmanApologizeDto): Observable<{ success: boolean; message: string }> {
+        return this.http.post<{ success: boolean; message: string }>(`${this.API_URL}/craftsman-apologize`, dto);
+    }
+
+    /**
+     * Client chooses to get a refund after craftsman apologizes
+     * POST /api/Offer/client-choose-refund
+     */
+    clientChooseRefund(dto: ClientChooseAfterApologyDto): Observable<{ success: boolean; message: string }> {
+        return this.http.post<{ success: boolean; message: string }>(`${this.API_URL}/client-choose-refund`, dto);
+    }
+
+    /**
+     * Client chooses to select a new craftsman after craftsman apologizes
+     * POST /api/Offer/client-choose-new-craftsman
+     */
+    clientChooseNewCraftsman(dto: ClientChooseAfterApologyDto): Observable<{ success: boolean; message: string }> {
+        return this.http.post<{ success: boolean; message: string }>(`${this.API_URL}/client-choose-new-craftsman`, dto);
+    }
+
+    /**
+     * Get offer by ID
+     * GET /api/Offer/GetById/{id}
+     */
+    getOfferById(id: number): Observable<OfferResponse> {
+        return this.http.get<OfferResponse>(`${this.API_URL}/GetById/${id}`);
+    }
 }
+
+export interface CraftsmanApologizeDto {
+    serviceRequestId: number;
+    reason?: string;
+}
+
+export interface ClientChooseAfterApologyDto {
+    serviceRequestId: number;
+}
+

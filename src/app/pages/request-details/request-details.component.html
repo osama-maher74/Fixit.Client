@@ -32,6 +32,8 @@
                 <div class="title-row">
                     <h1 class="request-title">{{ request.serviceName || ('REQUEST_DETAILS.SERVICE_REQUEST' | translate)
                         }}</h1>
+                    <h1 class="request-title">{{ request.serviceName || ('REQUEST_DETAILS.SERVICE_REQUEST' | translate)
+                        }}</h1>
                     <span class="request-id">#{{ request.servicesRequestId || request.id }}</span>
                 </div>
                 <div class="status-badge" [ngClass]="getStatusClass(request.status)">
@@ -74,6 +76,8 @@
                     <div class="detail-label">
                         <span class="detail-icon">📍</span>
                         <span>{{ 'REQUEST_DETAILS.LOCATION' | translate }}</span>
+                    </div>
+                    <div class="detail-value">{{ request.location || ('REQUEST_DETAILS.NOT_SPECIFIED' | translate) }}
                     </div>
                     <div class="detail-value">{{ request.location || ('REQUEST_DETAILS.NOT_SPECIFIED' | translate) }}
                     </div>
@@ -166,6 +170,8 @@
                 </h2>
                 <p class="description-text">{{ request.description || ('REQUEST_DETAILS.NO_DESCRIPTION' | translate) }}
                 </p>
+                <p class="description-text">{{ request.description || ('REQUEST_DETAILS.NO_DESCRIPTION' | translate) }}
+                </p>
             </div>
 
             <!-- Complaint Section (Display existing complaints) -->
@@ -232,11 +238,13 @@
             </div>
             }
 
-            <!-- Review Form Section (Add/Edit Review - Client only) -->
-            @if (isCompleted() && !isCraftsman()) {
+            <!-- Review Form Section (Add/Edit Review - Client only, hidden from Admin) -->
+            @if (isCompleted() && !isCraftsman() && !isAdmin()) {
             <div class="review-form-section">
                 <h2 class="section-title">
                     <span class="section-icon">{{ hasExistingReview() ? '✏️' : '➕' }}</span>
+                    {{ hasExistingReview() ? ('REQUEST_DETAILS.EDIT_REVIEW' | translate) : ('REQUEST_DETAILS.ADD_REVIEW'
+                    | translate) }}
                     {{ hasExistingReview() ? ('REQUEST_DETAILS.EDIT_REVIEW' | translate) : ('REQUEST_DETAILS.ADD_REVIEW'
                     | translate) }}
                 </h2>
@@ -260,6 +268,8 @@
                     <div class="form-group">
                         <label for="review-comment-input" class="form-label">{{ 'REQUEST_DETAILS.COMMENT' | translate
                             }}</label>
+                        <label for="review-comment-input" class="form-label">{{ 'REQUEST_DETAILS.COMMENT' | translate
+                            }}</label>
                         <textarea id="review-comment-input" class="form-textarea" [(ngModel)]="reviewComment"
                             [placeholder]="'REQUEST_DETAILS.COMMENT_PLACEHOLDER' | translate" rows="4"></textarea>
                     </div>
@@ -270,7 +280,11 @@
                         <span class="spinner-small"></span>
                         <span>{{ hasExistingReview() ? ('REQUEST_DETAILS.UPDATING' | translate) :
                             ('REQUEST_DETAILS.SUBMITTING' | translate) }}</span>
+                        <span>{{ hasExistingReview() ? ('REQUEST_DETAILS.UPDATING' | translate) :
+                            ('REQUEST_DETAILS.SUBMITTING' | translate) }}</span>
                         } @else {
+                        <span>{{ hasExistingReview() ? ('✓ ' + ('REQUEST_DETAILS.UPDATE_REVIEW' | translate)) : ('✓ ' +
+                            ('REQUEST_DETAILS.SUBMIT_REVIEW' | translate)) }}</span>
                         <span>{{ hasExistingReview() ? ('✓ ' + ('REQUEST_DETAILS.UPDATE_REVIEW' | translate)) : ('✓ ' +
                             ('REQUEST_DETAILS.SUBMIT_REVIEW' | translate)) }}</span>
                         }
@@ -279,7 +293,8 @@
             </div>
             }
 
-            <!-- Action Buttons -->
+            <!-- Action Buttons (hidden from Admin and when Cancelled) -->
+            @if (!isAdmin() && !isCancelled()) {
             <div class="action-buttons">
                 @if (canEditStartTime()) {
                 <button class="btn-edit-time" (click)="editStartTime()">
@@ -301,7 +316,18 @@
                     <span>⚠️ {{ 'REQUEST_DETAILS.HAVING_PROBLEM' | translate }}</span>
                 </button>
                 }
+                @if (canApologize()) {
+                <button class="btn-apologize" (click)="apologize()" [disabled]="apologizing">
+                    @if (apologizing) {
+                    <span class="spinner-small"></span>
+                    <span>{{ 'REQUEST_DETAILS.APOLOGIZING' | translate }}</span>
+                    } @else {
+                    <span>🙏 {{ 'REQUEST_DETAILS.APOLOGIZE' | translate }}</span>
+                    }
+                </button>
+                }
             </div>
+            }
         </div>
     </div>
     }

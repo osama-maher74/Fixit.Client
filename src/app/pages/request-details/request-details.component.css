@@ -967,7 +967,8 @@
     .btn-submit-review,
     .btn-edit-time,
     .btn-problem,
-    .btn-back {
+    .btn-back,
+    .btn-apologize {
         width: 100%;
     }
 }

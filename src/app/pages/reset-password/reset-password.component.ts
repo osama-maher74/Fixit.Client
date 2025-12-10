@@ -143,7 +143,21 @@ import { ToastService } from '../../services/toast.service';
       border: none;
       cursor: pointer;
       font-size: 1.2rem;
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
       color: var(--text-secondary);
+    }
+
+    :host-context([dir="rtl"]) .toggle-password {
+      right: auto;
+      left: 10px;
     }
 
     .btn-primary {

@@ -602,7 +602,8 @@
     "IN_PROGRESS": "In Progress",
     "COMPLETED": "Completed",
     "APPROVED": "Approved",
-    "CANCELLED": "Cancelled"
+    "CANCELLED": "Cancelled",
+    "CANCELLED_BY_CRAFTSMAN": "Cancelled by Craftsman"
   },
   "CRAFTSMAN_REQUESTS": {
     "TITLE": "My Service Requests",
@@ -917,6 +918,10 @@
     "TYPE_SERVICE_SCHEDULED": "Service Scheduled",
     "TYPE_WITHDRAWAL_REQUESTED": "Withdrawal Requested",
     "TYPE_WITHDRAWAL_APPROVED": "Withdrawal Approved",
+       "TYPE_SERVICE_CANCELLED": "Service Cancelled",
+    "TYPE_CRAFTSMAN_NO_SHOW": "Craftsman No-Show",
+    "TYPE_CRAFTSMAN_APOLOGIZED": "Craftsman Cancelled Service",
+
     "ALERTS": {
       "OFFER_REJECTED_TITLE": "Offer Rejected",
       "OFFER_REJECTED_TEXT": "The client has rejected your offer.",
@@ -1029,5 +1034,43 @@
     "ANONYMOUS": "Anonymous Client",
     "NO_REVIEWS": "No reviews yet",
     "LOADING_REVIEWS": "Loading reviews..."
+  },
+  "CLIENT_CHOICE": {
+    "LOADING": "Loading service details...",
+    "INVALID_REQUEST_ID": "Invalid request ID",
+    "INVALID_STATUS": "This request does not require a decision",
+    "LOAD_ERROR": "Failed to load service request",
+    "BACK": "Go Back",
+    "BACK_TO_REQUESTS": "Back to My Requests",
+    "ALERT_TITLE": "Craftsman Cancelled Your Service",
+    "ALERT_MESSAGE": "The craftsman has apologized and cancelled. Please choose what you would like to do with your payment.",
+    "SERVICE_REQUEST": "Service Request",
+    "CANCELLED_BY_CRAFTSMAN": "Cancelled by Craftsman",
+    "SERVICE": "Service",
+    "CRAFTSMAN": "Craftsman",
+    "LOCATION": "Location",
+    "REQUESTED_AT": "Requested At",
+    "TOTAL_AMOUNT": "Total Amount",
+    "SERVICE_START_TIME": "Service Start Time",
+    "DESCRIPTION": "Description",
+    "NOT_SPECIFIED": "Not specified",
+    "WHAT_WOULD_YOU_LIKE": "What would you like to do?",
+    "GET_REFUND": "Get Refund",
+    "REFUND_SUBTITLE": "Receive your money back",
+    "NEW_CRAFTSMAN": "Select New Craftsman",
+    "NEW_CRAFTSMAN_SUBTITLE": "Find another craftsman for your service",
+    "REFUND_CONFIRM_TITLE": "Confirm Refund",
+    "REFUND_CONFIRM_TEXT": "Are you sure you want to get a refund? The amount will be returned to your original payment method.",
+    "YES_REFUND": "Yes, Get Refund",
+    "CANCEL": "Cancel",
+    "REFUND_SUCCESS_TITLE": "Refund Processed!",
+    "REFUND_SUCCESS_TEXT": "Your refund has been processed. It will appear in your account within 5-10 business days.",
+    "REFUND_FAILED": "Refund Failed",
+    "NEW_CRAFTSMAN_CONFIRM_TITLE": "Select New Craftsman",
+    "NEW_CRAFTSMAN_CONFIRM_TEXT": "Would you like to keep your payment and select a new craftsman for this service?",
+    "YES_NEW_CRAFTSMAN": "Yes, Find New Craftsman",
+    "NEW_CRAFTSMAN_SUCCESS_TITLE": "Request Updated!",
+    "NEW_CRAFTSMAN_SUCCESS_TEXT": "You can now select a new craftsman for your service.",
+    "NEW_CRAFTSMAN_FAILED": "Failed to Update Request"
   }
 }

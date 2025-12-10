@@ -126,6 +126,11 @@
   color: var(--primary-gold);
 }
 
+:host-context([dir="rtl"]) .toggle-password {
+  right: auto;
+  left: 10px;
+}
+
 .error-message {
   color: #e74c3c;
   font-size: 0.875rem;

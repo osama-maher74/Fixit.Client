@@ -8,7 +8,10 @@ export enum NotificationType {
     PaymentRequested = 'PaymentRequested',
     ServiceRequestScheduled = 'ServiceRequestScheduled',
     WithdrawalRequested = 'WithdrawalRequested',
-    WithdrawalApproved = 'WithdrawalApproved'
+    WithdrawalApproved = 'WithdrawalApproved',
+    CraftsmanApologized = 'CraftsmanApologized',
+    ServiceCancelled = 'ServiceCancelled',
+    CraftsmanNoShow = 'CraftsmanNoShow'
 }
 
 export interface ReadNotificationDto {

@@ -43,11 +43,11 @@ export class CraftsmanRequestsComponent implements OnInit {
                     next: (data) => {
                         console.log('Service requests loaded:', data);
                         this.requests = data;
-                        // Filter to show only InProgress (6) and Completed (7) requests
+                        // Filter to show InProgress (6), Completed (7), and Cancelled (9, 10) requests
                         // Status comes as enum number from backend
                         this.filteredRequests = this.requests.filter(req => {
                             const status = typeof req.status === 'number' ? req.status : parseInt(req.status as any);
-                            return status === 6 || status === 7; // 6 = InProgress, 7 = Completed
+                            return status === 6 || status === 7 || status === 9 || status === 10; // 6 = InProgress, 7 = Completed, 9 = Cancelled, 10 = CancelledDueToNonPayment
                         });
                         this.loading = false;
                     },
