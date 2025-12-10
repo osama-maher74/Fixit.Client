@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ServiceRequestService, ServiceRequestResponse } from '../../services/service-request.service';
 import { ReviewService, CreateReviewDTO, UpdateReviewDTO } from '../../services/review.service';
+import { ComplaintsService, ComplaintDTO } from '../../services/complaints.service';
 import { OfferService } from '../../services/offer.service';
 import { AuthService } from '../../services/auth.service';
 import { ContactService } from '../../services/contact.service';
@@ -24,6 +25,7 @@ export class RequestDetailsComponent implements OnInit {
     private router = inject(Router);
     private serviceRequestService = inject(ServiceRequestService);
     private reviewService = inject(ReviewService);
+    private complaintsService = inject(ComplaintsService);
     private offerService = inject(OfferService);
     private authService = inject(AuthService);
     private contactService = inject(ContactService);
@@ -42,6 +44,10 @@ export class RequestDetailsComponent implements OnInit {
     reviewComment = '';
     reviewId: number | null = null;
     submittingReview = false;
+
+    // Complaint properties
+    existingComplaints: ComplaintDTO[] = [];
+    loadingComplaint = false;
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
@@ -67,6 +73,9 @@ export class RequestDetailsComponent implements OnInit {
 
                 // Initialize review form if review exists
                 this.initializeReviewForm();
+
+                // Load existing complaint if any
+                this.loadComplaint(data.servicesRequestId || data.id || 0);
             },
             error: (err) => {
                 console.error('Failed to load request details:', err);
@@ -727,8 +736,159 @@ export class RequestDetailsComponent implements OnInit {
         }
     }
 
-    goToContactUs() {
-        this.router.navigate(['/contact-us']);
+    // Complaint
+    isSubmittingComplaint = false;
+
+    viewAllComplaints() {
+        if (!this.request) return;
+        const requestId = this.request.servicesRequestId || this.request.id;
+        if (requestId) {
+            this.router.navigate(['/request-details', requestId, 'complaints']);
+        }
+    }
+
+    loadComplaint(requestId: number) {
+        if (!this.request) return;
+
+        const userId = this.isCraftsman()
+            ? (this.request.craftsManId || 0)
+            : (this.request.clientId || 0);
+
+        if (!userId) {
+            console.warn('User ID not available for loading complaints');
+            return;
+        }
+
+        this.loadingComplaint = true;
+        this.complaintsService.getComplaintsByServiceRequest(requestId, userId, this.isCraftsman()).subscribe({
+            next: (data) => {
+                console.log('Complaints loaded:', data);
+                // Sort by date descending so the first item is the newest
+                this.existingComplaints = (data || []).sort((a, b) =>
+                    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                );
+                this.loadingComplaint = false;
+            },
+            error: (err) => {
+                console.log('No existing complaints or error loading:', err);
+                this.existingComplaints = [];
+                this.loadingComplaint = false;
+            }
+        });
+    }
+
+    openComplaintModal() {
+        if (!this.request) return;
+
+        Swal.fire({
+            title: `<h3 style="color: #d4af37; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif;">${this.translate.instant('REQUEST_DETAILS.HAVING_PROBLEM')}</h3>`,
+            background: '#ffffff',
+            color: '#374151',
+            html: `
+                <div style="direction: ${this.translate.currentLang === 'ar' ? 'rtl' : 'ltr'};">
+                    <p style="color: #6b7280; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                        ${this.translate.instant('REQUEST_DETAILS.COMPLAINT_DESCRIPTION')}
+                    </p>
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                        <label for="complaint-content" style="display: block; font-weight: 700; margin-bottom: 1rem; color: #d4af37; text-align: center; font-size: 1rem;">
+                            ${this.translate.instant('REQUEST_DETAILS.COMPLAINT_LABEL')}
+                        </label>
+                        <textarea
+                            id="complaint-content"
+                            class="swal2-textarea"
+                            placeholder="${this.translate.instant('REQUEST_DETAILS.COMPLAINT_PLACEHOLDER')}"
+                            style="
+                                margin: 0 !important;
+                                width: 100% !important;
+                                min-height: 140px;
+                                padding: 1rem;
+                                background: #ffffff;
+                                border: 1px solid #cbd5e1;
+                                border-radius: 12px;
+                                font-size: 0.95rem;
+                                font-family: inherit;
+                                resize: vertical;
+                                color: #334155;
+                                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+                                transition: all 0.2s ease;
+                            "
+                            onfocus="this.style.borderColor='#d4af37'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)';"
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='0 1px 2px 0 rgba(0, 0, 0, 0.05)';"
+                        ></textarea>
+                    </div>
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: this.translate.instant('REQUEST_DETAILS.SUBMIT'),
+            cancelButtonText: this.translate.instant('REQUEST_DETAILS.CANCEL'),
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#94a3b8',
+            width: '32rem',
+            padding: '2rem',
+            customClass: {
+                popup: 'premium-modal-popup',
+                confirmButton: 'premium-modal-confirm',
+                cancelButton: 'premium-modal-cancel'
+            },
+            preConfirm: () => {
+                const contentTextarea = document.getElementById('complaint-content') as HTMLTextAreaElement;
+                const content = contentTextarea?.value.trim();
+
+                if (!content) {
+                    Swal.showValidationMessage(this.translate.instant('REQUEST_DETAILS.COMPLAINT_REQUIRED'));
+                    return false;
+                }
+                return content;
+            }
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                this.submitComplaint(result.value);
+            }
+        });
+    }
+
+    private submitComplaint(content: string) {
+        if (!this.request) return;
+
+        const requestId = this.request.servicesRequestId || this.request.id;
+        if (!requestId) return;
+
+        this.isSubmittingComplaint = true;
+
+        const complaintDto = {
+            serviceRequestId: requestId,
+            clientId: this.request.clientId || 0,
+            craftsManId: this.request.craftsManId || 0,
+            content: content
+        };
+
+        this.complaintsService.createComplaint(complaintDto, this.isCraftsman()).subscribe({
+            next: (response) => {
+                console.log('Complaint submitted successfully:', response);
+                this.isSubmittingComplaint = false;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: this.translate.instant('REQUEST_DETAILS.COMPLAINT_SUBMITTED'),
+                    text: this.translate.instant('REQUEST_DETAILS.COMPLAINT_SUBMITTED_MESSAGE'),
+                    confirmButtonColor: '#d4af37'
+                }).then(() => {
+                    // Navigate to complaints list
+                    this.router.navigate(['/request-details', requestId, 'complaints']);
+                });
+            },
+            error: (err) => {
+                console.error('Failed to submit complaint:', err);
+                this.isSubmittingComplaint = false;
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: err.error?.message || this.translate.instant('ERROR_DEFAULT'),
+                    confirmButtonColor: '#d4af37'
+                });
+            }
+        });
     }
 
     /**
@@ -766,7 +926,7 @@ export class RequestDetailsComponent implements OnInit {
                     serviceRequestId: requestId!,
                     reason: result.value || undefined
                 }).subscribe({
-                    next: (response) => {
+                    next: (response: any) => {
                         this.apologizing = false;
                         Swal.fire({
                             icon: 'success',
@@ -776,7 +936,7 @@ export class RequestDetailsComponent implements OnInit {
                         });
                         this.loadRequestDetails(requestId!);
                     },
-                    error: (err) => {
+                    error: (err: any) => {
                         this.apologizing = false;
                         Swal.fire({
                             icon: 'error',
@@ -787,271 +947,6 @@ export class RequestDetailsComponent implements OnInit {
                     }
                 });
             }
-        });
-    }
-
-    /**
-     * Opens the problem dialog for the client to report issues with the service
-     * Options: Craftsman didn't show up (reschedule or cancel+refund) or Cancel service request
-     */
-    openProblemDialog() {
-        if (!this.request || !this.isInProgress()) return;
-
-        Swal.fire({
-            title: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.TITLE'),
-            text: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.SUBTITLE'),
-            icon: 'question',
-            showCancelButton: true,
-            showDenyButton: true,
-            confirmButtonText: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.CRAFTSMAN_NO_SHOW'),
-            denyButtonText: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.CANCEL_SERVICE'),
-            cancelButtonText: this.translate.instant('REQUEST_DETAILS.CANCEL'),
-            confirmButtonColor: '#f59e0b',
-            denyButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Craftsman didn't show up - show sub-options
-                this.showCraftsmanNoShowOptions();
-            } else if (result.isDenied) {
-                // Want to cancel the service request
-                this.showCancellationForm('cancel_request');
-            }
-        });
-    }
-
-    /**
-     * Shows options when craftsman didn't show up: Reschedule or Cancel+Refund
-     */
-    private showCraftsmanNoShowOptions() {
-        Swal.fire({
-            title: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.NO_SHOW_TITLE'),
-            text: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.NO_SHOW_SUBTITLE'),
-            icon: 'warning',
-            showCancelButton: true,
-            showDenyButton: true,
-            confirmButtonText: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.RESCHEDULE'),
-            denyButtonText: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.CANCEL_AND_REFUND'),
-            cancelButtonText: this.translate.instant('REQUEST_DETAILS.CANCEL'),
-            confirmButtonColor: '#10b981',
-            denyButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Reschedule - redirect to appointment scheduling page
-                this.navigateToReschedule();
-            } else if (result.isDenied) {
-                // Cancel and refund - show cancellation form
-                this.showCancellationForm('craftsman_no_show');
-            }
-        });
-    }
-
-    /**
-     * Navigates to the appointment scheduling page for rescheduling
-     */
-    private navigateToReschedule() {
-        if (!this.request) return;
-
-        // Check if serviceId exists
-        if (!this.request.serviceId) {
-            Swal.fire({
-                icon: 'error',
-                title: this.translate.instant('REQUEST_DETAILS.MISSING_SERVICE_ID_TITLE'),
-                text: this.translate.instant('REQUEST_DETAILS.MISSING_SERVICE_ID_MESSAGE'),
-                confirmButtonColor: '#d4af37'
-            });
-            return;
-        }
-
-        const queryParams = {
-            craftsmanId: this.request.craftsManId,
-            serviceRequestId: this.request.servicesRequestId || this.request.id,
-            serviceId: this.request.serviceId,
-            duration: 120,
-            location: this.request.location,
-            serviceName: this.request.serviceName,
-            isEdit: true  // Edit mode - reschedule
-        };
-
-        this.router.navigate(['/appointment-scheduling'], { queryParams });
-    }
-
-    /**
-     * Shows the cancellation form for collecting reason and contact info
-     * @param reason 'craftsman_no_show' or 'cancel_request'
-     */
-    private showCancellationForm(reason: 'craftsman_no_show' | 'cancel_request') {
-        const user = this.authService.getCurrentUser();
-
-        const reasonTitle = reason === 'craftsman_no_show'
-            ? this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.REASON_NO_SHOW')
-            : this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.REASON_CANCEL');
-
-        Swal.fire({
-            title: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.CANCELLATION_FORM_TITLE'),
-            html: `
-                <div style="text-align: left; padding: 1rem;">
-                    <div style="margin-bottom: 1rem; padding: 0.75rem; background-color: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
-                        <p style="margin: 0; color: #92400e; font-size: 0.875rem;">
-                            <strong>${this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.REASON_LABEL')}:</strong> ${reasonTitle}
-                        </p>
-                    </div>
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #374151;">
-                            ${this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.FULL_NAME')} <span style="color: #ef4444;">*</span>
-                        </label>
-                        <input
-                            type="text"
-                            id="cancel-fullname"
-                            class="swal2-input"
-                            value="${user?.fName || ''} ${user?.lName || ''}"
-                            placeholder="${this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.FULL_NAME_PLACEHOLDER')}"
-                            style="width: 100%; margin: 0; padding: 0.75rem; border: 2px solid #E5E7EB; border-radius: 8px;"
-                        >
-                    </div>
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #374151;">
-                            ${this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.EMAIL')} <span style="color: #ef4444;">*</span>
-                        </label>
-                        <input
-                            type="email"
-                            id="cancel-email"
-                            class="swal2-input"
-                            value="${user?.email || ''}"
-                            placeholder="${this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.EMAIL_PLACEHOLDER')}"
-                            style="width: 100%; margin: 0; padding: 0.75rem; border: 2px solid #E5E7EB; border-radius: 8px;"
-                        >
-                    </div>
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #374151;">
-                            ${this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.PHONE')}
-                        </label>
-                        <input
-                            type="tel"
-                            id="cancel-phone"
-                            class="swal2-input"
-                            placeholder="${this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.PHONE_PLACEHOLDER')}"
-                            style="width: 100%; margin: 0; padding: 0.75rem; border: 2px solid #E5E7EB; border-radius: 8px;"
-                        >
-                    </div>
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #374151;">
-                            ${this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.CANCELLATION_REASON')} <span style="color: #ef4444;">*</span>
-                        </label>
-                        <textarea
-                            id="cancel-message"
-                            class="swal2-textarea"
-                            placeholder="${this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.CANCELLATION_REASON_PLACEHOLDER')}"
-                            style="width: 100%; min-height: 100px; margin: 0; padding: 0.75rem; border: 2px solid #E5E7EB; border-radius: 8px; resize: vertical;"
-                        ></textarea>
-                    </div>
-                </div>
-            `,
-            showCancelButton: true,
-            confirmButtonText: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.SUBMIT_CANCELLATION'),
-            cancelButtonText: this.translate.instant('REQUEST_DETAILS.CANCEL'),
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280',
-            preConfirm: () => {
-                const fullName = (document.getElementById('cancel-fullname') as HTMLInputElement)?.value?.trim();
-                const email = (document.getElementById('cancel-email') as HTMLInputElement)?.value?.trim();
-                const phone = (document.getElementById('cancel-phone') as HTMLInputElement)?.value?.trim();
-                const message = (document.getElementById('cancel-message') as HTMLTextAreaElement)?.value?.trim();
-
-                if (!fullName) {
-                    Swal.showValidationMessage(this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.VALIDATION_NAME_REQUIRED'));
-                    return false;
-                }
-                if (!email) {
-                    Swal.showValidationMessage(this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.VALIDATION_EMAIL_REQUIRED'));
-                    return false;
-                }
-                if (!message) {
-                    Swal.showValidationMessage(this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.VALIDATION_REASON_REQUIRED'));
-                    return false;
-                }
-
-                return { fullName, email, phone, message, reason };
-            }
-        }).then((result) => {
-            if (result.isConfirmed && result.value) {
-                this.submitCancellationRequest(result.value);
-            }
-        });
-    }
-
-    /**
-     * Submits the cancellation request to the backend
-     */
-    private submitCancellationRequest(data: { fullName: string; email: string; phone: string; message: string; reason: string }) {
-        if (!this.request) return;
-
-        const requestId = this.request.servicesRequestId || this.request.id;
-
-        if (!requestId) {
-            Swal.fire({
-                icon: 'error',
-                title: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.SUBMISSION_FAILED'),
-                text: this.translate.instant('REQUEST_DETAILS.INVALID_REQUEST_ID'),
-                confirmButtonColor: '#d4af37'
-            });
-            return;
-        }
-
-        // Show loading state
-        Swal.fire({
-            title: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.SUBMITTING'),
-            text: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.PLEASE_WAIT'),
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
-        // Call the cancel endpoint which updates status and sends notifications
-        this.serviceRequestService.cancelServiceRequestWithReason(requestId, {
-            reason: data.message,
-            reasonType: data.reason as 'craftsman_no_show' | 'cancel_request',
-            clientName: data.fullName,
-            clientEmail: data.email,
-            clientPhone: data.phone || undefined
-        }).subscribe({
-            next: () => {
-                // Show success message
-                this.showCancellationSuccess();
-            },
-            error: (err) => {
-                console.error('Failed to cancel service request:', err);
-                Swal.fire({
-                    icon: 'error',
-                    title: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.SUBMISSION_FAILED'),
-                    text: err.error?.message || err.error || this.translate.instant('ERROR_DEFAULT'),
-                    confirmButtonColor: '#d4af37'
-                });
-            }
-        });
-    }
-
-    /**
-     * Shows success message after cancellation
-     */
-    private showCancellationSuccess() {
-        Swal.fire({
-            icon: 'success',
-            title: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.SUCCESS_TITLE'),
-            html: `
-                <p>${this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.SUCCESS_MESSAGE')}</p>
-                <p style="margin-top: 1rem; font-size: 0.875rem; color: #6B7280;">
-                    ${this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.REFUND_NOTE')}
-                </p>
-            `,
-            confirmButtonText: this.translate.instant('REQUEST_DETAILS.PROBLEM_DIALOG.OK'),
-            confirmButtonColor: '#d4af37'
-        }).then(() => {
-            // Navigate back to requests page
-            this.goBack();
         });
     }
 }

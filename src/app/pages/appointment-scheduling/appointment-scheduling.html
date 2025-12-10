@@ -127,7 +127,7 @@
             </svg>
             <h3>{{ 'APPOINTMENT_SCHEDULING.REVIEWS_TITLE' | translate }}</h3>
             <div class="reviews-stats" *ngIf="averageRating && averageRating.averageRating != null">
-                <span class="avg-rating">{{ averageRating.averageRating?.toFixed(1) || '0.0' }}</span>
+                <span class="avg-rating">{{ averageRating.averageRating.toFixed(1) || '0.0' }}</span>
                 <div class="stars">
                     <span *ngFor="let filled of getStarsArray(Math.round(averageRating.averageRating || 0))"
                         class="star" [class.filled]="filled">★</span>

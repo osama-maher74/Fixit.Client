@@ -135,6 +135,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'request-details/:id/complaints',
+    loadComponent: () => import('./pages/complaints-list/complaints-list').then(m => m.ComplaintsList),
+    canActivate: [authGuard]
+  },
+  {
     path: 'about-us',
     loadComponent: () => import('./pages/about-us/about-us.component').then(m => m.AboutUsComponent)
   },

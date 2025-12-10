@@ -1,0 +1,69 @@
+<div class="complaints-container">
+    <div class="header">
+        <button class="btn-back" (click)="goBack()">
+            <span class="back-icon">←</span>
+            {{ 'REQUEST_DETAILS.BACK_TO_REQUEST' | translate }}
+        </button>
+        <h1 class="page-title">{{ 'REQUEST_DETAILS.MY_COMPLAINTS' | translate }}</h1>
+    </div>
+
+    <!-- Loading State -->
+    @if (loading) {
+    <div class="loading-state">
+        <div class="spinner"></div>
+        <p>{{ 'COMMON.LOADING' | translate }}</p>
+    </div>
+    }
+
+    <!-- Error State -->
+    @if (error && !loading) {
+    <div class="error-state">
+        <span class="error-icon">⚠️</span>
+        <p>{{ error }}</p>
+        <button class="btn-retry" (click)="loadComplaints(serviceRequestId)">
+            {{ 'REQUEST_DETAILS.RETRY' | translate }}
+        </button>
+    </div>
+    }
+
+    <!-- Empty State -->
+    @if (!loading && !error && complaints.length === 0) {
+    <div class="empty-state">
+        <span class="empty-icon">✓</span>
+        <p>{{ 'REQUEST_DETAILS.NO_COMPLAINTS_FOUND' | translate }}</p>
+    </div>
+    }
+
+    <!-- Complaints List -->
+    @if (!loading && !error && complaints.length > 0) {
+    <div class="complaints-list">
+        @for (complaint of complaints; track complaint.id) {
+        <div class="complaint-card" [class.solved]="complaint.status === 'Solved'">
+            <div class="card-header">
+                <span class="status-badge" [class.pending]="complaint.status === 'Pending'"
+                    [class.solved]="complaint.status === 'Solved'">
+                    {{ complaint.status === 'Solved' ? ('REQUEST_DETAILS.COMPLAINT_SOLVED' | translate) :
+                    ('REQUEST_DETAILS.COMPLAINT_PENDING' | translate) }}
+                </span>
+                <span class="date">{{ formatDateShort(complaint.createdAt) }}</span>
+            </div>
+
+            <div class="card-content">
+                <p class="content-text">{{ complaint.content }}</p>
+            </div>
+
+            @if (complaint.adminResponse) {
+            <div class="admin-response">
+                <div class="response-header">
+                    <span class="admin-icon">🛡️</span>
+                    <span class="response-title">{{ 'REQUEST_DETAILS.ADMIN_RESPONSE' | translate }}</span>
+                    <span class="response-date">{{ formatDateShort(complaint.respondedAt) }}</span>
+                </div>
+                <p class="response-text">{{ complaint.adminResponse }}</p>
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+</div>

@@ -32,6 +32,8 @@
                 <div class="title-row">
                     <h1 class="request-title">{{ request.serviceName || ('REQUEST_DETAILS.SERVICE_REQUEST' | translate)
                         }}</h1>
+                    <h1 class="request-title">{{ request.serviceName || ('REQUEST_DETAILS.SERVICE_REQUEST' | translate)
+                        }}</h1>
                     <span class="request-id">#{{ request.servicesRequestId || request.id }}</span>
                 </div>
                 <div class="status-badge" [ngClass]="getStatusClass(request.status)">
@@ -74,6 +76,8 @@
                     <div class="detail-label">
                         <span class="detail-icon">📍</span>
                         <span>{{ 'REQUEST_DETAILS.LOCATION' | translate }}</span>
+                    </div>
+                    <div class="detail-value">{{ request.location || ('REQUEST_DETAILS.NOT_SPECIFIED' | translate) }}
                     </div>
                     <div class="detail-value">{{ request.location || ('REQUEST_DETAILS.NOT_SPECIFIED' | translate) }}
                     </div>
@@ -166,7 +170,49 @@
                 </h2>
                 <p class="description-text">{{ request.description || ('REQUEST_DETAILS.NO_DESCRIPTION' | translate) }}
                 </p>
+                <p class="description-text">{{ request.description || ('REQUEST_DETAILS.NO_DESCRIPTION' | translate) }}
+                </p>
             </div>
+
+            <!-- Complaint Section (Display existing complaints) -->
+            @if (existingComplaints && existingComplaints.length > 0) {
+            <div class="complaint-section">
+                <h2 class="section-title">
+                    <span class="section-icon">⚠️</span>
+                    {{ 'REQUEST_DETAILS.MY_COMPLAINTS' | translate }}
+                    @if (existingComplaints.length > 1) {
+                    <span class="complaint-count">({{ existingComplaints.length }})</span>
+                    }
+                </h2>
+                <div class="complaint-status-card" [class.solved]="existingComplaints[0].status === 'Solved'"
+                    [class.pending]="existingComplaints[0].status === 'Pending'">
+                    <div class="status-header">
+                        <span class="status-badge">
+                            {{ existingComplaints[0].status === 'Solved' ? ('REQUEST_DETAILS.COMPLAINT_SOLVED' |
+                            translate)
+                            : ('REQUEST_DETAILS.COMPLAINT_PENDING' | translate) }}
+                        </span>
+                        <span class="complaint-date">{{ formatDateShort(existingComplaints[0].createdAt) }}</span>
+                    </div>
+                    <p class="complaint-content"><strong>{{ 'REQUEST_DETAILS.COMPLAINT_LABEL' | translate }}:</strong>
+                        {{ existingComplaints[0].content }}</p>
+                    @if (existingComplaints[0].adminResponse) {
+                    <div class="admin-response">
+                        <p class="response-label"><strong>{{ 'REQUEST_DETAILS.ADMIN_RESPONSE' | translate }}:</strong>
+                        </p>
+                        <p class="response-content">{{ existingComplaints[0].adminResponse }}</p>
+                        <span class="response-date">{{ formatDateShort(existingComplaints[0].respondedAt) }}</span>
+                    </div>
+                    }
+                </div>
+                @if (existingComplaints.length > 1) {
+                <button class="btn-view-all-complaints" (click)="viewAllComplaints()">
+                    <span class="icon">📂</span>
+                    {{ 'REQUEST_DETAILS.VIEW_ALL_COMPLAINTS' | translate }} ({{ existingComplaints.length }})
+                </button>
+                }
+            </div>
+            }
 
             <!-- Review Section (Display existing review) -->
             @if (request.reviewRatingValue || request.reviewComment) {
@@ -257,8 +303,8 @@
                     }
                 </button>
                 }
-                @if (isInProgress() && !isCraftsman()) {
-                <button class="btn-problem" (click)="openProblemDialog()">
+                @if (isInProgress() || isCompleted()) {
+                <button class="btn-problem" (click)="openComplaintModal()">
                     <span>⚠️ {{ 'REQUEST_DETAILS.HAVING_PROBLEM' | translate }}</span>
                 </button>
                 }
