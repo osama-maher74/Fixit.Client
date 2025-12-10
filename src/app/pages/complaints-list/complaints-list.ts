@@ -41,7 +41,7 @@ export class ComplaintsList implements OnInit {
 
     isCraftsman(): boolean {
         const user = this.authService.getCurrentUser();
-        return user?.role === 'Craftsman';
+        return user?.role?.toLowerCase() === 'craftsman';
     }
 
     loadComplaints(requestId: number) {
@@ -62,7 +62,9 @@ export class ComplaintsList implements OnInit {
                 this.complaintsService.getComplaintsByServiceRequest(requestId, userId, this.isCraftsman())
                     .subscribe({
                         next: (data) => {
-                            this.complaints = data || [];
+                            this.complaints = (data || []).sort((a, b) =>
+                                new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                            );
                             this.loading = false;
                         },
                         error: (err) => {

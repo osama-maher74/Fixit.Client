@@ -763,7 +763,10 @@ export class RequestDetailsComponent implements OnInit {
         this.complaintsService.getComplaintsByServiceRequest(requestId, userId, this.isCraftsman()).subscribe({
             next: (data) => {
                 console.log('Complaints loaded:', data);
-                this.existingComplaints = data || [];
+                // Sort by date descending so the first item is the newest
+                this.existingComplaints = (data || []).sort((a, b) =>
+                    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                );
                 this.loadingComplaint = false;
             },
             error: (err) => {

@@ -245,8 +245,6 @@
                     <span class="section-icon">{{ hasExistingReview() ? '✏️' : '➕' }}</span>
                     {{ hasExistingReview() ? ('REQUEST_DETAILS.EDIT_REVIEW' | translate) : ('REQUEST_DETAILS.ADD_REVIEW'
                     | translate) }}
-                    {{ hasExistingReview() ? ('REQUEST_DETAILS.EDIT_REVIEW' | translate) : ('REQUEST_DETAILS.ADD_REVIEW'
-                    | translate) }}
                 </h2>
 
                 <div class="review-form">
@@ -268,8 +266,6 @@
                     <div class="form-group">
                         <label for="review-comment-input" class="form-label">{{ 'REQUEST_DETAILS.COMMENT' | translate
                             }}</label>
-                        <label for="review-comment-input" class="form-label">{{ 'REQUEST_DETAILS.COMMENT' | translate
-                            }}</label>
                         <textarea id="review-comment-input" class="form-textarea" [(ngModel)]="reviewComment"
                             [placeholder]="'REQUEST_DETAILS.COMMENT_PLACEHOLDER' | translate" rows="4"></textarea>
                     </div>
@@ -280,11 +276,7 @@
                         <span class="spinner-small"></span>
                         <span>{{ hasExistingReview() ? ('REQUEST_DETAILS.UPDATING' | translate) :
                             ('REQUEST_DETAILS.SUBMITTING' | translate) }}</span>
-                        <span>{{ hasExistingReview() ? ('REQUEST_DETAILS.UPDATING' | translate) :
-                            ('REQUEST_DETAILS.SUBMITTING' | translate) }}</span>
                         } @else {
-                        <span>{{ hasExistingReview() ? ('✓ ' + ('REQUEST_DETAILS.UPDATE_REVIEW' | translate)) : ('✓ ' +
-                            ('REQUEST_DETAILS.SUBMIT_REVIEW' | translate)) }}</span>
                         <span>{{ hasExistingReview() ? ('✓ ' + ('REQUEST_DETAILS.UPDATE_REVIEW' | translate)) : ('✓ ' +
                             ('REQUEST_DETAILS.SUBMIT_REVIEW' | translate)) }}</span>
                         }
