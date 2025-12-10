@@ -522,6 +522,13 @@ export class AppointmentSchedulingComponent implements OnInit {
     }
 
     goBack(): void {
+        // In edit mode, go back to the service request details
+        if (this.isEditMode && this.serviceRequestId) {
+            this.router.navigate(['/request-details', this.serviceRequestId]);
+            return;
+        }
+
+        // In new booking mode, go back to craftsmen list
         this.router.navigate(['/craftsmen-list'], {
             queryParams: {
                 location: this.location,
