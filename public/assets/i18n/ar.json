@@ -681,7 +681,22 @@
     "COMMENT_REQUIRED": "التعليق مطلوب",
     "COMMENT_REQUIRED_MESSAGE": "يرجى إضافة تعليق لتقييمك",
     "INVALID_REQUEST_ID": "معرف الطلب غير صحيح",
-    "HAVING_PROBLEM": "هل تواجه مشكلة؟"
+    "HAVING_PROBLEM": "هل تواجه مشكلة؟",
+    "COMPLAINT_DESCRIPTION": "يرجى وصف المشكلة التي تواجهها مع طلب الخدمة هذا. سنقوم بمراجعتها والرد عليك.",
+    "COMPLAINT_LABEL": "وصف المشكلة",
+    "COMPLAINT_PLACEHOLDER": "أدخل تفاصيل مشكلتك هنا...",
+    "SUBMIT": "إرسال",
+    "COMPLAINT_REQUIRED": "يرجى تقديم تفاصيل مشكلتك",
+    "COMPLAINT_SUBMITTED": "تم تقديم الشكوى",
+    "COMPLAINT_SUBMITTED_MESSAGE": "لقد تلقينا شكواك وسيتم النظر فيها قريباً.",
+    "MY_COMPLAINTS": "شكاواي",
+    "VIEW_ALL_COMPLAINTS": "عرض جميع الشكاوى",
+    "BACK_TO_REQUEST": "العودة للطلب",
+    "NO_COMPLAINTS_FOUND": "لا توجد شكاوى لهذا الطلب.",
+    "RETRY": "إعادة المحاولة",
+    "COMPLAINT_SOLVED": "تم الحل",
+    "COMPLAINT_PENDING": "قيد الانتظار",
+    "ADMIN_RESPONSE": "رد المشرف"
   },
   "SERVICES": {
     "SERVICE_NAMES": {

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ServiceRequestService, ServiceRequestResponse } from '../../services/service-request.service';
 import { ReviewService, CreateReviewDTO, UpdateReviewDTO } from '../../services/review.service';
+import { ComplaintsService, ComplaintDTO } from '../../services/complaints.service';
 import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
 import Swal from 'sweetalert2';
@@ -21,6 +22,7 @@ export class RequestDetailsComponent implements OnInit {
     private router = inject(Router);
     private serviceRequestService = inject(ServiceRequestService);
     private reviewService = inject(ReviewService);
+    private complaintsService = inject(ComplaintsService);
     private authService = inject(AuthService);
     private translate = inject(TranslateService);
 
@@ -35,6 +37,10 @@ export class RequestDetailsComponent implements OnInit {
     reviewComment = '';
     reviewId: number | null = null;
     submittingReview = false;
+
+    // Complaint properties
+    existingComplaints: ComplaintDTO[] = [];
+    loadingComplaint = false;
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
@@ -60,6 +66,9 @@ export class RequestDetailsComponent implements OnInit {
 
                 // Initialize review form if review exists
                 this.initializeReviewForm();
+
+                // Load existing complaint if any
+                this.loadComplaint(data.servicesRequestId || data.id || 0);
             },
             error: (err) => {
                 console.error('Failed to load request details:', err);
@@ -706,7 +715,155 @@ export class RequestDetailsComponent implements OnInit {
         }
     }
 
-    goToContactUs() {
-        this.router.navigate(['/contact-us']);
+    // Complaint
+    isSubmittingComplaint = false;
+
+    viewAllComplaints() {
+        if (!this.request) return;
+        const requestId = this.request.servicesRequestId || this.request.id;
+        if (requestId) {
+            this.router.navigate(['/request-details', requestId, 'complaints']);
+        }
+    }
+
+    loadComplaint(requestId: number) {
+        if (!this.request) return;
+
+        const userId = this.isCraftsman()
+            ? (this.request.craftsManId || 0)
+            : (this.request.clientId || 0);
+
+        if (!userId) {
+            console.warn('User ID not available for loading complaints');
+            return;
+        }
+
+        this.loadingComplaint = true;
+        this.complaintsService.getComplaintsByServiceRequest(requestId, userId, this.isCraftsman()).subscribe({
+            next: (data) => {
+                console.log('Complaints loaded:', data);
+                this.existingComplaints = data || [];
+                this.loadingComplaint = false;
+            },
+            error: (err) => {
+                console.log('No existing complaints or error loading:', err);
+                this.existingComplaints = [];
+                this.loadingComplaint = false;
+            }
+        });
+    }
+
+    openComplaintModal() {
+        if (!this.request) return;
+
+        Swal.fire({
+            title: `<h3 style="color: #d4af37; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif;">${this.translate.instant('REQUEST_DETAILS.HAVING_PROBLEM')}</h3>`,
+            background: '#ffffff',
+            color: '#374151',
+            html: `
+                <div style="direction: ${this.translate.currentLang === 'ar' ? 'rtl' : 'ltr'};">
+                    <p style="color: #6b7280; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                        ${this.translate.instant('REQUEST_DETAILS.COMPLAINT_DESCRIPTION')}
+                    </p>
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                        <label for="complaint-content" style="display: block; font-weight: 700; margin-bottom: 1rem; color: #d4af37; text-align: center; font-size: 1rem;">
+                            ${this.translate.instant('REQUEST_DETAILS.COMPLAINT_LABEL')}
+                        </label>
+                        <textarea
+                            id="complaint-content"
+                            class="swal2-textarea"
+                            placeholder="${this.translate.instant('REQUEST_DETAILS.COMPLAINT_PLACEHOLDER')}"
+                            style="
+                                margin: 0 !important;
+                                width: 100% !important;
+                                min-height: 140px;
+                                padding: 1rem;
+                                background: #ffffff;
+                                border: 1px solid #cbd5e1;
+                                border-radius: 12px;
+                                font-size: 0.95rem;
+                                font-family: inherit;
+                                resize: vertical;
+                                color: #334155;
+                                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+                                transition: all 0.2s ease;
+                            "
+                            onfocus="this.style.borderColor='#d4af37'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)';"
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='0 1px 2px 0 rgba(0, 0, 0, 0.05)';"
+                        ></textarea>
+                    </div>
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: this.translate.instant('REQUEST_DETAILS.SUBMIT'),
+            cancelButtonText: this.translate.instant('REQUEST_DETAILS.CANCEL'),
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#94a3b8',
+            width: '32rem',
+            padding: '2rem',
+            customClass: {
+                popup: 'premium-modal-popup',
+                confirmButton: 'premium-modal-confirm',
+                cancelButton: 'premium-modal-cancel'
+            },
+            preConfirm: () => {
+                const contentTextarea = document.getElementById('complaint-content') as HTMLTextAreaElement;
+                const content = contentTextarea?.value.trim();
+
+                if (!content) {
+                    Swal.showValidationMessage(this.translate.instant('REQUEST_DETAILS.COMPLAINT_REQUIRED'));
+                    return false;
+                }
+                return content;
+            }
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                this.submitComplaint(result.value);
+            }
+        });
+    }
+
+    private submitComplaint(content: string) {
+        if (!this.request) return;
+
+        const requestId = this.request.servicesRequestId || this.request.id;
+        if (!requestId) return;
+
+        this.isSubmittingComplaint = true;
+
+        const complaintDto = {
+            serviceRequestId: requestId,
+            clientId: this.request.clientId || 0,
+            craftsManId: this.request.craftsManId || 0,
+            content: content
+        };
+
+        this.complaintsService.createComplaint(complaintDto, this.isCraftsman()).subscribe({
+            next: (response) => {
+                console.log('Complaint submitted successfully:', response);
+                this.isSubmittingComplaint = false;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: this.translate.instant('REQUEST_DETAILS.COMPLAINT_SUBMITTED'),
+                    text: this.translate.instant('REQUEST_DETAILS.COMPLAINT_SUBMITTED_MESSAGE'),
+                    confirmButtonColor: '#d4af37'
+                }).then(() => {
+                    // Navigate to complaints list
+                    this.router.navigate(['/request-details', requestId, 'complaints']);
+                });
+            },
+            error: (err) => {
+                console.error('Failed to submit complaint:', err);
+                this.isSubmittingComplaint = false;
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: err.error?.message || this.translate.instant('ERROR_DEFAULT'),
+                    confirmButtonColor: '#d4af37'
+                });
+            }
+        });
     }
 }

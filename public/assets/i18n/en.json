@@ -702,7 +702,22 @@
     "COMMENT_REQUIRED": "Comment Required",
     "COMMENT_REQUIRED_MESSAGE": "Please provide a comment for your review",
     "INVALID_REQUEST_ID": "Invalid request ID",
-    "HAVING_PROBLEM": "Having a problem?"
+    "HAVING_PROBLEM": "Having a problem?",
+    "COMPLAINT_DESCRIPTION": "Please describe the problem you are facing with this service request. We will review it and get back to you.",
+    "COMPLAINT_LABEL": "Describe the problem",
+    "COMPLAINT_PLACEHOLDER": "Enter the details of your problem here...",
+    "SUBMIT": "Submit",
+    "COMPLAINT_REQUIRED": "Please provide the details of your problem",
+    "COMPLAINT_SUBMITTED": "Complaint Submitted",
+    "COMPLAINT_SUBMITTED_MESSAGE": "We have received your complaint and will look into it shortly.",
+    "MY_COMPLAINTS": "My Complaints",
+    "VIEW_ALL_COMPLAINTS": "View All Complaints",
+    "BACK_TO_REQUEST": "Back to Request",
+    "NO_COMPLAINTS_FOUND": "No complaints found.",
+    "RETRY": "Retry",
+    "COMPLAINT_SOLVED": "Solved",
+    "COMPLAINT_PENDING": "Pending",
+    "ADMIN_RESPONSE": "Admin Response"
   },
   "SERVICES": {
     "SERVICE_NAMES": {
