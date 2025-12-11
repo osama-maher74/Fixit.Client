@@ -32,6 +32,14 @@ export const routes: Routes = [
     canActivate: [loginGuard]
   },
   {
+    path: 'check-email',
+    loadComponent: () => import('./pages/check-email/check-email.component').then(m => m.CheckEmailComponent)
+  },
+  {
+    path: 'verify-email',
+    loadComponent: () => import('./pages/verify-email/verify-email.component').then(m => m.VerifyEmailComponent)
+  },
+  {
     path: 'admin/dashboard',
     loadComponent: () => import('./pages/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard),
     canActivate: [adminOnlyGuard]

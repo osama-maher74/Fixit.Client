@@ -3,6 +3,13 @@
     <h2>{{ 'LOGIN.TITLE' | translate }}</h2>
     <p class="subtitle">{{ 'LOGIN.SUBTITLE' | translate }}</p>
 
+    <!-- Email Verification Message -->
+    @if (verificationMessage()) {
+      <div class="verification-alert" [class.success]="verificationSuccess()" [class.error]="!verificationSuccess()">
+        {{ verificationMessage() }}
+      </div>
+    }
+
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="email">{{ 'LOGIN.EMAIL' | translate }}</label>

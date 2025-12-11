@@ -59,11 +59,10 @@ export class AuthService {
 
     console.log('Sending client registration JSON:', payload);
 
+    // No auto-login - user must verify email first
     return this.http.post<AuthResponse>(
       `${environment.apiUrl}/Account/register/client`,
       payload
-    ).pipe(
-      tap(response => this.handleAuthResponse(response))
     );
   }
 
@@ -90,11 +89,10 @@ export class AuthService {
 
     console.log('Sending craftsman registration JSON:', payload);
 
+    // No auto-login - user must verify email first
     return this.http.post<AuthResponse>(
       `${environment.apiUrl}/Account/register/craftsman`,
       payload
-    ).pipe(
-      tap(response => this.handleAuthResponse(response))
     );
   }
 
@@ -108,6 +106,13 @@ export class AuthService {
   resetPassword(data: any): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(
       `${environment.apiUrl}/Account/reset-password`,
+      data
+    );
+  }
+
+  verifyEmail(data: { email: string; token: string }): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${environment.apiUrl}/Account/verify-email`,
       data
     );
   }
