@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
@@ -15,7 +15,7 @@ import { LoginRequest } from '../../models/auth.models';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private notificationService = inject(NotificationService);
@@ -27,11 +27,51 @@ export class LoginComponent {
   loginForm: FormGroup;
   isLoading = signal(false);
   showPassword = signal(false);
+  verificationMessage = signal<string | null>(null);
+  verificationSuccess = signal(false);
 
   constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
+
+  ngOnInit(): void {
+    // Check if user came from email verification link
+    this.route.queryParams.subscribe(params => {
+      const email = params['email'];
+      const token = params['token'];
+      const action = params['action'];
+
+      if (action === 'verify' && email && token) {
+        this.handleEmailVerification(email, token);
+      }
+    });
+  }
+
+  private handleEmailVerification(email: string, token: string): void {
+    this.isLoading.set(true);
+
+    this.authService.verifyEmail({ email, token }).subscribe({
+      next: (response) => {
+        this.isLoading.set(false);
+        this.verificationSuccess.set(true);
+        this.verificationMessage.set('✅ Email verified successfully! You can now login.');
+
+        // Pre-fill email in login form
+        this.loginForm.patchValue({ email });
+
+        // Show success toast
+        this.toastService.success('Email verified! Please login with your password.');
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.verificationSuccess.set(false);
+        const errorMsg = error.error?.message || error.error?.title || 'Verification failed. The link may be invalid or expired.';
+        this.verificationMessage.set('❌ ' + errorMsg);
+        this.toastService.error(errorMsg);
+      }
     });
   }
 

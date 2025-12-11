@@ -118,19 +118,23 @@ export class RegisterClientComponent {
       this.authService.registerClient(payload).subscribe({
         next: (response) => {
           this.isLoading.set(false);
-          this.successMessage.set(this.translate.instant('REGISTER_CLIENT.SUCCESS_MESSAGE'));
+          this.successMessage.set('Registration successful! Please check your email to verify your account.');
 
-          // Start SignalR connection after successful registration
-          this.notificationService.reconnectSignalR();
-
+          // Redirect to check-email page (no auto-login)
           setTimeout(() => {
-            this.router.navigate(['/']);
+            this.router.navigate(['/check-email']);
           }, 2000);
         },
         error: (error) => {
           this.isLoading.set(false);
           console.error('Client registration error:', error);
-          this.errorMessage.set(error.message || this.translate.instant('REGISTER_CLIENT.ERROR_DEFAULT'));
+
+          // Extract error message from different possible locations
+          const errorMsg = error.error?.message ||
+            error.error?.title ||
+            error.message ||
+            this.translate.instant('REGISTER_CLIENT.ERROR_DEFAULT');
+          this.errorMessage.set(errorMsg);
         }
       });
     } else {
