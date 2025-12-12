@@ -67,6 +67,9 @@
           @if (email?.errors?.['email']) {
           <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.EMAIL_INVALID' | translate }}</span>
           }
+          @if (email?.errors?.['notGmail']) {
+          <span>{{ 'REGISTER_CRAFTSMAN.VALIDATION.EMAIL_MUST_BE_GMAIL' | translate }}</span>
+          }
         </div>
         }
       </div>

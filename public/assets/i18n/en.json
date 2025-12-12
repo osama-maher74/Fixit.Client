@@ -213,6 +213,7 @@
       "LAST_NAME_MIN_LENGTH": "Minimum 2 characters required",
       "EMAIL_REQUIRED": "Email is required",
       "EMAIL_INVALID": "Please enter a valid email",
+      "EMAIL_MUST_BE_GMAIL": "Email must be a valid Gmail address (ending with @gmail.com)",
       "PASSWORD_REQUIRED": "Password is required",
       "PASSWORD_MIN_LENGTH": "Minimum 8 characters required",
       "PASSWORD_STRENGTH": "Must contain uppercase, lowercase, and number",
@@ -267,6 +268,7 @@
       "LAST_NAME_MIN_LENGTH": "Minimum 2 characters required",
       "EMAIL_REQUIRED": "Email is required",
       "EMAIL_INVALID": "Please enter a valid email",
+      "EMAIL_MUST_BE_GMAIL": "Email must be a valid Gmail address (ending with @gmail.com)",
       "PASSWORD_REQUIRED": "Password is required",
       "PASSWORD_MIN_LENGTH": "Minimum 8 characters required",
       "PASSWORD_STRENGTH": "Must contain uppercase, lowercase, and number",
@@ -919,10 +921,9 @@
     "TYPE_SERVICE_SCHEDULED": "Service Scheduled",
     "TYPE_WITHDRAWAL_REQUESTED": "Withdrawal Requested",
     "TYPE_WITHDRAWAL_APPROVED": "Withdrawal Approved",
-       "TYPE_SERVICE_CANCELLED": "Service Cancelled",
+    "TYPE_SERVICE_CANCELLED": "Service Cancelled",
     "TYPE_CRAFTSMAN_NO_SHOW": "Craftsman No-Show",
     "TYPE_CRAFTSMAN_APOLOGIZED": "Craftsman Cancelled Service",
-
     "ALERTS": {
       "OFFER_REJECTED_TITLE": "Offer Rejected",
       "OFFER_REJECTED_TEXT": "The client has rejected your offer.",
