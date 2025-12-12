@@ -36,6 +36,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/check-email/check-email.component').then(m => m.CheckEmailComponent)
   },
   {
+    path: 'resend-verification',
+    loadComponent: () => import('./pages/resend-verification/resend-verification.component').then(m => m.ResendVerificationComponent)
+  },
+  {
     path: 'verify-email',
     loadComponent: () => import('./pages/verify-email/verify-email.component').then(m => m.VerifyEmailComponent)
   },
