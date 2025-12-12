@@ -4,6 +4,17 @@
         <p class="page-subtitle">{{ 'CRAFTSMAN_REQUESTS.SUBTITLE' | translate }}</p>
     </div>
 
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <label for="statusFilter" class="filter-label">{{ 'CRAFTSMAN_REQUESTS.STATUS_LABEL' | translate }}:</label>
+        <select id="statusFilter" [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="filter-select">
+            <option value="All">{{ 'MY_REQUESTS.ALL' | translate }}</option>
+            @for (status of statuses; track status) {
+            <option [value]="status">{{ getStatusDisplayName(status) }}</option>
+            }
+        </select>
+    </div>
+
     <!-- Loading State -->
     @if (loading) {
     <div class="loading-container">

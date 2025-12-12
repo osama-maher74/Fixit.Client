@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ServiceRequestService, ServiceRequestResponse } from '../../services/service-request.service';
 import { CraftsmanService } from '../../services/craftsman.service';
@@ -10,7 +11,7 @@ import { environment } from '../../../environments/environment';
 @Component({
     selector: 'app-craftsman-requests',
     standalone: true,
-    imports: [CommonModule, TranslateModule],
+    imports: [CommonModule, TranslateModule, FormsModule],
     templateUrl: './craftsman-requests.component.html',
     styleUrl: './craftsman-requests.component.css'
 })
@@ -23,11 +24,52 @@ export class CraftsmanRequestsComponent implements OnInit {
 
     requests: ServiceRequestResponse[] = [];
     filteredRequests: ServiceRequestResponse[] = [];
+    statuses: string[] = [];
+    selectedStatus: string = 'All';
+
     loading = true;
     error: string | null = null;
     apiUrl = environment.apiUrl;
 
+    // Enum mapping for parsing API strings
+    statusEnumStr: { [key: string]: number } = {
+        'Pending': 0,
+        'WaitingForCraftsmanResponse': 1,
+        'WaitingForClientDecision': 2,
+        'WaitingForClientPayment': 3,
+        'RejectedByCraftsman': 4,
+        'RejectedByClient': 5,
+        'InProgress': 6,
+        'Completed': 7,
+        'Approved': 8,
+        'Cancelled': 9,
+        'CancelledDueToNonPayment': 10,
+        'CancelledByCraftsman': 11
+    };
+
     ngOnInit() {
+        this.loadStatuses();
+        this.loadCraftsmanRequests();
+    }
+
+    getStatusDisplayName(statusName: string): string {
+        const val = this.statusEnumStr[statusName];
+        if (val !== undefined) {
+            return this.getStatusText(val);
+        }
+        return statusName;
+    }
+
+    loadStatuses() {
+        this.serviceRequestService.getServiceRequestStatuses().subscribe({
+            next: (data) => {
+                this.statuses = data;
+            },
+            error: (err) => console.error('Failed to load statuses', err)
+        });
+    }
+
+    onStatusChange() {
         this.loadCraftsmanRequests();
     }
 
@@ -39,21 +81,33 @@ export class CraftsmanRequestsComponent implements OnInit {
         this.craftsmanService.getCurrentUserProfile().subscribe({
             next: (craftsman) => {
                 console.log('Craftsman profile loaded:', craftsman);
-                this.serviceRequestService.getAllServiceRequestsForCraftsmanById(craftsman.id).subscribe({
+
+                let requestObservable;
+                if (this.selectedStatus && this.selectedStatus !== 'All') {
+                    requestObservable = this.serviceRequestService.getRequestsByCraftsmanAndStatus(craftsman.id, this.selectedStatus);
+                } else {
+                    requestObservable = this.serviceRequestService.getAllServiceRequestsForCraftsmanById(craftsman.id);
+                }
+
+                requestObservable.subscribe({
                     next: (data) => {
                         console.log('Service requests loaded:', data);
                         this.requests = data;
-                        // Filter to show InProgress (6), Completed (7), and Cancelled (9, 10) requests
-                        // Status comes as enum number from backend
-                        this.filteredRequests = this.requests.filter(req => {
-                            const status = typeof req.status === 'number' ? req.status : parseInt(req.status as any);
-                            return status === 6 || status === 7 || status === 9 || status === 10; // 6 = InProgress, 7 = Completed, 9 = Cancelled, 10 = CancelledDueToNonPayment
-                        });
+                        // For consistency, if filtered by server, just show all.
+                        // If 'All' is selected, we show all (removing previous specific filtering for in-progress etc)
+                        this.filteredRequests = this.requests;
                         this.loading = false;
                     },
                     error: (err) => {
                         console.error('Failed to load service requests:', err);
-                        this.error = this.translate.instant('CRAFTSMAN_REQUESTS.ERROR_LOAD_REQUESTS');
+                        // If 404, it means no requests found. Treat as empty success.
+                        if (err.status === 404) {
+                            this.requests = [];
+                            this.filteredRequests = [];
+                            this.error = null;
+                        } else {
+                            this.error = this.translate.instant('CRAFTSMAN_REQUESTS.ERROR_LOAD_REQUESTS');
+                        }
                         this.loading = false;
                     }
                 });
@@ -159,13 +213,14 @@ export class CraftsmanRequestsComponent implements OnInit {
             1: 'MY_REQUESTS.WAITING_FOR_RESPONSE',
             2: 'MY_REQUESTS.WAITING_FOR_DECISION',
             3: 'MY_REQUESTS.WAITING_FOR_PAYMENT',
-            4: 'MY_REQUESTS.REJECTED',
-            5: 'MY_REQUESTS.REJECTED',
+            4: 'MY_REQUESTS.REJECTED_BY_CRAFTSMAN',
+            5: 'MY_REQUESTS.REJECTED_BY_CLIENT',
             6: 'MY_REQUESTS.IN_PROGRESS',
             7: 'MY_REQUESTS.COMPLETED',
             8: 'MY_REQUESTS.APPROVED',
             9: 'MY_REQUESTS.CANCELLED',
-            10: 'MY_REQUESTS.CANCELLED'
+            10: 'MY_REQUESTS.CANCELLED_DUE_TO_NON_PAYMENT',
+            11: 'MY_REQUESTS.CANCELLED_BY_CRAFTSMAN'
         };
 
         return this.translate.instant(statusNames[statusNum] || 'MY_REQUESTS.UNKNOWN');
