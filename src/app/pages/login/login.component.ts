@@ -85,27 +85,24 @@ export class LoginComponent implements OnInit {
         console.log('Error body:', error.error);
         console.log('Specific error code:', error.error?.error);
 
-        // Check for specific error types
-        // Also check if message contains "expired" as a fallback
-        const isExpired = (error.status === 400 && error.error?.error === 'TokenExpired') ||
-          (error.error?.message?.toLowerCase().includes('expired')) ||
-          (error.error?.title?.toLowerCase().includes('expired'));
-
-        if (isExpired) {
-          // Token expired - show resend option
-          console.log('✅ Detected Expired Token condition');
+        // Based on backend code:
+        // return BadRequest(new { success = false, error = "TokenExpired", ... })
+        if (error.status === 400 && error.error?.error === 'TokenExpired') {
+          console.log('✅ Detected TokenExpired from backend');
           this.isTokenExpired.set(true);
-          // Try to get email from error object, otherwise use the one from query params
-          const errorEmail = error.error?.email;
-          if (errorEmail) {
-            this.userEmail.set(errorEmail);
+
+          // Backend sends: email = result.Email
+          if (error.error.email) {
+            this.userEmail.set(error.error.email);
           }
+
           this.verificationMessage.set(this.translate.instant('VERIFY_EMAIL.TOKEN_EXPIRED_MESSAGE'));
-        } else if (error.status === 404) {
-          // User not found
+        }
+        else if (error.status === 404 || (error.error?.error === 'UserNotFound')) {
           this.verificationMessage.set(this.translate.instant('VERIFY_EMAIL.USER_NOT_FOUND'));
           this.toastService.error(this.translate.instant('VERIFY_EMAIL.USER_NOT_FOUND'));
-        } else {
+        }
+        else {
           // Other errors
           const errorMsg = error.error?.message || this.translate.instant('VERIFY_EMAIL.VERIFICATION_FAILED');
           this.verificationMessage.set(errorMsg);
