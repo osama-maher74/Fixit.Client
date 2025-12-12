@@ -29,6 +29,9 @@ export class LoginComponent implements OnInit {
   showPassword = signal(false);
   verificationMessage = signal<string | null>(null);
   verificationSuccess = signal(false);
+  isTokenExpired = signal(false);
+  userEmail = signal<string | null>(null);
+  resendingEmail = signal(false);
 
   constructor() {
     this.loginForm = this.fb.group({
@@ -52,25 +55,81 @@ export class LoginComponent implements OnInit {
 
   private handleEmailVerification(email: string, token: string): void {
     this.isLoading.set(true);
+    this.userEmail.set(email);
 
     this.authService.verifyEmail({ email, token }).subscribe({
       next: (response) => {
         this.isLoading.set(false);
-        this.verificationSuccess.set(true);
-        this.verificationMessage.set('✅ Email verified successfully! You can now login.');
+
+        // Check if already verified
+        if (response.alreadyVerified) {
+          this.verificationSuccess.set(true);
+          this.verificationMessage.set(this.translate.instant('VERIFY_EMAIL.ALREADY_VERIFIED'));
+          this.toastService.info(this.translate.instant('VERIFY_EMAIL.ALREADY_VERIFIED'));
+        } else {
+          this.verificationSuccess.set(true);
+          this.verificationMessage.set(this.translate.instant('VERIFY_EMAIL.SUCCESS'));
+          this.toastService.success(this.translate.instant('VERIFY_EMAIL.SUCCESS'));
+        }
 
         // Pre-fill email in login form
         this.loginForm.patchValue({ email });
-
-        // Show success toast
-        this.toastService.success('Email verified! Please login with your password.');
+        this.isTokenExpired.set(false);
       },
       error: (error) => {
         this.isLoading.set(false);
         this.verificationSuccess.set(false);
-        const errorMsg = error.error?.message || error.error?.title || 'Verification failed. The link may be invalid or expired.';
-        this.verificationMessage.set('❌ ' + errorMsg);
-        this.toastService.error(errorMsg);
+
+        // Check for specific error types
+        if (error.status === 400 && error.error?.error === 'TokenExpired') {
+          // Token expired - show resend option
+          this.isTokenExpired.set(true);
+          this.userEmail.set(error.error.email || email);
+          this.verificationMessage.set(this.translate.instant('VERIFY_EMAIL.TOKEN_EXPIRED_MESSAGE'));
+        } else if (error.status === 404) {
+          // User not found
+          this.verificationMessage.set(this.translate.instant('VERIFY_EMAIL.USER_NOT_FOUND'));
+          this.toastService.error(this.translate.instant('VERIFY_EMAIL.USER_NOT_FOUND'));
+        } else {
+          // Other errors
+          const errorMsg = error.error?.message || this.translate.instant('VERIFY_EMAIL.VERIFICATION_FAILED');
+          this.verificationMessage.set(errorMsg);
+          this.toastService.error(errorMsg);
+        }
+      }
+    });
+  }
+
+  resendVerificationEmail(): void {
+    const email = this.userEmail();
+    if (!email) {
+      this.toastService.error('Email address not found');
+      return;
+    }
+
+    this.resendingEmail.set(true);
+
+    this.authService.resendVerificationEmail(email).subscribe({
+      next: (response) => {
+        this.resendingEmail.set(false);
+        this.isTokenExpired.set(false);
+        this.verificationSuccess.set(true);
+        this.verificationMessage.set(this.translate.instant('VERIFY_EMAIL.RESEND_SUCCESS'));
+        this.toastService.success(this.translate.instant('VERIFY_EMAIL.RESEND_SUCCESS'));
+      },
+      error: (error) => {
+        this.resendingEmail.set(false);
+
+        // Check if email was verified in the meantime
+        if (error.status === 400 && error.error?.message?.includes('already verified')) {
+          this.isTokenExpired.set(false);
+          this.verificationSuccess.set(true);
+          this.verificationMessage.set(this.translate.instant('VERIFY_EMAIL.ALREADY_VERIFIED'));
+          this.toastService.info(this.translate.instant('VERIFY_EMAIL.ALREADY_VERIFIED'));
+        } else {
+          const errorMsg = error.error?.message || this.translate.instant('VERIFY_EMAIL.RESEND_ERROR');
+          this.toastService.error(errorMsg);
+        }
       }
     });
   }

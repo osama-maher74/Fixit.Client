@@ -117,6 +117,13 @@ export class AuthService {
     );
   }
 
+  resendVerificationEmail(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${environment.apiUrl}/Account/resend-verification-email`,
+      { email }
+    );
+  }
+
   logout(): void {
     // Disconnect SignalR before clearing auth data
     if (this.notificationService) {
