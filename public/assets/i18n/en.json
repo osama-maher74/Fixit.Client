@@ -163,6 +163,17 @@
     },
     "FORGOT_PASSWORD": "Forgot Password?"
   },
+  "VERIFY_EMAIL": {
+    "SUCCESS": "✅ Email verified successfully! You can now login.",
+    "ALREADY_VERIFIED": "✅ Your email is already verified. Please login below.",
+    "TOKEN_EXPIRED_MESSAGE": "⏰ Your verification link has expired. Click the button below to receive a new verification email.",
+    "USER_NOT_FOUND": "❌ User not found. Please register again.",
+    "VERIFICATION_FAILED": "❌ Email verification failed. The link may be invalid.",
+    "RESEND_BUTTON": "Resend Verification Email",
+    "RESENDING": "Sending...",
+    "RESEND_SUCCESS": "✅ New verification email sent successfully! Please check your inbox and spam folder.",
+    "RESEND_ERROR": "❌ Failed to resend verification email. Please try again later."
+  },
   "FORGOT_PASSWORD": {
     "TITLE": "Forgot Password",
     "SUBTITLE": "Enter your email to receive a password reset link",
