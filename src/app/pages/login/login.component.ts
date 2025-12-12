@@ -80,11 +80,26 @@ export class LoginComponent implements OnInit {
         this.isLoading.set(false);
         this.verificationSuccess.set(false);
 
+        console.log('========== VERIFICATION ERROR ==========');
+        console.log('Error status:', error.status);
+        console.log('Error body:', error.error);
+        console.log('Specific error code:', error.error?.error);
+
         // Check for specific error types
-        if (error.status === 400 && error.error?.error === 'TokenExpired') {
+        // Also check if message contains "expired" as a fallback
+        const isExpired = (error.status === 400 && error.error?.error === 'TokenExpired') ||
+          (error.error?.message?.toLowerCase().includes('expired')) ||
+          (error.error?.title?.toLowerCase().includes('expired'));
+
+        if (isExpired) {
           // Token expired - show resend option
+          console.log('✅ Detected Expired Token condition');
           this.isTokenExpired.set(true);
-          this.userEmail.set(error.error.email || email);
+          // Try to get email from error object, otherwise use the one from query params
+          const errorEmail = error.error?.email;
+          if (errorEmail) {
+            this.userEmail.set(errorEmail);
+          }
           this.verificationMessage.set(this.translate.instant('VERIFY_EMAIL.TOKEN_EXPIRED_MESSAGE'));
         } else if (error.status === 404) {
           // User not found
