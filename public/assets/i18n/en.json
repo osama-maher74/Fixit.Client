@@ -589,6 +589,7 @@
   "MY_REQUESTS": {
     "TITLE": "My Service Requests",
     "SUBTITLE": "View and manage your service requests",
+    "STATUS_LABEL": "Status",
     "LOADING": "Loading your requests...",
     "TRY_AGAIN": "Try Again",
     "NO_REQUESTS_TITLE": "No Requests Yet",
@@ -604,11 +605,17 @@
     "COMPLETED": "Completed",
     "APPROVED": "Approved",
     "CANCELLED": "Cancelled",
-    "CANCELLED_BY_CRAFTSMAN": "Cancelled by Craftsman"
+    "CANCELLED_DUE_TO_NON_PAYMENT": "Cancelled (Non-Payment)",
+    "CANCELLED_BY_CRAFTSMAN": "Cancelled by Craftsman",
+    "CANCELLED_BY_CLIENT": "Cancelled by Client",
+    "REJECTED_BY_CRAFTSMAN": "Rejected by Craftsman",
+    "REJECTED_BY_CLIENT": "Rejected by Client",
+    "ALL": "All Requests"
   },
   "CRAFTSMAN_REQUESTS": {
     "TITLE": "My Service Requests",
     "SUBTITLE": "View your in progress and completed service requests",
+    "STATUS_LABEL": "Status",
     "LOADING": "Loading your requests...",
     "TRY_AGAIN": "Try Again",
     "NO_REQUESTS_TITLE": "No Requests Found",
@@ -635,7 +642,11 @@
     "STATUS_WAITING_PAYMENT": "Waiting for Payment",
     "STATUS_IN_PROGRESS": "In Progress",
     "STATUS_COMPLETED": "Completed",
+    "STATUS_APPROVED": "Approved",
+    "STATUS_REJECTED_CRAFTSMAN": "Rejected by Craftsman",
+    "STATUS_REJECTED_CLIENT": "Rejected by Client",
     "STATUS_CANCELLED": "Cancelled",
+    "STATUS_CANCELLED_PAYMENT": "Cancelled (Non-Payment)",
     "REQUESTS_FOUND": "requests found",
     "VIEW": "View",
     "TABLE": {
@@ -919,10 +930,9 @@
     "TYPE_SERVICE_SCHEDULED": "Service Scheduled",
     "TYPE_WITHDRAWAL_REQUESTED": "Withdrawal Requested",
     "TYPE_WITHDRAWAL_APPROVED": "Withdrawal Approved",
-       "TYPE_SERVICE_CANCELLED": "Service Cancelled",
+    "TYPE_SERVICE_CANCELLED": "Service Cancelled",
     "TYPE_CRAFTSMAN_NO_SHOW": "Craftsman No-Show",
     "TYPE_CRAFTSMAN_APOLOGIZED": "Craftsman Cancelled Service",
-
     "ALERTS": {
       "OFFER_REJECTED_TITLE": "Offer Rejected",
       "OFFER_REJECTED_TEXT": "The client has rejected your offer.",

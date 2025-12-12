@@ -10,24 +10,16 @@
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <input
-                type="text"
-                class="search-input"
-                [placeholder]="'ADMIN_REQUESTS.SEARCH_PLACEHOLDER' | translate"
-                (input)="onSearchChange($event)"
-            />
+            <input type="text" class="search-input" [placeholder]="'ADMIN_REQUESTS.SEARCH_PLACEHOLDER' | translate"
+                (input)="onSearchChange($event)" />
         </div>
 
         <div class="status-filter">
             <select class="filter-select" (change)="onStatusFilterChange($event)">
                 <option value="all">{{ 'ADMIN_REQUESTS.ALL_STATUSES' | translate }}</option>
-                <option value="0">{{ 'ADMIN_REQUESTS.STATUS_PENDING' | translate }}</option>
-                <option value="1">{{ 'ADMIN_REQUESTS.STATUS_WAITING_CRAFTSMAN' | translate }}</option>
-                <option value="2">{{ 'ADMIN_REQUESTS.STATUS_WAITING_CLIENT' | translate }}</option>
-                <option value="3">{{ 'ADMIN_REQUESTS.STATUS_WAITING_PAYMENT' | translate }}</option>
-                <option value="6">{{ 'ADMIN_REQUESTS.STATUS_IN_PROGRESS' | translate }}</option>
-                <option value="7">{{ 'ADMIN_REQUESTS.STATUS_COMPLETED' | translate }}</option>
-                <option value="9">{{ 'ADMIN_REQUESTS.STATUS_CANCELLED' | translate }}</option>
+                @for (status of statuses(); track status) {
+                <option [value]="status">{{ getStatusText(status) }}</option>
+                }
             </select>
         </div>
 
@@ -38,98 +30,102 @@
 
     <!-- Loading State -->
     @if (loading()) {
-        <div class="loading-container">
-            <div class="spinner"></div>
-            <p>{{ 'ADMIN_REQUESTS.LOADING' | translate }}</p>
-        </div>
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <p>{{ 'ADMIN_REQUESTS.LOADING' | translate }}</p>
+    </div>
     }
 
     <!-- Error State -->
     @if (error() && !loading()) {
-        <div class="error-container">
-            <div class="error-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-            </div>
-            <p class="error-message">{{ error() }}</p>
-            <button class="btn-retry" (click)="loadAllRequests()">{{ 'ADMIN_REQUESTS.TRY_AGAIN' | translate }}</button>
+    <div class="error-container">
+        <div class="error-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
         </div>
+        <p class="error-message">{{ error() }}</p>
+        <button class="btn-retry" (click)="loadAllRequests()">{{ 'ADMIN_REQUESTS.TRY_AGAIN' | translate }}</button>
+    </div>
     }
 
     <!-- Empty State -->
     @if (!loading() && !error() && filteredRequests().length === 0) {
-        <div class="empty-container">
-            <div class="empty-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-            </div>
-            <h2 class="empty-title">{{ 'ADMIN_REQUESTS.NO_REQUESTS_TITLE' | translate }}</h2>
-            <p class="empty-message">{{ 'ADMIN_REQUESTS.NO_REQUESTS_MESSAGE' | translate }}</p>
+    <div class="empty-container">
+        <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
         </div>
+        <h2 class="empty-title">{{ 'ADMIN_REQUESTS.NO_REQUESTS_TITLE' | translate }}</h2>
+        <p class="empty-message">{{ 'ADMIN_REQUESTS.NO_REQUESTS_MESSAGE' | translate }}</p>
+    </div>
     }
 
     <!-- Requests Table -->
     @if (!loading() && !error() && filteredRequests().length > 0) {
-        <div class="requests-table-container">
-            <table class="requests-table">
-                <thead>
-                    <tr>
-                        <th>{{ 'ADMIN_REQUESTS.TABLE.ID' | translate }}</th>
-                        <th>{{ 'ADMIN_REQUESTS.TABLE.SERVICE' | translate }}</th>
-                        <th>{{ 'ADMIN_REQUESTS.TABLE.CLIENT' | translate }}</th>
-                        <th>{{ 'ADMIN_REQUESTS.TABLE.CRAFTSMAN' | translate }}</th>
-                        <th>{{ 'ADMIN_REQUESTS.TABLE.LOCATION' | translate }}</th>
-                        <th>{{ 'ADMIN_REQUESTS.TABLE.DATE' | translate }}</th>
-                        <th>{{ 'ADMIN_REQUESTS.TABLE.AMOUNT' | translate }}</th>
-                        <th>{{ 'ADMIN_REQUESTS.TABLE.STATUS' | translate }}</th>
-                        <th>{{ 'ADMIN_REQUESTS.TABLE.ACTIONS' | translate }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (request of filteredRequests(); track request.servicesRequestId || request.id) {
-                        <tr class="request-row" (click)="viewRequestDetails(request)">
-                            <td class="id-cell">
-                                <span class="request-id">#{{ request.servicesRequestId || request.id }}</span>
-                            </td>
-                            <td class="service-cell">
-                                <div class="service-info">
-                                    <img [src]="getImageUrl(request)" [alt]="request.serviceName" class="service-image" />
-                                    <span class="service-name">{{ request.serviceName || 'N/A' }}</span>
-                                </div>
-                            </td>
-                            <td class="client-cell">{{ request.clientName || 'N/A' }}</td>
-                            <td class="craftsman-cell">{{ request.craftsManName || 'Not Assigned' }}</td>
-                            <td class="location-cell">{{ request.location || 'N/A' }}</td>
-                            <td class="date-cell">{{ formatDate(request.requestAt) }}</td>
-                            <td class="amount-cell">
-                                @if (request.totalAmount) {
-                                    <span class="amount">{{ request.totalAmount }} EGP</span>
-                                } @else if (request.suggestedPrice) {
-                                    <span class="suggested-price">{{ request.suggestedPrice }} EGP</span>
-                                } @else {
-                                    <span class="no-amount">-</span>
-                                }
-                            </td>
-                            <td class="status-cell">
-                                <span class="status-badge" [ngClass]="getStatusClass(request.status)">
-                                    {{ getStatusText(request.status) }}
-                                </span>
-                            </td>
-                            <td class="actions-cell">
-                                <button class="btn-view" (click)="viewRequestDetails(request); $event.stopPropagation()">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                    </svg>
-                                    {{ 'ADMIN_REQUESTS.VIEW' | translate }}
-                                </button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+    <div class="requests-table-container">
+        <table class="requests-table">
+            <thead>
+                <tr>
+                    <th>{{ 'ADMIN_REQUESTS.TABLE.ID' | translate }}</th>
+                    <th>{{ 'ADMIN_REQUESTS.TABLE.SERVICE' | translate }}</th>
+                    <th>{{ 'ADMIN_REQUESTS.TABLE.CLIENT' | translate }}</th>
+                    <th>{{ 'ADMIN_REQUESTS.TABLE.CRAFTSMAN' | translate }}</th>
+                    <th>{{ 'ADMIN_REQUESTS.TABLE.LOCATION' | translate }}</th>
+                    <th>{{ 'ADMIN_REQUESTS.TABLE.DATE' | translate }}</th>
+                    <th>{{ 'ADMIN_REQUESTS.TABLE.AMOUNT' | translate }}</th>
+                    <th>{{ 'ADMIN_REQUESTS.TABLE.STATUS' | translate }}</th>
+                    <th>{{ 'ADMIN_REQUESTS.TABLE.ACTIONS' | translate }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (request of filteredRequests(); track request.servicesRequestId || request.id) {
+                <tr class="request-row" (click)="viewRequestDetails(request)">
+                    <td class="id-cell">
+                        <span class="request-id">#{{ request.servicesRequestId || request.id }}</span>
+                    </td>
+                    <td class="service-cell">
+                        <div class="service-info">
+                            <img [src]="getImageUrl(request)" [alt]="request.serviceName" class="service-image" />
+                            <span class="service-name">{{ request.serviceName || 'N/A' }}</span>
+                        </div>
+                    </td>
+                    <td class="client-cell">{{ request.clientName || 'N/A' }}</td>
+                    <td class="craftsman-cell">{{ request.craftsManName || 'Not Assigned' }}</td>
+                    <td class="location-cell">{{ request.location || 'N/A' }}</td>
+                    <td class="date-cell">{{ formatDate(request.requestAt) }}</td>
+                    <td class="amount-cell">
+                        @if (request.totalAmount) {
+                        <span class="amount">{{ request.totalAmount }} EGP</span>
+                        } @else if (request.suggestedPrice) {
+                        <span class="suggested-price">{{ request.suggestedPrice }} EGP</span>
+                        } @else {
+                        <span class="no-amount">-</span>
+                        }
+                    </td>
+                    <td class="status-cell">
+                        <span class="status-badge" [ngClass]="getStatusClass(request.status)">
+                            {{ getStatusText(request.status) }}
+                        </span>
+                    </td>
+                    <td class="actions-cell">
+                        <button class="btn-view" (click)="viewRequestDetails(request); $event.stopPropagation()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            {{ 'ADMIN_REQUESTS.VIEW' | translate }}
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
     }
 </div>

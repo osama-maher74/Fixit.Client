@@ -20,16 +20,43 @@ export class AdminServiceRequestsComponent implements OnInit {
 
     requests = signal<ServiceRequestResponse[]>([]);
     filteredRequests = signal<ServiceRequestResponse[]>([]);
+    statuses = signal<string[]>([]);
     loading = signal<boolean>(true);
     error = signal<string | null>(null);
     apiUrl = environment.apiUrl;
+
+    // Enum mapping for filtering
+    statusEnum: { [key: string]: number } = {
+        'Pending': 0,
+        'WaitingForCraftsmanResponse': 1,
+        'WaitingForClientDecision': 2,
+        'WaitingForClientPayment': 3,
+        'RejectedByCraftsman': 4,
+        'RejectedByClient': 5,
+        'InProgress': 6,
+        'Completed': 7,
+        'Approved': 8,
+        'Cancelled': 9,
+        'CancelledDueToNonPayment': 10,
+        'CancelledByCraftsman': 11
+    };
 
     // Filter options
     statusFilter = signal<string>('all');
     searchQuery = signal<string>('');
 
     ngOnInit() {
+        this.loadStatuses();
         this.loadAllRequests();
+    }
+
+    loadStatuses() {
+        this.serviceRequestService.getServiceRequestStatuses().subscribe({
+            next: (data) => {
+                this.statuses.set(data);
+            },
+            error: (err) => console.error('Failed to load statuses', err)
+        });
     }
 
     loadAllRequests() {
@@ -45,7 +72,14 @@ export class AdminServiceRequestsComponent implements OnInit {
             },
             error: (err) => {
                 console.error('Failed to load service requests:', err);
-                this.error.set(this.translate.instant('ADMIN_REQUESTS.ERROR_LOADING'));
+                // If 404, it means no requests found. Treat as empty success.
+                if (err.status === 404) {
+                    this.requests.set([]);
+                    this.applyFilters(); // Updates filteredRequests
+                    this.error.set(null);
+                } else {
+                    this.error.set(this.translate.instant('ADMIN_REQUESTS.ERROR_LOADING'));
+                }
                 this.loading.set(false);
             }
         });
@@ -55,12 +89,18 @@ export class AdminServiceRequestsComponent implements OnInit {
         let filtered = [...this.requests()];
 
         // Apply status filter
+        // Apply status filter
         if (this.statusFilter() !== 'all') {
-            const statusNum = parseInt(this.statusFilter());
-            filtered = filtered.filter(req => {
-                const status = typeof req.status === 'number' ? req.status : parseInt(req.status as any);
-                return status === statusNum;
-            });
+            const selectedStatusName = this.statusFilter();
+            // Map the selected string name to the number
+            const targetStatusNum = this.statusEnum[selectedStatusName];
+
+            if (targetStatusNum !== undefined) {
+                filtered = filtered.filter(req => {
+                    const status = typeof req.status === 'number' ? req.status : parseInt(req.status as any);
+                    return status === targetStatusNum;
+                });
+            }
         }
 
         // Apply search filter
@@ -141,23 +181,37 @@ export class AdminServiceRequestsComponent implements OnInit {
     }
 
     getStatusText(status: string | number | undefined): string {
-        if (status === null || status === undefined) return 'Unknown';
-        const statusNum = typeof status === 'number' ? status : parseInt(status as any);
+        if (status === null || status === undefined) return this.translate.instant('ADMIN_REQUESTS.STATUS_UNKNOWN');
 
-        const statusTexts: { [key: number]: string } = {
-            0: 'Pending',
-            1: 'Waiting for Craftsman',
-            2: 'Waiting for Client',
-            3: 'Waiting for Payment',
-            4: 'Rejected by Craftsman',
-            5: 'Rejected by Client',
-            6: 'In Progress',
-            7: 'Completed',
-            8: 'Approved',
-            9: 'Cancelled',
-            10: 'Cancelled (No Payment)'
+        // If status is a string (e.g. from dropdown), try to map it to number first
+        let statusNum: number;
+        if (typeof status === 'string') {
+            if (!isNaN(parseInt(status))) {
+                statusNum = parseInt(status);
+            } else {
+                // Try mapping from name
+                const mapped = this.statusEnum[status];
+                statusNum = mapped !== undefined ? mapped : -1;
+            }
+        } else {
+            statusNum = status;
+        }
+
+        const statusKeys: { [key: number]: string } = {
+            0: 'ADMIN_REQUESTS.STATUS_PENDING',
+            1: 'ADMIN_REQUESTS.STATUS_WAITING_CRAFTSMAN',
+            2: 'ADMIN_REQUESTS.STATUS_WAITING_CLIENT',
+            3: 'ADMIN_REQUESTS.STATUS_WAITING_PAYMENT',
+            4: 'ADMIN_REQUESTS.STATUS_REJECTED_CRAFTSMAN',
+            5: 'ADMIN_REQUESTS.STATUS_REJECTED_CLIENT',
+            6: 'ADMIN_REQUESTS.STATUS_IN_PROGRESS',
+            7: 'ADMIN_REQUESTS.STATUS_COMPLETED',
+            8: 'ADMIN_REQUESTS.STATUS_APPROVED',
+            9: 'ADMIN_REQUESTS.STATUS_CANCELLED',
+            10: 'ADMIN_REQUESTS.STATUS_CANCELLED_PAYMENT'
         };
 
-        return statusTexts[statusNum] || 'Unknown';
+        const key = statusKeys[statusNum];
+        return key ? this.translate.instant(key) : this.translate.instant('ADMIN_REQUESTS.STATUS_UNKNOWN');
     }
 }

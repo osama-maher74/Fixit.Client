@@ -4,92 +4,101 @@
         <p class="page-subtitle">{{ 'MY_REQUESTS.SUBTITLE' | translate }}</p>
     </div>
 
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <label for="statusFilter" class="filter-label">{{ 'MY_REQUESTS.STATUS_LABEL' | translate }}:</label>
+        <select id="statusFilter" [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="filter-select">
+            <option value="All">{{ 'MY_REQUESTS.ALL' | translate }}</option>
+            @for (status of statuses; track status) {
+            <option [value]="status">{{ getStatusDisplayName(status) }}</option>
+            }
+        </select>
+    </div>
+
     <!-- Loading State -->
     @if (loading) {
-        <div class="loading-container">
-            <div class="spinner"></div>
-            <p>{{ 'MY_REQUESTS.LOADING' | translate }}</p>
-        </div>
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <p>{{ 'MY_REQUESTS.LOADING' | translate }}</p>
+    </div>
     }
 
     <!-- Error State -->
     @if (error && !loading) {
-        <div class="error-container">
-            <div class="error-icon">⚠️</div>
-            <p class="error-message">{{ error }}</p>
-            <button class="btn-retry" (click)="loadClientRequests()">{{ 'MY_REQUESTS.TRY_AGAIN' | translate }}</button>
-        </div>
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <p class="error-message">{{ error }}</p>
+        <button class="btn-retry" (click)="loadClientRequests()">{{ 'MY_REQUESTS.TRY_AGAIN' | translate }}</button>
+    </div>
     }
 
     <!-- Empty State -->
     @if (!loading && !error && filteredRequests.length === 0) {
-        <div class="empty-container">
-            <div class="empty-icon">📋</div>
-            <h2 class="empty-title">{{ 'MY_REQUESTS.NO_REQUESTS_TITLE' | translate }}</h2>
-            <p class="empty-message">{{ 'MY_REQUESTS.NO_REQUESTS_MESSAGE' | translate }}</p>
-        </div>
+    <div class="empty-container">
+        <div class="empty-icon">📋</div>
+        <h2 class="empty-title">{{ 'MY_REQUESTS.NO_REQUESTS_TITLE' | translate }}</h2>
+        <p class="empty-message">{{ 'MY_REQUESTS.NO_REQUESTS_MESSAGE' | translate }}</p>
+    </div>
     }
 
     <!-- Requests List -->
     @if (!loading && !error && filteredRequests.length > 0) {
-        <div class="requests-grid">
-            @for (request of filteredRequests; track request.servicesRequestId || request.id) {
-                <div class="request-card" (click)="viewRequestDetails(request)">
-                    <!-- Request Image -->
-                    <div class="request-image-container">
-                        <img
-                            [src]="getImageUrl(request)"
-                            [alt]="request.serviceName || 'Service'"
-                            class="request-image"
-                        />
-                        <div class="status-badge" [ngClass]="getStatusClass(request.status)">
-                            <span class="status-icon">{{ getStatusIcon(request.status) }}</span>
-                            <span class="status-text">{{ getStatusText(request.status) }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Request Info -->
-                    <div class="request-info">
-                        <h3 class="request-title">{{ request.serviceName || ('REQUEST_DETAILS.SERVICE_REQUEST' | translate) }}</h3>
-
-                        @if (request.craftsManName) {
-                            <div class="info-row">
-                                <span class="info-icon">👷</span>
-                                <span class="info-text">{{ request.craftsManName }}</span>
-                            </div>
-                        }
-
-                        <div class="info-row">
-                            <span class="info-icon">📍</span>
-                            <span class="info-text">{{ request.location || ('MY_REQUESTS.NO_LOCATION' | translate) }}</span>
-                        </div>
-
-                        <div class="info-row">
-                            <span class="info-icon">📅</span>
-                            <span class="info-text">{{ formatDate(request.requestAt) }}</span>
-                        </div>
-
-                        @if (request.totalAmount) {
-                            <div class="info-row price-row">
-                                <span class="info-icon">💰</span>
-                                <span class="price-text">{{ request.totalAmount }} EGP</span>
-                            </div>
-                        }
-
-                        @if (request.completedAt) {
-                            <div class="info-row">
-                                <span class="info-icon">✓</span>
-                                <span class="info-text completed-text">{{ 'MY_REQUESTS.COMPLETED' | translate }}: {{ formatDate(request.completedAt) }}</span>
-                            </div>
-                        }
-                    </div>
-
-                    <!-- Action Arrow -->
-                    <div class="action-arrow">
-                        <span>→</span>
-                    </div>
+    <div class="requests-grid">
+        @for (request of filteredRequests; track request.servicesRequestId || request.id) {
+        <div class="request-card" (click)="viewRequestDetails(request)">
+            <!-- Request Image -->
+            <div class="request-image-container">
+                <img [src]="getImageUrl(request)" [alt]="request.serviceName || 'Service'" class="request-image" />
+                <div class="status-badge" [ngClass]="getStatusClass(request.status)">
+                    <span class="status-icon">{{ getStatusIcon(request.status) }}</span>
+                    <span class="status-text">{{ getStatusText(request.status) }}</span>
                 </div>
-            }
+            </div>
+
+            <!-- Request Info -->
+            <div class="request-info">
+                <h3 class="request-title">{{ request.serviceName || ('REQUEST_DETAILS.SERVICE_REQUEST' | translate) }}
+                </h3>
+
+                @if (request.craftsManName) {
+                <div class="info-row">
+                    <span class="info-icon">👷</span>
+                    <span class="info-text">{{ request.craftsManName }}</span>
+                </div>
+                }
+
+                <div class="info-row">
+                    <span class="info-icon">📍</span>
+                    <span class="info-text">{{ request.location || ('MY_REQUESTS.NO_LOCATION' | translate) }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-icon">📅</span>
+                    <span class="info-text">{{ formatDate(request.requestAt) }}</span>
+                </div>
+
+                @if (request.totalAmount) {
+                <div class="info-row price-row">
+                    <span class="info-icon">💰</span>
+                    <span class="price-text">{{ request.totalAmount }} EGP</span>
+                </div>
+                }
+
+                @if (request.completedAt) {
+                <div class="info-row">
+                    <span class="info-icon">✓</span>
+                    <span class="info-text completed-text">{{ 'MY_REQUESTS.COMPLETED' | translate }}: {{
+                        formatDate(request.completedAt) }}</span>
+                </div>
+                }
+            </div>
+
+            <!-- Action Arrow -->
+            <div class="action-arrow">
+                <span>→</span>
+            </div>
         </div>
+        }
+    </div>
     }
 </div>
