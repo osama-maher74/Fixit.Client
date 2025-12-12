@@ -55,6 +55,11 @@ export const routes: Routes = [
     canActivate: [adminOnlyGuard]
   },
   {
+    path: 'admin/complaints',
+    loadComponent: () => import('./pages/admin-complaints/admin-complaints').then(m => m.AdminComplaints),
+    canActivate: [adminOnlyGuard]
+  },
+  {
     path: 'register/client',
     loadComponent: () => import('./pages/register-client/register-client.component').then(m => m.RegisterClientComponent)
   },

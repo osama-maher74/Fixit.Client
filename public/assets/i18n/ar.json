@@ -16,7 +16,8 @@
     "EDIT_PROFILE": "تعديل الملف الشخصي",
     "VERIFY_ID": "توثيق الهوية",
     "DASHBOARD": "لوحة التحكم",
-    "SERVICE_REQUESTS": "طلبات الخدمة"
+    "SERVICE_REQUESTS": "طلبات الخدمة",
+    "MANAGE_COMPLAINTS": "إدارة الشكاوى"
   },
   "CONTACT_US": {
     "TITLE": "اتصل بنا",
@@ -626,6 +627,43 @@
       "DATE": "التاريخ",
       "AMOUNT": "المبلغ",
       "STATUS": "الحالة",
+      "ACTIONS": "الإجراءات"
+    }
+  },
+  "ADMIN_COMPLAINTS": {
+    "TITLE": "إدارة الشكاوى",
+    "SUBTITLE": "عرض وإدارة جميع الشكاوى في النظام",
+    "LOADING": "جاري تحميل الشكاوى...",
+    "TRY_AGAIN": "حاول مرة أخرى",
+    "ERROR_LOADING": "فشل تحميل الشكاوى. يرجى المحاولة مرة أخرى.",
+    "NO_COMPLAINTS_TITLE": "لا توجد شكاوى",
+    "NO_COMPLAINTS_MESSAGE": "لا توجد شكاوى في النظام",
+    "SEARCH_PLACEHOLDER": "بحث بالمعرف، المحتوى، طلب الخدمة...",
+    "ALL_STATUSES": "جميع الحالات",
+    "STATUS_PENDING": "قيد الانتظار",
+    "STATUS_IN_PROGRESS": "قيد المعالجة",
+    "STATUS_RESOLVED": "تم الحل",
+    "STATUS_CLOSED": "مغلق",
+    "COMPLAINTS_FOUND": "شكوى موجودة",
+    "VIEW": "عرض",
+    "VIEW_SERVICE_REQUEST": "عرض طلب الخدمة",
+    "RESPOND": "الرد",
+    "RESPOND_TO_COMPLAINT": "الرد على الشكوى",
+    "COMPLAINT_ID": "معرف الشكوى",
+    "COMPLAINT_CONTENT": "محتوى الشكوى",
+    "YOUR_RESPONSE": "ردك",
+    "RESPONSE_PLACEHOLDER": "أدخل ردك على هذه الشكوى...",
+    "CANCEL": "إلغاء",
+    "SUBMIT_RESPONSE": "إرسال الرد",
+    "SUBMITTING": "جاري الإرسال...",
+    "TABLE": {
+      "ID": "المعرف",
+      "SERVICE_REQUEST": "طلب الخدمة",
+      "CLIENT_ID": "معرف العميل",
+      "CRAFTSMAN_ID": "معرف الحرفي",
+      "CONTENT": "المحتوى",
+      "STATUS": "الحالة",
+      "DATE": "التاريخ",
       "ACTIONS": "الإجراءات"
     }
   },

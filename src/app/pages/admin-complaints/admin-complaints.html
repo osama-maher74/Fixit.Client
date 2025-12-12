@@ -1,0 +1,178 @@
+<div class="admin-complaints-container">
+    <div class="page-header">
+        <h1 class="page-title">{{ 'ADMIN_COMPLAINTS.TITLE' | translate }}</h1>
+        <p class="page-subtitle">{{ 'ADMIN_COMPLAINTS.SUBTITLE' | translate }}</p>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" class="search-input" [placeholder]="'ADMIN_COMPLAINTS.SEARCH_PLACEHOLDER' | translate"
+                (input)="onSearchChange($event)" />
+        </div>
+
+        <div class="status-filter">
+            <select class="filter-select" [value]="statusFilter()" (change)="onStatusFilterChange($event)">
+                <option value="all">{{ 'ADMIN_COMPLAINTS.ALL_STATUSES' | translate }}</option>
+                <option value="Pending">Pending</option>
+                <option value="InProgress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+            </select>
+        </div>
+
+        <div class="results-count">
+            {{ filteredComplaints().length }} {{ 'ADMIN_COMPLAINTS.COMPLAINTS_FOUND' | translate }}
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (loading()) {
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <p>{{ 'ADMIN_COMPLAINTS.LOADING' | translate }}</p>
+    </div>
+    }
+
+    <!-- Error State -->
+    @if (error() && !loading()) {
+    <div class="error-container">
+        <div class="error-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+        </div>
+        <p class="error-message">{{ error() }}</p>
+        <button class="btn-retry" (click)="loadAllComplaints()">{{ 'ADMIN_COMPLAINTS.TRY_AGAIN' | translate }}</button>
+    </div>
+    }
+
+    <!-- Empty State -->
+    @if (!loading() && !error() && filteredComplaints().length === 0) {
+    <div class="empty-container">
+        <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+        </div>
+        <h2 class="empty-title">{{ 'ADMIN_COMPLAINTS.NO_COMPLAINTS_TITLE' | translate }}</h2>
+        <p class="empty-message">{{ 'ADMIN_COMPLAINTS.NO_COMPLAINTS_MESSAGE' | translate }}</p>
+    </div>
+    }
+
+    <!-- Complaints Table -->
+    @if (!loading() && !error() && filteredComplaints().length > 0) {
+    <div class="complaints-table-container">
+        <table class="complaints-table">
+            <thead>
+                <tr>
+                    <th>{{ 'ADMIN_COMPLAINTS.TABLE.ID' | translate }}</th>
+                    <th>{{ 'ADMIN_COMPLAINTS.TABLE.SERVICE_REQUEST' | translate }}</th>
+                    <th>{{ 'ADMIN_COMPLAINTS.TABLE.CLIENT_ID' | translate }}</th>
+                    <th>{{ 'ADMIN_COMPLAINTS.TABLE.CRAFTSMAN_ID' | translate }}</th>
+                    <th>{{ 'ADMIN_COMPLAINTS.TABLE.CONTENT' | translate }}</th>
+                    <th>{{ 'ADMIN_COMPLAINTS.TABLE.STATUS' | translate }}</th>
+                    <th>{{ 'ADMIN_COMPLAINTS.TABLE.DATE' | translate }}</th>
+                    <th>{{ 'ADMIN_COMPLAINTS.TABLE.ACTIONS' | translate }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (complaint of filteredComplaints(); track complaint.id) {
+                <tr class="complaint-row">
+                    <td class="id-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.ID' | translate">
+                        <span class="complaint-id">#{{ complaint.id }}</span>
+                    </td>
+                    <td class="request-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.SERVICE_REQUEST' | translate">
+                        <span class="request-id">#{{ complaint.serviceRequestId }}</span>
+                    </td>
+                    <td class="client-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.CLIENT_ID' | translate">{{
+                        complaint.clientId }}</td>
+                    <td class="craftsman-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.CRAFTSMAN_ID' | translate">{{
+                        complaint.craftsManId }}</td>
+                    <td class="content-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.CONTENT' | translate">
+                        <div class="content-preview">{{ complaint.content }}</div>
+                    </td>
+                    <td class="status-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.STATUS' | translate">
+                        <span class="status-badge" [ngClass]="getStatusClass(complaint.status)">
+                            {{ complaint.status }}
+                        </span>
+                    </td>
+                    <td class="date-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.DATE' | translate">{{
+                        formatDate(complaint.createdAt) }}</td>
+                    <td class="actions-cell">
+                        <button class="btn-view" (click)="viewComplaintDetails(complaint)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            {{ 'ADMIN_COMPLAINTS.VIEW_SERVICE_REQUEST' | translate }}
+                        </button>
+                        <!-- Show Respond button for both Pending and In Progress -->
+                        @if (complaint.status.toLowerCase() === 'pending' || complaint.status.toLowerCase() ===
+                        'inprogress' || complaint.status.toLowerCase() === 'in progress') {
+                        <button class="btn-respond" (click)="openResponseModal(complaint)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                            </svg>
+                            {{ 'ADMIN_COMPLAINTS.RESPOND' | translate }}
+                        </button>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+
+    <!-- Response Modal -->
+    @if (showResponseModal()) {
+    <div class="modal-overlay" (click)="closeResponseModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>{{ 'ADMIN_COMPLAINTS.RESPOND_TO_COMPLAINT' | translate }}</h2>
+                <button class="close-btn" (click)="closeResponseModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="complaint-info">
+                    <p><strong>{{ 'ADMIN_COMPLAINTS.COMPLAINT_ID' | translate }}:</strong> #{{ selectedComplaint()?.id
+                        }}</p>
+                    <p><strong>{{ 'ADMIN_COMPLAINTS.COMPLAINT_CONTENT' | translate }}:</strong></p>
+                    <p class="complaint-content">{{ selectedComplaint()?.content }}</p>
+                </div>
+                <div class="form-group">
+                    <label for="adminResponse">{{ 'ADMIN_COMPLAINTS.YOUR_RESPONSE' | translate }}</label>
+                    <textarea id="adminResponse" rows="6" class="response-textarea" [value]="adminResponse()"
+                        (input)="adminResponse.set($any($event.target).value)"
+                        [placeholder]="'ADMIN_COMPLAINTS.RESPONSE_PLACEHOLDER' | translate"
+                        [disabled]="isSubmitting()"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" (click)="closeResponseModal()" [disabled]="isSubmitting()">
+                    {{ 'ADMIN_COMPLAINTS.CANCEL' | translate }}
+                </button>
+                <button class="btn-submit" (click)="submitResponse()"
+                    [disabled]="!adminResponse().trim() || isSubmitting()">
+                    @if (isSubmitting()) {
+                    {{ 'ADMIN_COMPLAINTS.SUBMITTING' | translate }}
+                    } @else {
+                    {{ 'ADMIN_COMPLAINTS.SUBMIT_RESPONSE' | translate }}
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+</div>

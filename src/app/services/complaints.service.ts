@@ -22,6 +22,12 @@ export interface ComplaintDTO {
     respondedAt?: string;
 }
 
+export interface RespondToComplaintDTO {
+    complaintId: number;
+    adminResponse: string;
+    status: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -39,5 +45,13 @@ export class ComplaintsService {
             ? `/complaints/craftsman/${userId}/service-request/${serviceRequestId}`
             : `/complaints/client/${userId}/service-request/${serviceRequestId}`;
         return this.http.get<ComplaintDTO[]>(`${this.apiUrl}${endpoint}`);
+    }
+
+    getAllComplaints(): Observable<ComplaintDTO[]> {
+        return this.http.get<ComplaintDTO[]>(`${this.apiUrl}/complaints/all`);
+    }
+
+    respondToComplaint(response: RespondToComplaintDTO): Observable<any> {
+        return this.http.post(`${this.apiUrl}/complaints/respond`, response);
     }
 }

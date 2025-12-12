@@ -16,7 +16,8 @@
     "EDIT_PROFILE": "Edit Profile",
     "VERIFY_ID": "Verify ID",
     "DASHBOARD": "Dashboard",
-    "SERVICE_REQUESTS": "Service Requests"
+    "SERVICE_REQUESTS": "Service Requests",
+    "MANAGE_COMPLAINTS": "Manage Complaints"
   },
   "CONTACT_US": {
     "TITLE": "Contact Us",
@@ -650,6 +651,43 @@
       "ACTIONS": "Actions"
     }
   },
+  "ADMIN_COMPLAINTS": {
+    "TITLE": "Manage Complaints",
+    "SUBTITLE": "View and manage all complaints in the system",
+    "LOADING": "Loading complaints...",
+    "TRY_AGAIN": "Try Again",
+    "ERROR_LOADING": "Failed to load complaints. Please try again.",
+    "NO_COMPLAINTS_TITLE": "No Complaints",
+    "NO_COMPLAINTS_MESSAGE": "There are no complaints in the system",
+    "SEARCH_PLACEHOLDER": "Search by ID, content, service request...",
+    "ALL_STATUSES": "All Statuses",
+    "STATUS_PENDING": "Pending",
+    "STATUS_IN_PROGRESS": "In Progress",
+    "STATUS_RESOLVED": "Resolved",
+    "STATUS_CLOSED": "Closed",
+    "COMPLAINTS_FOUND": "complaints found",
+    "VIEW": "View",
+    "VIEW_SERVICE_REQUEST": "Show Service Request",
+    "RESPOND": "Respond",
+    "RESPOND_TO_COMPLAINT": "Respond to Complaint",
+    "COMPLAINT_ID": "Complaint ID",
+    "COMPLAINT_CONTENT": "Complaint Content",
+    "YOUR_RESPONSE": "Your Response",
+    "RESPONSE_PLACEHOLDER": "Enter your response to this complaint...",
+    "CANCEL": "Cancel",
+    "SUBMIT_RESPONSE": "Submit Response",
+    "SUBMITTING": "Submitting...",
+    "TABLE": {
+      "ID": "ID",
+      "SERVICE_REQUEST": "Service Request",
+      "CLIENT_ID": "Client ID",
+      "CRAFTSMAN_ID": "Craftsman ID",
+      "CONTENT": "Content",
+      "STATUS": "Status",
+      "DATE": "Date",
+      "ACTIONS": "Actions"
+    }
+  },
   "REQUEST_DETAILS": {
     "LOADING": "Loading request details...",
     "BACK_TO_MY_REQUESTS": "Back to My Requests",
@@ -919,10 +957,9 @@
     "TYPE_SERVICE_SCHEDULED": "Service Scheduled",
     "TYPE_WITHDRAWAL_REQUESTED": "Withdrawal Requested",
     "TYPE_WITHDRAWAL_APPROVED": "Withdrawal Approved",
-       "TYPE_SERVICE_CANCELLED": "Service Cancelled",
+    "TYPE_SERVICE_CANCELLED": "Service Cancelled",
     "TYPE_CRAFTSMAN_NO_SHOW": "Craftsman No-Show",
     "TYPE_CRAFTSMAN_APOLOGIZED": "Craftsman Cancelled Service",
-
     "ALERTS": {
       "OFFER_REJECTED_TITLE": "Offer Rejected",
       "OFFER_REJECTED_TEXT": "The client has rejected your offer.",
