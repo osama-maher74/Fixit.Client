@@ -129,6 +129,34 @@ export class ServiceRequestService {
     }
 
     /**
+     * Get all available service request statuses
+     * GET /api/ServiceRequest/statuses
+     */
+    getServiceRequestStatuses(): Observable<string[]> {
+        return this.http.get<string[]>(`${this.API_URL}/statuses`);
+    }
+
+    /**
+     * Get requests by client and status
+     * GET /api/ServiceRequest/by-client-status?clientId=...&status=...
+     */
+    getRequestsByClientAndStatus(clientId: number, status: string): Observable<ServiceRequestResponse[]> {
+        return this.http.get<ServiceRequestResponse[]>(`${this.API_URL}/by-client-status`, {
+            params: { clientId: clientId.toString(), status: status }
+        });
+    }
+
+    /**
+     * Get requests by craftsman and status
+     * GET /api/ServiceRequest/by-craftsMan-status?craftsManId=...&status=...
+     */
+    getRequestsByCraftsmanAndStatus(craftsManId: number, status: string): Observable<ServiceRequestResponse[]> {
+        return this.http.get<ServiceRequestResponse[]>(`${this.API_URL}/by-craftsMan-status`, {
+            params: { craftsManId: craftsManId.toString(), status: status }
+        });
+    }
+
+    /**
      * Update service request start time
      * PUT /api/ServiceRequest/StartAtTime/{id}
      */

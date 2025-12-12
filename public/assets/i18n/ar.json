@@ -569,6 +569,7 @@
   "MY_REQUESTS": {
     "TITLE": "طلبات الخدمة الخاصة بي",
     "SUBTITLE": "عرض وإدارة طلبات الخدمة الخاصة بك",
+    "STATUS_LABEL": "الحالة",
     "LOADING": "جاري تحميل طلباتك...",
     "TRY_AGAIN": "حاول مرة أخرى",
     "NO_REQUESTS_TITLE": "لا توجد طلبات بعد",
@@ -584,11 +585,17 @@
     "COMPLETED": "مكتمل",
     "APPROVED": "معتمد",
     "CANCELLED": "ملغى",
-    "CANCELLED_BY_CRAFTSMAN": "ملغى من الحرفي"
+    "CANCELLED_DUE_TO_NON_PAYMENT": "ملغى لعدم الدفع",
+    "CANCELLED_BY_CRAFTSMAN": "ملغى من الحرفي",
+    "CANCELLED_BY_CLIENT": "ملغى من العميل",
+    "REJECTED_BY_CRAFTSMAN": "مرفوض من الحرفي",
+    "REJECTED_BY_CLIENT": "مرفوض من العميل",
+    "ALL": "كل الطلبات"
   },
   "CRAFTSMAN_REQUESTS": {
     "TITLE": "طلبات الخدمة الخاصة بي",
     "SUBTITLE": "عرض طلباتك قيد التنفيذ والمكتملة",
+    "STATUS_LABEL": "الحالة",
     "LOADING": "جاري تحميل طلباتك...",
     "TRY_AGAIN": "حاول مرة أخرى",
     "NO_REQUESTS_TITLE": "لم يتم العثور على طلبات",
@@ -615,7 +622,11 @@
     "STATUS_WAITING_PAYMENT": "في انتظار الدفع",
     "STATUS_IN_PROGRESS": "قيد التنفيذ",
     "STATUS_COMPLETED": "مكتمل",
+    "STATUS_APPROVED": "معتمد",
+    "STATUS_REJECTED_CRAFTSMAN": "مرفوض من الحرفي",
+    "STATUS_REJECTED_CLIENT": "مرفوض من العميل",
     "STATUS_CANCELLED": "ملغى",
+    "STATUS_CANCELLED_PAYMENT": "ملغى لعدم الدفع",
     "REQUESTS_FOUND": "طلب موجود",
     "VIEW": "عرض",
     "TABLE": {

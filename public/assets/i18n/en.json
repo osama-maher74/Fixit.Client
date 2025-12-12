@@ -590,6 +590,7 @@
   "MY_REQUESTS": {
     "TITLE": "My Service Requests",
     "SUBTITLE": "View and manage your service requests",
+    "STATUS_LABEL": "Status",
     "LOADING": "Loading your requests...",
     "TRY_AGAIN": "Try Again",
     "NO_REQUESTS_TITLE": "No Requests Yet",
@@ -605,11 +606,17 @@
     "COMPLETED": "Completed",
     "APPROVED": "Approved",
     "CANCELLED": "Cancelled",
-    "CANCELLED_BY_CRAFTSMAN": "Cancelled by Craftsman"
+    "CANCELLED_DUE_TO_NON_PAYMENT": "Cancelled (Non-Payment)",
+    "CANCELLED_BY_CRAFTSMAN": "Cancelled by Craftsman",
+    "CANCELLED_BY_CLIENT": "Cancelled by Client",
+    "REJECTED_BY_CRAFTSMAN": "Rejected by Craftsman",
+    "REJECTED_BY_CLIENT": "Rejected by Client",
+    "ALL": "All Requests"
   },
   "CRAFTSMAN_REQUESTS": {
     "TITLE": "My Service Requests",
     "SUBTITLE": "View your in progress and completed service requests",
+    "STATUS_LABEL": "Status",
     "LOADING": "Loading your requests...",
     "TRY_AGAIN": "Try Again",
     "NO_REQUESTS_TITLE": "No Requests Found",
@@ -636,7 +643,11 @@
     "STATUS_WAITING_PAYMENT": "Waiting for Payment",
     "STATUS_IN_PROGRESS": "In Progress",
     "STATUS_COMPLETED": "Completed",
+    "STATUS_APPROVED": "Approved",
+    "STATUS_REJECTED_CRAFTSMAN": "Rejected by Craftsman",
+    "STATUS_REJECTED_CLIENT": "Rejected by Client",
     "STATUS_CANCELLED": "Cancelled",
+    "STATUS_CANCELLED_PAYMENT": "Cancelled (Non-Payment)",
     "REQUESTS_FOUND": "requests found",
     "VIEW": "View",
     "TABLE": {
