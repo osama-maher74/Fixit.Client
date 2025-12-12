@@ -17,22 +17,11 @@
         </div>
         }
 
-        <form [formGroup]="resendForm" (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="onSubmit()">
             <div class="form-group">
                 <label for="email">{{ 'RESEND_VERIFICATION.EMAIL' | translate }}</label>
-                <input type="email" id="email" formControlName="email" class="form-control"
-                    [class.error]="email?.invalid && email?.touched"
-                    [placeholder]="'RESEND_VERIFICATION.EMAIL_PLACEHOLDER' | translate" />
-                @if (email?.invalid && email?.touched) {
-                <div class="error-message">
-                    @if (email?.errors?.['required']) {
-                    <span>{{ 'RESEND_VERIFICATION.VALIDATION.EMAIL_REQUIRED' | translate }}</span>
-                    }
-                    @if (email?.errors?.['email']) {
-                    <span>{{ 'RESEND_VERIFICATION.VALIDATION.EMAIL_INVALID' | translate }}</span>
-                    }
-                </div>
-                }
+                <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control"
+                    [placeholder]="'RESEND_VERIFICATION.EMAIL_PLACEHOLDER' | translate" required />
             </div>
 
             <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
