@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ClientService } from '../../services/client.service';
 import { CraftsmanService } from '../../services/craftsman.service';
+import { AuthService } from '../../services/auth.service';
 import { ClientProfile, Gender } from '../../models/client.models';
 import { CraftsmanProfile } from '../../models/craftsman.models';
 
@@ -23,6 +24,7 @@ export class EditProfileComponent implements OnInit {
   private craftsmanService = inject(CraftsmanService);
   private translate = inject(TranslateService);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   // Signals for reactive state management
   userRole = signal<'client' | 'craftsman' | null>(null);
@@ -375,6 +377,15 @@ export class EditProfileComponent implements OnInit {
     this.clientService.updateClient(profile.id, formData).subscribe({
       next: (updatedProfile) => {
         console.log('Client profile updated successfully:', updatedProfile);
+
+        // Update local user state using form values to ensure consistency
+        const formValues = this.clientForm.value;
+        this.authService.updateUser({
+          fName: formValues.fName,
+          lName: formValues.lName,
+          // gender might be needed if stored in user object, but User interface doesn't have it
+        });
+
         this.successMessage.set('Profile updated successfully!');
         this.isSaving.set(false);
 
@@ -441,6 +452,14 @@ export class EditProfileComponent implements OnInit {
     this.craftsmanService.updateCraftsman(profile.id, formData).subscribe({
       next: (updatedProfile) => {
         console.log('Craftsman profile updated successfully:', updatedProfile);
+
+        // Update local user state using form values
+        const formValues = this.craftsmanForm.value;
+        this.authService.updateUser({
+          fName: formValues.fName,
+          lName: formValues.lName
+        });
+
         this.successMessage.set('Profile updated successfully!');
         this.isSaving.set(false);
 

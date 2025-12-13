@@ -220,4 +220,40 @@ export class AuthService {
       this.isAuthenticated.set(true);
     }
   }
+
+  updateUser(userData: Partial<User>): void {
+    const currentUser = this.currentUserSubject.value;
+
+    if (currentUser) {
+      // Create updated user object while preserving critical fields
+      const updatedUser: User = {
+        ...currentUser,
+        ...userData,
+        // Enforce preservation of critical fields
+        id: currentUser.id,
+        email: currentUser.email,
+        role: currentUser.role
+      };
+
+      // Validation: Ensure we don't save an invalid object
+      if (!updatedUser.id || !updatedUser.email || !updatedUser.role) {
+        console.error('❌ AuthService - Attempted to save invalid user state:', updatedUser);
+        return;
+      }
+
+      // Update localStorage
+      try {
+        localStorage.setItem(this.USER_KEY, JSON.stringify(updatedUser));
+        console.log('✅ AuthService - User locally updated in localStorage');
+      } catch (e) {
+        console.error('❌ AuthService - Failed to update localStorage:', e);
+      }
+
+      // Update BehaviorSubject to notify subscribers
+      this.currentUserSubject.next(updatedUser);
+      console.log('✅ AuthService - User subject updated:', updatedUser);
+    } else {
+      console.warn('⚠️ AuthService - Cannot update user: No current user found.');
+    }
+  }
 }
