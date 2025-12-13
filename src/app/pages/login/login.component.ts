@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
   verificationMessage = signal<string | null>(null);
   verificationSuccess = signal(false);
   isTokenExpired = signal(false);
+  emailNotVerified = signal(false);
   userEmail = signal<string | null>(null);
   resendingEmail = signal(false);
 
@@ -215,8 +216,17 @@ export class LoginComponent implements OnInit {
           console.error('Login error:', error);
           console.error('Error message:', error.message);
           console.error('Error status:', error.status);
+          console.error('Error code:', error.error?.errorCode);
           this.isLoading.set(false);
-          this.toastService.error(error.message || this.translate.instant('LOGIN.ERROR_DEFAULT'));
+
+          // Check for EMAIL_NOT_VERIFIED error
+          if (error.error?.errorCode === 'EMAIL_NOT_VERIFIED') {
+            this.emailNotVerified.set(true);
+            this.userEmail.set(this.loginForm.value.email);
+            this.verificationMessage.set(this.translate.instant('LOGIN.EMAIL_NOT_VERIFIED_MESSAGE'));
+          } else {
+            this.toastService.error(error.message || this.translate.instant('LOGIN.ERROR_DEFAULT'));
+          }
         }
       });
     } else {

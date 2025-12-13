@@ -161,7 +161,10 @@
       "PASSWORD_REQUIRED": "Password is required",
       "PASSWORD_MIN_LENGTH": "Password must be at least 6 characters"
     },
-    "FORGOT_PASSWORD": "Forgot Password?"
+    "FORGOT_PASSWORD": "Forgot Password?",
+    "EMAIL_NOT_VERIFIED_MESSAGE": "⚠️ Your account is not verified. Please check your email or click below to resend the verification link.",
+    "RESENDING": "Sending...",
+    "RESEND_BUTTON": "Resend Verification Email"
   },
   "VERIFY_EMAIL": {
     "SUCCESS": "✅ Email verified successfully! You can now login.",

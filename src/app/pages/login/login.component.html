@@ -6,10 +6,10 @@
     <!-- Email Verification Message -->
     @if (verificationMessage()) {
     <div class="verification-alert" [class.success]="verificationSuccess()" [class.error]="!verificationSuccess()"
-      [class.warning]="isTokenExpired()">
+      [class.warning]="isTokenExpired() || emailNotVerified()">
       <p>{{ verificationMessage() }}</p>
 
-      @if (isTokenExpired()) {
+      @if (isTokenExpired() || emailNotVerified()) {
       <button type="button" class="btn-resend" (click)="resendVerificationEmail()" [disabled]="resendingEmail()">
         @if (resendingEmail()) {
         <span class="spinner"></span>
