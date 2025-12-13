@@ -478,6 +478,7 @@
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 2px 8px rgba(253, 184, 19, 0.25);
+    white-space: nowrap;
 }
 
 .btn-view svg {
@@ -513,6 +514,7 @@
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+    white-space: nowrap;
 }
 
 .btn-respond svg {
@@ -548,6 +550,7 @@
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+    white-space: nowrap;
 }
 
 .btn-resolve svg {
