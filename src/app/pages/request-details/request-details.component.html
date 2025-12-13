@@ -170,8 +170,6 @@
                 </h2>
                 <p class="description-text">{{ request.description || ('REQUEST_DETAILS.NO_DESCRIPTION' | translate) }}
                 </p>
-                <p class="description-text">{{ request.description || ('REQUEST_DETAILS.NO_DESCRIPTION' | translate) }}
-                </p>
             </div>
 
             <!-- Complaint Section (Display existing complaints) -->
@@ -188,9 +186,14 @@
                     [class.pending]="existingComplaints[0].status === 'Pending'">
                     <div class="status-header">
                         <span class="status-badge">
-                            {{ existingComplaints[0].status === 'Solved' ? ('REQUEST_DETAILS.COMPLAINT_SOLVED' |
-                            translate)
-                            : ('REQUEST_DETAILS.COMPLAINT_PENDING' | translate) }}
+                            @switch (existingComplaints[0].status) {
+                            @case ('Pending') { {{ 'ADMIN_COMPLAINTS.STATUS_PENDING' | translate }} }
+                            @case ('Resolved') { {{ 'ADMIN_COMPLAINTS.STATUS_RESOLVED' | translate }} }
+                            @case ('Solved') { {{ 'ADMIN_COMPLAINTS.STATUS_RESOLVED' | translate }} }
+                            @case ('In Progress') { {{ 'ADMIN_COMPLAINTS.STATUS_IN_PROGRESS' | translate }} }
+                            @case ('InProgress') { {{ 'ADMIN_COMPLAINTS.STATUS_IN_PROGRESS' | translate }} }
+                            @default { {{ existingComplaints[0].status }} }
+                            }
                         </span>
                         <span class="complaint-date">{{ formatDateShort(existingComplaints[0].createdAt) }}</span>
                     </div>

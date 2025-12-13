@@ -781,7 +781,13 @@ export class RequestDetailsComponent implements OnInit {
     onProblemClicked() {
         if (!this.request) return;
 
-        // If 'In Progress', show specific options
+        // If craftsman, just show the complaint modal directly
+        if (this.isCraftsman()) {
+            this.openComplaintModal();
+            return;
+        }
+
+        // For clients: If 'In Progress', show specific options
         // Otherwise fallback to generic complaints modal
         if (this.isInProgress()) {
             this.showProblemSelectionModal();

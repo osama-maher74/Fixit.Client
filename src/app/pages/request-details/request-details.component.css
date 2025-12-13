@@ -1001,11 +1001,33 @@
 }
 
 .complaint-status-card.solved {
-    border-left: 4px solid var(--success-green);
+    border-left: 4px solid var(--error-red);
+}
+
+.complaint-status-card.solved .status-badge {
+    background: linear-gradient(135deg, var(--error-red) 0%, #B91C1C 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.25);
 }
 
 .complaint-status-card.pending {
     border-left: 4px solid var(--warning-yellow);
+}
+
+.complaint-status-card.pending .status-badge {
+    background: linear-gradient(135deg, var(--warning-yellow) 0%, #D97706 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+}
+
+.complaint-status-card.inprogress {
+    border-left: 4px solid var(--info-blue);
+}
+
+.complaint-status-card.inprogress .status-badge {
+    background: linear-gradient(135deg, var(--info-blue) 0%, #2563EB 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
 }
 
 .status-header {
