@@ -1179,16 +1179,62 @@ export class RequestDetailsComponent implements OnInit {
         if (!this.request || !this.canApologize()) return;
 
         Swal.fire({
-            title: this.translate.instant('REQUEST_DETAILS.APOLOGIZE_TITLE'),
-            input: 'textarea',
-            inputLabel: this.translate.instant('REQUEST_DETAILS.APOLOGIZE_REASON_LABEL'),
-            inputPlaceholder: this.translate.instant('REQUEST_DETAILS.APOLOGIZE_REASON_PLACEHOLDER'),
+            title: `<div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 3rem;">🙏</span>
+                        <h3 style="color: #DC2626; font-size: 1.5rem; font-weight: 800; font-family: 'Inter', sans-serif;">${this.translate.instant('REQUEST_DETAILS.APOLOGIZE_TITLE')}</h3>
+                    </div>`,
+            background: '#ffffff',
+            color: '#374151',
+            html: `
+                <div style="direction: ${this.translate.currentLang === 'ar' ? 'rtl' : 'ltr'}; text-align: start;">
+                    <p style="color: #6b7280; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; text-align: center;">
+                        ${this.translate.instant('REQUEST_DETAILS.APOLOGIZE_MESSAGE')}
+                    </p>
+                    <div style="background: #FFF5F5; padding: 1.5rem; border-radius: 16px; border: 1px solid #FECACA; box-shadow: inset 0 2px 4px rgba(220, 38, 38, 0.02);">
+                        <label for="apologize-reason" style="display: block; font-weight: 700; margin-bottom: 1rem; color: #DC2626; text-align: start; font-size: 1rem;">
+                            ${this.translate.instant('REQUEST_DETAILS.APOLOGIZE_REASON_LABEL')}
+                        </label>
+                        <textarea
+                            id="apologize-reason"
+                            class="swal2-textarea"
+                            placeholder="${this.translate.instant('REQUEST_DETAILS.APOLOGIZE_REASON_PLACEHOLDER')}"
+                            style="
+                                margin: 0 !important;
+                                width: 100% !important;
+                                min-height: 120px;
+                                padding: 1rem;
+                                background: #ffffff;
+                                border: 1px solid #FECACA;
+                                border-radius: 12px;
+                                font-size: 0.95rem;
+                                font-family: inherit;
+                                resize: vertical;
+                                color: #334155;
+                                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+                                transition: all 0.2s ease;
+                            "
+                            onfocus="this.style.borderColor='#DC2626'; this.style.boxShadow='0 0 0 3px rgba(220, 38, 38, 0.1)';"
+                            onblur="this.style.borderColor='#FECACA'; this.style.boxShadow='0 1px 2px 0 rgba(0, 0, 0, 0.05)';"
+                        ></textarea>
+                    </div>
+                </div>
+            `,
             showCancelButton: true,
             confirmButtonText: this.translate.instant('REQUEST_DETAILS.CONFIRM_APOLOGIZE'),
             cancelButtonText: this.translate.instant('REQUEST_DETAILS.CANCEL'),
             confirmButtonColor: '#DC2626',
-            cancelButtonColor: '#6b7280',
-            icon: 'warning'
+            cancelButtonColor: '#94a3b8',
+            width: '32rem',
+            padding: '2rem',
+            customClass: {
+                popup: 'premium-modal-popup',
+                confirmButton: 'premium-modal-confirm',
+                cancelButton: 'premium-modal-cancel'
+            },
+            preConfirm: () => {
+                const reasonTextarea = document.getElementById('apologize-reason') as HTMLTextAreaElement;
+                return reasonTextarea?.value.trim() || '';
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 this.apologizing = true;

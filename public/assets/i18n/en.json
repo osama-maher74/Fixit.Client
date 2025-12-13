@@ -802,7 +802,16 @@
     "RETRY": "Retry",
     "COMPLAINT_SOLVED": "Solved",
     "COMPLAINT_PENDING": "Pending",
-    "ADMIN_RESPONSE": "Admin Response"
+    "ADMIN_RESPONSE": "Admin Response",
+    "APOLOGIZE": "Apologize",
+    "APOLOGIZE_TITLE": "Apologize for Request",
+    "APOLOGIZE_MESSAGE": "We are sorry that you cannot continue with this request. Please provide a reason to the client.",
+    "APOLOGIZE_REASON_LABEL": "Reason for Apology",
+    "APOLOGIZE_REASON_PLACEHOLDER": "Enter your reason here...",
+    "CONFIRM_APOLOGIZE": "Confirm Apology",
+    "APOLOGIZE_SUCCESS": "Apology sent successfully",
+    "APOLOGIZE_FAILED": "Failed to send apology",
+    "APOLOGIZING": "Apologizing..."
   },
   "SERVICES": {
     "SERVICE_NAMES": {
@@ -1100,8 +1109,6 @@
     "SCHEDULE_APPOINTMENT": "Schedule Appointment",
     "CONFIRM_APPOINTMENT": "Confirm Appointment",
     "CONFIRM_NEW_APPOINTMENT": "Confirm New Appointment",
-    "BOOKING": "Booking...",
-    "UPDATING": "Updating...",
     "UPDATE_SUCCESS_TITLE": "Appointment Updated Successfully!",
     "UPDATE_SUCCESS_MESSAGE": "Your appointment has been updated with",
     "NOTIFICATION_SENT": "The craftsman has been notified of the new appointment time",

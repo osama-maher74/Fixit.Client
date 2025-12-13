@@ -770,7 +770,8 @@
 .btn-submit-review,
 .btn-edit-time,
 .btn-problem,
-.btn-back {
+.btn-back,
+.btn-apologize {
     padding: 0.85rem 2rem;
     /* Reduced padding */
     border: none;
@@ -797,7 +798,8 @@
 .btn-submit-review::after,
 .btn-edit-time::after,
 .btn-problem::after,
-.btn-back::after {
+.btn-back::after,
+.btn-apologize::after {
     content: '';
     position: absolute;
     top: 0;
@@ -813,7 +815,8 @@
 .btn-submit-review:hover::after,
 .btn-edit-time:hover::after,
 .btn-problem:hover::after,
-.btn-back:hover::after {
+.btn-back:hover::after,
+.btn-apologize:hover::after {
     transform: skewX(-20deg) translateX(150%);
     transition: transform 1s ease;
 }
@@ -843,16 +846,28 @@
 }
 
 .btn-problem {
-    background: var(--background-white);
-    color: var(--error-red);
-    border: 2px solid rgba(220, 38, 38, 0.2);
+    background: #FEF2F2;
+    color: #DC2626;
+    border: 1px solid #FECACA;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.05);
 }
 
 .btn-problem:hover {
-    background: var(--error-light);
-    border-color: var(--error-red);
+    background: #FEE2E2;
+    border-color: #EF4444;
     transform: translateY(-4px);
     box-shadow: 0 8px 25px rgba(220, 38, 38, 0.15);
+}
+
+.btn-apologize {
+    background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(107, 114, 128, 0.3);
+}
+
+.btn-apologize:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(107, 114, 128, 0.4);
 }
 
 /* Back Button Style */
@@ -870,7 +885,8 @@
 }
 
 .btn-complete:disabled,
-.btn-submit-review:disabled {
+.btn-submit-review:disabled,
+.btn-apologize:disabled {
     background: linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%);
     cursor: not-allowed;
     transform: none;
