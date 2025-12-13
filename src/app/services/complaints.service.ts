@@ -54,4 +54,9 @@ export class ComplaintsService {
     respondToComplaint(response: RespondToComplaintDTO): Observable<any> {
         return this.http.post(`${this.apiUrl}/complaints/respond`, response);
     }
+
+    updateComplaintStatus(complaintId: number, status: string): Observable<any> {
+        const payload = { complaintId, status };
+        return this.http.post(`${this.apiUrl}/complaints/admin/update-status`, payload);
+    }
 }

@@ -71,4 +71,13 @@ export class ClientService {
 
     return this.http.put<ClientProfile>(url, formData);
   }
+
+  /**
+   * Get client by ID
+   * @param id - Client ID
+   * @returns Observable of ClientProfile
+   */
+  getClientById(id: number): Observable<ClientProfile> {
+    return this.http.get<ClientProfile>(`${this.CLIENT_API}/${id}`);
+  }
 }

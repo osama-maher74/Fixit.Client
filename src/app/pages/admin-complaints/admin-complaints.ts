@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ComplaintsService, ComplaintDTO } from '../../services/complaints.service';
@@ -8,7 +8,7 @@ import { ComplaintsService, ComplaintDTO } from '../../services/complaints.servi
 @Component({
     selector: 'app-admin-complaints',
     standalone: true,
-    imports: [CommonModule, TranslateModule, FormsModule],
+    imports: [CommonModule, TranslateModule, FormsModule, RouterLink],
     templateUrl: './admin-complaints.html',
     styleUrl: './admin-complaints.css'
 })
@@ -31,6 +31,10 @@ export class AdminComplaints implements OnInit {
     selectedComplaint = signal<ComplaintDTO | null>(null);
     adminResponse = signal<string>('');
     isSubmitting = signal<boolean>(false);
+
+    // Resolve modal state
+    showResolveModal = signal<boolean>(false);
+    complaintToResolve = signal<ComplaintDTO | null>(null);
 
     ngOnInit() {
         this.loadAllComplaints();
@@ -126,7 +130,7 @@ export class AdminComplaints implements OnInit {
         const payload: any = {
             complaintId: complaint.id,
             adminResponse: response,
-            status: 'InProgress'
+            status: 'InProgress' // Revert to InProgress for response
         };
 
         this.complaintsService.respondToComplaint(payload).subscribe({
@@ -145,6 +149,38 @@ export class AdminComplaints implements OnInit {
                 console.error('Failed to submit response:', err);
                 this.isSubmitting.set(false);
                 alert('Failed to submit response. Please try again.');
+            }
+        });
+    }
+
+    markAsResolved(complaint: ComplaintDTO) {
+        this.complaintToResolve.set(complaint);
+        this.showResolveModal.set(true);
+    }
+
+    closeResolveModal() {
+        this.showResolveModal.set(false);
+        this.complaintToResolve.set(null);
+    }
+
+    confirmResolve() {
+        const complaint = this.complaintToResolve();
+        if (!complaint) return;
+
+        this.complaintsService.updateComplaintStatus(complaint.id, 'Resolved').subscribe({
+            next: () => {
+                const updatedComplaints = this.complaints().map(c =>
+                    c.id === complaint.id
+                        ? { ...c, status: 'Resolved' }
+                        : c
+                );
+                this.complaints.set(updatedComplaints);
+                this.applyFilters();
+                this.closeResolveModal();
+            },
+            error: (err) => {
+                console.error('Failed to resolve complaint:', err);
+                alert('Failed to update status. Please try again.');
             }
         });
     }

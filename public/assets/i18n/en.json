@@ -709,6 +709,10 @@
     "VIEW": "View",
     "VIEW_SERVICE_REQUEST": "Show Service Request",
     "RESPOND": "Respond",
+    "RESOLVE": "Resolve",
+    "RESOLVE_CONFIRM_TITLE": "Resolve Complaint?",
+    "RESOLVE_CONFIRM_MESSAGE": "Are you sure you want to mark this complaint as resolved? This action cannot be undone.",
+    "CONFIRM_RESOLVE": "Yes, Resolve",
     "RESPOND_TO_COMPLAINT": "Respond to Complaint",
     "COMPLAINT_ID": "Complaint ID",
     "COMPLAINT_CONTENT": "Complaint Content",
@@ -720,6 +724,7 @@
     "TABLE": {
       "ID": "ID",
       "SERVICE_REQUEST": "Service Request",
+      "COMPLAINANT": "Complainant",
       "CLIENT_ID": "Client ID",
       "CRAFTSMAN_ID": "Craftsman ID",
       "CONTENT": "Content",

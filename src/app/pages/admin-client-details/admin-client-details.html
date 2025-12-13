@@ -1,0 +1,68 @@
+<div class="details-container">
+    <div class="header-actions">
+        <button class="back-btn" (click)="goBack()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Back
+        </button>
+    </div>
+
+    @if (isLoading()) {
+    <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading client details...</p>
+    </div>
+    }
+
+    @if (errorMessage()) {
+    <div class="error-state">
+        <div class="error-icon">⚠️</div>
+        <h3>Error Loading Client</h3>
+        <p>{{ errorMessage() }}</p>
+        <button class="retry-btn" (click)="retryLoad()">Retry</button>
+    </div>
+    }
+
+    @if (client(); as user) {
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="avatar-wrapper">
+                <img [src]="getProfileImage(user)" [alt]="getFullName(user)" class="profile-avatar" />
+            </div>
+            <div class="profile-info">
+                <h1>{{ getFullName(user) }}</h1>
+                <span class="role-badge">Client</span>
+            </div>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span class="label">Client ID</span>
+                <span class="value">#{{ user.id }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Email</span>
+                <span class="value">{{ user.normalizedEmail }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Phone</span>
+                <span class="value">{{ user.phoneNumber || 'N/A' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Location</span>
+                <span class="value">{{ user.location || 'N/A' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Gender</span>
+                <span class="value">{{ user.gender === 0 ? 'Male' : 'Female' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Total Requests</span>
+                <span class="value">{{ user.totalRequests }}</span>
+            </div>
+        </div>
+    </div>
+    }
+</div>
