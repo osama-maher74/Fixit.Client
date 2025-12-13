@@ -119,8 +119,8 @@ export class AuthService {
 
   resendVerificationEmail(email: string): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(
-      `${environment.apiUrl}/Account/resend-verification-email`,
-      { email }
+      `${environment.apiUrl}/Account/resend-verification-email?email=${encodeURIComponent(email)}`,
+      {}
     );
   }
 
