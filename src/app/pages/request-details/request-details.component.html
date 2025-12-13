@@ -304,7 +304,7 @@
                 </button>
                 }
                 @if (isInProgress() || isCompleted()) {
-                <button class="btn-problem" (click)="openComplaintModal()">
+                <button class="btn-problem" (click)="onProblemClicked()">
                     <span>⚠️ {{ 'REQUEST_DETAILS.HAVING_PROBLEM' | translate }}</span>
                 </button>
                 }

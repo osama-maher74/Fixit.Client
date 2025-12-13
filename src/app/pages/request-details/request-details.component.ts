@@ -777,6 +777,267 @@ export class RequestDetailsComponent implements OnInit {
         });
     }
 
+    // Problem Reporting Flow
+    onProblemClicked() {
+        if (!this.request) return;
+
+        // If 'In Progress', show specific options
+        // Otherwise fallback to generic complaints modal
+        if (this.isInProgress()) {
+            this.showProblemSelectionModal();
+        } else {
+            this.openComplaintModal();
+        }
+    }
+
+    showProblemSelectionModal() {
+        Swal.fire({
+            title: `
+                <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #3b82f6; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 30px; color: #3b82f6;">?</span>
+                    </div>
+                </div>
+                <h3 style="color: #fff; font-size: 1.5rem; font-weight: 700;">${this.translate.instant('What\'s the problem?')}</h3>
+            `,
+            html: `
+                <p style="color: #9ca3af; margin-bottom: 1.5rem;">${this.translate.instant('Please select the issue you\'re experiencing')}</p>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <button id="btn-no-show" style="
+                        background-color: #f59e0b; 
+                        color: white; 
+                        padding: 1rem; 
+                        border-radius: 8px; 
+                        border: none; 
+                        font-weight: 600; 
+                        cursor: pointer; 
+                        transition: transform 0.1s;
+                    " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                        ${this.translate.instant('Craftsman didn\'t show up')}
+                    </button>
+                    <button id="btn-post-complaint" style="
+                        background-color: #3b82f6; 
+                        color: white; 
+                        padding: 1rem; 
+                        border-radius: 8px; 
+                        border: none; 
+                        font-weight: 600; 
+                        cursor: pointer; 
+                        transition: transform 0.1s;
+                    " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                        ${this.translate.instant('Post a complaint to this service request')}
+                    </button>
+                    <button id="btn-cancel-service" style="
+                        background-color: #374151; 
+                        color: white; 
+                        padding: 1rem; 
+                        border-radius: 8px; 
+                        border: 1px solid #4b5563; 
+                        font-weight: 600; 
+                        cursor: pointer; 
+                        transition: background-color 0.2s;
+                    " onmouseover="this.style.backgroundColor='#4b5563'" onmouseout="this.style.backgroundColor='#374151'">
+                        ${this.translate.instant('I want to cancel this service')}
+                    </button>
+                    <button id="btn-cancel-modal" style="
+                        background-color: transparent; 
+                        color: #9ca3af; 
+                        padding: 0.5rem; 
+                        border: 1px solid #4b5563; 
+                        border-radius: 8px; 
+                        margin-top: 0.5rem;
+                        cursor: pointer;
+                        font-weight: 500;
+                    ">
+                        ${this.translate.instant('Cancel')}
+                    </button>
+                </div>
+            `,
+            background: '#1f2937',
+            showConfirmButton: false,
+            didOpen: () => {
+                const btnNoShow = document.getElementById('btn-no-show');
+                const btnPostComplaint = document.getElementById('btn-post-complaint');
+                const btnCancelService = document.getElementById('btn-cancel-service');
+                const btnCancelModal = document.getElementById('btn-cancel-modal');
+
+                btnNoShow?.addEventListener('click', () => {
+                    Swal.close();
+                    this.showCraftsmanNoShowModal();
+                });
+
+                btnPostComplaint?.addEventListener('click', () => {
+                    Swal.close();
+                    this.openComplaintModal();
+                });
+
+                btnCancelService?.addEventListener('click', () => {
+                    Swal.close();
+                    this.showCancellationReasonModal();
+                });
+
+                btnCancelModal?.addEventListener('click', () => {
+                    Swal.close();
+                });
+            }
+        });
+    }
+
+    showCraftsmanNoShowModal() {
+        Swal.fire({
+            title: `
+                <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #f59e0b; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 30px; color: #f59e0b;">!</span>
+                    </div>
+                </div>
+                <h3 style="color: #fff; font-size: 1.5rem; font-weight: 700;">${this.translate.instant('Craftsman No-Show')}</h3>
+            `,
+            html: `
+                <p style="color: #9ca3af; margin-bottom: 2rem; line-height: 1.5;">
+                    ${this.translate.instant('The scheduled time has passed and the craftsman hasn\'t arrived. What would you like to do?')}
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <button id="btn-reschedule" style="
+                        background-color: #f59e0b; 
+                        color: white; 
+                        padding: 0.75rem 1rem; 
+                        border-radius: 8px; 
+                        border: none; 
+                        font-weight: 600; 
+                        cursor: pointer;
+                        flex: 1;
+                    ">
+                        ${this.translate.instant('Reschedule Appointment')}
+                    </button>
+                    <button id="btn-refund" style="
+                        background-color: #374151; 
+                        color: white; 
+                        padding: 0.75rem 1rem; 
+                        border-radius: 8px; 
+                        border: 1px solid #4b5563; 
+                        font-weight: 600; 
+                        cursor: pointer;
+                        flex: 1;
+                    ">
+                        ${this.translate.instant('Cancel & Request Refund')}
+                    </button>
+                </div>
+                <button id="btn-cancel-no-show" style="
+                    background-color: transparent; 
+                    color: #9ca3af; 
+                    padding: 0.5rem 1rem; 
+                    border: 1px solid #4b5563; 
+                    border-radius: 8px; 
+                    margin-top: 1rem;
+                    cursor: pointer;
+                    width: 100px;
+                ">
+                    ${this.translate.instant('Cancel')}
+                </button>
+            `,
+            background: '#1f2937',
+            showConfirmButton: false,
+            didOpen: () => {
+                const btnReschedule = document.getElementById('btn-reschedule');
+                const btnRefund = document.getElementById('btn-refund');
+                const btnCancel = document.getElementById('btn-cancel-no-show');
+
+                btnReschedule?.addEventListener('click', () => {
+                    Swal.close();
+                    this.editStartTime(); // Reuse existing edit logic
+                });
+
+                btnRefund?.addEventListener('click', () => {
+                    Swal.close();
+                    this.confirmCancellation('craftsman_no_show');
+                });
+
+                btnCancel?.addEventListener('click', () => {
+                    Swal.close();
+                });
+            }
+        });
+    }
+
+    showCancellationReasonModal() {
+        this.confirmCancellation('cancel_request');
+    }
+
+    confirmCancellation(reasonType: 'craftsman_no_show' | 'cancel_request') {
+        Swal.fire({
+            title: this.translate.instant('Are you sure?'),
+            text: this.translate.instant('Do you really want to cancel this service? This action cannot be undone.'),
+            icon: 'warning',
+            background: '#1f2937',
+            color: '#fff',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444', // Red for danger/cancel
+            cancelButtonColor: '#374151',
+            confirmButtonText: this.translate.instant('Yes, Cancel Service'),
+            cancelButtonText: this.translate.instant('No, Keep it')
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.performCancellation(reasonType);
+            }
+        });
+    }
+
+    performCancellation(reasonType: 'craftsman_no_show' | 'cancel_request') {
+        if (!this.request) return;
+
+        const requestId = this.request.servicesRequestId || this.request.id;
+        const currentUser = this.authService.getCurrentUser();
+
+        if (!requestId || !currentUser) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Missing request or user information.'
+            });
+            return;
+        }
+
+        const cancelDto = {
+            reason: reasonType === 'craftsman_no_show' ? 'Craftsman did not show up' : 'Client requested cancellation',
+            reasonType: reasonType,
+            clientName: currentUser.fName + ' ' + currentUser.lName,
+            clientEmail: currentUser.email,
+            clientPhone: currentUser.phoneNumber
+        };
+
+        Swal.fire({
+            title: this.translate.instant('Cancelling...'),
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        this.serviceRequestService.cancelServiceRequestWithReason(requestId, cancelDto).subscribe({
+            next: (response) => {
+                console.log('Cancellation successful:', response);
+                Swal.fire({
+                    icon: 'success',
+                    title: this.translate.instant('Cancelled'),
+                    text: this.translate.instant('Service has been cancelled successfully.'),
+                    confirmButtonColor: '#10b981'
+                }).then(() => {
+                    this.loadRequestDetails(requestId); // Reload to show updated status
+                });
+            },
+            error: (err) => {
+                console.error('Cancellation failed:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: this.translate.instant('Error'),
+                    text: err.error?.message || this.translate.instant('Failed to cancel service. Please try again.'),
+                    confirmButtonColor: '#d4af37'
+                });
+            }
+        });
+    }
+
     openComplaintModal() {
         if (!this.request) return;
 

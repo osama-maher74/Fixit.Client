@@ -44,6 +44,7 @@ export interface AuthResponse {
   role?: string;
   message?: string;
   success?: boolean;
+  phoneNumber?: string;
 }
 
 export interface User {
@@ -52,6 +53,7 @@ export interface User {
   fName: string;
   lName: string;
   role: string;
+  phoneNumber?: string;
 }
 
 export interface ResetPasswordRequest {

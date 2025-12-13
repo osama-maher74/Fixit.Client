@@ -179,7 +179,8 @@ export class AuthService {
         email: response.email,
         fName: response.fName,
         lName: response.lName || '',
-        role: response.role || 'Client'
+        role: response.role || 'Client',
+        phoneNumber: response.phoneNumber
       };
 
       console.log('✅ Created user object:', user);
