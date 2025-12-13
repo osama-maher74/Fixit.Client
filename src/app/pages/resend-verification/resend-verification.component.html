@@ -1,0 +1,41 @@
+<div class="resend-container">
+    <div class="resend-card">
+        <h2>{{ 'RESEND_VERIFICATION.TITLE' | translate }}</h2>
+        <p class="subtitle">{{ 'RESEND_VERIFICATION.SUBTITLE' | translate }}</p>
+
+        <!-- Success Message -->
+        @if (successMessage()) {
+        <div class="alert alert-success">
+            {{ successMessage() }}
+        </div>
+        }
+
+        <!-- Error Message -->
+        @if (errorMessage()) {
+        <div class="alert alert-error">
+            {{ errorMessage() }}
+        </div>
+        }
+
+        <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="email">{{ 'RESEND_VERIFICATION.EMAIL' | translate }}</label>
+                <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control"
+                    [placeholder]="'RESEND_VERIFICATION.EMAIL_PLACEHOLDER' | translate" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+                @if (isLoading()) {
+                <span class="spinner"></span>
+                <span>{{ 'RESEND_VERIFICATION.SENDING' | translate }}</span>
+                } @else {
+                <span>{{ 'RESEND_VERIFICATION.SEND_BUTTON' | translate }}</span>
+                }
+            </button>
+        </form>
+
+        <div class="back-link">
+            <a routerLink="/login">{{ 'RESEND_VERIFICATION.BACK_TO_LOGIN' | translate }}</a>
+        </div>
+    </div>
+</div>

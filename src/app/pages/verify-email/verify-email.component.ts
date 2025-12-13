@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
-    selector: 'app-verify-email',
-    standalone: true,
-    imports: [CommonModule, RouterModule, TranslateModule],
-    template: `
+  selector: 'app-verify-email',
+  standalone: true,
+  imports: [CommonModule, RouterModule, TranslateModule],
+  template: `
     <div class="verify-container">
       <div class="verify-card">
         
@@ -47,14 +48,26 @@ import { AuthService } from '../../services/auth.service';
           <h2 class="title error-title">Verification Failed</h2>
           <p class="message">{{ errorMessage() }}</p>
           
-          <button class="btn-secondary" routerLink="/">
+          <button 
+            class="btn-resend" 
+            (click)="resendVerificationEmail()"
+            [disabled]="isResending()">
+            @if (isResending()) {
+              <span class="spinner"></span>
+              <span>Sending...</span>
+            } @else {
+              <span>Resend Verification Link</span>
+            }
+          </button>
+          
+          <button class="btn-secondary" routerLink="/" style="margin-top: 1rem;">
             Go to Home
           </button>
         }
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     .verify-container {
       display: flex;
       justify-content: center;
@@ -285,6 +298,45 @@ import { AuthService } from '../../services/auth.service';
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
     }
+    
+    .btn-resend {
+      background-color: var(--primary-gold);
+      color: var(--text-dark);
+      border: none;
+      padding: 0.875rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1rem auto;
+      min-width: 220px;
+      font-size: 1rem;
+    }
+    
+    .btn-resend:hover:not(:disabled) {
+      background-color: var(--primary-gold-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    }
+    
+    .btn-resend:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .btn-resend .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--text-dark);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
 
     @media (max-width: 640px) {
       .verify-card {
@@ -304,69 +356,103 @@ import { AuthService } from '../../services/auth.service';
   `]
 })
 export class VerifyEmailComponent implements OnInit {
-    private authService = inject(AuthService);
-    private router = inject(Router);
-    private route = inject(ActivatedRoute);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
-    isLoading = signal(true);
-    verificationSuccess = signal(false);
-    errorMessage = signal('The link may be invalid or expired.');
-    countdown = signal(5);
-    private countdownInterval: any;
+  private toastService = inject(ToastService);
 
-    ngOnInit(): void {
-        // Extract query parameters
-        this.route.queryParams.subscribe(params => {
-            const email = params['email'];
-            const token = params['token'];
+  isLoading = signal(true);
+  verificationSuccess = signal(false);
+  errorMessage = signal('The link may be invalid or expired.');
+  countdown = signal(5);
+  isResending = signal(false);
+  resendSuccess = signal(false);
+  resendSuccessMessage = signal('');
+  userEmail = signal<string | null>(null);
+  private countdownInterval: any;
 
-            if (!email || !token) {
-                this.isLoading.set(false);
-                this.verificationSuccess.set(false);
-                this.errorMessage.set('Invalid verification link. Missing email or token.');
-                return;
-            }
+  ngOnInit(): void {
+    // Extract query parameters
+    this.route.queryParams.subscribe(params => {
+      const email = params['email'];
+      const token = params['token'];
 
-            // Call verification API
-            this.verifyEmail(email, token);
-        });
+      if (!email || !token) {
+        this.isLoading.set(false);
+        this.verificationSuccess.set(false);
+        this.errorMessage.set('Invalid verification link. Missing email or token.');
+        return;
+      }
+
+      // Store email for resend functionality
+      this.userEmail.set(email);
+
+      // Call verification API
+      this.verifyEmail(email, token);
+    });
+  }
+
+  private verifyEmail(email: string, token: string): void {
+    this.authService.verifyEmail({ email, token }).subscribe({
+      next: (response) => {
+        this.isLoading.set(false);
+        this.verificationSuccess.set(true);
+
+        // Start countdown for auto-redirect
+        this.startCountdown();
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.verificationSuccess.set(false);
+
+        // Extract error message from response
+        const message = error.error?.message || error.error?.title || 'Verification failed. The link may be invalid or expired.';
+        this.errorMessage.set(message);
+      }
+    });
+  }
+
+  resendVerificationEmail(): void {
+    const email = this.userEmail();
+    if (!email) {
+      this.toastService.error('Email not found. Please try again.');
+      return;
     }
 
-    private verifyEmail(email: string, token: string): void {
-        this.authService.verifyEmail({ email, token }).subscribe({
-            next: (response) => {
-                this.isLoading.set(false);
-                this.verificationSuccess.set(true);
+    this.isResending.set(true);
+    this.resendSuccess.set(false);
 
-                // Start countdown for auto-redirect
-                this.startCountdown();
-            },
-            error: (error) => {
-                this.isLoading.set(false);
-                this.verificationSuccess.set(false);
+    this.authService.resendVerificationEmail(email).subscribe({
+      next: (response) => {
+        this.isResending.set(false);
+        this.resendSuccess.set(true);
+        this.resendSuccessMessage.set(response.message || 'A new verification link has been sent to your email.');
+        this.toastService.success('New verification link sent! Check your email.');
+      },
+      error: (error) => {
+        this.isResending.set(false);
+        const errorMsg = error.error?.message || 'Failed to resend verification email.';
+        this.toastService.error(errorMsg);
+      }
+    });
+  }
 
-                // Extract error message from response
-                const message = error.error?.message || error.error?.title || 'Verification failed. The link may be invalid or expired.';
-                this.errorMessage.set(message);
-            }
-        });
+  private startCountdown(): void {
+    this.countdownInterval = setInterval(() => {
+      const current = this.countdown();
+      if (current > 1) {
+        this.countdown.set(current - 1);
+      } else {
+        clearInterval(this.countdownInterval);
+        this.router.navigate(['/login']);
+      }
+    }, 1000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
     }
-
-    private startCountdown(): void {
-        this.countdownInterval = setInterval(() => {
-            const current = this.countdown();
-            if (current > 1) {
-                this.countdown.set(current - 1);
-            } else {
-                clearInterval(this.countdownInterval);
-                this.router.navigate(['/login']);
-            }
-        }, 1000);
-    }
-
-    ngOnDestroy(): void {
-        if (this.countdownInterval) {
-            clearInterval(this.countdownInterval);
-        }
-    }
+  }
 }

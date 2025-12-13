@@ -5,9 +5,21 @@
 
     <!-- Email Verification Message -->
     @if (verificationMessage()) {
-      <div class="verification-alert" [class.success]="verificationSuccess()" [class.error]="!verificationSuccess()">
-        {{ verificationMessage() }}
-      </div>
+    <div class="verification-alert" [class.success]="verificationSuccess()" [class.error]="!verificationSuccess()"
+      [class.warning]="isTokenExpired() || emailNotVerified()">
+      <p>{{ verificationMessage() }}</p>
+
+      @if (isTokenExpired() || emailNotVerified()) {
+      <button type="button" class="btn-resend" (click)="resendVerificationEmail()" [disabled]="resendingEmail()">
+        @if (resendingEmail()) {
+        <span class="spinner"></span>
+        <span>{{ 'VERIFY_EMAIL.RESENDING' | translate }}</span>
+        } @else {
+        <span>{{ 'VERIFY_EMAIL.RESEND_BUTTON' | translate }}</span>
+        }
+      </button>
+      }
+    </div>
     }
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">

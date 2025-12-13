@@ -18,7 +18,7 @@ import { ToastService } from '../../services/toast.service';
           <!-- Success State -->
           <div class="gif-container">
             <div class="gif-wrapper">
-              <img src="assets/email/sent-mail.gif" alt="Email Sent" class="success-gif" />
+              <img src="assets/email-check.png" alt="Email Sent" class="success-gif" />
             </div>
           </div>
           <h2 class="text-center" style="color: var(--text-dark);">Check your Gmail</h2>

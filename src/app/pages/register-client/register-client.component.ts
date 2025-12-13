@@ -37,7 +37,7 @@ export class RegisterClientComponent {
     this.registerForm = this.fb.group({
       fName: ['', [Validators.required, Validators.minLength(2)]],
       lName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email, this.gmailValidator]],
       password: ['', [Validators.required, Validators.minLength(8), this.passwordStrengthValidator]],
       confirmPassword: ['', [Validators.required]],
       location: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^[a-zA-Z0-9\s,.\-#\/]+$/)]],
@@ -59,6 +59,15 @@ export class RegisterClientComponent {
 
     const valid = hasNumber && hasUpper && hasLower && hasSpecial && hasMinLength;
     return valid ? null : { passwordStrength: true };
+  }
+
+  gmailValidator(control: any) {
+    const value = control.value;
+    if (!value) return null;
+
+    // Check if email ends with @gmail.com
+    const isGmail = value.toLowerCase().endsWith('@gmail.com');
+    return isGmail ? null : { notGmail: true };
   }
 
   passwordMatchValidator(group: FormGroup) {

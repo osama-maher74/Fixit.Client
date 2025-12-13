@@ -110,10 +110,17 @@ export class AuthService {
     );
   }
 
-  verifyEmail(data: { email: string; token: string }): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(
+  verifyEmail(data: { email: string; token: string }): Observable<{ message: string; alreadyVerified?: boolean }> {
+    return this.http.post<{ message: string; alreadyVerified?: boolean }>(
       `${environment.apiUrl}/Account/verify-email`,
       data
+    );
+  }
+
+  resendVerificationEmail(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${environment.apiUrl}/Account/resend-verification-email?email=${encodeURIComponent(email)}`,
+      {}
     );
   }
 

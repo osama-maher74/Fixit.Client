@@ -162,7 +162,34 @@
       "PASSWORD_REQUIRED": "Password is required",
       "PASSWORD_MIN_LENGTH": "Password must be at least 6 characters"
     },
-    "FORGOT_PASSWORD": "Forgot Password?"
+    "FORGOT_PASSWORD": "Forgot Password?",
+    "EMAIL_NOT_VERIFIED_MESSAGE": "⚠️ Your account is not verified. Please check your email or click below to resend the verification link.",
+    "RESENDING": "Sending...",
+    "RESEND_BUTTON": "Resend Verification Email"
+  },
+  "VERIFY_EMAIL": {
+    "SUCCESS": "✅ Email verified successfully! You can now login.",
+    "ALREADY_VERIFIED": "✅ Your email is already verified. Please login below.",
+    "TOKEN_EXPIRED_MESSAGE": "⏰ Your verification link has expired. Click the button below to receive a new verification email.",
+    "USER_NOT_FOUND": "❌ User not found. Please register again.",
+    "VERIFICATION_FAILED": "❌ Email verification failed. The link may be invalid.",
+    "RESEND_BUTTON": "Resend Verification Email",
+    "RESENDING": "Sending...",
+    "RESEND_SUCCESS": "✅ New verification email sent successfully! Please check your inbox and spam folder.",
+    "RESEND_ERROR": "❌ Failed to resend verification email. Please try again later."
+  },
+  "RESEND_VERIFICATION": {
+    "TITLE": "Resend Verification Email",
+    "SUBTITLE": "Enter your email to receive a new verification link",
+    "EMAIL": "Email Address",
+    "EMAIL_PLACEHOLDER": "Enter your email",
+    "SEND_BUTTON": "Send Verification Email",
+    "SENDING": "Sending...",
+    "BACK_TO_LOGIN": "← Back to Login",
+    "VALIDATION": {
+      "EMAIL_REQUIRED": "Email is required",
+      "EMAIL_INVALID": "Please enter a valid email address"
+    }
   },
   "FORGOT_PASSWORD": {
     "TITLE": "Forgot Password",
@@ -214,6 +241,7 @@
       "LAST_NAME_MIN_LENGTH": "Minimum 2 characters required",
       "EMAIL_REQUIRED": "Email is required",
       "EMAIL_INVALID": "Please enter a valid email",
+      "EMAIL_MUST_BE_GMAIL": "Email must be a valid Gmail address (ending with @gmail.com)",
       "PASSWORD_REQUIRED": "Password is required",
       "PASSWORD_MIN_LENGTH": "Minimum 8 characters required",
       "PASSWORD_STRENGTH": "Must contain uppercase, lowercase, and number",
@@ -268,6 +296,7 @@
       "LAST_NAME_MIN_LENGTH": "Minimum 2 characters required",
       "EMAIL_REQUIRED": "Email is required",
       "EMAIL_INVALID": "Please enter a valid email",
+      "EMAIL_MUST_BE_GMAIL": "Email must be a valid Gmail address (ending with @gmail.com)",
       "PASSWORD_REQUIRED": "Password is required",
       "PASSWORD_MIN_LENGTH": "Minimum 8 characters required",
       "PASSWORD_STRENGTH": "Must contain uppercase, lowercase, and number",
