@@ -855,10 +855,15 @@ export class RequestDetailsComponent implements OnInit {
 
         this.isSubmittingComplaint = true;
 
+        const clientId = this.request.clientId || 0;
+        const craftsManId = this.request.craftsManId || 0;
+
+        console.log('Submitting complaint with IDs:', { clientId, craftsManId, requestObj: this.request });
+
         const complaintDto = {
             serviceRequestId: requestId,
-            clientId: this.request.clientId || 0,
-            craftsManId: this.request.craftsManId || 0,
+            clientId: clientId,
+            craftsmanId: craftsManId, // Property name matches DTO
             content: content
         };
 

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 export interface CreateComplaintDTO {
     serviceRequestId: number;
     clientId: number;
-    craftsManId: number;
+    craftsmanId: number;
     content: string;
 }
 

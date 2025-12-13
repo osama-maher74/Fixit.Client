@@ -97,7 +97,29 @@ export class ServiceRequestService {
     }
 
     getServiceRequestById(id: number): Observable<ServiceRequestResponse> {
-        return this.http.get<ServiceRequestResponse>(`${this.API_URL}/${id}`);
+        return this.http.get<any>(`${this.API_URL}/${id}`).pipe(
+            map(data => {
+                // Normalize keys to camelCase as expected by the frontend
+                const normalized: ServiceRequestResponse = {
+                    ...data,
+                    id: data.id || data.Id,
+                    servicesRequestId: data.servicesRequestId || data.ServicesRequestId || data.id || data.Id,
+                    craftsManId: data.craftsManId || data.CraftsManId || data.CraftsmanId || data.craftsmanId,
+                    craftsManName: data.craftsManName || data.CraftsManName || data.CraftsmanName,
+                    clientId: data.clientId || data.ClientId,
+                    clientName: data.clientName || data.ClientName,
+                    serviceId: data.serviceId || data.ServiceId,
+                    serviceName: data.serviceName || data.ServiceName,
+                    status: data.status || data.Status,
+                    serviceStartTime: data.serviceStartTime || data.ServiceStartTime,
+                    description: data.description || data.Description,
+                    location: data.location || data.Location,
+                    imageUrl: data.imageUrl || data.ImageUrl
+                };
+                console.log(`Service Request ${id} loaded and normalized:`, normalized);
+                return normalized;
+            })
+        );
     }
 
     /**
