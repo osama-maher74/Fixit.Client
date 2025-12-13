@@ -48,12 +48,6 @@ import { ToastService } from '../../services/toast.service';
           <h2 class="title error-title">Verification Failed</h2>
           <p class="message">{{ errorMessage() }}</p>
           
-          @if (resendSuccess()) {
-            <div class="success-message">
-              <p>✅ {{ resendSuccessMessage() }}</p>
-            </div>
-          }
-          
           <button 
             class="btn-resend" 
             (click)="resendVerificationEmail()"
@@ -303,6 +297,45 @@ import { ToastService } from '../../services/toast.service';
       background-color: #5a6268;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+    }
+    
+    .btn-resend {
+      background-color: var(--primary-gold);
+      color: var(--text-dark);
+      border: none;
+      padding: 0.875rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1rem auto;
+      min-width: 220px;
+      font-size: 1rem;
+    }
+    
+    .btn-resend:hover:not(:disabled) {
+      background-color: var(--primary-gold-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    }
+    
+    .btn-resend:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .btn-resend .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--text-dark);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
     }
 
     @media (max-width: 640px) {
