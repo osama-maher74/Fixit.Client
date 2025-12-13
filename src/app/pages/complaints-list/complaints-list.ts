@@ -26,6 +26,10 @@ export class ComplaintsList implements OnInit {
     error: string | null = null;
     serviceRequestId: number = 0;
 
+    // Modal state
+    showResolveModal = false;
+    complaintToResolve: ComplaintDTO | null = null;
+
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
             const id = params.get('id');
@@ -89,6 +93,38 @@ export class ComplaintsList implements OnInit {
             year: 'numeric',
             month: 'short',
             day: 'numeric'
+        });
+    }
+
+    markAsResolved(complaint: ComplaintDTO) {
+        this.complaintToResolve = complaint;
+        this.showResolveModal = true;
+    }
+
+    closeResolveModal() {
+        this.showResolveModal = false;
+        this.complaintToResolve = null;
+    }
+
+    confirmResolve() {
+        if (!this.complaintToResolve) return;
+
+        const complaint = this.complaintToResolve;
+
+        this.complaintsService.updateComplaintStatus(complaint.id, 'Resolved').subscribe({
+            next: () => {
+                // Optimistically update the UI
+                const index = this.complaints.findIndex(c => c.id === complaint.id);
+                if (index !== -1) {
+                    this.complaints[index].status = 'Resolved';
+                }
+                this.closeResolveModal();
+            },
+            error: (err) => {
+                console.error('Failed to resolve complaint:', err);
+                alert(this.translate.instant('Failed to update status'));
+                this.closeResolveModal();
+            }
         });
     }
 

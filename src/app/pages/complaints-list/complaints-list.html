@@ -41,9 +41,9 @@
         <div class="complaint-card" [class.solved]="complaint.status === 'Solved'">
             <div class="card-header">
                 <span class="status-badge" [class.pending]="complaint.status === 'Pending'"
-                    [class.solved]="complaint.status === 'Solved'">
-                    {{ complaint.status === 'Solved' ? ('REQUEST_DETAILS.COMPLAINT_SOLVED' | translate) :
-                    ('REQUEST_DETAILS.COMPLAINT_PENDING' | translate) }}
+                    [class.solved]="complaint.status === 'Resolved' || complaint.status === 'Solved'"
+                    [class.inprogress]="complaint.status === 'InProgress' || complaint.status === 'In Progress'">
+                    {{ complaint.status }}
                 </span>
                 <span class="date">{{ formatDateShort(complaint.createdAt) }}</span>
             </div>
@@ -62,8 +62,43 @@
                 <p class="response-text">{{ complaint.adminResponse }}</p>
             </div>
             }
+            <div class="card-actions" *ngIf="complaint.status !== 'Resolved' && complaint.status !== 'Solved'">
+                <button class="btn-resolve" (click)="markAsResolved(complaint)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {{ 'Mark as Resolved' | translate }}
+                </button>
+            </div>
         </div>
         }
+    </div>
+    }
+
+    <!-- Resolve Confirmation Modal -->
+    @if (showResolveModal) {
+    <div class="modal-overlay" (click)="closeResolveModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>{{ 'Resolve Complaint' | translate }}</h2>
+                <button class="close-btn" (click)="closeResolveModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'Are you sure you want to mark this complaint as resolved?' | translate }}</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" (click)="closeResolveModal()">
+                    {{ 'Cancel' | translate }}
+                </button>
+                <button class="btn-confirm-resolve" (click)="confirmResolve()">
+                    {{ 'Confirm' | translate }}
+                </button>
+            </div>
+        </div>
     </div>
     }
 </div>

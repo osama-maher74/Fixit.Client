@@ -196,6 +196,29 @@ export class AdminComplaints implements OnInit {
         });
     }
 
+    updateStatus(complaint: ComplaintDTO, newStatus: string) {
+        if (complaint.status === newStatus) return;
+
+        this.complaintsService.updateComplaintStatus(complaint.id, newStatus).subscribe({
+            next: () => {
+                const updatedComplaints = this.complaints().map(c =>
+                    c.id === complaint.id
+                        ? { ...c, status: newStatus }
+                        : c
+                );
+                this.complaints.set(updatedComplaints);
+                this.applyFilters();
+                // Optional: Show success toast/alert
+            },
+            error: (err) => {
+                console.error('Failed to update status:', err);
+                alert(this.translate.instant('ADMIN_COMPLAINTS.ERROR_UPDATING_STATUS'));
+                // Revert change in UI if needed (though select will stay on new value, might need forced refresh)
+                this.loadAllComplaints();
+            }
+        });
+    }
+
     getStatusClass(status: string): string {
         switch (status.toLowerCase()) {
             case 'pending': return 'status-pending';

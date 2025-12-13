@@ -107,9 +107,16 @@
                         <div class="content-preview">{{ complaint.content }}</div>
                     </td>
                     <td class="status-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.STATUS' | translate">
-                        <span class="status-badge" [ngClass]="getStatusClass(complaint.status)">
-                            {{ complaint.status }}
-                        </span>
+                    <td class="status-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.STATUS' | translate">
+                        <select class="status-select" [ngClass]="getStatusClass(complaint.status)"
+                            (change)="updateStatus(complaint, $any($event.target).value)"
+                            (click)="$event.stopPropagation()">
+                            <option value="Pending" [selected]="complaint.status === 'Pending'">Pending</option>
+                            <option value="InProgress"
+                                [selected]="complaint.status === 'InProgress' || complaint.status === 'In Progress'">In
+                                Progress</option>
+                            <option value="Resolved" [selected]="complaint.status === 'Resolved'">Resolved</option>
+                        </select>
                     </td>
                     <td class="date-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.DATE' | translate">{{
                         formatDate(complaint.createdAt) }}</td>

@@ -417,6 +417,29 @@
     border: 1.5px solid rgba(234, 179, 8, 0.3);
 }
 
+.status-select {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: center;
+}
+
+.status-select option {
+    background-color: #1f2937;
+    color: #ffffff;
+    padding: 10px;
+    text-transform: none;
+}
+
 .status-inprogress {
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.08));
     color: #2563eb;
