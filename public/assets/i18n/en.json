@@ -19,6 +19,14 @@
     "SERVICE_REQUESTS": "Service Requests",
     "MANAGE_COMPLAINTS": "Manage Complaints"
   },
+  "SERVICE_NAMES": {
+    "ELECTRICAL_MAINTENANCE": "Electrical Maintenance",
+    "PLUMBING": "Plumbing",
+    "CARPENTRY": "Carpentry",
+    "PAINTING": "Painting",
+    "CLEANING": "Cleaning",
+    "AC_MAINTENANCE": "AC Maintenance"
+  },
   "CONTACT_US": {
     "TITLE": "Contact Us",
     "SUBTITLE": "Have questions or feedback? We'd love to hear from you!",
@@ -324,7 +332,8 @@
   },
   "ADMIN": {
     "DASHBOARD": {
-      "TITLE": "Admin Dashboard",
+      "SYSTEM_ADMIN": "System Admin",
+      "TITLE": "Manage Craftsmen",
       "SUBTITLE": "Manage all craftsmen in the system",
       "LOADING": "Loading craftsmen...",
       "NO_CRAFTSMEN": "No craftsmen found",
@@ -336,6 +345,16 @@
       "RATING": "Rating",
       "EXPERIENCE": "Experience",
       "PER_HOUR": "Per Hour"
+    },
+    "HOME": {
+      "TITLE": "Dashboard",
+      "SUBTITLE": "Welcome to the Admin Dashboard",
+      "MANAGE_CRAFTSMEN": "Manage Craftsmen",
+      "MANAGE_CRAFTSMEN_DESC": "View and verify craftsman profiles",
+      "SERVICE_REQUESTS": "Service Requests",
+      "SERVICE_REQUESTS_DESC": "Track and manage service requests",
+      "MANAGE_COMPLAINTS": "Manage Complaints",
+      "MANAGE_COMPLAINTS_DESC": "Review and resolve user complaints"
     },
     "CRAFTSMAN_DETAILS": {
       "TITLE": "Craftsman Details",

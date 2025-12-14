@@ -104,88 +104,45 @@ $hover-red: #c0392b;
 }
 
 // Navigation Styles
+// Navigation Styles
 .nav {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   align-items: center;
-  flex-wrap: wrap;
+  flex: 1; // Take remaining space
+  justify-content: space-between; // Space out groups
 
-  // Ensure visibility on desktop
   @media (min-width: 769px) {
     visibility: visible;
     opacity: 1;
   }
 }
 
-// Theme Toggle Button
-.theme-toggle {
-  background-color: var(--background-light);
-  color: var(--text-dark);
-  border: 1.5px solid var(--border-light);
-  padding: 0.6rem;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-flex;
+.mobile-controls-row {
+  display: flex;
+  gap: 0.5rem;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  box-shadow: var(--shadow-sm);
-
-  &:hover {
-    background-color: var(--background-hover);
-    border-color: $primary-gold;
-    transform: translateY(-2px) rotate(15deg);
-    box-shadow: var(--shadow-md);
-  }
-
-  &:active {
-    transform: translateY(0) rotate(15deg);
-  }
-
-  .theme-icon {
-    width: 20px;
-    height: 20px;
-    color: $primary-gold;
-    transition: transform 0.3s ease;
-  }
 }
 
-// Language Switcher
-.lang-switcher {
-  background-color: $primary-gold;
-  color: $primary-dark;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 25px;
-  cursor: pointer;
-  font-weight: 600;
-  font-family: 'Cairo', sans-serif;
-  font-size: 0.95rem;
-  transition: all 0.3s;
-  box-shadow: 0 2px 6px rgba(253, 184, 19, 0.3);
-  white-space: nowrap;
-  display: inline-flex;
+.nav-links-container {
+  display: flex;
+  gap: 1rem;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
+}
 
-  &:hover {
-    background-color: $hover-gold;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(253, 184, 19, 0.4);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
+.user-menu-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 // Navigation Links
 .nav-link {
   color: var(--text-dark);
   text-decoration: none;
-  padding: 0.6rem 1.2rem;
+  padding: 0.5rem 0.8rem;
   border-radius: 25px;
   transition: all 0.3s;
   background: none;
@@ -210,9 +167,21 @@ $hover-red: #c0392b;
   }
 
   &.active {
-    background-color: $primary-gold;
-    color: var(--text-dark);
-    font-weight: 600;
+    background-color: transparent;
+    color: $primary-gold;
+    font-weight: 700;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0.8rem; // Match padding
+      right: 0.8rem;
+      height: 2px;
+      background-color: $primary-gold;
+      border-radius: 2px;
+    }
   }
 }
 

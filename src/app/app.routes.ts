@@ -45,6 +45,11 @@ export const routes: Routes = [
   },
   {
     path: 'admin/dashboard',
+    loadComponent: () => import('./pages/admin-home/admin-home.component').then(m => m.AdminHomeComponent),
+    canActivate: [adminOnlyGuard]
+  },
+  {
+    path: 'admin/craftsmen',
     loadComponent: () => import('./pages/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard),
     canActivate: [adminOnlyGuard]
   },

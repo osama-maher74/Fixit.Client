@@ -1,7 +1,7 @@
 import { Component, inject, signal, HostListener, ElementRef } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { TranslationService } from '../../services/translation.service';
 import { ThemeService } from '../../services/theme.service';
@@ -10,7 +10,6 @@ import { CraftsmanService } from '../../services/craftsman.service';
 import { NotificationListComponent } from '../../shared/components/notification-list/notification-list';
 import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher.component';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
-
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -30,8 +29,19 @@ export class HeaderComponent {
   // Make services public for template access
   public authService = inject(AuthService);
   public translationService = inject(TranslationService);
+  public translate = inject(TranslateService);
   public themeService = inject(ThemeService);
   public notificationService = inject(NotificationService);
+
+  getUserDisplayName(user: any): string {
+    if (!user) return '';
+    const fullName = `${user.fName} ${user.lName}`;
+    if (fullName.trim() === 'System Admin') {
+      return this.translate.instant('ADMIN.DASHBOARD.SYSTEM_ADMIN');
+    }
+    return fullName;
+  }
+
   private craftsmanService = inject(CraftsmanService);
   private elementRef = inject(ElementRef);
 

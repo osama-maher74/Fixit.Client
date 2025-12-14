@@ -301,7 +301,7 @@
 
 .complaints-table th {
     padding: 1.25rem 1rem;
-    text-align: left;
+    text-align: center;
     font-size: 0.825rem;
     font-weight: 700;
     color: var(--text-primary);
@@ -323,6 +323,12 @@
     padding: 1.25rem 1rem;
     font-size: 0.95rem;
     color: var(--text-primary);
+    text-align: center;
+}
+
+.complaints-table th:nth-child(4),
+.content-cell {
+    text-align: start;
 }
 
 .id-cell,

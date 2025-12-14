@@ -108,7 +108,6 @@
                         <div class="content-preview">{{ complaint.content }}</div>
                     </td>
                     <td class="status-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.STATUS' | translate">
-                    <td class="status-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.STATUS' | translate">
                         <select class="status-select" [ngClass]="getStatusClass(complaint.status)"
                             (change)="updateStatus(complaint, $any($event.target).value)"
                             (click)="$event.stopPropagation()">

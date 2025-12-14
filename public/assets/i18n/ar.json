@@ -312,7 +312,8 @@
   },
   "ADMIN": {
     "DASHBOARD": {
-      "TITLE": "لوحة تحكم المسؤول",
+      "SYSTEM_ADMIN": "مدير النظام",
+      "TITLE": "إدارة الحرفيين",
       "SUBTITLE": "إدارة جميع الحرفيين في النظام",
       "LOADING": "جاري تحميل الحرفيين...",
       "NO_CRAFTSMEN": "لم يتم العثور على حرفيين",
@@ -324,6 +325,16 @@
       "RATING": "التقييم",
       "EXPERIENCE": "الخبرة",
       "PER_HOUR": "في الساعة"
+    },
+    "HOME": {
+      "TITLE": "لوحة التحكم",
+      "SUBTITLE": "مرحباً بك في لوحة تحكم المسؤول",
+      "MANAGE_CRAFTSMEN": "إدارة الحرفيين",
+      "MANAGE_CRAFTSMEN_DESC": "عرض وإدارة ملفات الحرفيين وتوثيقهم",
+      "SERVICE_REQUESTS": "طلبات الخدمة",
+      "SERVICE_REQUESTS_DESC": "متابعة وإدارة طلبات الخدمة والعملاء",
+      "MANAGE_COMPLAINTS": "إدارة الشكاوى",
+      "MANAGE_COMPLAINTS_DESC": "مراجعة وحل شكاوى المستخدمين"
     },
     "CRAFTSMAN_DETAILS": {
       "TITLE": "تفاصيل الحرفي",

@@ -80,6 +80,13 @@
         gap: 0.5rem;
     }
 
+    .header .nav-links-container {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
     .header .theme-toggle {
         width: 36px !important;
         height: 36px !important;
@@ -132,6 +139,13 @@
         gap: 0.4rem;
     }
 
+    .header .nav-links-container {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
     .header .theme-toggle {
         width: 34px !important;
         height: 34px !important;
@@ -174,6 +188,8 @@
     .header .user-name {
         font-size: 0.8rem !important;
         max-width: 80px !important;
+        display: none;
+        /* Hide name on very small screens to save space */
     }
 
     .header .profile-icon {
