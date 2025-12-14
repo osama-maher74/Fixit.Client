@@ -384,28 +384,111 @@
     color: var(--text-dark);
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
+/* Responsive Design - Card Layout */
+@media (max-width: 1024px) {
     .requests-table-container {
-        overflow-x: auto;
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
     }
 
-    .requests-table {
-        min-width: 900px;
-    }
-}
-
-@media (max-width: 768px) {
-    .admin-requests-container {
-        padding: 1rem;
+    .requests-table,
+    .requests-table tbody,
+    .requests-table tr,
+    .requests-table td {
+        display: block;
+        width: 100%;
     }
 
-    .page-title {
-        font-size: 2rem;
+    .requests-table thead {
+        display: none;
     }
 
+    .requests-table tbody tr {
+        background: var(--background-white);
+        margin-bottom: 1rem;
+        border-radius: 16px;
+        box-shadow: var(--shadow-md);
+        padding: 1.25rem;
+        border: 1px solid var(--border-light);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .requests-table tbody tr:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        background: var(--background-white);
+    }
+
+    .requests-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        text-align: right;
+        border-bottom: 1px solid var(--border-light);
+        gap: 1rem;
+    }
+
+    .requests-table td:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        padding-top: 1rem;
+        justify-content: flex-end;
+    }
+
+    /* Add labels from data-label attribute */
+    .requests-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-align: left;
+    }
+
+    /* Cell Specific Adjustments for Card View */
+    .id-cell {
+        padding-top: 0 !important;
+        border-bottom: 2px solid var(--border-light) !important;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.75rem !important;
+    }
+
+    .id-cell::before {
+        display: none;
+    }
+
+    .service-cell .service-info {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .actions-cell {
+        margin-top: 0.5rem;
+        border-top: 1px solid var(--border-light);
+        padding-top: 1rem !important;
+    }
+
+    .actions-cell::before {
+        display: none;
+    }
+
+    .actions-cell .btn-view {
+        width: 100%;
+        justify-content: center;
+        padding: 0.875rem;
+        background: var(--primary-gold);
+        color: var(--text-dark);
+        font-weight: 700;
+    }
+
+    /* Filters specific adjustments */
     .filters-section {
         flex-direction: column;
+        align-items: stretch;
+        padding: 1rem;
         gap: 1rem;
     }
 
@@ -418,16 +501,23 @@
     .results-count {
         width: 100%;
         text-align: center;
+        margin-top: 0.5rem;
+    }
+
+    .admin-requests-container {
+        padding: 1rem;
     }
 }
 
-@media (max-width: 480px) {
-    .page-title {
-        font-size: 1.75rem;
-    }
+/* RTL Specific Adjustments for Card Layout */
+[dir="rtl"] .requests-table td {
+    text-align: left;
+}
 
-    .requests-table th,
-    .requests-table td {
-        padding: 0.75rem 0.5rem;
-    }
+[dir="rtl"] .requests-table td::before {
+    text-align: right;
+}
+
+[dir="rtl"] .service-cell .service-info {
+    justify-content: flex-start;
 }

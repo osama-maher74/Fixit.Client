@@ -84,20 +84,24 @@
             <tbody>
                 @for (request of filteredRequests(); track request.servicesRequestId || request.id) {
                 <tr class="request-row" (click)="viewRequestDetails(request)">
-                    <td class="id-cell">
+                    <td class="id-cell" [attr.data-label]="'ADMIN_REQUESTS.TABLE.ID' | translate">
                         <span class="request-id">#{{ request.servicesRequestId || request.id }}</span>
                     </td>
-                    <td class="service-cell">
+                    <td class="service-cell" [attr.data-label]="'ADMIN_REQUESTS.TABLE.SERVICE' | translate">
                         <div class="service-info">
                             <img [src]="getImageUrl(request)" [alt]="request.serviceName" class="service-image" />
                             <span class="service-name">{{ request.serviceName || 'N/A' }}</span>
                         </div>
                     </td>
-                    <td class="client-cell">{{ request.clientName || 'N/A' }}</td>
-                    <td class="craftsman-cell">{{ request.craftsManName || 'Not Assigned' }}</td>
-                    <td class="location-cell">{{ request.location || 'N/A' }}</td>
-                    <td class="date-cell">{{ formatDate(request.requestAt) }}</td>
-                    <td class="amount-cell">
+                    <td class="client-cell" [attr.data-label]="'ADMIN_REQUESTS.TABLE.CLIENT' | translate">{{
+                        request.clientName || 'N/A' }}</td>
+                    <td class="craftsman-cell" [attr.data-label]="'ADMIN_REQUESTS.TABLE.CRAFTSMAN' | translate">{{
+                        request.craftsManName || 'Not Assigned' }}</td>
+                    <td class="location-cell" [attr.data-label]="'ADMIN_REQUESTS.TABLE.LOCATION' | translate">{{
+                        request.location || 'N/A' }}</td>
+                    <td class="date-cell" [attr.data-label]="'ADMIN_REQUESTS.TABLE.DATE' | translate">{{
+                        formatDate(request.requestAt) }}</td>
+                    <td class="amount-cell" [attr.data-label]="'ADMIN_REQUESTS.TABLE.AMOUNT' | translate">
                         @if (request.totalAmount) {
                         <span class="amount">{{ request.totalAmount }} EGP</span>
                         } @else if (request.suggestedPrice) {
@@ -106,12 +110,12 @@
                         <span class="no-amount">-</span>
                         }
                     </td>
-                    <td class="status-cell">
+                    <td class="status-cell" [attr.data-label]="'ADMIN_REQUESTS.TABLE.STATUS' | translate">
                         <span class="status-badge" [ngClass]="getStatusClass(request.status)">
                             {{ getStatusText(request.status) }}
                         </span>
                     </td>
-                    <td class="actions-cell">
+                    <td class="actions-cell" [attr.data-label]="'ADMIN_REQUESTS.TABLE.ACTIONS' | translate">
                         <button class="btn-view" (click)="viewRequestDetails(request); $event.stopPropagation()">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"

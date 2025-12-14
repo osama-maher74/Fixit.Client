@@ -17,9 +17,9 @@
         <div class="status-filter">
             <select class="filter-select" [value]="statusFilter()" (change)="onStatusFilterChange($event)">
                 <option value="all">{{ 'ADMIN_COMPLAINTS.ALL_STATUSES' | translate }}</option>
-                <option value="Pending">Pending</option>
-                <option value="InProgress">In Progress</option>
-                <option value="Resolved">Resolved</option>
+                <option value="Pending">{{ 'ADMIN_COMPLAINTS.STATUS_PENDING' | translate }}</option>
+                <option value="InProgress">{{ 'ADMIN_COMPLAINTS.STATUS_IN_PROGRESS' | translate }}</option>
+                <option value="Resolved">{{ 'ADMIN_COMPLAINTS.STATUS_RESOLVED' | translate }}</option>
             </select>
         </div>
 
@@ -92,14 +92,15 @@
                         @if (complaint.clientId && complaint.clientId > 0) {
                         <a [routerLink]="['/admin/client', complaint.clientId]" class="complainant-badge client-badge">
                             <span class="role-icon">👤</span>
-                            <span>Client #{{ complaint.clientId }}</span>
+                            <span>{{ 'ADMIN_COMPLAINTS.CLIENT_LABEL' | translate }} #{{ complaint.clientId }}</span>
                         </a>
                         }
                         @if (complaint.craftsManId && complaint.craftsManId > 0) {
                         <a [routerLink]="['/admin/craftsman', complaint.craftsManId]"
                             class="complainant-badge craftsman-badge">
                             <span class="role-icon">🛠️</span>
-                            <span>Craftsman #{{ complaint.craftsManId }}</span>
+                            <span>{{ 'ADMIN_COMPLAINTS.CRAFTSMAN_LABEL' | translate }} #{{ complaint.craftsManId
+                                }}</span>
                         </a>
                         }
                     </td>
@@ -111,11 +112,13 @@
                         <select class="status-select" [ngClass]="getStatusClass(complaint.status)"
                             (change)="updateStatus(complaint, $any($event.target).value)"
                             (click)="$event.stopPropagation()">
-                            <option value="Pending" [selected]="complaint.status === 'Pending'">Pending</option>
+                            <option value="Pending" [selected]="complaint.status === 'Pending'">{{
+                                'ADMIN_COMPLAINTS.STATUS_PENDING' | translate }}</option>
                             <option value="InProgress"
-                                [selected]="complaint.status === 'InProgress' || complaint.status === 'In Progress'">In
-                                Progress</option>
-                            <option value="Resolved" [selected]="complaint.status === 'Resolved'">Resolved</option>
+                                [selected]="complaint.status === 'InProgress' || complaint.status === 'In Progress'">{{
+                                'ADMIN_COMPLAINTS.STATUS_IN_PROGRESS' | translate }}</option>
+                            <option value="Resolved" [selected]="complaint.status === 'Resolved'">{{
+                                'ADMIN_COMPLAINTS.STATUS_RESOLVED' | translate }}</option>
                         </select>
                     </td>
                     <td class="date-cell" [attr.data-label]="'ADMIN_COMPLAINTS.TABLE.DATE' | translate">{{
@@ -128,7 +131,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                             </svg>
-                            {{ 'View Request' | translate }}
+                            {{ 'ADMIN_COMPLAINTS.VIEW_SERVICE_REQUEST' | translate }}
                         </button>
                         <!-- Show Respond button for Pending -->
                         @if (complaint.status.toLowerCase() === 'pending') {

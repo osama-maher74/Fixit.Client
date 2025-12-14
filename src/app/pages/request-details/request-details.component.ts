@@ -125,7 +125,8 @@ export class RequestDetailsComponent implements OnInit {
     formatDate(dateString: string | undefined): string {
         if (!dateString) return 'N/A';
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
+        const lang = this.translate.currentLang === 'ar' ? 'ar-EG' : 'en-US';
+        return date.toLocaleDateString(lang, {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -138,11 +139,19 @@ export class RequestDetailsComponent implements OnInit {
     formatDateShort(dateString: string | undefined): string {
         if (!dateString) return 'N/A';
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
+        const lang = this.translate.currentLang === 'ar' ? 'ar-EG' : 'en-US';
+        return date.toLocaleDateString(lang, {
             year: 'numeric',
             month: 'short',
             day: 'numeric'
         });
+    }
+
+    getServiceTranslationKey(serviceName: string | undefined): string {
+        if (!serviceName) return 'REQUEST_DETAILS.SERVICE_REQUEST';
+        // Convert "Electrical Maintenance" to "ELECTRICAL_MAINTENANCE"
+        const key = serviceName.trim().toUpperCase().replace(/\s+/g, '_');
+        return `SERVICE_NAMES.${key}`;
     }
 
     getStatusClass(status: string | number | undefined): string {
