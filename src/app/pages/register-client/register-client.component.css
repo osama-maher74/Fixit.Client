@@ -1,12 +1,26 @@
 .register-container {
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 80px);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 2rem 1rem;
   position: relative;
   background: linear-gradient(135deg, var(--background-light) 0%, var(--background-accent) 100%);
   transition: background 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .register-container {
+    min-height: calc(100vh - 65px);
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    min-height: calc(100vh - 60px);
+    padding: 1rem 0.75rem;
+  }
 }
 
 .register-container::before {
@@ -37,9 +51,47 @@
   padding: 2.5rem;
   width: 100%;
   max-width: 700px;
-  margin: 2rem auto;
+  margin: 1rem auto;
   border: 2px solid var(--border-light);
   transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .register-card {
+    padding: 2rem 1.5rem;
+    margin: 0.5rem auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-card {
+    padding: 1.5rem 1rem;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 8px;
+  }
+
+  .register-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-control {
+    padding: 0.65rem;
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    padding: 0.75rem;
+  }
 }
 
 .register-card:hover {

@@ -349,6 +349,7 @@
     "HOME": {
       "TITLE": "Dashboard",
       "SUBTITLE": "Welcome to the Admin Dashboard",
+      "QUICK_ACTIONS": "Quick Actions",
       "MANAGE_CRAFTSMEN": "Manage Craftsmen",
       "MANAGE_CRAFTSMEN_DESC": "View and verify craftsman profiles",
       "SERVICE_REQUESTS": "Service Requests",

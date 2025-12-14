@@ -329,6 +329,7 @@
     "HOME": {
       "TITLE": "لوحة التحكم",
       "SUBTITLE": "مرحباً بك في لوحة تحكم المسؤول",
+      "QUICK_ACTIONS": "إجراءات سريعة",
       "MANAGE_CRAFTSMEN": "إدارة الحرفيين",
       "MANAGE_CRAFTSMEN_DESC": "عرض وإدارة ملفات الحرفيين وتوثيقهم",
       "SERVICE_REQUESTS": "طلبات الخدمة",

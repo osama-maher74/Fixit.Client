@@ -23,7 +23,7 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
     LanguageSwitcherComponent
   ],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss', './header-responsive.css']
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
   // Make services public for template access

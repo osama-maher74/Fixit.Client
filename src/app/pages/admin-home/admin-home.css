@@ -1,140 +1,557 @@
-.admin-home-container {
-    padding: 3rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+/* =============================================
+   ADMIN DASHBOARD - Professional Design
+   ============================================= */
+
+.admin-dashboard {
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, var(--background-light) 0%, var(--background-accent) 100%);
+  padding: 0;
 }
 
-.page-header {
-    margin-bottom: 4rem;
-    text-align: center;
+/* =============================================
+   HEADER SECTION
+   ============================================= */
+.dashboard-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 3rem 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.page-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.5px;
+.dashboard-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
 }
 
-.page-subtitle {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
+.dashboard-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-gold), #e5a510, var(--primary-gold));
 }
 
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2.5rem;
-    justify-items: center;
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
 }
 
-.dashboard-card {
-    background: var(--background-white);
-    border-radius: 20px;
-    padding: 3rem 2rem;
-    width: 100%;
-    max-width: 380px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    display: flex;
+.welcome-text h1 {
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.5px;
+}
+
+.welcome-text p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.header-icon {
+  width: 80px;
+  height: 80px;
+  background: rgba(253, 184, 19, 0.15);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(253, 184, 19, 0.3);
+}
+
+.header-icon svg {
+  width: 40px;
+  height: 40px;
+  color: var(--primary-gold);
+}
+
+/* =============================================
+   QUICK ACTIONS SECTION
+   ============================================= */
+.quick-actions {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 3rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 1.5rem 0;
+}
+
+.section-title svg {
+  width: 24px;
+  height: 24px;
+  color: var(--primary-gold);
+}
+
+/* =============================================
+   ACTION CARDS GRID
+   ============================================= */
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.action-card {
+  position: relative;
+  background: var(--background-white);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  border: 2px solid var(--border-light);
+}
+
+.action-card:hover {
+  transform: translateY(-6px);
+  border-color: transparent;
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+}
+
+.card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.action-card:hover .card-glow {
+  opacity: 1;
+}
+
+.card-content {
+  padding: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.4s ease;
+}
+
+.icon-wrapper svg {
+  width: 28px;
+  height: 28px;
+  transition: all 0.3s ease;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 0.35rem 0;
+  line-height: 1.3;
+}
+
+.card-info p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--background-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.card-arrow svg {
+  width: 18px;
+  height: 18px;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.action-card:hover .card-arrow {
+  transform: translateX(4px);
+}
+
+[dir="rtl"] .action-card:hover .card-arrow {
+  transform: translateX(-4px);
+}
+
+[dir="rtl"] .card-arrow svg {
+  transform: rotate(180deg);
+}
+
+/* =============================================
+   CRAFTSMEN CARD - Blue Theme
+   ============================================= */
+.action-card.craftsmen .card-glow {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.action-card.craftsmen .icon-wrapper {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.action-card.craftsmen:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.action-card.craftsmen:hover .icon-wrapper {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px -4px rgba(59, 130, 246, 0.4);
+}
+
+.action-card.craftsmen:hover .card-arrow {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.action-card.craftsmen:hover .card-arrow svg {
+  color: #3b82f6;
+}
+
+/* =============================================
+   SERVICES CARD - Amber Theme
+   ============================================= */
+.action-card.services .card-glow {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.action-card.services .icon-wrapper {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.action-card.services:hover {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.action-card.services:hover .icon-wrapper {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.4);
+}
+
+.action-card.services:hover .card-arrow {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.action-card.services:hover .card-arrow svg {
+  color: #f59e0b;
+}
+
+/* =============================================
+   COMPLAINTS CARD - Red Theme
+   ============================================= */
+.action-card.complaints .card-glow {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.action-card.complaints .icon-wrapper {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.action-card.complaints:hover {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.action-card.complaints:hover .icon-wrapper {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px -4px rgba(239, 68, 68, 0.4);
+}
+
+.action-card.complaints:hover .card-arrow {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.action-card.complaints:hover .card-arrow svg {
+  color: #ef4444;
+}
+
+/* =============================================
+   RESPONSIVE DESIGN
+   ============================================= */
+@media (max-width: 1024px) {
+  .actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-header {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .welcome-text h1 {
+    font-size: 2rem;
+  }
+
+  .header-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .header-icon svg {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 768px) {
+  .actions-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .dashboard-header {
+    padding: 2rem 1rem;
+  }
+
+  .header-content {
     flex-direction: column;
-    align-items: center;
     text-align: center;
-    border: 1px solid transparent;
-    position: relative;
-    overflow: hidden;
-}
+    gap: 1.5rem;
+  }
 
-.dashboard-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
+  .welcome-text h1 {
+    font-size: 1.75rem;
+  }
 
-/* Card Icons */
-.card-icon {
-    width: 90px;
-    height: 90px;
-    border-radius: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.75rem;
-    transition: all 0.4s ease;
-}
-
-.card-icon svg {
-    width: 42px;
-    height: 42px;
-    stroke-width: 2px;
-}
-
-/* Specific Card Styles */
-
-/* Craftsmen Card - Blue */
-.card-craftsmen .card-icon {
-    background: rgba(59, 130, 246, 0.1);
-    color: #3b82f6;
-}
-
-.card-craftsmen:hover {
-    border-color: rgba(59, 130, 246, 0.3);
-}
-
-.card-craftsmen:hover .card-icon {
-    background: #3b82f6;
-    color: white;
-    transform: scale(1.1) rotate(-3deg);
-    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
-}
-
-/* Service Requests Card - Amber/Orange */
-.card-services .card-icon {
-    background: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
-}
-
-.card-services:hover {
-    border-color: rgba(245, 158, 11, 0.3);
-}
-
-.card-services:hover .card-icon {
-    background: #f59e0b;
-    color: white;
-    transform: scale(1.1) rotate(3deg);
-    box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.3);
-}
-
-/* Complaints Card - Red */
-.card-complaints .card-icon {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-}
-
-.card-complaints:hover {
-    border-color: rgba(239, 68, 68, 0.3);
-}
-
-.card-complaints:hover .card-icon {
-    background: #ef4444;
-    color: white;
-    transform: scale(1.1) rotate(-3deg);
-    box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
-}
-
-
-/* Text Styling */
-.card-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 0.75rem;
-}
-
-.card-desc {
-    color: var(--text-secondary);
+  .welcome-text p {
     font-size: 1rem;
-    line-height: 1.6;
-    max-width: 280px;
+  }
+
+  .header-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+  }
+
+  .header-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .quick-actions {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-content {
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  .icon-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+  }
+
+  .icon-wrapper svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .card-info h3 {
+    font-size: 1rem;
+  }
+
+  .card-info p {
+    font-size: 0.8rem;
+  }
+
+  .card-arrow {
+    width: 32px;
+    height: 32px;
+  }
+
+  .card-arrow svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .welcome-text h1 {
+    font-size: 1.5rem;
+  }
+
+  .quick-actions {
+    padding: 1.25rem 0.75rem 1.5rem;
+  }
+
+  .action-card {
+    border-radius: 12px;
+  }
+
+  .card-content {
+    padding: 1rem;
+  }
+
+  .icon-wrapper {
+    width: 45px;
+    height: 45px;
+  }
+
+  .icon-wrapper svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* =============================================
+   RTL SUPPORT
+   ============================================= */
+[dir="rtl"] .card-content {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .card-info {
+  text-align: right;
+}
+
+/* =============================================
+   DARK MODE ADJUSTMENTS
+   ============================================= */
+:root.dark-theme .admin-dashboard {
+  background: linear-gradient(135deg, var(--background-light) 0%, var(--background-accent) 100%);
+}
+
+:root.dark-theme .dashboard-header {
+  background: linear-gradient(135deg, #0d0d14 0%, #1a1a2e 50%, #16213e 100%);
+}
+
+:root.dark-theme .dashboard-header::before {
+  opacity: 0.3;
+}
+
+:root.dark-theme .action-card {
+  background: var(--background-white);
+  border-color: var(--border-light);
+}
+
+:root.dark-theme .action-card:hover {
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+  border-color: var(--border-medium);
+}
+
+:root.dark-theme .card-arrow {
+  background: var(--background-accent);
+}
+
+:root.dark-theme .section-title {
+  color: var(--text-dark);
+}
+
+:root.dark-theme .card-info h3 {
+  color: var(--text-dark);
+}
+
+:root.dark-theme .card-info p {
+  color: var(--text-secondary);
+}
+
+/* Dark mode card theme adjustments */
+:root.dark-theme .action-card.craftsmen .icon-wrapper {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+:root.dark-theme .action-card.services .icon-wrapper {
+  background: rgba(245, 158, 11, 0.2);
+}
+
+:root.dark-theme .action-card.complaints .icon-wrapper {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+:root.dark-theme .action-card.craftsmen:hover .card-arrow {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+:root.dark-theme .action-card.services:hover .card-arrow {
+  background: rgba(245, 158, 11, 0.2);
+}
+
+:root.dark-theme .action-card.complaints:hover .card-arrow {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* =============================================
+   ACCESSIBILITY
+   ============================================= */
+@media (prefers-reduced-motion: reduce) {
+  .action-card,
+  .icon-wrapper,
+  .card-arrow,
+  .card-glow {
+    transition: none;
+  }
+
+  .action-card:hover {
+    transform: none;
+  }
+
+  .action-card:hover .icon-wrapper {
+    transform: none;
+  }
+}
+
+.action-card:focus-visible {
+  outline: 3px solid var(--primary-gold);
+  outline-offset: 2px;
 }

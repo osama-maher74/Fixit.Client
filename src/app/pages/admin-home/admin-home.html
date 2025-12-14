@@ -1,49 +1,98 @@
-<div class="admin-home-container">
-    <div class="page-header">
-        <h1 class="page-title">{{ 'ADMIN.HOME.TITLE' | translate }}</h1>
-        <p class="page-subtitle">{{ 'ADMIN.HOME.SUBTITLE' | translate }}</p>
+<div class="admin-dashboard">
+  <!-- Welcome Section -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div class="welcome-text">
+        <h1>{{ 'ADMIN.HOME.TITLE' | translate }}</h1>
+        <p>{{ 'ADMIN.HOME.SUBTITLE' | translate }}</p>
+      </div>
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </div>
     </div>
+  </header>
 
-    <div class="dashboard-grid">
-        <!-- Manage Craftsmen -->
-        <div class="dashboard-card card-craftsmen" (click)="navigateTo('/admin/craftsmen')">
-            <div class="card-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-            </div>
-            <h2 class="card-title">{{ 'ADMIN.HOME.MANAGE_CRAFTSMEN' | translate }}</h2>
-            <p class="card-desc">{{ 'ADMIN.HOME.MANAGE_CRAFTSMEN_DESC' | translate }}</p>
-        </div>
+  <!-- Quick Actions -->
+  <section class="quick-actions">
+    <h2 class="section-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+      {{ 'ADMIN.HOME.QUICK_ACTIONS' | translate }}
+    </h2>
 
-        <!-- Service Requests -->
-        <div class="dashboard-card card-services" (click)="navigateTo('/admin/service-requests')">
-            <div class="card-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path
-                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
-                    </path>
-                </svg>
-            </div>
-            <h2 class="card-title">{{ 'ADMIN.HOME.SERVICE_REQUESTS' | translate }}</h2>
-            <p class="card-desc">{{ 'ADMIN.HOME.SERVICE_REQUESTS_DESC' | translate }}</p>
+    <div class="actions-grid">
+      <!-- Manage Craftsmen -->
+      <div class="action-card craftsmen" (click)="navigateTo('/admin/craftsmen')">
+        <div class="card-glow"></div>
+        <div class="card-content">
+          <div class="icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </div>
+          <div class="card-info">
+            <h3>{{ 'ADMIN.HOME.MANAGE_CRAFTSMEN' | translate }}</h3>
+            <p>{{ 'ADMIN.HOME.MANAGE_CRAFTSMEN_DESC' | translate }}</p>
+          </div>
+          <div class="card-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </div>
+      </div>
 
-        <!-- Manage Complaints -->
-        <div class="dashboard-card card-complaints" (click)="navigateTo('/admin/complaints')">
-            <div class="card-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-            </div>
-            <h2 class="card-title">{{ 'ADMIN.HOME.MANAGE_COMPLAINTS' | translate }}</h2>
-            <p class="card-desc">{{ 'ADMIN.HOME.MANAGE_COMPLAINTS_DESC' | translate }}</p>
+      <!-- Service Requests -->
+      <div class="action-card services" (click)="navigateTo('/admin/service-requests')">
+        <div class="card-glow"></div>
+        <div class="card-content">
+          <div class="icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+            </svg>
+          </div>
+          <div class="card-info">
+            <h3>{{ 'ADMIN.HOME.SERVICE_REQUESTS' | translate }}</h3>
+            <p>{{ 'ADMIN.HOME.SERVICE_REQUESTS_DESC' | translate }}</p>
+          </div>
+          <div class="card-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </div>
+      </div>
+
+      <!-- Manage Complaints -->
+      <div class="action-card complaints" (click)="navigateTo('/admin/complaints')">
+        <div class="card-glow"></div>
+        <div class="card-content">
+          <div class="icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+          </div>
+          <div class="card-info">
+            <h3>{{ 'ADMIN.HOME.MANAGE_COMPLAINTS' | translate }}</h3>
+            <p>{{ 'ADMIN.HOME.MANAGE_COMPLAINTS_DESC' | translate }}</p>
+          </div>
+          <div class="card-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
 </div>
