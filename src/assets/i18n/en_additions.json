@@ -1,0 +1,13 @@
+{
+    "REQUEST_DETAILS": {
+        "ANY_PROBLEMS": "Any Problems?",
+        "MANAGE_REQUEST_TITLE": "Manage Request",
+        "CLIENT_NOT_RESPONDING": "Client Not Responding",
+        "APOLOGIZE": "I need to Apologize/Cancel",
+        "REPORT_CLIENT_NO_SHOW_TITLE": "Report Client No Show",
+        "REPORT_CLIENT_NO_SHOW_CONFIRM": "Are you sure you want to report that the client is not responding? This will notify the admin.",
+        "YES_REPORT": "Yes, Report",
+        "REPORT_SUCCESS": "Reported Successfully",
+        "REPORT_SUCCESS_MESSAGE": "The admin has been notified about the issue."
+    }
+}

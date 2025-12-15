@@ -823,7 +823,6 @@
     "COMPLAINT_SOLVED": "Solved",
     "COMPLAINT_PENDING": "Pending",
     "ADMIN_RESPONSE": "Admin Response",
-    "APOLOGIZE": "Apologize",
     "APOLOGIZE_TITLE": "Apologize for Request",
     "APOLOGIZE_MESSAGE": "We are sorry that you cannot continue with this request. Please provide a reason to the client.",
     "APOLOGIZE_REASON_LABEL": "Reason for Apology",
@@ -831,7 +830,16 @@
     "CONFIRM_APOLOGIZE": "Confirm Apology",
     "APOLOGIZE_SUCCESS": "Apology sent successfully",
     "APOLOGIZE_FAILED": "Failed to send apology",
-    "APOLOGIZING": "Apologizing..."
+    "APOLOGIZING": "Apologizing...",
+    "ANY_PROBLEMS": "Any Problems?",
+    "MANAGE_REQUEST_TITLE": "Manage Request",
+    "CLIENT_NOT_RESPONDING": "Client Not Responding",
+    "APOLOGIZE": "I need to Apologize/Cancel",
+    "REPORT_CLIENT_NO_SHOW_TITLE": "Report Client No Show",
+    "REPORT_CLIENT_NO_SHOW_CONFIRM": "Are you sure you want to report that the client is not responding? This will notify the admin.",
+    "YES_REPORT": "Yes, Report",
+    "REPORT_SUCCESS": "Reported Successfully",
+    "REPORT_SUCCESS_MESSAGE": "The admin has been notified about the issue."
   },
   "SERVICES": {
     "SERVICE_NAMES": {

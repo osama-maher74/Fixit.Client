@@ -214,6 +214,18 @@ export class ServiceRequestService {
         );
     }
 
+    /**
+     * Report an issue with the service request (for Craftsman)
+     * POST /api/ServiceRequest/report-issue/{requestId}
+     */
+    reportIssue(requestId: number, reason: string): Observable<any> {
+        return this.http.post(
+            `${this.API_URL}/report-issue/${requestId}`,
+            { reason },
+            { responseType: 'json' }
+        );
+    }
+
     private prepareFormData(serviceRequest: CreateServiceRequestDto): FormData {
         const formData = new FormData();
 

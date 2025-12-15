@@ -1,0 +1,13 @@
+{
+    "REQUEST_DETAILS": {
+        "ANY_PROBLEMS": "هل توجد مشكلة؟",
+        "MANAGE_REQUEST_TITLE": "إدارة الطلب",
+        "CLIENT_NOT_RESPONDING": "العميل لا يستجيب",
+        "APOLOGIZE": "أحتاج للاعتذار/الإلغاء",
+        "REPORT_CLIENT_NO_SHOW_TITLE": "إبلاغ عن عدم استجابة العميل",
+        "REPORT_CLIENT_NO_SHOW_CONFIRM": "هل أنت متأكد أنك تريد الإبلاغ عن عدم استجابة العميل؟ سيتم إشعار الإدارة.",
+        "YES_REPORT": "نعم، إبلاغ",
+        "REPORT_SUCCESS": "تم الإبلاغ بنجاح",
+        "REPORT_SUCCESS_MESSAGE": "تم إشعار الإدارة بالمشكلة."
+    }
+}

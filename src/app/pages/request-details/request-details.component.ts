@@ -11,6 +11,8 @@ import { AuthService } from '../../services/auth.service';
 import { ContactService } from '../../services/contact.service';
 import { NotificationService } from '../../services/notification.service';
 import { environment } from '../../../environments/environment';
+import { ThemeService } from '../../services/theme.service';
+import { getSwalThemeConfig } from '../../helpers/swal-theme.helper';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -31,6 +33,7 @@ export class RequestDetailsComponent implements OnInit {
     private contactService = inject(ContactService);
     private notificationService = inject(NotificationService);
     private translate = inject(TranslateService);
+    private themeService = inject(ThemeService);
 
     request: ServiceRequestResponse | null = null;
     loading = true;
@@ -798,12 +801,79 @@ export class RequestDetailsComponent implements OnInit {
 
         // For clients: If 'In Progress', show specific options
         // Otherwise fallback to generic complaints modal
-        if (this.isInProgress()) {
-            this.showProblemSelectionModal();
-        } else {
-            this.openComplaintModal();
-        }
+        this.openComplaintModal();
     }
+
+    openManageRequestModal() {
+        if (!this.request) return;
+
+        Swal.fire({
+            title: this.translate.instant('REQUEST_DETAILS.MANAGE_REQUEST_TITLE'), // "Any Problems?" or "Manage Request"
+            showCancelButton: true,
+            cancelButtonText: this.translate.instant('REQUEST_DETAILS.CANCEL'),
+            showConfirmButton: false, // We'll use custom HTML buttons or just rely on the actions
+            html: `
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <button id="btn-client-no-show" class="swal2-confirm swal2-styled" style="background-color: #EF4444; width: 100%; margin: 0;">
+                        ${this.translate.instant('REQUEST_DETAILS.CLIENT_NOT_RESPONDING')}
+                    </button>
+                    <button id="btn-apologize-nav" class="swal2-confirm swal2-styled" style="background-color: #6B7280; width: 100%; margin: 0;">
+                        ${this.translate.instant('REQUEST_DETAILS.APOLOGIZE')}
+                    </button>
+                </div>
+            `,
+            didOpen: () => {
+                const btnNoShow = document.getElementById('btn-client-no-show');
+                const btnApologize = document.getElementById('btn-apologize-nav');
+
+                btnNoShow?.addEventListener('click', () => {
+                    Swal.close();
+                    this.reportClientNoShow();
+                });
+
+                btnApologize?.addEventListener('click', () => {
+                    Swal.close();
+                    this.apologize();
+                });
+            }
+        });
+    }
+
+    reportClientNoShow() {
+        if (!this.request) return;
+        const requestId = this.request.servicesRequestId || this.request.id;
+
+        Swal.fire({
+            title: this.translate.instant('REQUEST_DETAILS.REPORT_CLIENT_NO_SHOW_TITLE'),
+            text: this.translate.instant('REQUEST_DETAILS.REPORT_CLIENT_NO_SHOW_CONFIRM'),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#EF4444',
+            confirmButtonText: this.translate.instant('REQUEST_DETAILS.YES_REPORT')
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.serviceRequestService.reportIssue(requestId!, "Client Not Responding / No Show").subscribe({
+                    next: () => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: this.translate.instant('REQUEST_DETAILS.REPORT_SUCCESS'),
+                            text: this.translate.instant('REQUEST_DETAILS.REPORT_SUCCESS_MESSAGE'),
+                            confirmButtonColor: '#d4af37'
+                        });
+                    },
+                    error: (err) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: err.error?.message || 'Failed to report issue.',
+                            confirmButtonColor: '#d4af37'
+                        });
+                    }
+                });
+            }
+        });
+    }
+
 
     showProblemSelectionModal() {
         Swal.fire({
@@ -1187,59 +1257,77 @@ export class RequestDetailsComponent implements OnInit {
     apologize() {
         if (!this.request || !this.canApologize()) return;
 
+        const isDark = this.themeService.isDark();
+        const themeConfig = getSwalThemeConfig(isDark);
+
+        // Define colors based on theme
+        const bgSecondary = isDark ? '#2A2A2A' : '#FFF5F5';
+        const borderColor = isDark ? '#4A4A4A' : '#FECACA';
+        const labelColor = isDark ? '#F87171' : '#DC2626'; // Lighter red for dark mode
+        const textColor = isDark ? '#F3F4F6' : '#374151';
+        const placeholderColor = isDark ? '#9CA3AF' : '#6B7280';
+        const textareaBg = isDark ? '#374151' : '#ffffff';
+        const textareaBorder = isDark ? '#4B5563' : '#FECACA';
+        const textareaText = isDark ? '#E5E7EB' : '#334155';
+
         Swal.fire({
-            title: `<div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
-                        <span style="font-size: 3rem;">🙏</span>
-                        <h3 style="color: #DC2626; font-size: 1.5rem; font-weight: 800; font-family: 'Inter', sans-serif;">${this.translate.instant('REQUEST_DETAILS.APOLOGIZE_TITLE')}</h3>
+            ...themeConfig,
+            title: `<div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                        <div style="font-size: 3.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">🙏</div>
+                        <h3 style="color: ${labelColor}; font-size: 1.5rem; font-weight: 700; margin: 0; font-family: 'Inter', sans-serif;">
+                            ${this.translate.instant('REQUEST_DETAILS.APOLOGIZE_TITLE')}
+                        </h3>
                     </div>`,
-            background: '#ffffff',
-            color: '#374151',
             html: `
                 <div style="direction: ${this.translate.currentLang === 'ar' ? 'rtl' : 'ltr'}; text-align: start;">
-                    <p style="color: #6b7280; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; text-align: center;">
+                    <p style="color: ${placeholderColor}; font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem; text-align: center;">
                         ${this.translate.instant('REQUEST_DETAILS.APOLOGIZE_MESSAGE')}
                     </p>
-                    <div style="background: #FFF5F5; padding: 1.5rem; border-radius: 16px; border: 1px solid #FECACA; box-shadow: inset 0 2px 4px rgba(220, 38, 38, 0.02);">
-                        <label for="apologize-reason" style="display: block; font-weight: 700; margin-bottom: 1rem; color: #DC2626; text-align: start; font-size: 1rem;">
+                    
+                    <div style="
+                        background: ${bgSecondary}; 
+                        padding: 1.5rem; 
+                        border-radius: 16px; 
+                        border: 1px solid ${borderColor}; 
+                        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                    ">
+                        <label for="apologize-reason" style="display: block; font-weight: 600; margin-bottom: 0.75rem; color: ${labelColor}; font-size: 0.95rem; letter-spacing: 0.025em;">
                             ${this.translate.instant('REQUEST_DETAILS.APOLOGIZE_REASON_LABEL')}
                         </label>
-                        <textarea
-                            id="apologize-reason"
-                            class="swal2-textarea"
-                            placeholder="${this.translate.instant('REQUEST_DETAILS.APOLOGIZE_REASON_PLACEHOLDER')}"
-                            style="
-                                margin: 0 !important;
-                                width: 100% !important;
-                                min-height: 120px;
-                                padding: 1rem;
-                                background: #ffffff;
-                                border: 1px solid #FECACA;
-                                border-radius: 12px;
-                                font-size: 0.95rem;
-                                font-family: inherit;
-                                resize: vertical;
-                                color: #334155;
-                                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-                                transition: all 0.2s ease;
-                            "
-                            onfocus="this.style.borderColor='#DC2626'; this.style.boxShadow='0 0 0 3px rgba(220, 38, 38, 0.1)';"
-                            onblur="this.style.borderColor='#FECACA'; this.style.boxShadow='0 1px 2px 0 rgba(0, 0, 0, 0.05)';"
-                        ></textarea>
+                        <div style="position: relative;">
+                            <textarea
+                                id="apologize-reason"
+                                class="swal2-textarea"
+                                placeholder="${this.translate.instant('REQUEST_DETAILS.APOLOGIZE_REASON_PLACEHOLDER')}"
+                                style="
+                                    margin: 0 !important;
+                                    width: 100% !important;
+                                    min-height: 120px;
+                                    padding: 1rem;
+                                    background: ${textareaBg};
+                                    border: 1px solid ${textareaBorder};
+                                    border-radius: 12px;
+                                    font-size: 0.95rem;
+                                    font-family: inherit;
+                                    resize: vertical;
+                                    color: ${textareaText};
+                                    transition: all 0.2s ease;
+                                    outline: none;
+                                "
+                                onfocus="this.style.borderColor='${labelColor}'; this.style.boxShadow='0 0 0 3px rgba(220, 38, 38, 0.2)';"
+                                onblur="this.style.borderColor='${textareaBorder}'; this.style.boxShadow='none';"
+                            ></textarea>
+                        </div>
                     </div>
                 </div>
             `,
             showCancelButton: true,
             confirmButtonText: this.translate.instant('REQUEST_DETAILS.CONFIRM_APOLOGIZE'),
             cancelButtonText: this.translate.instant('REQUEST_DETAILS.CANCEL'),
-            confirmButtonColor: '#DC2626',
-            cancelButtonColor: '#94a3b8',
+            confirmButtonColor: '#DC2626', // Red for destructive/apology action
+            cancelButtonColor: isDark ? '#4B5563' : '#94a3b8',
             width: '32rem',
             padding: '2rem',
-            customClass: {
-                popup: 'premium-modal-popup',
-                confirmButton: 'premium-modal-confirm',
-                cancelButton: 'premium-modal-cancel'
-            },
             preConfirm: () => {
                 const reasonTextarea = document.getElementById('apologize-reason') as HTMLTextAreaElement;
                 return reasonTextarea?.value.trim() || '';
@@ -1256,6 +1344,7 @@ export class RequestDetailsComponent implements OnInit {
                     next: (response: any) => {
                         this.apologizing = false;
                         Swal.fire({
+                            ...themeConfig,
                             icon: 'success',
                             title: this.translate.instant('REQUEST_DETAILS.APOLOGIZE_SUCCESS'),
                             text: response.message,
@@ -1266,6 +1355,7 @@ export class RequestDetailsComponent implements OnInit {
                     error: (err: any) => {
                         this.apologizing = false;
                         Swal.fire({
+                            ...themeConfig,
                             icon: 'error',
                             title: this.translate.instant('REQUEST_DETAILS.APOLOGIZE_FAILED'),
                             text: err.error?.message || this.translate.instant('ERROR_DEFAULT'),

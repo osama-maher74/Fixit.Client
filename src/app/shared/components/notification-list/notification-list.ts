@@ -180,7 +180,7 @@ export class NotificationListComponent implements OnInit {
 
     // Get current user role
     const currentUser = this.authService.getCurrentUser();
-    const isClient = currentUser?.role?.toLowerCase() !== 'craftsman';
+    const isClient = currentUser?.role?.toLowerCase() === 'client';
     const isAdmin = currentUser?.role?.toLowerCase() === 'admin';
     const title = notification.title?.toLowerCase() || '';
     const message = notification.message?.toLowerCase() || '';
@@ -305,7 +305,7 @@ export class NotificationListComponent implements OnInit {
     }
 
     // 4. Client Rejected Offer - Craftsman side (show alert)
-    if (!isClient && (title.includes('client rejected') || title.includes('rejected your'))) {
+    if (!isClient && !isAdmin && (title.includes('client rejected') || title.includes('rejected your'))) {
       console.log('❌ Client Rejected → Showing alert');
       Swal.fire({
         ...getSwalThemeConfig(this.themeService.isDark()),
@@ -317,7 +317,7 @@ export class NotificationListComponent implements OnInit {
     }
 
     // 5. Client Accepted Offer - Craftsman side (navigate to service request details)
-    if (!isClient && title.includes('client accepted')) {
+    if (!isClient && !isAdmin && title.includes('client accepted')) {
       console.log('✅ Client Accepted → Navigating to offer details');
       if (notification.serviceRequestId) {
         this.router.navigate(['/offers', notification.serviceRequestId]);
@@ -326,7 +326,7 @@ export class NotificationListComponent implements OnInit {
     }
 
     // 6. Service Request Scheduled - Craftsman side (navigate to service request)
-    if (!isClient && title.includes('service request scheduled')) {
+    if (!isClient && !isAdmin && title.includes('service request scheduled')) {
       console.log('📅 Service Scheduled → Navigating to offer details');
       if (notification.serviceRequestId) {
         this.router.navigate(['/offers', notification.serviceRequestId]);
@@ -341,6 +341,9 @@ export class NotificationListComponent implements OnInit {
         // Client default: go to offer review
         const offerId = notification.offerId || notification.id;
         this.router.navigate(['/offer-review', notification.serviceRequestId, offerId]);
+      } else if (isAdmin) {
+        // Admin default: navigate to request details
+        this.router.navigate(['/request-details', notification.serviceRequestId]);
       } else {
         // Craftsman default: go to offers page
         this.router.navigate(['/offers', notification.serviceRequestId]);
@@ -538,10 +541,9 @@ export class NotificationListComponent implements OnInit {
       6: NotificationType.PaymentRequested,
       7: NotificationType.WithdrawalRequested,     // Admin: Withdrawal request notification
       8: NotificationType.WithdrawalApproved,      // Craftsman: Withdrawal approved notification
-      9: NotificationType.ServiceRequestScheduled, // Service scheduled notification
-      10: NotificationType.ServiceCancelled,       // Service cancelled notification
-      11: NotificationType.CraftsmanNoShow,
-      12: NotificationType.CraftsmanApologized     // Craftsman apologized notification
+      9: NotificationType.ServiceCancelled,
+      10: NotificationType.CraftsmanNoShow,
+      11: NotificationType.CraftsmanApologized
     };
     console.log(`🔄 Mapping type ${type} to ${mapping[type] || 'Unknown'}`);
     return mapping[type] || NotificationType.SelectCraftsman;

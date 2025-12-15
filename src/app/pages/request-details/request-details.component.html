@@ -303,21 +303,21 @@
                     }
                 </button>
                 }
-                @if (isInProgress() || isCompleted()) {
+
+                 <!-- Craftsman "Any Problems" Button -->
+                @if (isCraftsman() && isInProgress()) {
+                    <button class="btn-problem" (click)="openManageRequestModal()">
+                        <span>⚠️ {{ 'REQUEST_DETAILS.ANY_PROBLEMS' | translate }}</span>
+                    </button>
+                }
+
+                <!-- Client Problem Button (or specific statuses for anyone else) -->
+                @if (!isCraftsman() && (isInProgress() || isCompleted())) {
                 <button class="btn-problem" (click)="onProblemClicked()">
                     <span>⚠️ {{ 'REQUEST_DETAILS.HAVING_PROBLEM' | translate }}</span>
                 </button>
                 }
-                @if (canApologize()) {
-                <button class="btn-apologize" (click)="apologize()" [disabled]="apologizing">
-                    @if (apologizing) {
-                    <span class="spinner-small"></span>
-                    <span>{{ 'REQUEST_DETAILS.APOLOGIZING' | translate }}</span>
-                    } @else {
-                    <span>🙏 {{ 'REQUEST_DETAILS.APOLOGIZE' | translate }}</span>
-                    }
-                </button>
-                }
+
             </div>
             }
         </div>

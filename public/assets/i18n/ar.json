@@ -806,7 +806,6 @@
     "COMPLAINT_SOLVED": "تم الحل",
     "COMPLAINT_PENDING": "قيد الانتظار",
     "ADMIN_RESPONSE": "رد المشرف",
-    "APOLOGIZE": "اعتذار",
     "APOLOGIZE_TITLE": "الاعتذار عن الطلب",
     "APOLOGIZE_MESSAGE": "نحن آسفون لعدم تمكنك من الاستمرار في هذا الطلب. يرجى تقديم سبب للعميل.",
     "APOLOGIZE_REASON_LABEL": "سبب الاعتذار",
@@ -814,7 +813,16 @@
     "CONFIRM_APOLOGIZE": "تأكيد الاعتذار",
     "APOLOGIZE_SUCCESS": "تم إرسال الاعتذار بنجاح",
     "APOLOGIZE_FAILED": "فشل إرسال الاعتذار",
-    "APOLOGIZING": "جاري الاعتذار..."
+    "APOLOGIZING": "جاري الاعتذار...",
+    "ANY_PROBLEMS": "هل توجد مشكلة؟",
+    "MANAGE_REQUEST_TITLE": "إدارة الطلب",
+    "CLIENT_NOT_RESPONDING": "العميل لا يستجيب",
+    "APOLOGIZE": "أحتاج للاعتذار/الإلغاء",
+    "REPORT_CLIENT_NO_SHOW_TITLE": "إبلاغ عن عدم استجابة العميل",
+    "REPORT_CLIENT_NO_SHOW_CONFIRM": "هل أنت متأكد أنك تريد الإبلاغ عن عدم استجابة العميل؟ سيتم إشعار الإدارة.",
+    "YES_REPORT": "نعم، إبلاغ",
+    "REPORT_SUCCESS": "تم الإبلاغ بنجاح",
+    "REPORT_SUCCESS_MESSAGE": "تم إشعار الإدارة بالمشكلة."
   },
   "SERVICES": {
     "SERVICE_NAMES": {
