@@ -954,6 +954,7 @@
     "HOURLY_RATE": "Hourly Rate ($)"
   },
   "PROFILE": {
+    "COMPLETED_JOBS": "Completed Jobs",
     "LOADING": "Loading profile...",
     "UNABLE_TO_LOAD": "Unable to Load Profile",
     "RETRY": "Retry",
